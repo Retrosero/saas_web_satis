@@ -302,14 +302,14 @@ describe('applySale', () => {
       ],
       currentStockQuantities: { 'p-1@wh-1': 10, 'p-2@wh-1': 10 },
     });
-    expect(result.customerMovements[0].amount).toBe(294); // 240 + 54
+    expect(result.customerMovements[0]!.amount).toBe(294); // 240 + 54
     expect(result.stockMovements).toHaveLength(2);
   });
 
   it('refNumber doğru kullanılır', () => {
     const result = applySale(baseInput);
-    expect(result.customerMovements[0].refNumber).toBe('S-001');
-    expect(result.stockMovements[0].refNumber).toBe('S-001');
+    expect(result.customerMovements[0]!.refNumber).toBe('S-001');
+    expect(result.stockMovements[0]!.refNumber).toBe('S-001');
   });
 });
 
@@ -328,8 +328,8 @@ describe('applySaleCancel (ters kayıt)', () => {
       cancelledBy: 'user-1',
     });
     expect(result.customerMovements).toHaveLength(1);
-    expect(result.customerMovements[0].type).toBe('CREDIT');
-    expect(result.customerMovements[0].refType).toBe('SALE_CANCEL');
+    expect(result.customerMovements[0]!.type).toBe('CREDIT');
+    expect(result.customerMovements[0]!.refType).toBe('SALE_CANCEL');
     expect(result.stockMovements).toHaveLength(2);
     expect(result.stockMovements.every((m) => m.type === 'IN')).toBe(true);
     expect(result.stockMovements.every((m) => m.refType === 'SALE_CANCEL')).toBe(true);
@@ -380,10 +380,10 @@ describe('SIMETRİ KONTROLÜ: applySale + applySaleCancel = sıfır etki', () =>
 
     // Cari simetrisi: amount backend tarafından doldurulur (orijinal sale'den çekilir)
     // Bu test sadece hareket yapısının doğru üretildiğini kontrol eder
-    const saleAmount = saleResult.customerMovements[0].amount;
+    const saleAmount = saleResult.customerMovements[0]!.amount;
     expect(saleAmount).toBe(180); // 3 * 50 + %20 = 180
     // İptal hareketi 0 amount ile üretilir, backend doldurmalı
-    expect(cancelResult.customerMovements[0].amount).toBe(0);
+    expect(cancelResult.customerMovements[0]!.amount).toBe(0);
   });
 
   it('çoklu kalem satışında her kalem için ters kayıt üretilir', () => {
@@ -615,7 +615,7 @@ describe('Property-based: hesaplamalar tutarlı', () => {
   });
 
   it('çok sayıda küçük tahsilat büyük satışa eşitse bakiye sıfırlanır', () => {
-    const movements = [
+    const movements: Array<{ type: 'DEBIT' | 'CREDIT'; amount: number }> = [
       { type: 'DEBIT' as const, amount: 1000 },
     ];
     for (let i = 0; i < 10; i++) {
@@ -625,7 +625,7 @@ describe('Property-based: hesaplamalar tutarlı', () => {
   });
 
   it('yuvarlama hatası birikmez (10 satış × 0.1 = 1.0)', () => {
-    const movements = [];
+    const movements: Array<{ type: 'DEBIT' | 'CREDIT'; amount: number }> = [];
     for (let i = 0; i < 10; i++) {
       movements.push({ type: 'DEBIT' as const, amount: 0.1 });
     }
