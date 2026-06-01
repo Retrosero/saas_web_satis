@@ -154,11 +154,23 @@ async function main(): Promise<void> {
   console.log('  → Sistem rolleri ekleniyor...');
   const allPerms = await prisma.permission.findMany();
   const allMods = await prisma.module.findMany();
-  const superAdminRole = await prisma.role.upsert({
-    where: { tenantId_code: { tenantId: null as unknown as string, code: 'super_admin' } },
-    create: { tenantId: null, code: 'super_admin', name: 'Süper Admin', description: 'Tüm sistemi yönetir', isSystem: true },
-    update: {},
+  const existingSuperAdminRole = await prisma.role.findFirst({
+    where: { tenantId: null, code: 'super_admin' },
   });
+  const superAdminRole = existingSuperAdminRole
+    ? await prisma.role.update({
+        where: { id: existingSuperAdminRole.id },
+        data: {
+          name: 'Süper Admin',
+          description: 'Tüm sistemi yönetir',
+          isSystem: true,
+          isActive: true,
+          isDeleted: false,
+        },
+      })
+    : await prisma.role.create({
+        data: { tenantId: null, code: 'super_admin', name: 'Süper Admin', description: 'Tüm sistemi yönetir', isSystem: true },
+      });
   for (const p of allPerms) {
     await prisma.rolePermission.upsert({
       where: { roleId_permissionId: { roleId: superAdminRole.id, permissionId: p.id } },
@@ -173,18 +185,32 @@ async function main(): Promise<void> {
   const superAdminPassword = process.env.SUPER_ADMIN_PASSWORD ?? 'ChangeMe123!';
   const superAdminName = process.env.SUPER_ADMIN_NAME ?? 'Sistem Yöneticisi';
   const passwordHash = await argon2.hash(superAdminPassword, { type: argon2.argon2id });
-  const superAdminUser = await prisma.user.upsert({
-    where: { tenantId_email: { tenantId: null as unknown as string, email: superAdminEmail.toLowerCase() } },
-    create: {
-      tenantId: null,
-      email: superAdminEmail.toLowerCase(),
-      passwordHash,
-      fullName: superAdminName,
-      status: 'ACTIVE',
-      mfaEnabled: false,
-    },
-    update: { passwordHash, fullName: superAdminName, status: 'ACTIVE' },
+  const normalizedSuperAdminEmail = superAdminEmail.toLowerCase();
+  const existingSuperAdminUser = await prisma.user.findFirst({
+    where: { tenantId: null, email: normalizedSuperAdminEmail },
   });
+  const superAdminUser = existingSuperAdminUser
+    ? await prisma.user.update({
+        where: { id: existingSuperAdminUser.id },
+        data: {
+          passwordHash,
+          fullName: superAdminName,
+          status: 'ACTIVE',
+          mfaEnabled: false,
+          isActive: true,
+          isDeleted: false,
+        },
+      })
+    : await prisma.user.create({
+        data: {
+          tenantId: null,
+          email: normalizedSuperAdminEmail,
+          passwordHash,
+          fullName: superAdminName,
+          status: 'ACTIVE',
+          mfaEnabled: false,
+        },
+      });
   await prisma.userRole.upsert({
     where: { userId_roleId_tenantId: { userId: superAdminUser.id, roleId: superAdminRole.id, tenantId: 'SYSTEM' } },
     create: { userId: superAdminUser.id, roleId: superAdminRole.id, tenantId: 'SYSTEM', dataScope: 'TENANT' },
@@ -416,3 +442,4 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
+
