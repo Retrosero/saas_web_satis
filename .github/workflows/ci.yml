@@ -19,8 +19,8 @@ jobs:
       - name: Node.js kur
         uses: actions/setup-node@v4
         with:
-          node-version-file: ".nvmrc"
-          cache: "pnpm"
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
 
       - name: Bagimliliklari kur
         run: pnpm install --frozen-lockfile
@@ -61,8 +61,8 @@ jobs:
       - name: Node.js kur
         uses: actions/setup-node@v4
         with:
-          node-version-file: ".nvmrc"
-          cache: "pnpm"
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
 
       - name: Bagimliliklari kur
         run: pnpm install --frozen-lockfile
@@ -88,12 +88,11 @@ jobs:
       - name: Node.js kur
         uses: actions/setup-node@v4
         with:
-          node-version-file: ".nvmrc"
-          cache: "pnpm"
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
 
       - name: Bagimliliklari kur
         run: pnpm install --frozen-lockfile
 
       - name: Derle
         run: pnpm build
-
