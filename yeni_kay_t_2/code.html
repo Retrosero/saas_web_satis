@@ -1,0 +1,250 @@
+<!DOCTYPE html><html lang="tr"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Kayıt Ol - OpsCommand</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#82f9be",
+                    "primary-fixed-dim": "#b2c5ff",
+                    "secondary-fixed": "#82f9be",
+                    "on-secondary-fixed": "#002113",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-tint": "#0c56d0",
+                    "inverse-primary": "#b2c5ff",
+                    "surface-variant": "#d8e2ff",
+                    "on-tertiary-container": "#ffca81",
+                    "tertiary-fixed": "#ffddb3",
+                    "on-tertiary-fixed": "#291800",
+                    "on-tertiary-fixed-variant": "#624000",
+                    "on-surface-variant": "#434654",
+                    "tertiary-container": "#7d5200",
+                    "outline-variant": "#c3c6d6",
+                    "tertiary": "#5e3c00",
+                    "surface-container-highest": "#d8e2ff",
+                    "secondary-fixed-dim": "#65dca4",
+                    "inverse-surface": "#1d3054",
+                    "inverse-on-surface": "#edf0ff",
+                    "on-primary": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "on-secondary-container": "#00734c",
+                    "on-primary-container": "#c4d2ff",
+                    "outline": "#737685",
+                    "surface-container-high": "#e1e8ff",
+                    "on-secondary-fixed-variant": "#005235",
+                    "tertiary-fixed-dim": "#ffb950",
+                    "background": "#faf9ff",
+                    "surface-dim": "#ccdaff",
+                    "on-primary-fixed": "#001848",
+                    "on-tertiary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "on-background": "#051a3e",
+                    "error": "#ba1a1a",
+                    "on-secondary": "#ffffff",
+                    "primary": "#003d9b",
+                    "surface-container-low": "#f1f3ff",
+                    "on-surface": "#051a3e",
+                    "on-error": "#ffffff",
+                    "primary-container": "#0052cc",
+                    "on-primary-fixed-variant": "#0040a2",
+                    "surface-bright": "#faf9ff",
+                    "surface-container": "#e9edff",
+                    "surface": "#faf9ff",
+                    "secondary": "#006c47",
+                    "primary-fixed": "#dae2ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "gutter": "16px",
+                    "max-width": "1440px",
+                    "md": "16px",
+                    "base": "4px",
+                    "xl": "32px",
+                    "lg": "24px",
+                    "sm": "8px",
+                    "margin": "24px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "mono-label": ["JetBrains Mono"],
+                    "label-md": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "mono-label": ["13px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #F4F5F7; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #DFE1E6;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center font-body-md text-on-surface antialiased bg-[#F4F5F7] p-4">
+<!-- Toast Notification (Hidden by default) -->
+<div class="fixed top-xl right-xl bg-surface-container-lowest border border-outline-variant rounded shadow-[0_4px_12px_rgba(0,0,0,0.08)] p-md flex items-center gap-sm transform transition-all duration-300 translate-y-[-150%] opacity-0 z-50" id="toast-success">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Kayıt Başarılı</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Hesabınız başarıyla oluşturuldu.</p>
+</div>
+<button class="ml-auto text-on-surface-variant hover:text-on-surface" onclick="hideToast()">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Main Container -->
+<div class="w-full max-w-[1024px] grid grid-cols-1 md:grid-cols-2 gap-0 glass-card rounded-xl overflow-hidden shadow-sm">
+<!-- Left Side: Branding / Abstract Art -->
+<div class="hidden md:flex flex-col justify-between bg-primary-container p-xl relative overflow-hidden h-[600px]">
+<div class="relative z-10">
+<h1 class="font-headline-lg text-headline-lg text-on-primary-container mb-xs">OpsCommand</h1>
+<p class="font-body-lg text-body-lg text-on-primary-container opacity-80">Operasyonel mükemmellik için kurumsal kokpitiniz.</p>
+</div>
+<div class="relative z-10 mt-auto">
+<blockquote class="font-body-md text-body-md text-on-primary-container opacity-90 border-l-2 border-primary-fixed-dim pl-md">
+                    "Veriye dayalı kararlar, sağlam bir temel gerektirir. Sisteminizi kurun ve yönetin."
+                </blockquote>
+</div>
+<!-- Abstract Background Pattern -->
+<div class="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-primary-fixed via-primary-container to-primary"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[120%] h-[50%] bg-surface-variant/10 blur-[80px] rounded-full"></div>
+<img alt="Corporate abstraction" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-30" data-alt="A modern, abstract architectural visualization showing structured glass and steel corporate environment. The scene is illuminated with cool, clinical light, reflecting a high-stakes B2B software aesthetic. The color palette emphasizes deep navy blues, crisp whites, and subtle glowing accents, conveying precision, reliability, and enterprise-grade performance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBECCM4e2fxpAz51VWuNpS7reJHklSJ4YzHZefTrWlGnDe5hmoFcO2s_qfjX6REjbW53LaNYSATeqaPVbQO6mRktpDVD6ziqSW3LjbYaeTOLkvULKqpGHKCph2uTIAZPLJt65vrfS48rXbH8ck_yrfOOibZ9D0YOVWvo3155oU976qZn7terQckRYg5YiEGD5C4IC8yJZ7ci9U7LclAlbtwo8vYmseu8V92lv4dbjRuHjNQVWJ5SJmbUyETSMld1ogEH8id-LscEHGi">
+</div>
+<!-- Right Side: Registration Form -->
+<div class="p-xl bg-surface-container-lowest flex flex-col justify-center">
+<div class="mb-lg">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-xs">Yeni Hesap Oluştur</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Sisteme erişim sağlamak için bilgilerinizi giriniz.</p>
+</div>
+<form class="space-y-md" id="registerForm" onsubmit="handleRegister(event)">
+<div class="grid grid-cols-2 gap-md">
+<!-- İsim -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface" for="firstName">İsim</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded px-md py-sm font-body-md text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors placeholder:text-outline" id="firstName" required="" type="text">
+</div>
+<!-- Soyisim -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface" for="lastName">Soyisim</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded px-md py-sm font-body-md text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors placeholder:text-outline" id="lastName" required="" type="text">
+</div>
+</div>
+<!-- Email -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface" for="email">E-posta Adresi</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded px-md py-sm font-body-md text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors placeholder:text-outline" id="email" placeholder="ornek@sirket.com" required="" type="email">
+</div>
+<!-- Role Selection -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface" for="role">Rol</label>
+<div class="relative">
+<select class="w-full appearance-none bg-surface-container-low border border-outline-variant rounded px-md py-sm pr-lg font-body-md text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors" id="role" required="">
+<option disabled="" hidden="" selected="" value="">Rol Seçiniz</option>
+<option value="executive">Yönetici (Executive)</option>
+<option value="sales">Satış (Sales)</option>
+<option value="warehouse">Depo (Warehouse)</option>
+</select>
+<span class="material-symbols-outlined absolute right-sm top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<!-- Şifre -->
+<div class="flex flex-col gap-xs relative">
+<label class="font-label-md text-label-md text-on-surface" for="password">Şifre</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded px-md py-sm font-body-md text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors" id="password" required="" type="password">
+</div>
+<!-- Şifre Tekrar -->
+<div class="flex flex-col gap-xs relative">
+<label class="font-label-md text-label-md text-on-surface" for="confirmPassword">Şifre Tekrar</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded px-md py-sm font-body-md text-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors" id="confirmPassword" required="" type="password">
+<span class="hidden absolute -bottom-5 left-0 font-body-sm text-body-sm text-error flex items-center gap-xs" id="passwordError">
+<span class="material-symbols-outlined text-[14px]">error</span> Şifreler eşleşmiyor
+                        </span>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-sm pt-sm mt-lg border-t border-outline-variant/30">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm px-lg rounded hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm flex justify-center items-center gap-xs" type="submit">
+                        Kayıt Ol
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+<button class="w-full bg-transparent border border-outline-variant text-on-surface-variant font-label-md text-label-md py-sm px-lg rounded hover:bg-surface-container-low transition-colors flex justify-center items-center gap-xs" type="button">
+                        Giriş Ekranına Dön
+                    </button>
+</div>
+</form>
+</div>
+</div>
+<script>
+        function handleRegister(event) {
+            event.preventDefault();
+            
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmPassword');
+            const errorMsg = document.getElementById('passwordError');
+
+            // Reset styles
+            confirmPassword.classList.remove('border-error', 'focus:border-error', 'focus:ring-error/20');
+            confirmPassword.classList.add('border-outline-variant', 'focus:border-primary', 'focus:ring-primary/20');
+            errorMsg.classList.add('hidden');
+
+            if (password.value !== confirmPassword.value) {
+                // Show error
+                confirmPassword.classList.remove('border-outline-variant', 'focus:border-primary', 'focus:ring-primary/20');
+                confirmPassword.classList.add('border-error', 'focus:border-error', 'focus:ring-error/20');
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            // Success simulation
+            showToast();
+            event.target.reset();
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast-success');
+            toast.classList.remove('translate-y-[-150%]', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+            
+            setTimeout(() => {
+                hideToast();
+            }, 5000);
+        }
+
+        function hideToast() {
+            const toast = document.getElementById('toast-success');
+            toast.classList.add('translate-y-[-150%]', 'opacity-0');
+            toast.classList.remove('translate-y-0', 'opacity-100');
+        }
+    </script>
+</body></html>

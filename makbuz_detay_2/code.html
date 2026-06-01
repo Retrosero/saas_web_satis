@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Makbuz Detayı</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-high": "#dce9ff",
+                        "primary": "#00083d",
+                        "on-primary-fixed": "#061353",
+                        "surface-container-highest": "#d3e4fe",
+                        "primary-container": "#121e5c",
+                        "inverse-primary": "#bac3ff",
+                        "surface-tint": "#4f5a99",
+                        "on-background": "#0b1c30",
+                        "outline": "#767681",
+                        "on-tertiary-fixed": "#181c21",
+                        "on-primary-container": "#7d88cb",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#e5eeff",
+                        "surface-dim": "#cbdbf5",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#007167",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#21252a",
+                        "inverse-surface": "#213145",
+                        "background": "#f8f9ff",
+                        "secondary-container": "#51fbe7",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#bac3ff",
+                        "on-surface-variant": "#454650",
+                        "tertiary-fixed": "#dfe2e9",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "surface-container-low": "#eff4ff",
+                        "secondary-fixed-dim": "#1edecb",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#374280",
+                        "on-secondary-fixed": "#00201c",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#d3e4fe",
+                        "secondary": "#006a60",
+                        "on-tertiary-container": "#888c92",
+                        "surface-bright": "#f8f9ff",
+                        "primary-fixed": "#dee0ff",
+                        "on-surface": "#0b1c30",
+                        "surface": "#f8f9ff",
+                        "secondary-fixed": "#51fbe7",
+                        "tertiary-fixed-dim": "#c3c7cd",
+                        "outline-variant": "#c6c5d1",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#0c1015",
+                        "on-secondary-fixed-variant": "#005048"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "15": "15px"
+                    },
+                    spacing: {
+                        "xl": "3rem",
+                        "xs": "0.5rem",
+                        "sm": "1rem",
+                        "sidebar-width": "280px",
+                        "md": "1.5rem",
+                        "lg": "2rem",
+                        "gutter": "24px",
+                        "base": "4px"
+                    },
+                    fontFamily: {
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"]
+                    },
+                    fontSize: {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-surface text-primary font-title-md text-title-md sticky top-0 z-50 shadow-[0px_4px_20px_rgba(18,30,92,0.05)]">
+<div class="flex items-center justify-between px-md w-full h-16 max-w-5xl mx-auto">
+<button class="flex items-center justify-center p-xs hover:bg-surface-container-low transition-colors rounded-15 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary md:font-headline-lg md:text-headline-lg">Makbuz Detayı</h1>
+<div class="w-10"></div> <!-- Spacer for center alignment -->
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow p-sm md:p-md lg:p-xl max-w-4xl mx-auto w-full">
+<!-- Receipt Document Container (Bento/Card Style) -->
+<div class="bg-surface-container-lowest rounded-15 shadow-[0px_4px_20px_rgba(18,30,92,0.05)] p-md lg:p-lg border border-outline-variant/30 flex flex-col gap-lg">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start border-b border-outline-variant/30 pb-sm gap-sm">
+<div>
+<h2 class="font-title-md text-title-md text-primary-container">Tahsilat Makbuzu</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Düzenlenme Tarihi: 24 Ekim 2023</p>
+</div>
+<div class="text-left md:text-right">
+<p class="font-body-md text-body-md text-on-surface-variant">Makbuz No: <span class="font-title-md text-title-md text-primary">TR-2023-1089</span></p>
+<span class="inline-flex items-center px-xs py-1 mt-xs rounded-15 bg-secondary-container/20 text-secondary-fixed-dim font-label-sm text-label-sm border border-secondary/20">Ödendi</span>
+</div>
+</div>
+<!-- Entities Section -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="bg-surface-container-low p-md rounded-15">
+<h3 class="font-title-md text-title-md text-on-surface mb-xs">Cari / Müşteri Bilgileri</h3>
+<p class="font-body-md text-body-md text-primary font-bold">Acme Corp. Ticaret A.Ş.</p>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Maslak Mah. Büyükdere Cad. No:123<br/>Sarıyer, İstanbul, Türkiye</p>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Vergi Dairesi: Maslak / 1234567890</p>
+</div>
+<div class="bg-surface-container-low p-md rounded-15">
+<h3 class="font-title-md text-title-md text-on-surface mb-xs">Alıcı / Düzenleyen Bilgileri</h3>
+<p class="font-body-md text-body-md text-primary font-bold">Global Lojistik Çözümleri Ltd. Şti.</p>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Kavaklıdere Mah. Tunus Cad. No:45<br/>Çankaya, Ankara, Türkiye</p>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">İletişim: muhasebe@global.com</p>
+</div>
+</div>
+<!-- Items List -->
+<div>
+<h3 class="font-title-md text-title-md text-on-surface mb-sm">Kalemler</h3>
+<div class="overflow-x-auto rounded-15 border border-outline-variant/30">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high border-b border-outline-variant/30">
+<th class="p-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Açıklama</th>
+<th class="p-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-right">Miktar</th>
+<th class="p-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-right">Birim Fiyat</th>
+<th class="p-sm font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-right">Tutar</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-on-surface">
+<tr class="border-b border-outline-variant/20 hover:bg-surface-container-low transition-colors">
+<td class="p-sm">Ekim Ayı Danışmanlık Hizmet Bedeli</td>
+<td class="p-sm text-right text-on-surface-variant">1 Adet</td>
+<td class="p-sm text-right">15,000.00 ₺</td>
+<td class="p-sm text-right font-semibold text-primary">15,000.00 ₺</td>
+</tr>
+<tr class="border-b border-outline-variant/20 hover:bg-surface-container-low transition-colors">
+<td class="p-sm">Sunucu Barındırma Yıllık Ücret</td>
+<td class="p-sm text-right text-on-surface-variant">1 Yıl</td>
+<td class="p-sm text-right">8,500.00 ₺</td>
+<td class="p-sm text-right font-semibold text-primary">8,500.00 ₺</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="p-sm">Ekstra Teknik Destek Saati</td>
+<td class="p-sm text-right text-on-surface-variant">5 Saat</td>
+<td class="p-sm text-right">400.00 ₺</td>
+<td class="p-sm text-right font-semibold text-primary">2,000.00 ₺</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Totals Panel -->
+<div class="flex flex-col items-end pt-sm border-t border-outline-variant/30">
+<div class="w-full md:w-1/2 lg:w-1/3 flex flex-col gap-xs">
+<div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
+<span>Ara Toplam</span>
+<span>25,500.00 ₺</span>
+</div>
+<div class="flex justify-between font-body-md text-body-md text-on-surface-variant">
+<span>KDV (%20)</span>
+<span>5,100.00 ₺</span>
+</div>
+<div class="flex justify-between font-title-md text-title-md text-primary mt-xs pt-xs border-t border-outline-variant/30">
+<span>Genel Toplam</span>
+<span>30,600.00 ₺</span>
+</div>
+</div>
+</div>
+<!-- Notes -->
+<div class="mt-xs pt-sm border-t border-outline-variant/30">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-xs">Notlar</p>
+<p class="font-body-md text-body-md text-on-surface-variant italic text-sm">İşbu makbuz karşılığı ödeme, banka havalesi yoluyla 24.10.2023 tarihinde gerçekleştirilmiştir. Teşekkür ederiz.</p>
+</div>
+</div>
+<div class="h-24"></div> <!-- Spacer for bottom bar -->
+</main>
+<!-- Bottom Action Bar -->
+<div class="fixed bottom-0 w-full z-50 bg-surface-container-lowest border-t border-outline-variant/30 shadow-[0px_-4px_12px_rgba(0,0,0,0.05)] p-sm px-md flex justify-center gap-sm md:gap-md">
+<div class="w-full max-w-4xl flex justify-between gap-sm">
+<button class="flex-1 md:flex-none flex items-center justify-center gap-xs px-md py-3 rounded-15 bg-transparent border-[1.5px] border-primary text-primary font-title-md text-title-md hover:bg-surface-container-low transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="print">print</span>
+<span class="hidden md:inline">Yazdır</span>
+</button>
+<button class="flex-1 md:flex-none flex items-center justify-center gap-xs px-md py-3 rounded-15 bg-transparent border-[1.5px] border-primary text-primary font-title-md text-title-md hover:bg-surface-container-low transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="picture_as_pdf">picture_as_pdf</span>
+<span class="hidden md:inline">PDF İndir</span>
+</button>
+<button class="flex-[2] md:flex-none md:ml-auto flex items-center justify-center gap-xs px-lg py-3 rounded-15 bg-[#00D7C4] text-[#121E5C] font-title-md text-title-md hover:opacity-90 transition-opacity active:scale-95 shadow-sm">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+<span>Paylaş</span>
+</button>
+</div>
+</div>
+</body></html>

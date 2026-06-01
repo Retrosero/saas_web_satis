@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Stok Detayı - Operations Console</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#bac3ff",
+                        "on-tertiary-fixed": "#181c21",
+                        "on-surface": "#0b1c30",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "surface-container-high": "#dce9ff",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#bac3ff",
+                        "outline": "#767681",
+                        "surface-variant": "#d3e4fe",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-bright": "#f8f9ff",
+                        "on-tertiary-container": "#888c92",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#51fbe7",
+                        "error": "#ba1a1a",
+                        "tertiary": "#0c1015",
+                        "surface": "#f8f9ff",
+                        "background": "#f8f9ff",
+                        "on-primary-fixed-variant": "#374280",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#e5eeff",
+                        "on-primary-fixed": "#061353",
+                        "tertiary-fixed": "#dfe2e9",
+                        "outline-variant": "#c6c5d1",
+                        "on-primary-container": "#7d88cb",
+                        "on-secondary-container": "#007167",
+                        "surface-container-low": "#eff4ff",
+                        "secondary-fixed-dim": "#1edecb",
+                        "on-secondary-fixed-variant": "#005048",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#454650",
+                        "primary-fixed": "#dee0ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#4f5a99",
+                        "on-secondary-fixed": "#00201c",
+                        "secondary": "#006a60",
+                        "inverse-surface": "#213145",
+                        "tertiary-container": "#21252a",
+                        "error-container": "#ffdad6",
+                        "primary": "#00083d",
+                        "primary-container": "#121e5c",
+                        "on-background": "#0b1c30",
+                        "surface-dim": "#cbdbf5",
+                        "secondary-container": "#51fbe7",
+                        "inverse-on-surface": "#eaf1ff",
+                        "tertiary-fixed-dim": "#c3c7cd"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "custom": "15px"
+                    },
+                    "spacing": {
+                        "sidebar-width": "280px",
+                        "xl": "3rem",
+                        "md": "1.5rem",
+                        "sm": "1rem",
+                        "base": "4px",
+                        "xs": "0.5rem",
+                        "lg": "2rem",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+        body {
+            font-family: 'Hanken Grotesk', sans-serif;
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        .soft-shadow {
+            box-shadow: 0px 4px 20px rgba(18, 30, 92, 0.05);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background min-h-screen pb-24">
+<!-- App Bar (Mobile Context: Sub-page, no bottom nav, has back button) -->
+<header class="bg-surface sticky top-0 z-30 px-md py-md flex items-center justify-between border-b border-surface-variant">
+<button class="text-primary p-2 -ml-2 rounded-full hover:bg-surface-container-low transition-colors" onclick="history.back()">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-title-md text-title-md text-primary">Stok Detayı</h1>
+<button class="text-primary p-2 -mr-2 rounded-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</header>
+<main class="p-md space-y-md">
+<!-- Product Hero Card -->
+<section class="bg-surface-container-lowest rounded-custom soft-shadow overflow-hidden">
+<div class="h-48 w-full bg-surface-container-highest relative">
+<img alt="Premium Wireless Headphones Product Shot" class="w-full h-full object-cover" data-alt="A high-quality, professional product photography shot of premium wireless headphones. The lighting is studio-quality, creating soft, elegant highlights on the sleek dark materials. The background is a clean, neutral studio sweep, emphasizing a corporate modern aesthetic suitable for a high-end SaaS product catalog. The overall color palette features deep navy and sophisticated greys, aligning with a professional, clean interface design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBimYrbwOFV_afYacKc-f1OEan9v-28YL4CGo6r3_qXNA6RJg-y14BAeaP0LG6dcw20pT0gFcSlmcwTU8CStG2flCafWriKmt_qT1CO_QrH59zZVSHpLn74Y-M1kb-aWzqDN9b8-0sM5-6lJmY_6B9HKvbC9KB5vhRVtEsrx1fkFlV4NScbVEP7-hpoqxwjRKvQ4u88ifnfi9u0tTQ8DJbQ-vbSBPM3RKBroOUIcHQDXFzDTwedPl6CwX90jawz9FoRUyGiy8bXa3JZ"/>
+<div class="absolute top-sm right-sm bg-secondary-fixed text-primary px-sm py-1 rounded-full font-label-sm text-label-sm shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                    Aktif Stok
+                </div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary mb-1">Premium Kablosuz Kulaklık</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Kategori: Elektronik</p>
+</div>
+<div class="text-right">
+<span class="block font-title-md text-title-md text-primary">₺4.299,00</span>
+<span class="block font-label-sm text-label-sm text-on-surface-variant">Birim Fiyatı</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-sm mt-md pt-md border-t border-surface-variant">
+<div class="bg-surface-container-low p-sm rounded-lg">
+<span class="block font-label-sm text-label-sm text-on-surface-variant mb-1">SKU</span>
+<span class="block font-title-md text-title-md text-primary">PRM-WH-001</span>
+</div>
+<div class="bg-surface-container-low p-sm rounded-lg">
+<span class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Barkod</span>
+<span class="block font-title-md text-title-md text-primary">8690123456789</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Media Placeholder -->
+<section class="bg-surface-container-lowest rounded-custom soft-shadow p-md flex items-center gap-md cursor-pointer hover:bg-surface-bright transition-colors border border-transparent hover:border-outline-variant">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-primary">Ürün Tanıtım Videosu</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">İzlemek için dokunun</p>
+</div>
+<span class="material-symbols-outlined ml-auto text-on-surface-variant">chevron_right</span>
+</section>
+<!-- Stock Movement History -->
+<section class="bg-surface-container-lowest rounded-custom soft-shadow overflow-hidden">
+<div class="p-md border-b border-surface-variant flex justify-between items-center">
+<h3 class="font-title-md text-title-md text-primary">Stok Hareketleri</h3>
+<button class="text-secondary-fixed-dim hover:text-secondary-fixed font-label-sm text-label-sm uppercase transition-colors">Tümünü Gör</button>
+</div>
+<div class="divide-y divide-surface-variant">
+<!-- Row 1 -->
+<div class="p-md flex items-center justify-between hover:bg-surface-bright transition-colors">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-[#E5EEFF] flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</div>
+<div>
+<p class="font-title-md text-[14px] leading-snug text-primary">Mal Alımı</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">12 Eki 2023, 14:30</p>
+</div>
+</div>
+<div class="text-right">
+<span class="block font-title-md text-[16px] text-[#007167]">+50</span>
+<span class="block font-label-sm text-[10px] text-on-surface-variant mt-1">Depo A</span>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="p-md flex items-center justify-between hover:bg-surface-bright transition-colors">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-[#FFDAD6] flex items-center justify-center text-[#93000A]">
+<span class="material-symbols-outlined">shopping_cart_checkout</span>
+</div>
+<div>
+<p class="font-title-md text-[14px] leading-snug text-primary">Sipariş Çıkışı</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">10 Eki 2023, 09:15</p>
+</div>
+</div>
+<div class="text-right">
+<span class="block font-title-md text-[16px] text-[#ba1a1a]">-12</span>
+<span class="block font-label-sm text-[10px] text-on-surface-variant mt-1">Sip. #4829</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Quick Edit Form -->
+<section class="bg-surface-container-lowest rounded-custom soft-shadow p-md mb-xl">
+<h3 class="font-title-md text-title-md text-primary mb-md">Hızlı Düzenleme</h3>
+<form class="space-y-md">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-2">Raf Konumu</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">shelves</span>
+<input class="w-full bg-surface-bright border border-outline-variant rounded-custom py-3 pl-10 pr-3 font-body-md text-body-md text-primary focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed outline-none transition-shadow" type="text" value="A-Blok, Raf 3"/>
+</div>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-2">Minimum Stok Uyarı Seviyesi</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">warning</span>
+<input class="w-full bg-surface-bright border border-outline-variant rounded-custom py-3 pl-10 pr-3 font-body-md text-body-md text-primary focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed outline-none transition-shadow" type="number" value="15"/>
+</div>
+</div>
+<button class="w-full bg-secondary-container text-primary-container font-title-md text-title-md py-3 rounded-custom shadow-sm hover:opacity-90 transition-opacity mt-4 flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined text-[20px]">save</span>
+                    Değişiklikleri Kaydet
+                </button>
+</form>
+</section>
+</main>
+</body></html>

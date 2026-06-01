@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Product Catalog</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed-dim": "#bac3ff",
+                      "on-tertiary-fixed": "#181c21",
+                      "on-surface": "#0b1c30",
+                      "on-tertiary-fixed-variant": "#43474d",
+                      "surface-container-high": "#dce9ff",
+                      "on-error": "#ffffff",
+                      "inverse-primary": "#bac3ff",
+                      "outline": "#767681",
+                      "surface-variant": "#d3e4fe",
+                      "surface-container-highest": "#d3e4fe",
+                      "surface-bright": "#f8f9ff",
+                      "on-tertiary-container": "#888c92",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed": "#51fbe7",
+                      "error": "#ba1a1a",
+                      "tertiary": "#0c1015",
+                      "surface": "#f8f9ff",
+                      "background": "#f8f9ff",
+                      "on-primary-fixed-variant": "#374280",
+                      "on-primary": "#ffffff",
+                      "surface-container": "#e5eeff",
+                      "on-primary-fixed": "#061353",
+                      "tertiary-fixed": "#dfe2e9",
+                      "outline-variant": "#c6c5d1",
+                      "on-primary-container": "#7d88cb",
+                      "on-secondary-container": "#007167",
+                      "surface-container-low": "#eff4ff",
+                      "secondary-fixed-dim": "#1edecb",
+                      "on-secondary-fixed-variant": "#005048",
+                      "on-error-container": "#93000a",
+                      "on-surface-variant": "#454650",
+                      "primary-fixed": "#dee0ff",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-tint": "#4f5a99",
+                      "on-secondary-fixed": "#00201c",
+                      "secondary": "#006a60",
+                      "inverse-surface": "#213145",
+                      "tertiary-container": "#21252a",
+                      "error-container": "#ffdad6",
+                      "primary": "#00083d",
+                      "primary-container": "#121e5c",
+                      "on-background": "#0b1c30",
+                      "surface-dim": "#cbdbf5",
+                      "secondary-container": "#51fbe7",
+                      "inverse-on-surface": "#eaf1ff",
+                      "tertiary-fixed-dim": "#c3c7cd"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sidebar-width": "280px",
+                      "xl": "3rem",
+                      "md": "1.5rem",
+                      "sm": "1rem",
+                      "base": "4px",
+                      "xs": "0.5rem",
+                      "lg": "2rem",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "title-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg-mobile": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "label-sm": [
+                              "Hanken Grotesk"
+                      ],
+                      "display-lg": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "title-md": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased md:hidden pb-24">
+<!-- Top App Bar - Mobile Adaptation (No sidebar, so just a header) -->
+<header class="bg-surface shadow-sm sticky top-0 z-30 px-sm py-sm flex items-center justify-between">
+<div class="flex items-center gap-2">
+<button class="text-primary p-2 rounded-xl hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[24px]">menu</span>
+</button>
+<h1 class="font-title-md text-title-md text-primary font-bold">Product Catalog</h1>
+</div>
+<button class="text-primary p-2 rounded-xl hover:bg-surface-container-low transition-colors relative">
+<span class="material-symbols-outlined text-[24px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-[#E11D48] rounded-full"></span>
+</button>
+</header>
+<!-- Main Content Area -->
+<main class="p-sm flex flex-col gap-sm">
+<!-- Search and Filter Bar -->
+<div class="flex gap-2">
+<div class="relative flex-grow">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-bright border border-outline-variant rounded-[15px] pl-10 pr-4 py-3 font-body-md text-body-md text-on-surface focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors outline-none placeholder:text-on-surface-variant" placeholder="Ürün ara..." type="text"/>
+</div>
+<button class="bg-surface-bright border border-outline-variant text-on-surface rounded-[15px] px-4 py-3 flex items-center justify-center hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">tune</span>
+</button>
+</div>
+<!-- Filter Chips -->
+<div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide snap-x">
+<button class="snap-start whitespace-nowrap px-4 py-2 rounded-[15px] bg-secondary-fixed text-primary font-label-sm text-label-sm transition-colors border border-transparent">Tümü</button>
+<button class="snap-start whitespace-nowrap px-4 py-2 rounded-[15px] bg-surface-bright text-on-surface font-label-sm text-label-sm border border-outline-variant hover:border-primary transition-colors">Elektronik</button>
+<button class="snap-start whitespace-nowrap px-4 py-2 rounded-[15px] bg-surface-bright text-on-surface font-label-sm text-label-sm border border-outline-variant hover:border-primary transition-colors">Aksesuar</button>
+<button class="snap-start whitespace-nowrap px-4 py-2 rounded-[15px] bg-surface-bright text-on-surface font-label-sm text-label-sm border border-outline-variant hover:border-primary transition-colors">Yazılım</button>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-2 gap-sm">
+<!-- Product Card 1 -->
+<div class="bg-surface-lowest rounded-[15px] shadow-[0_4px_20px_rgba(18,30,92,0.05)] overflow-hidden flex flex-col relative group">
+<div class="absolute top-2 left-2 z-10">
+<input class="w-5 h-5 rounded-[4px] border-outline-variant text-secondary-fixed focus:ring-secondary-fixed bg-surface-bright/80 backdrop-blur-sm cursor-pointer" type="checkbox"/>
+</div>
+<button class="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-surface-bright/80 backdrop-blur-sm flex items-center justify-center text-on-surface hover:text-secondary-fixed transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<div class="h-32 bg-surface-variant relative">
+<img alt="Product Image" class="w-full h-full object-cover" data-alt="A sleek, high-end professional camera lens resting on a clean, modern white studio surface. The lighting is bright and sophisticated, highlighting the premium glass and metallic details of the lens. Deep navy shadows add contrast, while a subtle turquoise ambient glow reflects off the lens element. The mood is precise, technical, and premium." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOOCfDOLJAnERXbEIbQaoTQQr1Z5IG0auWt-mC2UJDwMhft5u_AJts-OPJ-laR31cZ-LufRQKZkSbGlyrbqCed4Bvdx7TIONfjBIT5Qm_E_4Cv6ITw5HVktGgPFrZVgCScVfq3EGEIk5yS71Qex5_Ily7cPREGWlNWx-j7biUodXumX2GBn2EuU4Aqd5R_5Aspn3LNUFRTk8H6rdChQNROnxMJ85ZVrKBnkB17L5W90kZtPJ6U7TUEFm5qbEYQPcpkG-EKmUd3sfhD"/>
+</div>
+<div class="p-3 flex flex-col gap-1 flex-grow justify-between">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Elektronik</p>
+<h3 class="font-title-md text-[14px] leading-tight text-on-surface line-clamp-2 mt-1">Pro Vision X-Series Lens</h3>
+</div>
+<div class="flex items-center justify-between mt-2">
+<span class="font-title-md text-title-md text-primary">₺4.500</span>
+<span class="font-label-sm text-[10px] bg-surface-container-high text-on-surface px-2 py-1 rounded-full">Stok: 12</span>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-surface-lowest rounded-[15px] shadow-[0_4px_20px_rgba(18,30,92,0.05)] overflow-hidden flex flex-col relative group border border-secondary-fixed">
+<div class="absolute top-2 left-2 z-10">
+<input checked="" class="w-5 h-5 rounded-[4px] border-outline-variant text-secondary-fixed focus:ring-secondary-fixed bg-surface-bright/80 backdrop-blur-sm cursor-pointer" type="checkbox"/>
+</div>
+<button class="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-surface-bright/80 backdrop-blur-sm flex items-center justify-center text-on-surface hover:text-secondary-fixed transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<div class="h-32 bg-surface-variant relative">
+<img alt="Product Image" class="w-full h-full object-cover" data-alt="A pair of premium noise-canceling headphones displayed on a smooth, slightly reflective light gray pedestal. Soft, high-key studio lighting creates a modern, corporate aesthetic. The headphones are a matte black finish with subtle turquoise accents on the earcups. The composition is clean, centered, and minimal, conveying luxury and performance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuASCUZOxL0bh6mXWsyRC36njFr8rCWVytQg7MWZmdolc_SLsN3QD0bM1XHyY4a5JIodpm9-Hp8ZEfMAsmRwqTwMA6LR5pAtq0bbw7FgyyWZ3cqyu_mj5-G0PAqrS6MVyhqhWL4naKJz33aDBodoVXGKpyKDmr0fJC92LrJozk_l7Kr3JeK9Wgk2dvlDHFR53rtVR-S4-nmFssZXWw4ZVnI1Xw1ZiV4Q5-sS8f8rzoDO8NW7yzlpI2AclIDDogJoQP22VqW4CZINM631"/>
+</div>
+<div class="p-3 flex flex-col gap-1 flex-grow justify-between bg-secondary-fixed/5">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Aksesuar</p>
+<h3 class="font-title-md text-[14px] leading-tight text-on-surface line-clamp-2 mt-1">Gürültü Önleyici Kulaklık V2</h3>
+</div>
+<div class="flex items-center justify-between mt-2">
+<span class="font-title-md text-title-md text-primary">₺2.100</span>
+<span class="font-label-sm text-[10px] bg-surface-container-high text-on-surface px-2 py-1 rounded-full">Stok: 45</span>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-surface-lowest rounded-[15px] shadow-[0_4px_20px_rgba(18,30,92,0.05)] overflow-hidden flex flex-col relative group">
+<div class="absolute top-2 left-2 z-10">
+<input class="w-5 h-5 rounded-[4px] border-outline-variant text-secondary-fixed focus:ring-secondary-fixed bg-surface-bright/80 backdrop-blur-sm cursor-pointer" type="checkbox"/>
+</div>
+<button class="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-surface-bright/80 backdrop-blur-sm flex items-center justify-center text-on-surface hover:text-secondary-fixed transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<div class="h-32 bg-surface-variant relative">
+<img alt="Product Image" class="w-full h-full object-cover" data-alt="A minimalist smart home hub device sitting on a pristine white surface. The device features a sleek, circular design with a soft glowing turquoise LED ring at its base. The background is a pure, bright off-white, emphasizing a modern, high-tech, and clean corporate style. Shadows are soft and cool-toned." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0Yi747gJ7Y5hQG34HPmbJoYhynMiSoZmgo6cuTW880TZ5F0EGHEyihYGTUb8ZUZmFre8IFAYjFrkczdzXljrYcvFK_-fxBaM_7Ga7ySIEnYNzGNr6UxqSPEWLsuUH953hPFt5Ve2enPcKPIjHNvUPxS25J4N0-N15n4OMnKgQwdKbccqULnc5Pn0MRQEYTRo17EORJCtdp8YkKcdzJzQDDCyU4vxTFzFemx9E7sHz_YHzhfnfOUNznNDYPGk6IJARZ7P-nxsIBPuf"/>
+</div>
+<div class="p-3 flex flex-col gap-1 flex-grow justify-between">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Elektronik</p>
+<h3 class="font-title-md text-[14px] leading-tight text-on-surface line-clamp-2 mt-1">Akıllı Ev Kontrol Merkezi</h3>
+</div>
+<div class="flex items-center justify-between mt-2">
+<span class="font-title-md text-title-md text-primary">₺1.850</span>
+<span class="font-label-sm text-[10px] bg-error-container text-on-error-container px-2 py-1 rounded-full">Stok: 3</span>
+</div>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="bg-surface-lowest rounded-[15px] shadow-[0_4px_20px_rgba(18,30,92,0.05)] overflow-hidden flex flex-col relative group">
+<div class="absolute top-2 left-2 z-10">
+<input class="w-5 h-5 rounded-[4px] border-outline-variant text-secondary-fixed focus:ring-secondary-fixed bg-surface-bright/80 backdrop-blur-sm cursor-pointer" type="checkbox"/>
+</div>
+<button class="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-surface-bright/80 backdrop-blur-sm flex items-center justify-center text-on-surface hover:text-secondary-fixed transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<div class="h-32 bg-surface-variant relative">
+<img alt="Product Image" class="w-full h-full object-cover" data-alt="A premium mechanical keyboard with dark navy keycaps and subtle turquoise backlighting. The keyboard is viewed from a slight angle on a modern, uncluttered light-colored desk setting. The lighting is crisp and professional, highlighting the texture of the keys and the sleek metallic frame. The mood is focused and efficient." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-0PZ1OdI11GSEX0lD0cW95AqgtuPXdmMxV0yOFxuUQ2b7fT84_o53vgZK06JXLC2pstSQ1RnE1CARM3XlKhXKqdEhANW7V82mEIeRptr8cCpOT5eAFd2lsvChXHgAsrpIA2oi95afEa7kJ5qvLBqj4zz7Pqr7sWdstTwm_Dv2fK-tJS99u0brd_nAzVplkp97PKJW_7zMnYlIG9lMBxyADdQsx_gokGxdaGL6VtKuSEPCscZl6MKDnFs7s5PGEKtAgfeCbrUf_F74"/>
+</div>
+<div class="p-3 flex flex-col gap-1 flex-grow justify-between">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Aksesuar</p>
+<h3 class="font-title-md text-[14px] leading-tight text-on-surface line-clamp-2 mt-1">Mekanik Klavye Pro</h3>
+</div>
+<div class="flex items-center justify-between mt-2">
+<span class="font-title-md text-title-md text-primary">₺2.400</span>
+<span class="font-label-sm text-[10px] bg-surface-container-high text-on-surface px-2 py-1 rounded-full">Stok: 28</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Semantic Shell Rule) -->
+<nav class="fixed bottom-0 left-0 right-0 bg-surface shadow-[0_-4px_20px_rgba(18,30,92,0.05)] z-40 pb-safe">
+<ul class="flex justify-around items-center h-16 px-2">
+<li class="flex-1 flex flex-col items-center justify-center gap-1">
+<a class="text-on-surface-variant opacity-80 flex flex-col items-center" href="#">
+<span class="material-symbols-outlined text-[24px]">dashboard</span>
+<span class="font-label-sm text-[10px]">Dashboard</span>
+</a>
+</li>
+<li class="flex-1 flex flex-col items-center justify-center gap-1">
+<a class="text-on-surface-variant opacity-80 flex flex-col items-center" href="#">
+<span class="material-symbols-outlined text-[24px]">inventory_2</span>
+<span class="font-label-sm text-[10px]">Stock</span>
+</a>
+</li>
+<li class="flex-1 flex flex-col items-center justify-center gap-1">
+<a class="text-primary flex flex-col items-center bg-secondary-fixed rounded-xl px-4 py-1" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">inventory</span>
+<span class="font-label-sm text-[10px] font-bold">Catalog</span>
+</a>
+</li>
+<li class="flex-1 flex flex-col items-center justify-center gap-1">
+<a class="text-on-surface-variant opacity-80 flex flex-col items-center" href="#">
+<span class="material-symbols-outlined text-[24px]">receipt_long</span>
+<span class="font-label-sm text-[10px]">Transactions</span>
+</a>
+</li>
+<li class="flex-1 flex flex-col items-center justify-center gap-1">
+<a class="text-on-surface-variant opacity-80 flex flex-col items-center" href="#">
+<span class="material-symbols-outlined text-[24px]">settings</span>
+<span class="font-label-sm text-[10px]">Settings</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- Floating Action Bar for Bulk Operations (Visible when items selected) -->
+<div class="fixed bottom-20 left-4 right-4 bg-primary text-white rounded-[15px] p-4 flex items-center justify-between shadow-lg z-30 transition-transform transform translate-y-0">
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm bg-primary-container px-2 py-1 rounded-full">1 Seçili</span>
+</div>
+<div class="flex gap-2">
+<button class="bg-transparent border border-white/20 text-white rounded-[15px] px-3 py-2 font-label-sm text-label-sm hover:bg-white/10 transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+                Düzenle
+            </button>
+<button class="bg-secondary-fixed text-primary rounded-[15px] px-3 py-2 font-label-sm text-label-sm font-bold hover:bg-secondary transition-colors flex items-center gap-1 shadow-md">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+                Sil
+            </button>
+</div>
+</div>
+</body></html>

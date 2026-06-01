@@ -1,0 +1,392 @@
+<!DOCTYPE html><html class="light" lang="tr"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>OpsCommand | Satış Ekranı</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-dim": "#cbdbf5",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#51fbe7",
+                        "tertiary": "#0c1015",
+                        "secondary-fixed": "#51fbe7",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-secondary-fixed-variant": "#005048",
+                        "surface-container-low": "#eff4ff",
+                        "primary": "#00083d",
+                        "secondary": "#006a60",
+                        "surface-tint": "#4f5a99",
+                        "on-secondary-fixed": "#00201c",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c6c5d1",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#454650",
+                        "primary-container": "#121e5c",
+                        "on-primary-container": "#7d88cb",
+                        "outline": "#767681",
+                        "on-background": "#0b1c30",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-container": "#007167",
+                        "on-surface": "#0b1c30",
+                        "surface-variant": "#d3e4fe",
+                        "surface-container-high": "#dce9ff",
+                        "on-tertiary-container": "#888c92",
+                        "primary-fixed": "#dee0ff",
+                        "inverse-primary": "#bac3ff",
+                        "on-tertiary-fixed": "#181c21",
+                        "surface": "#f8f9ff",
+                        "on-primary-fixed-variant": "#374280",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#21252a",
+                        "secondary-fixed-dim": "#1edecb",
+                        "on-primary-fixed": "#061353",
+                        "tertiary-fixed-dim": "#c3c7cd",
+                        "surface-container": "#e5eeff",
+                        "surface-bright": "#f8f9ff",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#213145",
+                        "tertiary-fixed": "#dfe2e9",
+                        "background": "#f8f9ff",
+                        "primary-fixed-dim": "#bac3ff",
+                        "error": "#ba1a1a",
+                        "brand-navy": "#121e5c",
+                        "brand-turquoise": "#51fbe7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.9375rem", // 15px
+                        "lg": "0.9375rem",
+                        "xl": "1rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "xl": "3rem",
+                        "sm": "1rem",
+                        "md": "1.5rem",
+                        "lg": "2rem",
+                        "xs": "0.5rem",
+                        "sidebar-width": "280px",
+                        "sidebar-collapsed": "80px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .drawer-transition { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .sidebar-transition { transition: transform 0.3s ease-in-out, width 0.2s ease-in-out; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md overflow-hidden">
+<!-- Main Layout Wrapper -->
+<div class="flex h-screen overflow-hidden relative">
+<!-- Mobile Sidebar Backdrop -->
+<div class="fixed inset-0 bg-brand-navy/60 z-40 lg:hidden hidden backdrop-blur-sm transition-opacity opacity-0" id="sidebar-overlay"></div>
+<!-- Sidebar -->
+<aside class="sidebar-transition flex flex-col py-lg bg-brand-navy w-[280px] z-50 fixed lg:relative inset-y-0 left-0 -translate-x-full lg:translate-x-0 shadow-2xl shrink-0" id="sidebar">
+<!-- Sidebar Header -->
+<div class="px-md mb-lg flex items-center justify-between">
+<div class="flex items-center gap-sm sidebar-header-text">
+<span class="font-headline-lg text-white font-bold text-2xl">OpsCommand</span>
+</div>
+<button class="p-xs rounded-lg hover:bg-white/10 text-white transition-colors lg:hidden" id="close-sidebar">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Sidebar Content - Compact Menu -->
+<div class="flex-1 overflow-y-auto space-y-4">
+<!-- Genel Section -->
+<div>
+<p class="sidebar-section-label px-lg text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2">GENEL</p>
+<nav class="space-y-0.5">
+<a class="flex items-center gap-sm mx-md px-md py-2.5 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+<span class="sidebar-text font-semibold text-sm">Panel</span>
+</a>
+<a class="flex items-center gap-sm mx-md px-md py-2.5 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="sidebar-text font-semibold text-sm">Ürün Yönetimi</span>
+</a>
+<a class="flex items-center gap-sm mx-md px-md py-2.5 bg-brand-turquoise text-brand-navy rounded-xl transition-all shadow-sm" href="#">
+<span class="material-symbols-outlined text-[20px]">sell</span>
+<span class="sidebar-text font-semibold text-sm">Kategoriler</span>
+</a>
+<a class="flex items-center gap-sm mx-md px-md py-2.5 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">book</span>
+<span class="sidebar-text font-semibold text-sm">Kataloglar</span>
+</a>
+</nav>
+</div>
+<!-- Satış & Operasyon Section -->
+<div>
+<p class="sidebar-section-label px-lg text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2">SATIŞ &amp; OPERASYON</p>
+<nav class="space-y-0.5">
+<a class="flex items-center gap-sm mx-md px-md py-2.5 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">bolt</span>
+<span class="sidebar-text font-semibold text-sm">Hızlı Satış</span>
+</a>
+<a class="flex items-center justify-between mx-md px-md py-2.5 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-[20px]">shopping_cart</span>
+<span class="sidebar-text font-semibold text-sm">Siparişler</span>
+</div>
+<span class="bg-error w-4 h-4 flex items-center justify-center rounded-full text-[9px] text-white">2</span>
+</a>
+<a class="flex items-center gap-sm mx-md px-md py-2.5 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+<span class="sidebar-text font-semibold text-sm">Tahsilatlar</span>
+</a>
+<a class="flex items-center gap-sm mx-md px-md py-2.5 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">description</span>
+<span class="sidebar-text font-semibold text-sm">Alış Faturaları</span>
+</a>
+<a class="flex items-center gap-sm mx-md px-md py-2.5 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">warehouse</span>
+<span class="sidebar-text font-semibold text-sm">Depo</span>
+</a>
+<a class="flex items-center gap-sm mx-md px-md py-2.5 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="sidebar-text font-semibold text-sm">Müşteriler</span>
+</a>
+</nav>
+</div>
+</div>
+<!-- Sidebar Footer -->
+<div class="mt-auto pt-md border-t border-white/10 px-md">
+<div class="flex items-center gap-md mb-md">
+<div class="w-8 h-8 rounded-full bg-brand-turquoise flex items-center justify-center text-brand-navy font-bold text-xs">EN</div>
+<div>
+<p class="font-bold text-white text-xs">Engin</p>
+<p class="text-[9px] text-white/50 uppercase">Yönetici</p>
+</div>
+</div>
+<button class="w-full bg-white/10 hover:bg-white/20 text-white py-2 rounded-xl flex items-center justify-center gap-sm transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+<span class="font-semibold text-xs">Çıkış Yap</span>
+</button>
+</div>
+</aside>
+<!-- Right Side: Content + Header -->
+<div class="flex-1 flex flex-col overflow-hidden w-full">
+<!-- TopNavBar -->
+<header class="h-16 flex items-center justify-between px-md lg:px-lg bg-white border-b border-outline-variant z-30 shrink-0">
+<div class="flex items-center gap-md flex-1">
+<button class="p-2 rounded-full hover:bg-surface-container-high text-brand-navy lg:hidden" id="open-sidebar">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="font-headline-lg text-lg lg:text-xl text-brand-navy whitespace-nowrap hidden sm:block">Satış Paneli</h2>
+<div class="flex items-center gap-sm flex-1 max-w-2xl relative">
+<span class="material-symbols-outlined absolute left-3 text-outline text-[20px]">search</span>
+<input class="w-full pl-10 pr-3 py-2 bg-surface-container-low border border-outline-variant rounded-full text-sm focus:ring-2 focus:ring-brand-navy focus:border-brand-navy transition-all" placeholder="Ürün Ara..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-2 ml-sm">
+<button class="relative p-2 rounded-full hover:bg-surface-container-high text-brand-navy transition-colors" id="toggle-cart">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="absolute top-0 right-0 bg-error text-white text-[9px] w-4 h-4 flex items-center justify-center rounded-full border border-white">3</span>
+</button>
+<div class="h-8 w-px bg-outline-variant mx-1 hidden sm:block"></div>
+<button class="p-2 rounded-full hover:bg-surface-container-high text-brand-navy transition-colors hidden sm:block" id="toggle-filter">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto bg-surface p-sm lg:p-lg relative">
+<!-- Product Grid - 2 columns on mobile -->
+<div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 lg:gap-md pb-xl">
+<script>
+                    const products = [
+                        { name: "Pro-X Industrial Drill", code: "IND-9921", price: "2.450,00", stock: "142" },
+                        { name: "Heavy Duty Compressor", code: "CMP-4402", price: "5.120,00", stock: "12" },
+                        { name: "Precision Laser Level", code: "LAS-1022", price: "890,00", stock: "85" },
+                        { name: "Magnesium Tool Chest", code: "TCH-5510", price: "12.300,00", stock: "5" },
+                        { name: "Titanium Wrench Set", code: "WRN-0021", price: "450,00", stock: "210" },
+                        { name: "Electric Impact Driver", code: "IMP-3311", price: "1.750,00", stock: "44" },
+                        { name: "Safety Gear Bundle", code: "SFY-8821", price: "320,00", stock: "1000+" },
+                        { name: "High-Volt Multimeter", code: "MUL-7721", price: "640,00", stock: "32" },
+                        { name: "Workbench Alpha v2", code: "WRK-9900", price: "4.200,00", stock: "8" },
+                        { name: "LED Site Lighting", code: "LIT-1123", price: "980,00", stock: "115" }
+                    ];
+
+                    products.forEach(p => {
+                        document.write(`
+                            <div class="bg-white border border-outline-variant rounded-xl overflow-hidden flex flex-col hover:shadow-lg transition-all group">
+                                <div class="h-32 lg:h-44 bg-surface-container-low relative overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1581244276891-6bc61a7a1680?q=80&w=1000" 
+                                         alt="${p.name}" 
+                                         class="w-full h-full object-cover">
+                                    <div class="absolute top-1 right-1 bg-brand-navy/80 backdrop-blur-sm px-1.5 py-0.5 rounded-full text-[8px] lg:text-[10px] font-bold text-brand-turquoise uppercase shadow-sm">
+                                        STOK: ${p.stock}
+                                    </div>
+                                </div>
+                                <div class="p-2 lg:p-md flex flex-col flex-1">
+                                    <div class="mb-2">
+                                        <h3 class="font-bold text-brand-navy leading-tight text-xs lg:text-sm line-clamp-2 min-h-[2rem] lg:min-h-[2.5rem]">${p.name}</h3>
+                                        <span class="text-on-surface-variant font-mono text-[9px] lg:text-[11px] opacity-70">#${p.code}</span>
+                                    </div>
+                                    <div class="mt-auto">
+                                        <p class="text-sm lg:text-lg text-brand-navy font-bold mb-2 lg:mb-md">₺${p.price}</p>
+                                        <button class="w-full bg-brand-navy hover:bg-primary-container text-white h-8 lg:h-9 rounded-lg font-bold text-[10px] lg:text-xs flex items-center justify-center gap-1 transition-all active:scale-95">
+                                            <span class="material-symbols-outlined text-[14px] lg:text-[16px]">add_shopping_cart</span>
+                                            EKLE
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    });
+                </script>
+</div>
+</main>
+</div>
+</div>
+<!-- Filters Sidebar (Drawer) -->
+<aside class="fixed right-0 top-0 h-full w-full max-w-[320px] bg-white shadow-2xl z-[60] translate-x-full drawer-transition border-l border-outline-variant flex flex-col" id="filter-drawer">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center bg-brand-navy text-white">
+<h3 class="font-bold">Filtreler</h3>
+<button class="material-symbols-outlined text-white hover:opacity-70" id="close-filter">close</button>
+</div>
+<div class="p-lg flex-1 overflow-y-auto space-y-xl">
+<div>
+<label class="font-bold text-brand-navy text-xs mb-md block">Kategoriler</label>
+<div class="space-y-sm">
+<label class="flex items-center gap-md cursor-pointer">
+<input checked="" class="rounded border-outline-variant text-brand-navy focus:ring-brand-navy" type="checkbox">
+<span class="text-sm">Elektrikli El Aletleri</span>
+</label>
+<label class="flex items-center gap-md cursor-pointer">
+<input class="rounded border-outline-variant text-brand-navy focus:ring-brand-navy" type="checkbox">
+<span class="text-sm">Hırdavat &amp; Aksesuar</span>
+</label>
+</div>
+</div>
+</div>
+<div class="p-lg border-t border-outline-variant bg-surface-container-low grid grid-cols-2 gap-md">
+<button class="py-2 border border-outline-variant rounded-lg font-bold text-xs text-outline hover:bg-white transition-colors">TEMİZLE</button>
+<button class="py-2 bg-brand-navy text-white rounded-lg font-bold text-xs shadow-md hover:bg-brand-navy/90 transition-colors">UYGULA</button>
+</div>
+</aside>
+<!-- Shopping Cart Drawer -->
+<aside class="fixed right-0 top-0 h-full w-full max-w-[400px] bg-white shadow-2xl z-[70] translate-x-full drawer-transition border-l border-outline-variant flex flex-col" id="cart-drawer">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center bg-brand-navy text-white">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined">shopping_cart</span>
+<h3 class="font-bold">Sepetim (3)</h3>
+</div>
+<button class="material-symbols-outlined text-white hover:opacity-70 transition-opacity" id="close-cart">close</button>
+</div>
+<div class="flex-1 overflow-y-auto p-md space-y-md">
+<div class="flex gap-md border-b border-outline-variant pb-md">
+<div class="w-16 h-16 bg-surface-container-low rounded-lg shrink-0 overflow-hidden border border-outline-variant">
+<img alt="Item" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqbxSWu9zPJoZRd7pWS1keq4x3R0ch3ac9WdYmsDm8akc3TdWammfQz9Jywsf9SifjXJFpco-kG4z3OSTTHxdw4U5l3kS-e_cIeLDdeJ4WVr4tc-xiXn5ViFVJRwp9Pl1erFNtN2iRPh8q3l7igAd3EvXfDbmyp85aMjgof71cP8-wS1ZkMAOSEQ-c8zKJ3ZBwSO2Y1iOqkCQuWm1AIX8axZJC-yUW5DD5UEwwLCM29f8YEF-FKyktUoL7j4h3bZ9O4-JTmO62RwOa">
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<p class="font-bold text-brand-navy text-sm line-clamp-1">Pro-X Industrial Drill</p>
+<p class="text-[10px] text-on-surface-variant">2 Adet x ₺2.450,00</p>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-brand-navy font-bold text-sm">₺4.900,00</span>
+<button class="text-error text-[10px] flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="p-lg bg-surface-container-low border-t border-outline-variant">
+<div class="space-y-1 mb-md">
+<div class="flex justify-between text-on-surface-variant text-xs">
+<span>Ara Toplam</span>
+<span>₺10.020,00</span>
+</div>
+<div class="flex justify-between text-brand-navy font-bold text-lg pt-sm border-t border-outline-variant">
+<span>TOPLAM</span>
+<span class="text-brand-navy">₺12.024,00</span>
+</div>
+</div>
+<button class="w-full bg-brand-turquoise hover:opacity-90 text-brand-navy py-3.5 rounded-xl font-bold shadow-lg transition-all active:scale-[0.98]">
+            SİPARİŞİ TAMAMLA
+        </button>
+</div>
+</aside>
+<!-- Overlay for Cart/Filter -->
+<div class="fixed inset-0 bg-brand-navy/60 z-50 hidden backdrop-blur-sm transition-opacity opacity-0" id="drawer-overlay"></div>
+<script>
+    const sidebar = document.getElementById('sidebar');
+    const openSidebarBtn = document.getElementById('open-sidebar');
+    const closeSidebarBtn = document.getElementById('close-sidebar');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    const filterDrawer = document.getElementById('filter-drawer');
+    const cartDrawer = document.getElementById('cart-drawer');
+    const overlay = document.getElementById('drawer-overlay');
+    const body = document.body;
+
+    // Sidebar Mobile Toggle
+    function openSidebar() {
+        sidebar.classList.remove('-translate-x-full');
+        sidebarOverlay.classList.remove('hidden');
+        setTimeout(() => sidebarOverlay.classList.add('opacity-100'), 10);
+    }
+
+    function closeSidebar() {
+        sidebar.classList.add('-translate-x-full');
+        sidebarOverlay.classList.remove('opacity-100');
+        setTimeout(() => sidebarOverlay.classList.add('hidden'), 300);
+    }
+
+    openSidebarBtn.addEventListener('click', openSidebar);
+    closeSidebarBtn.addEventListener('click', closeSidebar);
+    sidebarOverlay.addEventListener('click', closeSidebar);
+
+    // Drawers
+    function openDrawer(drawer) {
+        drawer.classList.remove('translate-x-full');
+        overlay.classList.remove('hidden');
+        setTimeout(() => overlay.classList.add('opacity-100'), 10);
+    }
+
+    function closeAll() {
+        filterDrawer.classList.add('translate-x-full');
+        cartDrawer.classList.add('translate-x-full');
+        overlay.classList.remove('opacity-100');
+        setTimeout(() => overlay.classList.add('hidden'), 300);
+    }
+
+    document.getElementById('toggle-filter').addEventListener('click', () => openDrawer(filterDrawer));
+    document.getElementById('toggle-cart').addEventListener('click', () => openDrawer(cartDrawer));
+    document.getElementById('close-filter').addEventListener('click', closeAll);
+    document.getElementById('close-cart').addEventListener('click', closeAll);
+    overlay.addEventListener('click', closeAll);
+</script>
+</body></html>

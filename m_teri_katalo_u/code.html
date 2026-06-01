@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ürün Kataloğu</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed": "#51fbe7",
+                      "error": "#ba1a1a",
+                      "tertiary": "#0c1015",
+                      "surface": "#f8f9ff",
+                      "background": "#f8f9ff",
+                      "on-primary-fixed-variant": "#374280",
+                      "on-primary": "#ffffff",
+                      "surface-container": "#e5eeff",
+                      "on-primary-fixed": "#061353",
+                      "tertiary-fixed": "#dfe2e9",
+                      "outline-variant": "#c6c5d1",
+                      "on-primary-container": "#7d88cb",
+                      "on-secondary-container": "#007167",
+                      "primary-fixed-dim": "#bac3ff",
+                      "on-tertiary-fixed": "#181c21",
+                      "on-surface": "#0b1c30",
+                      "on-tertiary-fixed-variant": "#43474d",
+                      "surface-container-high": "#dce9ff",
+                      "on-error": "#ffffff",
+                      "inverse-primary": "#bac3ff",
+                      "outline": "#767681",
+                      "surface-variant": "#d3e4fe",
+                      "surface-container-highest": "#d3e4fe",
+                      "surface-bright": "#f8f9ff",
+                      "on-tertiary-container": "#888c92",
+                      "on-secondary": "#ffffff",
+                      "tertiary-container": "#21252a",
+                      "error-container": "#ffdad6",
+                      "primary": "#00083d",
+                      "primary-container": "#121e5c",
+                      "on-background": "#0b1c30",
+                      "surface-dim": "#cbdbf5",
+                      "secondary-container": "#51fbe7",
+                      "inverse-on-surface": "#eaf1ff",
+                      "tertiary-fixed-dim": "#c3c7cd",
+                      "surface-container-low": "#eff4ff",
+                      "secondary-fixed-dim": "#1edecb",
+                      "on-secondary-fixed-variant": "#005048",
+                      "on-error-container": "#93000a",
+                      "on-surface-variant": "#454650",
+                      "primary-fixed": "#dee0ff",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-tint": "#4f5a99",
+                      "on-secondary-fixed": "#00201c",
+                      "secondary": "#006a60",
+                      "inverse-surface": "#213145"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "0.5rem",
+                      "lg": "2rem",
+                      "gutter": "24px",
+                      "sm": "1rem",
+                      "base": "4px",
+                      "sidebar-width": "280px",
+                      "xl": "3rem",
+                      "md": "1.5rem"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Hanken Grotesk"],
+                      "body-md": ["Hanken Grotesk"],
+                      "headline-lg-mobile": ["Hanken Grotesk"],
+                      "title-md": ["Hanken Grotesk"],
+                      "label-sm": ["Hanken Grotesk"],
+                      "display-lg": ["Hanken Grotesk"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+        .radius-15 { border-radius: 15px; }
+        .shadow-soft { box-shadow: 0px 4px 20px rgba(18, 30, 92, 0.05); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col md:hidden">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim w-full top-0 sticky shadow-sm dark:shadow-none shadow-[0px_4px_20px_rgba(18,30,92,0.05)] z-50">
+<div class="flex justify-between items-center px-lg h-20 w-full">
+<button class="text-primary dark:text-primary-fixed-dim hover:bg-surface-container-high transition-colors active:scale-95 duration-150 p-xs radius-15">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-secondary-fixed">Operations Console</h1>
+<button class="text-primary dark:text-primary-fixed-dim hover:bg-surface-container-high transition-colors active:scale-95 duration-150 p-xs radius-15 relative">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="absolute top-0 right-0 bg-[#E11D48] text-white text-[10px] font-bold px-1 rounded-full border-2 border-surface">3</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 p-md flex flex-col gap-md">
+<!-- Search & Filter Bar -->
+<div class="flex gap-sm">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant focus:border-secondary-container focus:ring-1 focus:ring-secondary-container text-on-surface radius-15 pl-xl pr-sm py-sm font-body-md transition-colors" placeholder="Ürün Ara..." type="text"/>
+</div>
+<button class="bg-surface-container-low border border-outline-variant text-on-surface radius-15 px-sm py-sm flex items-center justify-center hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="tune">tune</span>
+</button>
+</div>
+<!-- Categories Chips -->
+<div class="flex gap-xs overflow-x-auto pb-2 -mx-md px-md scrollbar-hide">
+<button class="whitespace-nowrap bg-secondary-fixed text-primary px-md py-xs radius-15 font-label-sm shadow-soft">Tümü</button>
+<button class="whitespace-nowrap bg-surface-container text-on-surface px-md py-xs radius-15 font-label-sm border border-outline-variant">Endüstriyel</button>
+<button class="whitespace-nowrap bg-surface-container text-on-surface px-md py-xs radius-15 font-label-sm border border-outline-variant">Yedek Parça</button>
+<button class="whitespace-nowrap bg-surface-container text-on-surface px-md py-xs radius-15 font-label-sm border border-outline-variant">Sarf Malzeme</button>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-2 gap-sm">
+<!-- Product Card 1 -->
+<div class="bg-white p-xs radius-15 shadow-soft flex flex-col gap-xs relative overflow-hidden group">
+<div class="aspect-square bg-surface-container-low radius-15 overflow-hidden flex items-center justify-center relative">
+<img alt="Endüstriyel Motor Parçası" class="object-cover w-full h-full mix-blend-multiply" data-alt="A macro studio shot of a complex industrial metallic gear component. The lighting is clean and highly controlled, emphasizing the precision engineering and metallic texture. The background is a very light, clinical off-white, aligning with a corporate modern B2B catalog aesthetic. Subtle turquoise light reflections accent the edges of the metal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7kPTuf5sBPTqyfPweeyN9fjjgiJfiTh3KT5g55pEj-Tbox0E6ZLHvD04rqaIW_aog-0dtyXUA3uyzj8eaLvoG70cIYofo3yzZeCtbQNXy3_xnn0G2unZrXo0WG95rm-hhFyu9HHbesabMpEljKaMi_3kqD-m0YgbAKb9TMqe7sLUdrvt7MhmLs2E9yebVxS0FetGNQ53JsoCarTzmgFVPuyiYhv_aQ8mvr82Q48zX_mnvJOogJWjvUabiS01PbZVmHJG0tWeQxBct"/>
+</div>
+<div class="flex flex-col flex-1 justify-between p-1">
+<div>
+<p class="font-label-sm text-outline uppercase">Motor Parçaları</p>
+<h3 class="font-title-md text-title-md text-on-surface line-clamp-2 mt-1">Yüksek Devirli Rulman</h3>
+</div>
+<div class="mt-sm flex justify-between items-center">
+<span class="font-title-md text-title-md text-primary">₺1,250</span>
+<button class="bg-secondary-fixed text-primary p-xs radius-15 hover:bg-secondary-fixed-dim transition-colors active:scale-95 flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-white p-xs radius-15 shadow-soft flex flex-col gap-xs relative overflow-hidden group">
+<div class="aspect-square bg-surface-container-low radius-15 overflow-hidden flex items-center justify-center relative">
+<img alt="Sensör Modülü" class="object-cover w-full h-full mix-blend-multiply" data-alt="A detailed product photography shot of a sleek, modern industrial sensor module. The device has a matte black casing with small metallic connectors. It is placed on a pristine white surface with soft, diffuse shadows beneath it. A faint turquoise accent light highlights the sensor's lens area, fitting the brand's tech-forward identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSrlrnG599evhDiwy-I3pFYMU89X5Pruj9YN55USvqeACnwreGdAhOv9HorNLX2kRjX5aEd7IUU3JxLhoLdiW2W2x7-ScfD9iIhLm_boWm3KxBxfDQbOHIXhXZMyIuiWmEEZpYiHdj7428R_1StdL7K3yCIJS_0ytQW36RJGIGBrm7k25O4kkN3UWQilw2q3xah7AfJVe6ihUPd7j9j75Qey6vERBLAucSeudkOIrgqOQaE1U479jRzbPgvNLbGDIJ-qID0LEobQhZ"/>
+</div>
+<div class="flex flex-col flex-1 justify-between p-1">
+<div>
+<p class="font-label-sm text-outline uppercase">Elektronik</p>
+<h3 class="font-title-md text-title-md text-on-surface line-clamp-2 mt-1">Lazer Sensör Modülü TR-90</h3>
+</div>
+<div class="mt-sm flex justify-between items-center">
+<span class="font-title-md text-title-md text-primary">₺3,400</span>
+<button class="bg-secondary-fixed text-primary p-xs radius-15 hover:bg-secondary-fixed-dim transition-colors active:scale-95 flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-white p-xs radius-15 shadow-soft flex flex-col gap-xs relative overflow-hidden group col-span-2">
+<div class="flex gap-sm">
+<div class="w-1/3 aspect-square bg-surface-container-low radius-15 overflow-hidden flex items-center justify-center relative">
+<img alt="Kontrol Paneli" class="object-cover w-full h-full mix-blend-multiply" data-alt="A clean, isolated image of a corporate digital control panel interface unit. The unit is metallic silver with a dark glass screen. The setting is pure white, creating a clinical B2B catalog look. Soft ambient lighting ensures all details of the buttons and screen bezel are visible without harsh glares." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC4Mm4OHSC5rG4BuHHddlPV0ufBD_k0o_JX7DlWoENKmuMNQXxW_7W8R_4e46hBGPAyY3i4GWnCjT36IVC-DraKyk4ZFB_VwWsVbTiyBEXgo1KfToDLsUO8I8Ff-3_uFsFFvqvbjU28XA3LyUzt0agnz4QQTTsnKpye0VIoePWOViAsm8FSI9fGT8365avunGTtRF_RNqoLInW8fWVAb-BkgSDLhao7pe0gGX85-MFhRXDon17CS1NyvQmpGsulQs_3-MvHvlPo3TUr"/>
+</div>
+<div class="flex flex-col flex-1 justify-center py-xs pr-xs">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-label-sm text-outline uppercase">Sistem Kontrol</p>
+<h3 class="font-title-md text-title-md text-on-surface mt-1">Ana Kontrol Ünitesi X5</h3>
+</div>
+<span class="bg-[#E11D48]/10 text-[#E11D48] font-label-sm px-2 py-1 radius-15">Yeni</span>
+</div>
+<div class="mt-auto flex justify-between items-center">
+<span class="font-title-md text-title-md text-primary">₺12,500</span>
+<button class="border-[1.5px] border-primary-container text-primary-container px-sm py-xs radius-15 font-title-md text-sm hover:bg-surface-container transition-colors">
+                                Detay
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="bg-white p-xs radius-15 shadow-soft flex flex-col gap-xs relative overflow-hidden group">
+<div class="aspect-square bg-surface-container-low radius-15 overflow-hidden flex items-center justify-center relative">
+<span class="material-symbols-outlined text-[48px] text-outline-variant">cable</span>
+</div>
+<div class="flex flex-col flex-1 justify-between p-1">
+<div>
+<p class="font-label-sm text-outline uppercase">Bağlantı</p>
+<h3 class="font-title-md text-title-md text-on-surface line-clamp-2 mt-1">Endüstriyel Kablo 5m</h3>
+</div>
+<div class="mt-sm flex justify-between items-center">
+<span class="font-title-md text-title-md text-primary">₺450</span>
+<button class="bg-secondary-fixed text-primary p-xs radius-15 hover:bg-secondary-fixed-dim transition-colors active:scale-95 flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]" data-icon="add_shopping_cart">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Action Bar (Simulating Cart Checkout Flow) -->
+<div class="sticky bottom-0 left-0 w-full bg-surface dark:bg-surface-dim p-md shadow-[0px_-4px_20px_rgba(18,30,92,0.05)] border-t border-surface-container z-40">
+<div class="flex items-center justify-between mb-sm">
+<span class="font-body-md text-on-surface-variant">Toplam (3 Ürün):</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold">₺5,100</span>
+</div>
+<button class="w-full bg-primary text-secondary-fixed py-sm radius-15 font-title-md text-title-md flex items-center justify-center gap-xs hover:opacity-90 transition-opacity">
+<span>Sipariş Talebi Oluştur</span>
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</body></html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Stok Listesi - Operations Console</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "tertiary": "#0c1015",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#7d88cb",
+                        "secondary": "#006a60",
+                        "on-primary-fixed": "#061353",
+                        "secondary-fixed-dim": "#1edecb",
+                        "on-secondary-fixed": "#00201c",
+                        "on-background": "#0b1c30",
+                        "inverse-on-surface": "#eaf1ff",
+                        "inverse-surface": "#213145",
+                        "tertiary-container": "#21252a",
+                        "surface-variant": "#d3e4fe",
+                        "on-error-container": "#93000a",
+                        "background": "#f8f9ff",
+                        "tertiary-fixed": "#dfe2e9",
+                        "on-surface": "#0b1c30",
+                        "on-secondary-fixed-variant": "#005048",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#eff4ff",
+                        "on-primary": "#ffffff",
+                        "primary": "#00083d",
+                        "on-primary-fixed-variant": "#374280",
+                        "surface-tint": "#4f5a99",
+                        "secondary-fixed": "#51fbe7",
+                        "on-tertiary-fixed": "#181c21",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-secondary-container": "#007167",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#cbdbf5",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "on-surface-variant": "#454650",
+                        "on-tertiary-container": "#888c92",
+                        "tertiary-fixed-dim": "#c3c7cd",
+                        "surface-container": "#e5eeff",
+                        "secondary-container": "#51fbe7",
+                        "primary-fixed": "#dee0ff",
+                        "surface-container-high": "#dce9ff",
+                        "surface": "#f8f9ff",
+                        "primary-fixed-dim": "#bac3ff",
+                        "inverse-primary": "#bac3ff",
+                        "primary-container": "#121e5c",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c6c5d1",
+                        "outline": "#767681"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "custom": "15px"
+                    },
+                    "spacing": {
+                        "xl": "3rem",
+                        "sidebar-width": "280px",
+                        "gutter": "24px",
+                        "sm": "1rem",
+                        "base": "4px",
+                        "xs": "0.5rem",
+                        "md": "1.5rem",
+                        "lg": "2rem"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .glass-panel {
+                @apply bg-surface-container-lowest shadow-[0px_4px_20px_rgba(18,30,92,0.05)] rounded-[15px] border border-white;
+            }
+            .btn-primary {
+                @apply bg-[#00D7C4] text-[#121E5C] font-title-md text-title-md rounded-[15px] px-[24px] py-[12px] hover:opacity-90 transition-opacity flex items-center gap-2;
+            }
+            .btn-secondary {
+                @apply bg-transparent border-[1.5px] border-[#121E5C] text-[#121E5C] font-title-md text-title-md rounded-[15px] px-[24px] py-[12px] hover:bg-[#121E5C]/5 transition-colors flex items-center gap-2;
+            }
+            .input-field {
+                @apply bg-surface-variant/30 border border-outline-variant text-on-surface font-body-md text-body-md rounded-[15px] px-[24px] py-[12px] focus:outline-none focus:border-[#00D7C4] focus:ring-1 focus:ring-[#00D7C4] transition-all;
+            }
+            .status-badge-in-stock {
+                @apply bg-[#00D7C4]/20 text-[#006a60] font-label-sm text-label-sm rounded-full px-3 py-1 flex items-center gap-1;
+            }
+            .status-badge-low-stock {
+                @apply bg-error-container text-on-error-container font-label-sm text-label-sm rounded-full px-3 py-1 flex items-center gap-1;
+            }
+            .status-badge-out-of-stock {
+                @apply bg-surface-variant text-on-surface-variant font-label-sm text-label-sm rounded-full px-3 py-1 flex items-center gap-1;
+            }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md text-body-md min-h-screen flex flex-col md:flex-row antialiased overflow-x-hidden">
+<!-- NavigationDrawer (Sidebar - Desktop) -->
+<aside class="hidden md:flex flex-col bg-primary dark:bg-primary fixed left-0 top-0 h-full w-[280px] border-r border-white/10 z-20">
+<div class="flex flex-col h-full py-xl px-4 gap-6">
+<!-- Brand -->
+<div class="px-4 mb-4">
+<span class="font-headline-lg text-headline-lg text-[#00D7C4] font-bold tracking-tight">Ops<span class="text-white">Console</span></span>
+</div>
+<!-- Profile Area -->
+<div class="flex items-center gap-4 px-4 py-3 bg-white/5 rounded-[15px] border border-white/10">
+<img alt="User Profile" class="w-10 h-10 rounded-full object-cover border border-white/20" data-alt="A highly detailed close-up portrait of a professional operations manager in a modern corporate setting. The lighting is soft and cinematic, highlighting features against a deep, cool-toned background. The aesthetic reflects a premium, trustworthy enterprise environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDULQ2y63Mova1akSSMBhA6_YODI6AufYibPv4H8NBPUMkxR6JPpSHOzozmd-7ayJ_S1K22prf8HXrfeZJp_0w2yvD1YLnubVbbik1NkGO5nvabLxMgWO3vqQDXYotsP_e8SwZdbUmYsSPccvZOMP13f9z7udCr55OoqyjNvuIpN1yvfN4QC54bwluaFb8LhFLP_q_vCERhwXRi0dcUCSRWU2Q18w9xS4MbP0aXke-_OGssvIJdn_IHEkGtA9KHDzYxfrikF0hGJWHl"/>
+<div>
+<h3 class="text-white font-title-md text-title-md text-sm truncate">Operations Manager</h3>
+<p class="text-white/60 font-label-sm text-label-sm">Global Logistics</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 space-y-2 mt-4">
+<a class="bg-[#00D7C4] text-[#121E5C] rounded-[15px] flex items-center px-4 py-3 font-bold transition-transform scale-[0.98]" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+                    Stock List
+                </a>
+<a class="text-white/80 hover:text-white flex items-center px-4 py-3 hover:bg-white/5 transition-colors duration-200 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 0; stroke-width: 2px;">edit_note</span>
+                    Manual Products
+                </a>
+<a class="text-white/80 hover:text-white flex items-center px-4 py-3 hover:bg-white/5 transition-colors duration-200 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 0; stroke-width: 2px;">info</span>
+                    Product Details
+                </a>
+<a class="text-white/80 hover:text-white flex items-center px-4 py-3 hover:bg-white/5 transition-colors duration-200 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 0; stroke-width: 2px;">query_stats</span>
+                    Stock Tracking
+                </a>
+<a class="text-white/80 hover:text-white flex items-center px-4 py-3 hover:bg-white/5 transition-colors duration-200 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 0; stroke-width: 2px;">auto_stories</span>
+                    Product Catalog
+                </a>
+<a class="text-white/80 hover:text-white flex items-center px-4 py-3 hover:bg-white/5 transition-colors duration-200 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 0; stroke-width: 2px;">shopping_cart</span>
+                    Catalog Cart
+                </a>
+</nav>
+<!-- Meta/Footer -->
+<div class="px-4 mt-auto">
+<p class="text-white/40 font-label-sm text-label-sm">v2.4.0</p>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-[280px] flex flex-col min-h-screen">
+<!-- TopAppBar (Mobile & Desktop) -->
+<header class="flex justify-between items-center px-4 md:px-xl h-20 w-full bg-surface dark:bg-surface-dim shadow-[0px_4px_20px_rgba(18,30,92,0.05)] z-10 sticky top-0">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-primary p-2 hover:bg-surface-container-high rounded-[15px] transition-all">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg font-bold text-primary tracking-tight">Stok Listesi</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:bg-surface-container-high p-2 rounded-[15px] transition-all relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2.5 h-2.5 bg-[#E11D48] rounded-full border-2 border-surface"></span>
+</button>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-4 md:p-xl flex-1 flex flex-col gap-6">
+<!-- Tools & Filters Bar (Glassmorphism inspired) -->
+<section class="glass-panel p-6 flex flex-col xl:flex-row gap-4 items-start xl:items-center justify-between">
+<div class="w-full xl:w-1/3 relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="input-field w-full pl-12" placeholder="Ürün adı, SKU veya barkod ile ara..." type="text"/>
+</div>
+<div class="flex flex-wrap gap-3 items-center w-full xl:w-auto">
+<select class="input-field py-[10px] bg-white">
+<option value="">Tüm Kategoriler</option>
+<option value="electronics">Elektronik</option>
+<option value="office">Ofis Malzemeleri</option>
+<option value="hardware">Donanım</option>
+</select>
+<select class="input-field py-[10px] bg-white">
+<option value="">Tüm Markalar</option>
+<option value="brand_a">TechPro</option>
+<option value="brand_b">LogiCore</option>
+</select>
+<div class="flex bg-surface-variant/30 rounded-[15px] p-1 border border-outline-variant">
+<button class="px-4 py-1.5 rounded-[12px] bg-white shadow-sm text-primary font-title-md text-sm">Aktif</button>
+<button class="px-4 py-1.5 rounded-[12px] text-on-surface-variant hover:text-primary font-title-md text-sm transition-colors">Pasif</button>
+</div>
+<button class="btn-primary ml-auto xl:ml-2 py-[10px]">
+<span class="material-symbols-outlined text-sm">add</span>
+                        Yeni Ürün
+                    </button>
+</div>
+</section>
+<!-- Grid Layout for Products -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Product Card 1 (In Stock) -->
+<div class="glass-panel p-5 flex flex-col gap-4 group hover:-translate-y-1 transition-transform duration-300">
+<div class="flex justify-between items-start">
+<div class="status-badge-in-stock">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                            Stokta
+                        </div>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="aspect-video bg-surface-container rounded-lg overflow-hidden relative mb-2">
+<img alt="TechPro Laptop" class="w-full h-full object-cover" data-alt="A sleek, modern high-end laptop sitting open on a pristine white desk. The lighting is bright and airy, typical of a modern office environment. The color palette emphasizes clean whites, soft grays, and the metallic silver of the laptop, reflecting a premium corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnVJ0_KlDQH6O-w_sFmE1_TO-U4K3r8JifGCQQR2WdKOzIsd1iWOMrEGVQMkYegBJc2v5Wwl0057cI4UojXdSLf8C3Nm7H5W96GquJDqepXUHROcE8mUx_3I4iLNWZi2rVNpgmzfsqvAR8yhPxBjzUo6IfpnkU_nj7TaRUTYRS7jf2WYN6mjqoB1XNSr5XaX2__ygimfs7e92oLm8asCyLuG6S2jZAFORShjjFqzGhUlaQdMB01wOYp3XnTIQDF9t-bWmf42mRAmbO"/>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-primary mb-1 line-clamp-1">TechPro EliteBook 14"</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm mb-2">SKU: TP-EB14-2023</p>
+<div class="flex justify-between items-end mt-2">
+<div>
+<span class="font-label-sm text-label-sm text-outline block">Birim Fiyat</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">₺24.500</span>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-outline block">Miktar</span>
+<span class="font-title-md text-title-md text-secondary-fixed-dim bg-[#121E5C] px-3 py-1 rounded-[10px]">142 Adet</span>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-surface-variant flex gap-2">
+<button class="btn-secondary flex-1 justify-center py-2 text-sm border-outline-variant text-on-surface-variant hover:border-[#121E5C] hover:text-[#121E5C]">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                            Hızlı Düzenle
+                        </button>
+<button class="btn-secondary flex-1 justify-center py-2 text-sm border-[#121E5C] text-[#121E5C] bg-[#121E5C]/5">
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                            Detaylar
+                        </button>
+</div>
+</div>
+<!-- Product Card 2 (Low Stock) -->
+<div class="glass-panel p-5 flex flex-col gap-4 group hover:-translate-y-1 transition-transform duration-300 border-l-4 border-l-error">
+<div class="flex justify-between items-start">
+<div class="status-badge-low-stock">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+                            Azalan Stok
+                        </div>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="aspect-video bg-surface-container rounded-lg overflow-hidden relative mb-2">
+<img alt="LogiCore Mouse" class="w-full h-full object-cover" data-alt="A top-down view of a minimalist ergonomic wireless computer mouse resting on a clean, light-colored surface. The lighting is soft and diffused, creating subtle shadows. The aesthetic is clean, technical, and modern, fitting a high-performance workspace vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7BlqVeUvf7BhJg3JfbfY_DkPSble0BsAaXVp0fjuHHFzupqssJkUv_SczUSJ_w96QyDc1sO_OqkCXdHCgXwHT82Gm5A4pP8P68c6ZYi5yVL65HTA-5ImDTClk162eURZOZ7fjDk3OA6EZY2bw6Q7RPRpvnWB0EHLa8tG4oB0mksgaT-LpaVAhARKMmwSMU-h9W3NUpS5FZc7Sc0inbrtxOeNDR8BGGa5HGpfgYMf_Bx9BpLwThUPe_E__RTif7vCycq45OLaxt6H7"/>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-primary mb-1 line-clamp-1">LogiCore Ergo Mouse MX</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm mb-2">SKU: LC-EMMX-BLK</p>
+<div class="flex justify-between items-end mt-2">
+<div>
+<span class="font-label-sm text-label-sm text-outline block">Birim Fiyat</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">₺1.850</span>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-error block">Kritik Seviye</span>
+<span class="font-title-md text-title-md text-error bg-error-container px-3 py-1 rounded-[10px]">8 Adet</span>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-surface-variant flex gap-2">
+<button class="btn-secondary flex-1 justify-center py-2 text-sm border-outline-variant text-on-surface-variant hover:border-[#121E5C] hover:text-[#121E5C]">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                            Hızlı Düzenle
+                        </button>
+<button class="btn-secondary flex-1 justify-center py-2 text-sm border-[#121E5C] text-[#121E5C] bg-[#121E5C]/5">
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                            Detaylar
+                        </button>
+</div>
+</div>
+<!-- Product Card 3 (Out of Stock) -->
+<div class="glass-panel p-5 flex flex-col gap-4 group hover:-translate-y-1 transition-transform duration-300 opacity-80">
+<div class="flex justify-between items-start">
+<div class="status-badge-out-of-stock">
+<span class="material-symbols-outlined text-[14px]">block</span>
+                            Tükendi
+                        </div>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="aspect-video bg-surface-container rounded-lg overflow-hidden relative mb-2 grayscale">
+<div class="absolute inset-0 bg-surface/40 z-10 flex items-center justify-center">
+<span class="bg-surface px-3 py-1 rounded-full text-sm font-title-md text-on-surface-variant shadow-sm">Sipariş Bekleniyor</span>
+</div>
+<img alt="Headphones" class="w-full h-full object-cover" data-alt="High-end noise-canceling headphones resting on a sleek wooden desk. The scene is illuminated by dramatic, moody lighting with cool tones, emphasizing the premium build quality of the audio equipment. The overall style is corporate modern with a touch of elegance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDP0TkeQmIHI0gk2y6dJS_NY5Ula8njBe-PcRoN5bzy7h9m5RTtwg1wjGz_RgV4nijLbU5DpJiKGSgHMpHdMgzX0FniJu8qkS4hfbgRyo2ndcz6A6fDZa6eLz9-ZmjNHKsfTnqiTL66gNr01hKwF0TSs7ka6QqeeJCYUvNUx-bLSW_pY6t50c22RjbCRtdZc-znq_H3RNeLh5UvsKShulCkrfZ_99cGqzmJEKr2a350tj6BeedahLwYREbEm8AzTvBrYXcxpLWK8d8"/>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-primary mb-1 line-clamp-1">SonicWave Pro Studio</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm mb-2">SKU: SW-PS-V2</p>
+<div class="flex justify-between items-end mt-2">
+<div>
+<span class="font-label-sm text-label-sm text-outline block">Birim Fiyat</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-outline-variant line-through">₺4.200</span>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-outline block">Miktar</span>
+<span class="font-title-md text-title-md text-on-surface-variant bg-surface-variant px-3 py-1 rounded-[10px]">0 Adet</span>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-surface-variant flex gap-2">
+<button class="btn-secondary flex-1 justify-center py-2 text-sm border-outline-variant text-on-surface-variant hover:border-[#121E5C] hover:text-[#121E5C]">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                            Hızlı Düzenle
+                        </button>
+<button class="btn-secondary flex-1 justify-center py-2 text-sm border-[#121E5C] text-[#121E5C] bg-[#121E5C]/5">
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                            Detaylar
+                        </button>
+</div>
+</div>
+<!-- Product Card 4 (In Stock) -->
+<div class="glass-panel p-5 flex flex-col gap-4 group hover:-translate-y-1 transition-transform duration-300">
+<div class="flex justify-between items-start">
+<div class="status-badge-in-stock">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                            Stokta
+                        </div>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<div class="aspect-video bg-surface-container rounded-lg overflow-hidden relative mb-2">
+<img alt="Office Chair" class="w-full h-full object-cover" data-alt="A premium ergonomic office chair positioned in a well-lit, contemporary office space. The background is slightly blurred to focus on the chair's modern mesh design and sturdy frame. The color palette features cool grays and crisp whites, aligning with a high-end corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAekgVzKaLuEJKQC9rztcQXSKn-gImvlzVyG_rsV-JjtgstRT-kl3-cAV2n5x8PY3lf5Y2FvjtKUf7XDJib04s0JWI9N_bOPQnYJmBngwncUOb7FpR5JO3xUyCKLfWyfQhee_wbmBFwmOnWpgFMgXXVH87K5vsa0ArJeCeQvp-6VKWYUC0PI7D7pU2SmijhPvtge5t3a1CjOkC3aqS4zxC0Wao45CCYZOKB5bu4zyywXkX92Jf1jUbRplU8kmFeqmIk1cgPorxXgig-"/>
+</div>
+<div>
+<h3 class="font-title-md text-title-md text-primary mb-1 line-clamp-1">ErgoFlex Yönetici Koltuğu</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm mb-2">SKU: EF-EXEC-GRY</p>
+<div class="flex justify-between items-end mt-2">
+<div>
+<span class="font-label-sm text-label-sm text-outline block">Birim Fiyat</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary">₺8.900</span>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-outline block">Miktar</span>
+<span class="font-title-md text-title-md text-secondary-fixed-dim bg-[#121E5C] px-3 py-1 rounded-[10px]">45 Adet</span>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-4 border-t border-surface-variant flex gap-2">
+<button class="btn-secondary flex-1 justify-center py-2 text-sm border-outline-variant text-on-surface-variant hover:border-[#121E5C] hover:text-[#121E5C]">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+                            Hızlı Düzenle
+                        </button>
+<button class="btn-secondary flex-1 justify-center py-2 text-sm border-[#121E5C] text-[#121E5C] bg-[#121E5C]/5">
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                            Detaylar
+                        </button>
+</div>
+</div>
+</section>
+<!-- Pagination (Simple) -->
+<div class="flex justify-center items-center gap-2 mt-4">
+<button class="w-10 h-10 rounded-[15px] border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 rounded-[15px] bg-[#121E5C] text-[#00D7C4] font-title-md font-bold flex items-center justify-center">1</button>
+<button class="w-10 h-10 rounded-[15px] border border-outline-variant flex items-center justify-center text-on-surface hover:bg-surface-variant transition-colors">2</button>
+<button class="w-10 h-10 rounded-[15px] border border-outline-variant flex items-center justify-center text-on-surface hover:bg-surface-variant transition-colors">3</button>
+<span class="text-outline-variant px-2">...</span>
+<button class="w-10 h-10 rounded-[15px] border border-outline-variant flex items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</main>
+</body></html>

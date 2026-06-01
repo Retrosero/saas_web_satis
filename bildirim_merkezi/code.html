@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bildirim Merkezi</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-container": "#21252a",
+                      "surface-container-high": "#dce9ff",
+                      "tertiary-fixed-dim": "#c3c7cd",
+                      "outline-variant": "#c6c5d1",
+                      "on-error": "#ffffff",
+                      "on-surface": "#0b1c30",
+                      "surface-variant": "#d3e4fe",
+                      "error-container": "#ffdad6",
+                      "primary-container": "#121e5c",
+                      "background": "#f8f9ff",
+                      "secondary-fixed": "#51fbe7",
+                      "on-tertiary-container": "#888c92",
+                      "on-background": "#0b1c30",
+                      "on-primary-container": "#7d88cb",
+                      "surface-container": "#e5eeff",
+                      "primary": "#00083d",
+                      "on-tertiary-fixed": "#181c21",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-on-surface": "#eaf1ff",
+                      "surface-bright": "#f8f9ff",
+                      "surface-tint": "#4f5a99",
+                      "surface-container-low": "#eff4ff",
+                      "outline": "#767681",
+                      "tertiary-fixed": "#dfe2e9",
+                      "secondary": "#006a60",
+                      "on-secondary-fixed": "#00201c",
+                      "on-primary-fixed": "#061353",
+                      "inverse-surface": "#213145",
+                      "on-secondary-container": "#007167",
+                      "on-secondary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "on-tertiary": "#ffffff",
+                      "tertiary": "#0c1015",
+                      "primary-fixed-dim": "#bac3ff",
+                      "primary-fixed": "#dee0ff",
+                      "secondary-fixed-dim": "#1edecb",
+                      "surface": "#f8f9ff",
+                      "on-tertiary-fixed-variant": "#43474d",
+                      "on-primary": "#ffffff",
+                      "on-secondary-fixed-variant": "#005048",
+                      "on-primary-fixed-variant": "#374280",
+                      "surface-container-highest": "#d3e4fe",
+                      "secondary-container": "#51fbe7",
+                      "on-surface-variant": "#454650",
+                      "inverse-primary": "#bac3ff",
+                      "surface-dim": "#cbdbf5",
+                      "on-error-container": "#93000a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xl": "3rem",
+                      "md": "1.5rem",
+                      "sm": "1rem",
+                      "lg": "2rem",
+                      "xs": "0.5rem",
+                      "gutter": "24px",
+                      "base": "4px",
+                      "sidebar-width": "280px"
+              },
+              "fontFamily": {
+                      "title-md": ["Hanken Grotesk"],
+                      "headline-lg": ["Hanken Grotesk"],
+                      "display-lg": ["Hanken Grotesk"],
+                      "body-md": ["Hanken Grotesk"],
+                      "headline-lg-mobile": ["Hanken Grotesk"],
+                      "label-sm": ["Hanken Grotesk"]
+              },
+              "fontSize": {
+                      "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .fill-icon { font-variation-settings: 'FILL' 1; }
+        
+        /* Hide scrollbar for clean look but allow scrolling */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background flex h-screen overflow-hidden antialiased">
+<!-- Navigation Drawer (Desktop) -->
+<nav class="bg-primary dark:bg-primary w-sidebar-width h-full fixed left-0 top-0 border-r border-white/10 hidden md:flex flex-col z-50">
+<!-- Header Profile -->
+<div class="p-6 border-b border-white/10">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-[15px] bg-secondary-fixed flex items-center justify-center text-primary font-bold text-xl overflow-hidden shrink-0">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD02IJF3Iwue8HJBPKyL619_KJrzV4sLCj-_m0hyvbUaKN2KIMmkuCe8nFq0OU4gYCgV5xfKNTjW006F5LsOZSdtPnDM5XZxnbZJReDvT9ioUYQVs_m6i7smhJzojwWSwM9n2AgYb94q468Ke85r_oa5yX8-0w2PzFlolVeoquxwUN-LX102KNDQU1Cmt_w9XJYz9o-xYVPJTljU5YrdI0FyCUQDPjOnL8gBxr0WwEFWZMYRLRkX34tJtXap-iSJQlcgtAUi0r6OYJY"/>
+</div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-secondary-fixed">Operations Manager</span>
+<span class="font-label-sm text-label-sm text-secondary-fixed-dim/80">B2B Enterprise Portal</span>
+</div>
+</div>
+<div class="mt-4 font-label-sm text-label-sm text-white/50">v2.4.0</div>
+</div>
+<!-- Nav Items -->
+<div class="flex flex-col gap-2 pt-6 flex-1 overflow-y-auto no-scrollbar font-title-md text-title-md font-label-sm text-label-sm">
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 rounded-[15px] group" href="#">
+<span class="material-symbols-outlined mr-3 text-white/70 group-hover:text-white transition-colors">sync</span>
+<span>Order Sync</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 rounded-[15px] group" href="#">
+<span class="material-symbols-outlined mr-3 text-white/70 group-hover:text-white transition-colors">edit</span>
+<span>Product Edit</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 rounded-[15px] group" href="#">
+<span class="material-symbols-outlined mr-3 text-white/70 group-hover:text-white transition-colors">assignment_return</span>
+<span>Returns</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 rounded-[15px] group" href="#">
+<span class="material-symbols-outlined mr-3 text-white/70 group-hover:text-white transition-colors">rule</span>
+<span>Approval Center</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 rounded-[15px] group" href="#">
+<span class="material-symbols-outlined mr-3 text-white/70 group-hover:text-white transition-colors">input</span>
+<span>Goods Receipt</span>
+</a>
+<!-- Active State: Settings -->
+<a class="bg-secondary-fixed text-primary rounded-[15px] mx-2 px-4 py-3 flex items-center transition-all duration-200 scale-98 transition-transform font-bold relative overflow-hidden" href="#">
+<div class="absolute inset-0 bg-white/10 opacity-0 hover:opacity-100 transition-opacity"></div>
+<span class="material-symbols-outlined mr-3 fill-icon text-primary">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full relative overflow-y-auto w-full md:ml-sidebar-width bg-background pb-24 lg:pb-0">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-background w-full sticky top-0 z-40 shadow-sm flex items-center justify-between px-xl h-20 transition-all duration-300">
+<div class="flex items-center gap-4">
+<button class="md:hidden p-2 text-primary dark:text-primary-fixed-dim hover:bg-surface-container-low rounded-[15px] transition-colors">
+<span class="material-symbols-outlined text-2xl">menu</span>
+</button>
+<h1 class="font-headline-lg text-headline-lg text-primary dark:text-primary-fixed-dim hidden md:block">Dashboard</h1>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary dark:text-primary-fixed-dim md:hidden">Dashboard</h1>
+</div>
+<div class="flex items-center">
+<button class="text-outline hover:bg-surface-container-low p-3 rounded-[15px] transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-sm text-label-sm hidden sm:block">Search</span>
+</button>
+</div>
+</header>
+<!-- Page Content: Notification Center -->
+<div class="p-4 md:p-xl max-w-6xl mx-auto w-full flex flex-col gap-8">
+<!-- Page Header & Main Actions -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface rounded-[15px] p-6 shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-outline-variant/20">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary">Bildirim Merkezi</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Sistem güncellemeleri, onaylar ve sipariş bildirimlerinizi yönetin.</p>
+</div>
+<button class="bg-secondary-fixed hover:bg-secondary-fixed-dim text-primary font-title-md text-title-md px-6 py-3 rounded-[15px] transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 self-start sm:self-auto shrink-0">
+<span class="material-symbols-outlined text-[20px]">done_all</span>
+                    Tepsini Okundu Yap
+                </button>
+</div>
+<!-- Content Grid / Layout -->
+<div class="flex flex-col lg:flex-row gap-8 items-start">
+<!-- Left Sidebar Filters (Desktop) / Top Filters (Mobile) -->
+<div class="w-full lg:w-64 shrink-0 flex flex-col gap-6">
+<!-- View Tabs -->
+<div class="bg-surface rounded-[15px] p-2 shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-outline-variant/20 flex lg:flex-col gap-1">
+<button class="flex-1 lg:w-full bg-primary-container text-on-primary font-title-md text-title-md px-4 py-3 rounded-[12px] flex items-center justify-between transition-colors shadow-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">mark_email_unread</span>
+                                Okunmamış
+                            </div>
+<span class="bg-secondary-fixed text-primary text-xs font-bold px-2 py-0.5 rounded-full">3</span>
+</button>
+<button class="flex-1 lg:w-full text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-title-md text-title-md px-4 py-3 rounded-[12px] flex items-center justify-between transition-colors">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">drafts</span>
+                                Okunmuş
+                            </div>
+</button>
+</div>
+<!-- Category Filters -->
+<div class="bg-surface rounded-[15px] p-5 shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-outline-variant/20 hidden lg:flex flex-col gap-4">
+<h3 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Kategoriler</h3>
+<div class="flex flex-col gap-2">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="w-4 h-4 text-secondary-fixed focus:ring-secondary-fixed border-outline-variant rounded bg-surface" name="category" type="radio"/>
+<span class="font-body-md text-body-md text-on-surface group-hover:text-primary transition-colors">Tümü</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 text-secondary-fixed focus:ring-secondary-fixed border-outline-variant rounded bg-surface" name="category" type="radio"/>
+<span class="font-body-md text-body-md text-on-surface group-hover:text-primary transition-colors">Siparişler</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 text-secondary-fixed focus:ring-secondary-fixed border-outline-variant rounded bg-surface" name="category" type="radio"/>
+<span class="font-body-md text-body-md text-on-surface group-hover:text-primary transition-colors">Onaylar</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 text-secondary-fixed focus:ring-secondary-fixed border-outline-variant rounded bg-surface" name="category" type="radio"/>
+<span class="font-body-md text-body-md text-on-surface group-hover:text-primary transition-colors">Sistem</span>
+</label>
+</div>
+</div>
+<!-- Mobile Category Chips -->
+<div class="lg:hidden flex gap-2 overflow-x-auto no-scrollbar pb-2">
+<button class="bg-primary-container text-on-primary px-4 py-2 rounded-[15px] font-label-sm text-label-sm shrink-0">Tümü</button>
+<button class="bg-surface border border-outline-variant/30 text-on-surface-variant px-4 py-2 rounded-[15px] font-label-sm text-label-sm shrink-0">Siparişler</button>
+<button class="bg-surface border border-outline-variant/30 text-on-surface-variant px-4 py-2 rounded-[15px] font-label-sm text-label-sm shrink-0">Onaylar</button>
+<button class="bg-surface border border-outline-variant/30 text-on-surface-variant px-4 py-2 rounded-[15px] font-label-sm text-label-sm shrink-0">Sistem</button>
+</div>
+</div>
+<!-- Notification List Area -->
+<div class="flex-1 flex flex-col gap-4 w-full">
+<!-- Unread Notification Item 1 -->
+<div class="group bg-surface rounded-[15px] p-5 shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-outline-variant/10 relative overflow-hidden transition-all duration-300 hover:shadow-md cursor-pointer flex gap-4 items-start">
+<!-- Unread Indicator Line -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-secondary-fixed"></div>
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center shrink-0 text-primary-container">
+<span class="material-symbols-outlined fill-icon">local_shipping</span>
+</div>
+<div class="flex-1 flex flex-col gap-1">
+<div class="flex items-start justify-between gap-2">
+<h4 class="font-title-md text-title-md text-primary group-hover:text-primary-container transition-colors">Yeni Sipariş Alındı #ORD-2023-441</h4>
+<span class="font-label-sm text-label-sm text-secondary font-bold shrink-0">10 dk önce</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Büyük Müşteri A.Ş. tarafından 50 adet 'Endüstriyel Motor X-200' siparişi sisteme girildi. Lütfen stok onayı veriniz.</p>
+<div class="flex gap-2 mt-2">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-surface-container-high text-primary-container">Siparişler</span>
+</div>
+</div>
+</div>
+<!-- Unread Notification Item 2 -->
+<div class="group bg-surface rounded-[15px] p-5 shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-outline-variant/10 relative overflow-hidden transition-all duration-300 hover:shadow-md cursor-pointer flex gap-4 items-start">
+<!-- Unread Indicator Line -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-secondary-fixed"></div>
+<div class="w-10 h-10 rounded-full bg-error-container/50 flex items-center justify-center shrink-0 text-error">
+<span class="material-symbols-outlined fill-icon">warning</span>
+</div>
+<div class="flex-1 flex flex-col gap-1">
+<div class="flex items-start justify-between gap-2">
+<h4 class="font-title-md text-title-md text-primary group-hover:text-primary-container transition-colors">İade Talebi Onay Bekliyor</h4>
+<span class="font-label-sm text-label-sm text-on-surface-variant shrink-0">1 saat önce</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">RET-992 numaralı iade talebi operasyon müdürü onayına düştü. Hasarlı ürün bildirimi mevcut.</p>
+<div class="flex gap-2 mt-2">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-surface-container-high text-primary-container">Onaylar</span>
+</div>
+</div>
+</div>
+<!-- Unread Notification Item 3 (Bento style highlight) -->
+<div class="group bg-primary-container text-white rounded-[15px] p-5 shadow-[0px_4px_20px_rgba(18,30,92,0.1)] border border-primary relative overflow-hidden transition-all duration-300 hover:shadow-lg cursor-pointer flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+<div class="absolute right-0 top-0 w-32 h-32 bg-secondary-fixed/10 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"></div>
+<div class="w-12 h-12 rounded-[15px] bg-white/10 flex items-center justify-center shrink-0 text-secondary-fixed backdrop-blur-sm border border-white/10">
+<span class="material-symbols-outlined fill-icon text-[28px]">campaign</span>
+</div>
+<div class="flex-1 flex flex-col gap-1 z-10">
+<div class="flex items-start justify-between gap-2">
+<h4 class="font-title-md text-title-md text-white">Sistem Bakımı Duyurusu</h4>
+<span class="font-label-sm text-label-sm text-secondary-fixed opacity-90 shrink-0">Bugün, 09:00</span>
+</div>
+<p class="font-body-md text-body-md text-white/80 line-clamp-2">Bu gece 02:00 - 04:00 saatleri arasında veritabanı optimizasyonu nedeniyle B2B portalı kısa süreliğine çevrimdışı olacaktır.</p>
+</div>
+<button class="bg-secondary-fixed text-primary px-4 py-2 rounded-[15px] font-title-md text-[14px] shrink-0 z-10 hover:bg-white transition-colors">
+                            Detaylar
+                        </button>
+</div>
+<!-- Divider -->
+<div class="flex items-center gap-4 my-2">
+<div class="h-px bg-outline-variant/30 flex-1"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Daha Eski (Okunmuş)</span>
+<div class="h-px bg-outline-variant/30 flex-1"></div>
+</div>
+<!-- Read Notification Item -->
+<div class="group bg-surface/50 rounded-[15px] p-5 border border-outline-variant/10 relative overflow-hidden transition-all duration-300 hover:bg-surface cursor-pointer flex gap-4 items-start opacity-80">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center shrink-0 text-outline">
+<span class="material-symbols-outlined">inventory_2</span>
+</div>
+<div class="flex-1 flex flex-col gap-1">
+<div class="flex items-start justify-between gap-2">
+<h4 class="font-title-md text-title-md text-on-surface">Ürün Stokları Güncellendi</h4>
+<span class="font-label-sm text-label-sm text-on-surface-variant shrink-0">Dün, 14:30</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-1">ERP sisteminden gelen son stok verileri başarıyla senkronize edildi.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile Only) -->
+<nav class="bg-surface-container dark:bg-surface-container-highest fixed bottom-0 w-full z-50 lg:hidden shadow-[0px_-4px_20px_rgba(18,30,92,0.05)]">
+<div class="flex justify-around items-center px-4 py-3 font-label-sm text-label-sm">
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80 scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mb-1">shopping_cart</span>
+<span>Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80 scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mb-1">inventory_2</span>
+<span>Products</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80 scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mb-1">keyboard_return</span>
+<span>Returns</span>
+</a>
+<!-- Active State: Settings -->
+<a class="flex flex-col items-center justify-center bg-secondary-fixed text-primary rounded-[15px] px-6 py-2 active:opacity-80 scale-95 duration-150" href="#">
+<span class="material-symbols-outlined fill-icon mb-1">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</nav>
+</body></html>

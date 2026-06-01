@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Katalog - B2B Enterprise Portal</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Hanken Grotesk -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#0b1c30",
+                      "inverse-on-surface": "#eaf1ff",
+                      "secondary-fixed-dim": "#1edecb",
+                      "on-secondary-fixed": "#00201c",
+                      "on-primary-fixed": "#061353",
+                      "on-primary-container": "#7d88cb",
+                      "secondary": "#006a60",
+                      "on-secondary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "tertiary": "#0c1015",
+                      "on-primary": "#ffffff",
+                      "surface-container-low": "#eff4ff",
+                      "on-error": "#ffffff",
+                      "tertiary-fixed": "#dfe2e9",
+                      "on-surface": "#0b1c30",
+                      "on-secondary-fixed-variant": "#005048",
+                      "surface-variant": "#d3e4fe",
+                      "on-error-container": "#93000a",
+                      "background": "#f8f9ff",
+                      "tertiary-container": "#21252a",
+                      "inverse-surface": "#213145",
+                      "on-tertiary-container": "#888c92",
+                      "surface-dim": "#cbdbf5",
+                      "on-tertiary-fixed-variant": "#43474d",
+                      "on-surface-variant": "#454650",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-bright": "#f8f9ff",
+                      "on-secondary-container": "#007167",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-highest": "#d3e4fe",
+                      "surface-tint": "#4f5a99",
+                      "secondary-fixed": "#51fbe7",
+                      "on-tertiary-fixed": "#181c21",
+                      "primary": "#00083d",
+                      "on-primary-fixed-variant": "#374280",
+                      "primary-container": "#121e5c",
+                      "error-container": "#ffdad6",
+                      "outline-variant": "#c6c5d1",
+                      "outline": "#767681",
+                      "inverse-primary": "#bac3ff",
+                      "primary-fixed-dim": "#bac3ff",
+                      "surface": "#f8f9ff",
+                      "surface-container-high": "#dce9ff",
+                      "tertiary-fixed-dim": "#c3c7cd",
+                      "surface-container": "#e5eeff",
+                      "secondary-container": "#51fbe7",
+                      "primary-fixed": "#dee0ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "2rem",
+                      "xs": "0.5rem",
+                      "md": "1.5rem",
+                      "sm": "1rem",
+                      "base": "4px",
+                      "gutter": "24px",
+                      "xl": "3rem",
+                      "sidebar-width": "280px"
+              },
+              "fontFamily": {
+                      "display-lg": ["Hanken Grotesk"],
+                      "body-md": ["Hanken Grotesk"],
+                      "title-md": ["Hanken Grotesk"],
+                      "headline-lg": ["Hanken Grotesk"],
+                      "label-sm": ["Hanken Grotesk"],
+                      "headline-lg-mobile": ["Hanken Grotesk"]
+              },
+              "fontSize": {
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c6c5d1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #767681;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased overflow-hidden flex h-screen w-full">
+<!-- SIDEBAR NAVIGATION (NavigationDrawer) -->
+<nav class="hidden md:flex flex-col w-sidebar-width h-full fixed left-0 top-0 bg-primary border-r border-white/10 z-50">
+<div class="p-6">
+<div class="flex items-center gap-3 mb-8">
+<div class="w-10 h-10 rounded-[15px] bg-secondary-fixed flex items-center justify-center text-primary font-bold text-xl">
+                    B
+                </div>
+<div>
+<h2 class="text-secondary-fixed font-title-md text-title-md">B2B Enterprise Portal</h2>
+<p class="text-secondary-fixed-dim font-label-sm text-label-sm opacity-80">v2.4.0</p>
+</div>
+</div>
+<div class="flex flex-col gap-2 pt-2">
+<!-- Inactive -->
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 hover:bg-white/5 rounded-[15px]" href="#">
+<span class="material-symbols-outlined">sync</span>
+<span class="font-title-md text-title-md">Order Sync</span>
+</a>
+<!-- Active State for Catalog -->
+<a class="bg-secondary-fixed text-primary rounded-[15px] mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 scale-98 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)]" href="#">
+<span class="material-symbols-outlined icon-fill">edit</span>
+<span class="font-title-md text-title-md">Product Edit</span>
+</a>
+<!-- Inactive -->
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 hover:bg-white/5 rounded-[15px]" href="#">
+<span class="material-symbols-outlined">assignment_return</span>
+<span class="font-title-md text-title-md">Returns</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 hover:bg-white/5 rounded-[15px]" href="#">
+<span class="material-symbols-outlined">rule</span>
+<span class="font-title-md text-title-md">Approval Center</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 hover:bg-white/5 rounded-[15px]" href="#">
+<span class="material-symbols-outlined">input</span>
+<span class="font-title-md text-title-md">Goods Receipt</span>
+</a>
+</div>
+</div>
+<div class="mt-auto p-6 border-t border-white/10">
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 hover:bg-white/5 rounded-[15px]" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-title-md text-title-md">Settings</span>
+</a>
+<div class="mt-4 flex items-center gap-3 px-4">
+<div class="w-10 h-10 rounded-full bg-surface-tint overflow-hidden border-2 border-primary-container">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="A professional headshot of a corporate manager smiling confidently in a modern office setting. The lighting is bright and even, highlighting a polished and approachable demeanor." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrjr8sRZdSGHIweb8YrVqTmWXhWqQ-qaogz6F2GdDnnsoslsL6pIAxylkR7OVDRvOyVfW-vqHtsKyNm-EEjZ5AiqEfdllkRRmiyku3Efnrk1K09MNHsHUdtGmwARIPf_wzf1YoJ7EMrZeyThhONgRD4t4LxMoXfOXvwy3Gu2kYtyTZm6HnXCKSuHpnXhP_FHC4RZiHOIuS4uW9VTEtEmiXH2Dmb255DuydiYvyhcq-6GrzAULbZnWAvlkQ33eMLYfBJQP0g78DdO1x"/>
+</div>
+<div class="flex flex-col">
+<span class="text-on-primary font-title-md text-title-md text-sm">Operations Manager</span>
+</div>
+</div>
+</div>
+</nav>
+<!-- MAIN CONTENT AREA -->
+<main class="flex-1 flex flex-col min-w-0 h-screen md:ml-sidebar-width overflow-y-auto bg-background">
+<!-- TOP APP BAR -->
+<header class="w-full sticky top-0 z-40 bg-surface shadow-sm flex items-center justify-between px-xl h-20">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-primary p-2 rounded-[15px] hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">Dashboard</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:flex items-center focus-within:ring-2 focus-within:ring-secondary rounded-[15px] bg-surface-container-lowest border border-outline-variant px-4 py-2 w-64 shadow-[0px_4px_20px_rgba(18,30,92,0.02)]">
+<span class="material-symbols-outlined text-outline mr-2 text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full font-body-md text-on-surface placeholder:text-outline p-0" placeholder="Ürün Ara..." type="text"/>
+</div>
+<button class="flex items-center gap-2 bg-secondary-fixed text-primary-container font-title-md text-title-md text-sm px-5 py-2.5 rounded-[15px] hover:opacity-90 transition-opacity shadow-sm">
+<span class="material-symbols-outlined text-base">add</span>
+<span>Yeni Ürün</span>
+</button>
+</div>
+</header>
+<!-- PAGE CONTENT (Katalog) -->
+<div class="p-gutter md:p-xl flex-1 flex flex-col gap-8">
+<!-- Page Header & Filters -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="font-display-lg text-display-lg text-primary mb-2">Ürün Kataloğu</h2>
+<p class="font-body-md text-body-md text-outline">Kurumsal tedarik ihtiyaçlarınız için tüm ürünlerimizi inceleyin ve hızlıca sipariş verin.</p>
+</div>
+<!-- Category Filters (Scrollable on mobile) -->
+<div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
+<button class="whitespace-nowrap px-4 py-2 rounded-[15px] bg-primary text-on-primary font-title-md text-title-md text-sm transition-colors shadow-sm">Tümü</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-[15px] bg-surface-container-lowest text-on-surface hover:bg-surface-container-low border border-outline-variant font-title-md text-title-md text-sm transition-colors">Ofis Malzemeleri</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-[15px] bg-surface-container-lowest text-on-surface hover:bg-surface-container-low border border-outline-variant font-title-md text-title-md text-sm transition-colors">Elektronik</button>
+<button class="whitespace-nowrap px-4 py-2 rounded-[15px] bg-surface-container-lowest text-on-surface hover:bg-surface-container-low border border-outline-variant font-title-md text-title-md text-sm transition-colors">Mobilya</button>
+</div>
+</div>
+<!-- Product Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter pb-24 md:pb-8">
+<!-- Featured Product Card (Spans 2 cols on tablet+) -->
+<div class="col-span-1 md:col-span-2 bg-surface-container-lowest rounded-[15px] shadow-[0px_4px_20px_rgba(18,30,92,0.05)] overflow-hidden flex flex-col sm:flex-row group transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0px_10px_30px_rgba(18,30,92,0.08)] relative border border-transparent hover:border-surface-variant">
+<div class="absolute top-4 left-4 z-10 bg-error text-on-error px-3 py-1 rounded-full font-label-sm text-label-sm shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">local_fire_department</span> Çok Satan
+                    </div>
+<div class="w-full sm:w-1/2 h-64 sm:h-auto bg-surface-container-low relative overflow-hidden">
+<img alt="Premium Office Chair" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A highly detailed, professional product shot of a premium ergonomic office chair in a bright, modern corporate environment. The chair is sleek, featuring dark gray mesh and polished aluminum accents, sitting on a light oak floor. The background is softly blurred, showing a high-end office space with large windows and subtle hints of turquoise and deep navy in the decor. The lighting is bright, natural, and flattering." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAq-4Nq79IR7Bm0Y7rHujXU15GckqihXBWANNJBeRdp0gN1xqyeHLzT5x_sybmpyR37HPkh-nOnxUPiQqVt93YlA0h_RFaDjF8gApT-fCB8lKATwg6hC-hfuoWDBNSt8sZGBCKO808SZUPDGYb1HPxnMHxsOTdpo7oLMqJLZ2jPwBB3PW9mufhpXSgvc8hHomwPZQ_LKINumAP6Gl__6TB1dvDQKRR6D3IBR6pxQ0WBVCy8z00P1Yl-TlDhDbDswhw0RDF6Oh9kHc6B"/>
+</div>
+<div class="w-full sm:w-1/2 p-6 flex flex-col justify-between bg-surface-container-lowest">
+<div>
+<span class="text-secondary font-label-sm text-label-sm uppercase tracking-wider mb-2 block">Premium Mobilya</span>
+<h3 class="font-headline-lg text-headline-lg text-primary leading-tight mb-2">Ergonomik Yönetici Koltuğu Pro</h3>
+<p class="font-body-md text-body-md text-outline mb-4 line-clamp-2">Uzun çalışma saatleri için özel olarak tasarlanmış, bel destekli, nefes alabilen file kumaşlı ve tam ayarlanabilir mekanizmalı premium ofis koltuğu.</p>
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-secondary text-sm">star</span>
+<span class="material-symbols-outlined text-secondary text-sm">star</span>
+<span class="material-symbols-outlined text-secondary text-sm">star</span>
+<span class="material-symbols-outlined text-secondary text-sm">star</span>
+<span class="material-symbols-outlined text-secondary text-sm">star_half</span>
+<span class="text-outline text-sm ml-1">(124 Değerlendirme)</span>
+</div>
+</div>
+<div class="flex items-end justify-between mt-auto pt-4 border-t border-surface-variant">
+<div>
+<span class="block text-outline font-label-sm text-label-sm mb-1">Kurumsal Fiyat</span>
+<span class="font-headline-lg text-headline-lg text-primary">8.450₺</span>
+</div>
+<button class="bg-primary text-secondary-fixed rounded-[15px] p-3 shadow-sm hover:bg-primary-container transition-colors flex items-center justify-center group/btn relative overflow-hidden" title="Siparişe Ekle">
+<span class="material-symbols-outlined group-hover/btn:scale-110 transition-transform">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Standard Product Card 1 -->
+<div class="bg-surface-container-lowest rounded-[15px] shadow-[0px_4px_20px_rgba(18,30,92,0.05)] overflow-hidden flex flex-col group transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0px_10px_30px_rgba(18,30,92,0.08)] border border-transparent hover:border-surface-variant">
+<div class="h-48 w-full bg-surface-container-low relative overflow-hidden">
+<img alt="Aluminium Laptop Stand" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A sleek, brushed aluminum laptop stand sitting on a pristine white desk. A modern silver laptop rests on the stand. The environment is minimalist and corporate, with a subtle navy blue accent wall in the softly blurred background. The lighting is crisp and cool, highlighting the metallic textures and creating a high-end, productive atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDu8pq07PgKDahoCikqL9sgPCKjIdUVhYm7hvfiV2hJFoobIBVqvaxbpUKSV73_--7vXwHigZP522s60uzUcA3UHGFrSAhrztA7xgt6Ql5jeUtG3CCTIDHwDrtlLs4VjtI9SWtpEQMSaa4w6vN87SCwhVxr8tNjB5Mry1cqoovG6xTHaCUJTuGUZXvCtF1-D4M4k__Xt0gjlb5Oe1ctJHVtUq-6LTIWn_M0wlFnvflX_4KGnE_8d1ZfT9yUso-t0zi-jEXsD7XRquWE"/>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<span class="text-secondary font-label-sm text-label-sm uppercase tracking-wider mb-1 block">Aksesuar</span>
+<h3 class="font-title-md text-title-md text-primary mb-1 line-clamp-1">Alüminyum Laptop Standı</h3>
+<p class="font-body-md text-body-md text-sm text-outline mb-4 line-clamp-2">Isı dağılımını optimize eden, ergonomik açılı, kaydırmaz tabanlı alüminyum stand.</p>
+<div class="mt-auto flex items-end justify-between pt-4 border-t border-surface-variant/50">
+<span class="font-title-md text-title-md text-primary font-bold">1.250₺</span>
+<button class="bg-surface-container text-primary rounded-[15px] px-4 py-2 text-sm font-title-md hover:bg-secondary-fixed transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span> Ekle
+                            </button>
+</div>
+</div>
+</div>
+<!-- Standard Product Card 2 -->
+<div class="bg-surface-container-lowest rounded-[15px] shadow-[0px_4px_20px_rgba(18,30,92,0.05)] overflow-hidden flex flex-col group transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0px_10px_30px_rgba(18,30,92,0.08)] border border-transparent hover:border-surface-variant">
+<div class="h-48 w-full bg-surface-container-low relative overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 bg-gradient-to-br from-surface-variant to-surface-container opacity-50 z-0"></div>
+<img alt="Wireless Keyboard Set" class="relative z-10 h-3/4 object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-700" data-alt="A top-down view of a premium minimalist wireless keyboard and mouse set resting on a dark navy desk mat. The keyboard is sleek white with low-profile keys. Subtle turquoise ambient light spills from the edge of the frame, creating a modern, tech-forward corporate workspace vibe. The image is clean and highly focused." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3s8frfv7Ae7nnr_4uvN7ZE9NmKBie8WCCnHx3SL-fD3I2er8wbx7CdAPrWw6hDql8hzqberF9LfxWb6DjERl3N2tPHpa1JNsOeZj2pHSO5SXCpdvRxaY_cmyw0sZEUbN835Qnit0cX_0JIyIZkGyoqM7N6kqrO4n5nFGi65KogyrWkPyKfPQnjA5G6IsorN82t-Uy-qUHplyPg9AlH8Zwi36hoirzyuuKkIGwDJVNgCENOpL70HXjVE82Sxb9Q5bTMvsyMQJ2GFGX"/>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<span class="text-secondary font-label-sm text-label-sm uppercase tracking-wider mb-1 block">Elektronik</span>
+<h3 class="font-title-md text-title-md text-primary mb-1 line-clamp-1">Pro Kablosuz Klavye &amp; Mouse Seti</h3>
+<p class="font-body-md text-body-md text-sm text-outline mb-4 line-clamp-2">Sessiz tuş yapısı, uzun pil ömrü ve çoklu cihaz bağlantı desteği sunan premium set.</p>
+<div class="mt-auto flex items-end justify-between pt-4 border-t border-surface-variant/50">
+<span class="font-title-md text-title-md text-primary font-bold">2.800₺</span>
+<button class="bg-surface-container text-primary rounded-[15px] px-4 py-2 text-sm font-title-md hover:bg-secondary-fixed transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span> Ekle
+                            </button>
+</div>
+</div>
+</div>
+<!-- Standard Product Card 3 -->
+<div class="bg-surface-container-lowest rounded-[15px] shadow-[0px_4px_20px_rgba(18,30,92,0.05)] overflow-hidden flex flex-col group transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0px_10px_30px_rgba(18,30,92,0.08)] border border-transparent hover:border-surface-variant">
+<div class="h-48 w-full bg-surface-container-low relative overflow-hidden">
+<img alt="Desk Lamp" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A modern architectural LED desk lamp emitting a crisp white light over a wooden desk surface. The lamp is matte black with a slender, geometric profile. In the blurred background, hints of a corporate office with deep navy wall panels and a potted plant add depth. The overall aesthetic is clean, functional, and premium." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUXzGvi9G-hKEyL2b3Mr3serJ-7HWlT7SmXwFKtC99SqoF2BkWdGmMnwEP7h-uigOu-E-86aGrDrkt00jEp6vGzjhnypPSTZM_2uZruVbOSO9MCb7ThA-qkVB4nsCtlpyRZCiUFSopQFu_P2CPvpaXpFckXek5HG3O0LG2yGobIpoGJ-zXxX4GmXkWMdv3U6ZRQyfIl14_WNyQ5DRPy2F8y0E95BTatg3WooOc7_p40ZeFtArpENlQGdN-T83t_A4_BNHFj5KvFrRB"/>
+</div>
+<div class="p-5 flex flex-col flex-1">
+<span class="text-secondary font-label-sm text-label-sm uppercase tracking-wider mb-1 block">Aydınlatma</span>
+<h3 class="font-title-md text-title-md text-primary mb-1 line-clamp-1">Akıllı Masa Lambası</h3>
+<p class="font-body-md text-body-md text-sm text-outline mb-4 line-clamp-2">Renk sıcaklığı ayarlanabilir, göz yormayan LED teknolojisi ve kablosuz şarj pedi.</p>
+<div class="mt-auto flex items-end justify-between pt-4 border-t border-surface-variant/50">
+<span class="font-title-md text-title-md text-primary font-bold">1.650₺</span>
+<button class="bg-surface-container text-primary rounded-[15px] px-4 py-2 text-sm font-title-md hover:bg-secondary-fixed transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span> Ekle
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- MOBILE BOTTOM NAVIGATION (BottomNavBar) -->
+<nav class="fixed bottom-0 w-full z-50 md:hidden bg-surface-container shadow-[0px_-4px_20px_rgba(18,30,92,0.05)] border-t-0 flex justify-around items-center px-4 py-3">
+<!-- Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80 scale-95 duration-150 p-2" href="#">
+<span class="material-symbols-outlined mb-1">shopping_cart</span>
+<span class="font-label-sm text-label-sm text-[10px]">Orders</span>
+</a>
+<!-- Active (Products matches Catalog context) -->
+<a class="flex flex-col items-center justify-center bg-secondary-fixed text-primary rounded-[15px] px-6 py-2 active:opacity-80 scale-95 duration-150 shadow-sm" href="#">
+<span class="material-symbols-outlined icon-fill mb-1">inventory_2</span>
+<span class="font-label-sm text-label-sm text-[10px] font-bold">Products</span>
+</a>
+<!-- Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80 scale-95 duration-150 p-2" href="#">
+<span class="material-symbols-outlined mb-1">keyboard_return</span>
+<span class="font-label-sm text-label-sm text-[10px]">Returns</span>
+</a>
+<!-- Inactive -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80 scale-95 duration-150 p-2" href="#">
+<span class="material-symbols-outlined mb-1">settings</span>
+<span class="font-label-sm text-label-sm text-[10px]">Settings</span>
+</a>
+</nav>
+</body></html>

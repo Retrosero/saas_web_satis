@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Barkod Yardımcı Ekranı</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed": "#061353",
+                        "surface-container-high": "#dce9ff",
+                        "primary": "#00083d",
+                        "primary-container": "#121e5c",
+                        "inverse-primary": "#bac3ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-tint": "#4f5a99",
+                        "on-background": "#0b1c30",
+                        "surface-container": "#e5eeff",
+                        "on-tertiary-fixed": "#181c21",
+                        "on-primary-container": "#7d88cb",
+                        "on-error-container": "#93000a",
+                        "outline": "#767681",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#cbdbf5",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#007167",
+                        "inverse-on-surface": "#eaf1ff",
+                        "background": "#f8f9ff",
+                        "tertiary-container": "#21252a",
+                        "inverse-surface": "#213145",
+                        "secondary-container": "#51fbe7",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#dfe2e9",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "primary-fixed-dim": "#bac3ff",
+                        "on-surface-variant": "#454650",
+                        "surface-container-low": "#eff4ff",
+                        "secondary-fixed-dim": "#1edecb",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed": "#00201c",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#374280",
+                        "on-tertiary-container": "#888c92",
+                        "secondary": "#006a60",
+                        "surface-variant": "#d3e4fe",
+                        "on-surface": "#0b1c30",
+                        "primary-fixed": "#dee0ff",
+                        "surface-bright": "#f8f9ff",
+                        "surface": "#f8f9ff",
+                        "secondary-fixed": "#51fbe7",
+                        "on-secondary-fixed-variant": "#005048",
+                        "tertiary": "#0c1015",
+                        "outline-variant": "#c6c5d1",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#c3c7cd"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "1.5rem",
+                        "lg": "2rem",
+                        "gutter": "24px",
+                        "base": "4px",
+                        "xs": "0.5rem",
+                        "sm": "1rem",
+                        "sidebar-width": "280px",
+                        "xl": "3rem"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0px 4px 20px rgba(18, 30, 92, 0.05);
+        }
+        .scanner-line {
+            animation: scan 2s infinite linear;
+        }
+        @keyframes scan {
+            0% { top: 0; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col md:flex-row">
+<!-- Navigation Drawer (Desktop) -->
+<aside class="hidden md:flex w-sidebar-width h-full fixed left-0 top-0 bg-primary border-r border-white/10 flex-col gap-2 pt-6 z-50">
+<div class="px-6 pb-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-primary font-bold">
+                    OM
+                </div>
+<div>
+<h2 class="font-title-md text-title-md text-secondary-fixed">Operations Manager</h2>
+<p class="font-label-sm text-label-sm text-secondary-fixed/70">B2B Enterprise Portal</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-1 px-2">
+<a class="text-on-primary/80 hover:text-on-primary hover:bg-white/5 mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 rounded-[15px] scale-98 hover:scale-100" href="#">
+<span class="material-symbols-outlined">sync</span>
+<span class="font-title-md text-title-md">Order Sync</span>
+</a>
+<a class="bg-secondary-fixed text-primary rounded-[15px] mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 scale-98" href="#">
+<span class="material-symbols-outlined">edit</span>
+<span class="font-title-md text-title-md">Product Edit</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary hover:bg-white/5 mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 rounded-[15px] scale-98 hover:scale-100" href="#">
+<span class="material-symbols-outlined">assignment_return</span>
+<span class="font-title-md text-title-md">Returns</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary hover:bg-white/5 mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 rounded-[15px] scale-98 hover:scale-100" href="#">
+<span class="material-symbols-outlined">rule</span>
+<span class="font-title-md text-title-md">Approval Center</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary hover:bg-white/5 mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 rounded-[15px] scale-98 hover:scale-100" href="#">
+<span class="material-symbols-outlined">input</span>
+<span class="font-title-md text-title-md">Goods Receipt</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary hover:bg-white/5 mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 rounded-[15px] scale-98 hover:scale-100" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-title-md text-title-md">Settings</span>
+</a>
+</nav>
+<div class="p-6">
+<p class="font-label-sm text-label-sm text-white/50">v2.4.0</p>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col md:ml-sidebar-width min-h-screen">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-40 bg-surface shadow-sm flex items-center justify-between px-xl h-20 transition-all focus-within:ring-2 focus-within:ring-secondary">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-primary p-2">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-lg text-headline-lg text-primary">Barcode Scanner</h1>
+</div>
+<div>
+<button class="text-outline hover:bg-surface-container-low p-2 rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</header>
+<!-- Canvas -->
+<div class="flex-1 p-6 md:p-xl flex flex-col items-center justify-center gap-8 pb-24 md:pb-xl">
+<div class="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+<!-- Scanner Section -->
+<div class="glass-panel rounded-[15px] p-6 flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<h2 class="font-title-md text-title-md text-primary">Scanner Module</h2>
+<div class="flex items-center gap-2 bg-surface-container-low p-1 rounded-full">
+<button class="px-4 py-1.5 rounded-full bg-surface shadow-sm text-primary font-label-sm text-label-sm transition-all">Single</button>
+<button class="px-4 py-1.5 rounded-full text-outline font-label-sm text-label-sm hover:text-primary transition-all">Batch</button>
+</div>
+</div>
+<!-- Camera Viewport -->
+<div class="relative w-full aspect-video bg-black rounded-[15px] overflow-hidden flex items-center justify-center group cursor-pointer">
+<img alt="Camera View" class="w-full h-full object-cover opacity-60 mix-blend-luminosity" data-alt="A modern warehouse setting viewed through a device camera lens, slightly blurred. The scene is illuminated by cool, industrial white lighting against a backdrop of deep navy blue racking systems. Focus is on a cardboard box with a crisp black and white barcode label in the center. The overall aesthetic is clean, technological, and efficient." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyd8UfRiEt_9XyoXZkwISNY5yFwSlaToqgwcflkNsyHM1Cy5U1ZKX21Bn4zY-iO4ALJi1gJQYtQplLGTQEk8Eg9G8lozsj3bM2-t8y6Y-srP9NlddnBewzM9YqBzNzOGMh1z7H1lBQm8d24QFxmG2ZBsz_dCn-oWUivS8GtMsJ2sY68fQ2fzUF997He2DL8fCzu0nBa1bkKmDHoci5g9vKCkTvtJI3weHScjeSat4aY2ukoFVC2O_S0wlyME1QQWQIKzrijE_PFM7o"/>
+<!-- Scanner Overlay -->
+<div class="absolute inset-0 border-4 border-secondary-fixed/50 m-8 rounded-lg pointer-events-none"></div>
+<div class="absolute left-8 right-8 h-1 bg-secondary-fixed scanner-line pointer-events-none shadow-[0_0_8px_rgba(81,251,231,0.8)]"></div>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-primary/40 backdrop-blur-sm">
+<button class="bg-secondary-fixed text-primary px-6 py-3 rounded-[15px] font-title-md text-title-md flex items-center gap-2 hover:bg-secondary-fixed-dim transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">qr_code_scanner</span>
+                                Tap to Focus
+                            </button>
+</div>
+</div>
+<!-- Manual Entry -->
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-outline">Manual Entry</label>
+<div class="flex gap-2">
+<input class="flex-1 bg-surface-container-lowest border border-outline-variant rounded-[15px] px-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-all" placeholder="Enter barcode number..." type="text"/>
+<button class="bg-primary-container text-on-primary px-6 py-3 rounded-[15px] font-title-md text-title-md hover:opacity-90 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Result Section -->
+<div class="flex flex-col gap-6">
+<!-- Product Mini Card -->
+<div class="glass-panel rounded-[15px] p-6 flex items-start gap-6 relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary-fixed/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+<div class="w-24 h-24 rounded-[15px] bg-surface-container overflow-hidden flex-shrink-0 border border-outline-variant/30">
+<img alt="Product Image" class="w-full h-full object-cover" data-alt="A sleek, high-end pair of wireless headphones resting on a pristine white surface. The headphones are a matte black finish with subtle metallic accents. The lighting is studio-quality, soft and diffused, highlighting the curves and premium texture of the product against a clean, minimalist background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTdFOLnb0Epd-bcEt-nR4zXI3A0CkeLOqf1WpJrmbCuQInfjxkTOv1yMcN-cAHPba2Sii3RjxpswjeoQBXUpTQmXA_ailwKM_PyGcdRM1X6cwePqAH4ERm23Ak9GVho_zbUxsrWcezpVFCKcXzCnOl6kgQjDByiqBv2W2JAPhROw1FB9RcbwOIVEh-o8es3mS5oqBBpl7NqkSpmshX0HxYzQ1MRRnUGJFYPZduHJlSjZAUm3k6eZwX3g-QhQvvQ7rAAlMJRYxwNy4d"/>
+</div>
+<div class="flex-1 flex flex-col gap-1">
+<div class="flex items-center justify-between mb-1">
+<span class="px-2 py-1 rounded bg-secondary-fixed/20 text-on-secondary-container font-label-sm text-label-sm">Found</span>
+<span class="font-label-sm text-label-sm text-outline">#8472910283</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary line-clamp-2">Premium Noise-Cancelling Wireless Headphones</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Stock: <span class="font-bold text-primary">142 Units</span> (Warehouse A)</p>
+<p class="font-label-sm text-label-sm text-secondary mt-1">Location: Aisle 4, Shelf B</p>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-3 gap-4">
+<button class="bg-secondary-fixed text-primary px-4 py-4 rounded-[15px] font-title-md text-title-md hover:bg-secondary-fixed-dim transition-all shadow-sm hover:shadow-md flex flex-col items-center justify-center gap-2 group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">add_shopping_cart</span>
+<span class="text-center">Add to Sale</span>
+</button>
+<button class="bg-primary text-on-primary px-4 py-4 rounded-[15px] font-title-md text-title-md hover:bg-primary-container transition-all shadow-sm hover:shadow-md flex flex-col items-center justify-center gap-2 group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">inventory</span>
+<span class="text-center">Add to Count</span>
+</button>
+<button class="bg-transparent border-2 border-primary text-primary px-4 py-4 rounded-[15px] font-title-md text-title-md hover:bg-primary/5 transition-all flex flex-col items-center justify-center gap-2 group sm:col-span-2 lg:col-span-1 xl:col-span-1">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">article</span>
+<span class="text-center">Stock Card</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="fixed bottom-0 w-full z-50 lg:hidden bg-surface-container border-t border-outline-variant shadow-[0px_-4px_20px_rgba(18,30,92,0.05)] flex justify-around items-center px-4 py-3">
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80 scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-label-sm text-label-sm mt-1">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-fixed text-primary rounded-[15px] px-6 py-2 active:opacity-80 scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-label-sm text-label-sm mt-1">Products</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80 scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">keyboard_return</span>
+<span class="font-label-sm text-label-sm mt-1">Returns</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80 scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm mt-1">Settings</span>
+</a>
+</nav>
+</body></html>

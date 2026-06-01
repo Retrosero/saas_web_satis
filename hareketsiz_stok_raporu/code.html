@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hareketsiz Stoklar Raporu - Operations Console</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#006a60",
+                        "on-surface": "#0b1c30",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-secondary-fixed-variant": "#005048",
+                        "on-primary-container": "#7d88cb",
+                        "tertiary-fixed-dim": "#c3c7cd",
+                        "primary-fixed-dim": "#bac3ff",
+                        "outline": "#767681",
+                        "error-container": "#ffdad6",
+                        "background": "#f8f9ff",
+                        "on-surface-variant": "#454650",
+                        "tertiary-container": "#21252a",
+                        "primary-container": "#121e5c",
+                        "secondary-container": "#51fbe7",
+                        "on-primary-fixed": "#061353",
+                        "surface": "#f8f9ff",
+                        "on-tertiary-container": "#888c92",
+                        "on-primary-fixed-variant": "#374280",
+                        "surface-variant": "#d3e4fe",
+                        "surface-tint": "#4f5a99",
+                        "inverse-surface": "#213145",
+                        "error": "#ba1a1a",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed": "#dfe2e9",
+                        "secondary-fixed": "#51fbe7",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#bac3ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-dim": "#cbdbf5",
+                        "secondary-fixed-dim": "#1edecb",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "on-error-container": "#93000a",
+                        "primary": "#00083d",
+                        "on-background": "#0b1c30",
+                        "surface-bright": "#f8f9ff",
+                        "primary-fixed": "#dee0ff",
+                        "tertiary": "#0c1015",
+                        "surface-container-high": "#dce9ff",
+                        "on-secondary-container": "#007167",
+                        "on-secondary-fixed": "#00201c",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c6c5d1",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#181c21",
+                        "surface-container": "#e5eeff",
+                        "accent-turquoise": "#00D7C4",
+                        "danger-red": "#E11D48"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "custom": "15px"
+                    },
+                    "spacing": {
+                        "sidebar-width": "280px",
+                        "md": "1.5rem",
+                        "lg": "2rem",
+                        "gutter": "24px",
+                        "xs": "0.5rem",
+                        "base": "4px",
+                        "xl": "3rem",
+                        "sm": "1rem"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    },
+                    "boxShadow": {
+                        'soft': '0px 4px 20px rgba(18, 30, 92, 0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex">
+<!-- Navigation Drawer -->
+<aside class="fixed left-0 top-0 bottom-0 z-40 w-sidebar-width h-full bg-primary border-r border-white/10 flex flex-col transition-transform duration-300 transform -translate-x-full md:translate-x-0" id="sidebar">
+<!-- Brand / Logo Area -->
+<div class="px-6 py-8 flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary-fixed text-4xl" style="font-variation-settings: 'FILL' 1;">widgets</span>
+<span class="font-title-md text-title-md text-white">StockOps Pro</span>
+</div>
+<!-- Header / Profile -->
+<div class="px-6 pb-6 mb-4 border-b border-white/10 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-primary-container border border-secondary-fixed/30 flex-shrink-0">
+<img alt="User profile avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBE87wfIKQFA-WYM0gRDCzRW4TTuS4tdmG0_cyAGtcHZUPTzwqljjsVsK4xkywlCQEVXLcExBkdT_n-d11Lq1PjeKFqP0iSyWdKhm6rnn4b1kVfuUtwl59She15r2ltw7FvM7VCnxXXRp-zqyNAcDHduYKEfQB6uzlobdtx10pSJtMA9FJrSutMN3BYS6KgCAw7uJpaYvZi0GZxFb3upOFkpfpcCQnIPrAhdmGPAnycgDMm0S1HDw_8Imsio248-SPzKqRjS8jqgPd_"/>
+</div>
+<div class="flex flex-col">
+<span class="text-white font-title-md text-title-md leading-tight">Operations Manager</span>
+<span class="text-tertiary-fixed-dim text-sm mt-1">Enterprise Admin</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 overflow-y-auto py-2 px-2 flex flex-col gap-1">
+<!-- Dashboard -->
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 rounded-custom hover:bg-primary-container hover:text-white transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 text-2xl group-hover:text-white" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<!-- Stock Management (Active based on Intent: Hareketsiz stoklar is stock management) -->
+<a class="bg-secondary-fixed text-primary rounded-[15px] flex items-center px-4 py-3 mx-2 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3 text-2xl" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-body-md text-body-md font-semibold">Stock Management</span>
+</a>
+<!-- Product Catalog -->
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 rounded-custom hover:bg-primary-container hover:text-white transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 text-2xl group-hover:text-white" style="font-variation-settings: 'FILL' 0;">inventory</span>
+<span class="font-body-md text-body-md">Product Catalog</span>
+</a>
+<!-- Transactions -->
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 rounded-custom hover:bg-primary-container hover:text-white transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 text-2xl group-hover:text-white" style="font-variation-settings: 'FILL' 0;">receipt_long</span>
+<span class="font-body-md text-body-md">Transactions</span>
+</a>
+<!-- Settings -->
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 rounded-custom hover:bg-primary-container hover:text-white transition-colors duration-200 group mt-auto mb-4" href="#">
+<span class="material-symbols-outlined mr-3 text-2xl group-hover:text-white" style="font-variation-settings: 'FILL' 0;">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 md:ml-sidebar-width flex flex-col min-h-screen overflow-hidden">
+<!-- TopAppBar -->
+<header class="bg-surface shadow-sm full-width top-0 z-30 flex justify-between items-center px-xl py-md transition-all duration-300">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-primary p-2 rounded-full hover:bg-surface-container-low transition-colors" id="mobile-menu-btn">
+<span class="material-symbols-outlined text-2xl">menu</span>
+</button>
+<h1 class="font-title-md text-title-md text-primary font-bold tracking-tight">Operations Console</h1>
+</div>
+<div class="flex items-center">
+<button class="text-on-surface-variant p-2 rounded-full hover:bg-surface-container-low transition-transform scale-95 hover:scale-100 relative">
+<span class="material-symbols-outlined text-2xl">notifications</span>
+<span class="absolute top-1 right-1 w-2.5 h-2.5 bg-danger-red rounded-full border-2 border-surface"></span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 overflow-y-auto p-4 md:p-xl">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-2">Hareketsiz Stoklar Raporu</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Son hareket tarihinden itibaren işlem görmeyen stok kalemlerinin detaylı analizi.</p>
+</div>
+<div class="flex gap-3 w-full md:w-auto">
+<button class="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 border-[1.5px] border-primary text-primary rounded-custom font-title-md text-title-md hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-xl">download</span>
+<span>Dışa Aktar</span>
+</button>
+<button class="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-accent-turquoise text-primary rounded-custom font-title-md text-title-md hover:opacity-90 transition-opacity shadow-sm">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">filter_list</span>
+<span>Filtrele</span>
+</button>
+</div>
+</div>
+<!-- Dashboard Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-gutter">
+<!-- Summary Cards -->
+<div class="md:col-span-4 bg-surface-container-lowest rounded-custom p-6 shadow-soft flex flex-col justify-between hover:-translate-y-1 transition-transform duration-300">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-title-md text-title-md text-on-surface-variant">Toplam Hareketsiz Kalem</h3>
+<div class="w-10 h-10 rounded-full bg-error-container text-error flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+</div>
+<div>
+<p class="font-display-lg text-display-lg text-primary">142</p>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1 flex items-center gap-1">
+<span class="text-error text-sm font-bold flex items-center"><span class="material-symbols-outlined text-sm">trending_up</span> +12</span> geçen aya göre
+                        </p>
+</div>
+</div>
+<div class="md:col-span-4 bg-surface-container-lowest rounded-custom p-6 shadow-soft flex flex-col justify-between hover:-translate-y-1 transition-transform duration-300">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-title-md text-title-md text-on-surface-variant">Riskli Stok Değeri</h3>
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-primary flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+</div>
+</div>
+<div>
+<p class="font-display-lg text-display-lg text-primary">₺845K</p>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Toplam stok değerinin %18'i</p>
+</div>
+</div>
+<div class="md:col-span-4 bg-primary rounded-custom p-6 shadow-soft relative overflow-hidden flex flex-col justify-between">
+<!-- Decorative subtle gradient -->
+<div class="absolute -right-10 -top-10 w-40 h-40 bg-secondary-fixed/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="flex items-center justify-between mb-4 relative z-10">
+<h3 class="font-title-md text-title-md text-white/80">Ortalama Hareketsizlik</h3>
+<div class="w-10 h-10 rounded-full bg-white/10 text-secondary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined">schedule</span>
+</div>
+</div>
+<div class="relative z-10">
+<p class="font-display-lg text-display-lg text-white">94 <span class="text-2xl text-white/60">Gün</span></p>
+<p class="font-body-md text-body-md text-secondary-fixed mt-1">Hedef: &lt; 60 Gün</p>
+</div>
+</div>
+</div>
+<!-- Filters & Data Table Section -->
+<div class="bg-surface-container-lowest rounded-custom shadow-soft overflow-hidden">
+<!-- Filters Bar -->
+<div class="p-6 border-b border-outline-variant/30 flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between bg-surface-bright">
+<div class="flex flex-wrap gap-3 w-full lg:w-auto">
+<!-- Category Filter -->
+<div class="relative flex-1 lg:flex-none min-w-[200px]">
+<select class="w-full appearance-none bg-background border border-outline-variant text-on-surface font-body-md text-body-md rounded-custom px-4 py-3 pr-10 focus:outline-none focus:border-accent-turquoise focus:ring-1 focus:ring-accent-turquoise transition-colors">
+<option value="">Tüm Kategoriler</option>
+<option value="elektronik">Elektronik Bileşenler</option>
+<option value="mekanik">Mekanik Parçalar</option>
+<option value="sarf">Sarf Malzemeleri</option>
+<option value="ambalaj">Ambalaj</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+<!-- Search -->
+<div class="relative flex-1 lg:flex-none min-w-[250px]">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-background border border-outline-variant text-on-surface font-body-md text-body-md rounded-custom pl-10 pr-4 py-3 focus:outline-none focus:border-accent-turquoise focus:ring-1 focus:ring-accent-turquoise transition-colors" placeholder="Stok kodu veya adı ara..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm">
+<span>Sıralama:</span>
+<button class="flex items-center gap-1 text-primary hover:text-accent-turquoise transition-colors">
+                            Hareketsiz Gün (Azalan) <span class="material-symbols-outlined text-sm">arrow_downward</span>
+</button>
+</div>
+</div>
+<!-- Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface border-b border-outline-variant/50 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">
+<th class="p-4 pl-6 font-semibold">Stok Kodu &amp; Adı</th>
+<th class="p-4 font-semibold">Kategori</th>
+<th class="p-4 font-semibold text-right">Miktar</th>
+<th class="p-4 font-semibold text-right">Toplam Değer</th>
+<th class="p-4 font-semibold text-center">Son Hareket</th>
+<th class="p-4 pr-6 font-semibold text-center">Hareketsiz Gün</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md divide-y divide-outline-variant/20">
+<!-- Row 1: High Risk -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="p-4 pl-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined">memory</span>
+</div>
+<div>
+<div class="font-title-md text-title-md text-primary group-hover:text-accent-turquoise transition-colors">ELK-MCU-8492</div>
+<div class="text-sm text-on-surface-variant">32-bit Microcontroller STM32</div>
+</div>
+</div>
+</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-surface-container text-on-surface-variant">
+                                        Elektronik Bileşenler
+                                    </span>
+</td>
+<td class="p-4 text-right font-semibold text-on-surface">4,500 <span class="text-xs font-normal text-on-surface-variant">Adet</span></td>
+<td class="p-4 text-right font-semibold text-on-surface">₺135,000</td>
+<td class="p-4 text-center text-on-surface-variant">12 Eyl 2023</td>
+<td class="p-4 pr-6 text-center">
+<!-- Highlighted Inactive Days -->
+<div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-error-container border-2 border-error text-error shadow-sm">
+<span class="font-title-md text-title-md font-bold">185</span>
+</div>
+</td>
+</tr>
+<!-- Row 2: Medium Risk -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="p-4 pl-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined">settings</span>
+</div>
+<div>
+<div class="font-title-md text-title-md text-primary group-hover:text-accent-turquoise transition-colors">MEK-BRG-204</div>
+<div class="text-sm text-on-surface-variant">Rulman 6204-2RS</div>
+</div>
+</div>
+</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-surface-container text-on-surface-variant">
+                                        Mekanik Parçalar
+                                    </span>
+</td>
+<td class="p-4 text-right font-semibold text-on-surface">1,200 <span class="text-xs font-normal text-on-surface-variant">Adet</span></td>
+<td class="p-4 text-right font-semibold text-on-surface">₺42,000</td>
+<td class="p-4 text-center text-on-surface-variant">05 Kas 2023</td>
+<td class="p-4 pr-6 text-center">
+<div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-surface-container-high border-2 border-outline-variant text-on-surface-variant shadow-sm">
+<span class="font-title-md text-title-md font-bold">131</span>
+</div>
+</td>
+</tr>
+<!-- Row 3: Medium Risk -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="p-4 pl-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined">cable</span>
+</div>
+<div>
+<div class="font-title-md text-title-md text-primary group-hover:text-accent-turquoise transition-colors">ELK-CBL-10M</div>
+<div class="text-sm text-on-surface-variant">Cat6 Ethernet Kablosu 10m</div>
+</div>
+</div>
+</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-surface-container text-on-surface-variant">
+                                        Sarf Malzemeleri
+                                    </span>
+</td>
+<td class="p-4 text-right font-semibold text-on-surface">350 <span class="text-xs font-normal text-on-surface-variant">Adet</span></td>
+<td class="p-4 text-right font-semibold text-on-surface">₺15,750</td>
+<td class="p-4 text-center text-on-surface-variant">20 Ara 2023</td>
+<td class="p-4 pr-6 text-center">
+<div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-surface-container-high border-2 border-outline-variant text-on-surface-variant shadow-sm">
+<span class="font-title-md text-title-md font-bold">86</span>
+</div>
+</td>
+</tr>
+<!-- Row 4: Low Risk (Approaching target) -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="p-4 pl-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-variant flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined">inventory_2</span>
+</div>
+<div>
+<div class="font-title-md text-title-md text-primary group-hover:text-accent-turquoise transition-colors">AMB-KUT-50X</div>
+<div class="text-sm text-on-surface-variant">Karton Kutu 50x50x50</div>
+</div>
+</div>
+</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-surface-container text-on-surface-variant">
+                                        Ambalaj
+                                    </span>
+</td>
+<td class="p-4 text-right font-semibold text-on-surface">5,000 <span class="text-xs font-normal text-on-surface-variant">Adet</span></td>
+<td class="p-4 text-right font-semibold text-on-surface">₺25,000</td>
+<td class="p-4 text-center text-on-surface-variant">15 Oca 2024</td>
+<td class="p-4 pr-6 text-center">
+<div class="inline-flex items-center justify-center px-4 py-2 rounded-full bg-surface-container text-on-surface-variant">
+<span class="font-title-md text-title-md font-bold">60</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="p-4 border-t border-outline-variant/30 flex items-center justify-between bg-surface">
+<span class="font-body-md text-body-md text-on-surface-variant">1-4 / Toplam 142 Kayıt Gösteriliyor</span>
+<div class="flex gap-2">
+<button class="p-2 rounded-custom border border-outline-variant text-on-surface-variant hover:bg-surface-container-low disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 rounded-custom bg-accent-turquoise text-primary font-bold shadow-sm">1</button>
+<button class="w-10 h-10 rounded-custom border border-outline-variant text-on-surface hover:bg-surface-container-low">2</button>
+<button class="w-10 h-10 rounded-custom border border-outline-variant text-on-surface hover:bg-surface-container-low">3</button>
+<span class="flex items-end justify-center px-1 text-on-surface-variant">...</span>
+<button class="p-2 rounded-custom border border-outline-variant text-on-surface hover:bg-surface-container-low">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+        // Simple mobile menu toggle logic
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+            }
+        });
+    </script>
+</body></html>

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Trade Shows</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#51fbe7",
+                        "surface-dim": "#cbdbf5",
+                        "outline-variant": "#c6c5d1",
+                        "surface-container-low": "#eff4ff",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f8f9ff",
+                        "tertiary-fixed": "#dfe2e9",
+                        "on-secondary-fixed": "#00201c",
+                        "surface-tint": "#4f5a99",
+                        "on-surface-variant": "#454650",
+                        "on-error": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-surface": "#0b1c30",
+                        "on-tertiary-container": "#888c92",
+                        "tertiary-container": "#21252a",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#d3e4fe",
+                        "secondary-container": "#51fbe7",
+                        "inverse-on-surface": "#eaf1ff",
+                        "secondary-fixed-dim": "#1edecb",
+                        "on-primary-fixed-variant": "#374280",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "primary-fixed-dim": "#bac3ff",
+                        "on-secondary-container": "#007167",
+                        "surface-container-high": "#dce9ff",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-container": "#e5eeff",
+                        "secondary": "#006a60",
+                        "on-primary-fixed": "#061353",
+                        "tertiary": "#0c1015",
+                        "primary-fixed": "#dee0ff",
+                        "inverse-surface": "#213145",
+                        "on-primary-container": "#7d88cb",
+                        "tertiary-fixed-dim": "#c3c7cd",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#121e5c",
+                        "on-error-container": "#93000a",
+                        "outline": "#767681",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#0b1c30",
+                        "on-primary": "#ffffff",
+                        "primary": "#00083d",
+                        "on-tertiary-fixed": "#181c21",
+                        "background": "#f8f9ff",
+                        "on-secondary-fixed-variant": "#005048",
+                        "inverse-primary": "#bac3ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "custom": "15px"
+                    },
+                    "spacing": {
+                        "sidebar-width": "280px",
+                        "xl": "3rem",
+                        "lg": "2rem",
+                        "md": "1.5rem",
+                        "xs": "0.5rem",
+                        "sm": "1rem",
+                        "base": "4px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0px 4px 20px rgba(18, 30, 92, 0.05);
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0px 8px 30px rgba(18, 30, 92, 0.1);
+        }
+        .input-focus-ring:focus-within {
+            border-color: #00D7C4;
+            box-shadow: 0 0 0 1px #00D7C4;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md flex min-h-screen">
+<!-- NavigationDrawer (Web) -->
+<nav class="hidden md:flex flex-col w-sidebar-width h-screen sticky left-0 top-0 bg-primary border-r border-white/10 p-md z-50">
+<!-- Brand/Profile Area -->
+<div class="flex items-center gap-sm mb-xl">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed/20 flex items-center justify-center text-secondary-fixed font-title-md shrink-0">
+                OM
+            </div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-secondary-fixed">Operations Manager</span>
+<span class="font-label-sm text-label-sm text-white/70">B2B Sales Enterprise</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex flex-col gap-sm flex-1">
+<a class="text-white/80 hover:text-white flex items-center gap-sm px-md py-sm transition-colors rounded-custom hover:bg-white/10" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="text-white/80 hover:text-white flex items-center gap-sm px-md py-sm transition-colors rounded-custom hover:bg-white/10" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">shopping_cart</span>
+<span>Orders</span>
+</a>
+<a class="text-white/80 hover:text-white flex items-center gap-sm px-md py-sm transition-colors rounded-custom hover:bg-white/10" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">inventory_2</span>
+<span>Inventory</span>
+</a>
+<a class="text-white/80 hover:text-white flex items-center gap-sm px-md py-sm transition-colors rounded-custom hover:bg-white/10" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">payments</span>
+<span>Sales</span>
+</a>
+<a class="bg-secondary-fixed text-on-secondary-fixed rounded-custom flex items-center gap-sm px-md py-sm shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)]" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event</span>
+<span>Trade Shows</span>
+</a>
+<a class="text-white/80 hover:text-white flex items-center gap-sm px-md py-sm transition-colors rounded-custom hover:bg-white/10" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">analytics</span>
+<span>Reports</span>
+</a>
+</div>
+<div class="mt-auto pt-md border-t border-white/10">
+<span class="font-label-sm text-label-sm text-white/50 px-md">v2.4.0</span>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col w-full min-w-0">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-40 bg-surface shadow-sm flex justify-between items-center px-xl py-md w-full">
+<div class="flex items-center gap-sm">
+<button class="md:hidden text-on-surface-variant hover:bg-surface-container-high rounded-full p-2 transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-lg text-headline-lg text-primary md:block hidden">Operations Management</h1>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary md:hidden block">Operations Management</h1>
+</div>
+<div class="flex items-center gap-sm">
+<button class="text-on-surface-variant hover:bg-surface-container-high rounded-full p-2 transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary font-title-md border border-outline-variant/30">
+                    AU
+                </div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="flex-1 p-md md:p-xl overflow-y-auto">
+<!-- Header & Actions -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-md mb-lg">
+<div>
+<h2 class="font-display-lg text-display-lg text-primary">Fuarlar</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Yaklaşan ve geçmiş fuar organizasyonlarını yönetin.</p>
+</div>
+<button class="bg-secondary-fixed text-primary-container font-title-md text-title-md px-6 py-3 rounded-custom hover:brightness-105 transition-all shadow-sm flex items-center gap-2 justify-center w-full md:w-auto">
+<span class="material-symbols-outlined">add</span>
+                    Yeni Fuar Oluştur
+                </button>
+</div>
+<!-- Filters (Glassmorphism Panel) -->
+<div class="glass-panel rounded-custom p-md mb-lg flex flex-col md:flex-row gap-md items-end">
+<div class="w-full md:w-1/3">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-2">ŞEHİR</label>
+<div class="relative input-focus-ring rounded-custom bg-surface-bright border border-outline-variant/50 flex items-center px-4 py-3 transition-colors">
+<span class="material-symbols-outlined text-outline mr-2">location_on</span>
+<select class="w-full bg-transparent border-none focus:ring-0 text-on-surface p-0 font-body-md appearance-none">
+<option value="">Tüm Şehirler</option>
+<option value="istanbul">İstanbul</option>
+<option value="izmir">İzmir</option>
+<option value="ankara">Ankara</option>
+<option value="antalya">Antalya</option>
+</select>
+<span class="material-symbols-outlined text-outline absolute right-4 pointer-events-none">expand_more</span>
+</div>
+</div>
+<div class="w-full md:w-1/3">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-2">TARİH ARALIĞI</label>
+<div class="relative input-focus-ring rounded-custom bg-surface-bright border border-outline-variant/50 flex items-center px-4 py-3 transition-colors">
+<span class="material-symbols-outlined text-outline mr-2">calendar_today</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-on-surface p-0 font-body-md placeholder-outline/50" placeholder="Tarih Seçin" type="text"/>
+</div>
+</div>
+<div class="w-full md:w-1/3 flex gap-2">
+<button class="flex-1 bg-surface-container-high text-primary font-title-md text-title-md px-6 py-3 rounded-custom hover:bg-surface-variant transition-colors border border-outline-variant/30 flex justify-center items-center gap-2">
+<span class="material-symbols-outlined">filter_list</span>
+                        Filtrele
+                    </button>
+<button class="bg-surface-bright text-on-surface-variant p-3 rounded-custom hover:bg-surface-container-high transition-colors border border-outline-variant/30" title="Temizle">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+</div>
+<!-- Bento Grid List -->
+<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-gutter">
+<!-- Card 1 -->
+<article class="bg-white rounded-custom p-md flex flex-col gap-sm border border-outline-variant/20 card-hover transition-all duration-300 relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-full h-1 bg-secondary-fixed origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+<div class="flex justify-between items-start mb-2">
+<div class="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-surface-container-low text-primary text-xs font-semibold">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed"></span>
+                            Yaklaşan
+                        </div>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<h3 class="font-title-md text-title-md text-primary mb-1">Uluslararası Yapı Fuarı 2024</h3>
+<div class="flex flex-col gap-2 mt-auto pt-4">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-outline">calendar_month</span>
+<span>15-18 Nisan 2024</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-outline">location_city</span>
+<span>TÜYAP Fuar Merkezi, İstanbul</span>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-outline-variant/20 flex justify-between items-center">
+<div class="flex -space-x-2">
+<img alt="Katılımcı" class="w-8 h-8 rounded-full border-2 border-white" data-alt="A small circular portrait of a professional individual against a bright white background. High key lighting, clear and crisp. Suitable for a user interface avatar in a modern corporate web application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRlKKFq3JveC0UncXpPHlCgROWoytO2VaArFAZ5GFtItxqn1hpruwhAuDSIMKIMOzvwhLVuVZs1YVcRIBSsmlyimGh0jqkBmXGZnkk4nxF55wc_dU8GlbHP-mUa7qGSochmpVHr1XkEAW0Tm_XybZPzfc69OWVutD8QesHxY1Mb6y3iWXWUplj9cV_N02m03_AGWSZRzvfCSmLcNiug1Qmlh7xyl688FWWoIp95f8B83CuSZgPRfXJzMDNflCCQ0IHAqtN9OpZTU2o"/>
+<img alt="Katılımcı" class="w-8 h-8 rounded-full border-2 border-white" data-alt="A small circular portrait of a professional individual against a bright white background. High key lighting, clear and crisp. Suitable for a user interface avatar in a modern corporate web application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnmEEi4-B_00EfPMdopResaJq2dEvWh26FOL78dZislQJ_cKm0ZS6yogY-FQc3pVFbj8C3eRiu8qoKinYHr_i5JVSBndfTDIejVe2GelAnCrtQ9CfY_V-oWf9aGp1cRyUJOj4F0dfPYtr-FQlI5Q0amyUcsdmsW4yu1YJaXq99q8R436tYDWr0ebtwnZNfS382C6kwUjkwhcqUW3CY4NzdyVSs_aVUrgREWheIMs6sbSwg8_MODetMGi0Y8H9T_tJOUtzk-7HHhz9K"/>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-surface-container-high flex items-center justify-center text-xs font-semibold text-primary">+12</div>
+</div>
+<button class="text-secondary font-title-md text-sm hover:underline">Detaylar</button>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="bg-white rounded-custom p-md flex flex-col gap-sm border border-outline-variant/20 card-hover transition-all duration-300 relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-full h-1 bg-secondary-fixed origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+<div class="flex justify-between items-start mb-2">
+<div class="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-surface-container-low text-primary text-xs font-semibold">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed"></span>
+                            Yaklaşan
+                        </div>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<h3 class="font-title-md text-title-md text-primary mb-1">Gıda Teknolojileri Zirvesi</h3>
+<div class="flex flex-col gap-2 mt-auto pt-4">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-outline">calendar_month</span>
+<span>05-07 Mayıs 2024</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-outline">location_city</span>
+<span>Fuar İzmir, İzmir</span>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-outline-variant/20 flex justify-between items-center">
+<div class="flex -space-x-2">
+<img alt="Katılımcı" class="w-8 h-8 rounded-full border-2 border-white" data-alt="A small circular portrait of a professional individual against a bright white background. High key lighting, clear and crisp. Suitable for a user interface avatar in a modern corporate web application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_K7kWwgStWJxLdy9nMSa40JzOTSSZW2VveYs2Ts4BfJeDltR3D5bzLuU2f3QPl_duVlcnkxHV3nkZ2h2ae66BnGqgkwfQco8gzuzLfaXSrlTHx1o5EjTPGQX9lqN_U9VT7IJ0gMtGatsIFILejc8MN6BlbFQQJT5JJj5nPeQq4dUPJvjmAc4_V5lXCkihTv6H1gj_byXHWYglrwt_41FengIkqAIFldqadMcs7CRGeh8dVHpCtTZ3NoMm37Q_3Y7rN-qrF_SwiGTO"/>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-surface-container-high flex items-center justify-center text-xs font-semibold text-primary">+5</div>
+</div>
+<button class="text-secondary font-title-md text-sm hover:underline">Detaylar</button>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="bg-white rounded-custom p-md flex flex-col gap-sm border border-outline-variant/20 card-hover transition-all duration-300 relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-full h-1 bg-outline-variant origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+<div class="flex justify-between items-start mb-2">
+<div class="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-surface-variant text-on-surface-variant text-xs font-semibold">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+                            Tamamlandı
+                        </div>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface-variant mb-1">Eurasia B2B Buluşmaları</h3>
+<div class="flex flex-col gap-2 mt-auto pt-4 opacity-70">
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-outline">calendar_month</span>
+<span>10-12 Şubat 2024</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-outline">location_city</span>
+<span>ATO Congresium, Ankara</span>
+</div>
+</div>
+<div class="mt-4 pt-4 border-t border-outline-variant/20 flex justify-between items-center opacity-70">
+<div class="flex -space-x-2">
+<img alt="Katılımcı" class="w-8 h-8 rounded-full border-2 border-white grayscale" data-alt="A small circular portrait of a professional individual against a bright white background. Black and white image, clear and crisp. Suitable for a user interface avatar in a modern corporate web application representing a past event." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCX4QP6AFb9i6JbAti9V1yyniovRHOYoyzKPtenVlRhxnczev2ME8A5pLxtmBhS-s2P0TuQXl0xXQaIAI7OTssFJb74IMdlrukfPdTQVhD3nGMYGOmtfGh6c-BY1vYWFrMlbEek3HpscQXBipMP2a0oFkPthpD3kQvDl0e-7JdRRs-4EO1-SpkEusGPAhA6iYxNTy6wBLNYHbiSj0tPpelp132dzWQ-QcvPClMOh537oU4h6gkpDF1qjHnrMGRQq4WsMXN1tdkMdudT"/>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-surface-variant flex items-center justify-center text-xs font-semibold text-on-surface-variant">+24</div>
+</div>
+<button class="text-on-surface-variant font-title-md text-sm hover:underline">Raporu Gör</button>
+</div>
+</article>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-outline-variant/20 flex justify-around items-center h-16 px-2 z-50 shadow-[0_-4px_20px_rgba(18,30,92,0.05)]">
+<a class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">shopping_cart</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-primary relative" href="#">
+<div class="absolute -top-3 w-12 h-1 bg-secondary-fixed rounded-b-full"></div>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event</span>
+</a>
+<a class="flex flex-col items-center justify-center w-full h-full text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">analytics</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Katalog Ürünleri</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "tertiary": "#0c1015",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#7d88cb",
+                        "secondary": "#006a60",
+                        "on-primary-fixed": "#061353",
+                        "secondary-fixed-dim": "#1edecb",
+                        "on-secondary-fixed": "#00201c",
+                        "on-background": "#0b1c30",
+                        "inverse-on-surface": "#eaf1ff",
+                        "inverse-surface": "#213145",
+                        "tertiary-container": "#21252a",
+                        "surface-variant": "#d3e4fe",
+                        "on-error-container": "#93000a",
+                        "background": "#f8f9ff",
+                        "tertiary-fixed": "#dfe2e9",
+                        "on-surface": "#0b1c30",
+                        "on-secondary-fixed-variant": "#005048",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#eff4ff",
+                        "on-primary": "#ffffff",
+                        "primary": "#00083d",
+                        "on-primary-fixed-variant": "#374280",
+                        "surface-tint": "#4f5a99",
+                        "secondary-fixed": "#51fbe7",
+                        "on-tertiary-fixed": "#181c21",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-secondary-container": "#007167",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#cbdbf5",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "on-surface-variant": "#454650",
+                        "on-tertiary-container": "#888c92",
+                        "tertiary-fixed-dim": "#c3c7cd",
+                        "surface-container": "#e5eeff",
+                        "secondary-container": "#51fbe7",
+                        "primary-fixed": "#dee0ff",
+                        "surface-container-high": "#dce9ff",
+                        "surface": "#f8f9ff",
+                        "primary-fixed-dim": "#bac3ff",
+                        "inverse-primary": "#bac3ff",
+                        "primary-container": "#121e5c",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c6c5d1",
+                        "outline": "#767681"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "card": "15px"
+                    },
+                    "spacing": {
+                        "xl": "3rem",
+                        "sidebar-width": "280px",
+                        "gutter": "24px",
+                        "sm": "1rem",
+                        "base": "4px",
+                        "xs": "0.5rem",
+                        "md": "1.5rem",
+                        "lg": "2rem"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background flex h-screen overflow-hidden">
+<!-- NavigationDrawer (Sidebar) -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-primary dark:bg-primary border-r border-white/10 hidden md:flex flex-col py-xl z-20">
+<div class="px-xl mb-8 flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary-fixed text-headline-lg">inventory_2</span>
+<span class="font-headline-lg text-headline-lg text-secondary-fixed">Global Logistics</span>
+</div>
+<div class="px-xl mb-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoFt_VGLTT9KNT3IbAl-Tzg9m97eNGujrS36G8JZf-CXbfXr9XJmcMruLXYlPqfpSXV0tqGi5zI9-X3yNV2qosAd2hpgJvUxOJQ7vsznH0f2GFfEI7VgvI1wdnNp1wpHpJshKilBVGXjg4z0CUDwVIagNbqFQ9IV71508OcxWsgG5qq3VLckfXFCX80-JNaoZocEE6lmIuaYsbvm8pRsASi6fbzdnLmevBy3NfseJT2KvIRaaIwJyvQYOY2KQrsc95Lwgb_oWq1er6"/>
+</div>
+<div>
+<div class="font-title-md text-on-primary text-sm">Operations Manager</div>
+<div class="text-on-primary-container text-xs">v2.4.0</div>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-2">
+<a class="text-white/80 hover:text-white flex items-center px-4 py-3 hover:bg-white/5 transition-colors duration-200 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 0;">inventory_2</span>
+<span class="font-body-md text-body-md">Stock List</span>
+</a>
+<a class="text-white/80 hover:text-white flex items-center px-4 py-3 hover:bg-white/5 transition-colors duration-200 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 0;">edit_note</span>
+<span class="font-body-md text-body-md">Manual Products</span>
+</a>
+<a class="text-white/80 hover:text-white flex items-center px-4 py-3 hover:bg-white/5 transition-colors duration-200 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 0;">info</span>
+<span class="font-body-md text-body-md">Product Details</span>
+</a>
+<a class="text-white/80 hover:text-white flex items-center px-4 py-3 hover:bg-white/5 transition-colors duration-200 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 0;">query_stats</span>
+<span class="font-body-md text-body-md">Stock Tracking</span>
+</a>
+<a class="bg-secondary text-primary rounded-[15px] flex items-center px-4 py-3 font-bold transition-transform scale-[0.98]" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<span class="font-body-md text-body-md">Product Catalog</span>
+</a>
+<a class="text-white/80 hover:text-white flex items-center px-4 py-3 hover:bg-white/5 transition-colors duration-200 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 0;">shopping_cart</span>
+<span class="font-body-md text-body-md">Catalog Cart</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-[280px] flex flex-col h-screen overflow-hidden">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim shadow-[0px_4px_20px_rgba(18,30,92,0.05)] flex justify-between items-center px-xl h-20 w-full z-10 sticky top-0 shrink-0">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-primary hover:bg-surface-container-high transition-all p-2 rounded-[15px]">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-lg text-headline-lg font-bold text-primary hidden md:block">Operations Console</h1>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary md:hidden">Operations Console</h1>
+</div>
+<button class="text-on-surface-variant hover:bg-surface-container-high transition-all p-2 rounded-[15px] relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2.5 h-2.5 bg-error rounded-full border-2 border-surface"></span>
+</button>
+</header>
+<!-- Page Content Canvas -->
+<div class="flex-1 overflow-y-auto p-4 md:p-xl space-y-6">
+<!-- Actions & Filters Bar -->
+<div class="flex flex-col lg:flex-row gap-4 justify-between items-start lg:items-center bg-surface-container-lowest p-4 rounded-[15px] shadow-[0px_4px_20px_rgba(18,30,92,0.05)]">
+<!-- Search -->
+<div class="relative w-full lg:w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-10 pr-4 py-3 bg-surface border border-outline-variant rounded-[15px] font-body-md text-body-md focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors" placeholder="Ürün Ara (SKU, İsim)..." type="text"/>
+</div>
+<!-- Filters & Bulk Actions -->
+<div class="flex flex-wrap gap-3 w-full lg:w-auto items-center">
+<select class="py-3 px-4 bg-surface border border-outline-variant rounded-[15px] font-body-md text-body-md focus:outline-none focus:border-secondary">
+<option value="">Tüm Kategoriler</option>
+<option value="electronics">Elektronik</option>
+<option value="apparel">Giyim</option>
+</select>
+<select class="py-3 px-4 bg-surface border border-outline-variant rounded-[15px] font-body-md text-body-md focus:outline-none focus:border-secondary">
+<option value="">Tüm Markalar</option>
+<option value="brand_a">Brand A</option>
+<option value="brand_b">Brand B</option>
+</select>
+<div class="h-8 w-px bg-outline-variant hidden sm:block"></div>
+<button class="bg-secondary text-primary-container font-title-md text-title-md py-3 px-6 rounded-[15px] hover:shadow-lg transition-all flex items-center gap-2 opacity-80 cursor-not-allowed" disabled="" id="bulkActionButton">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">checklist</span>
+                        Toplu İşlem
+                    </button>
+</div>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Product Card 1 -->
+<div class="bg-surface-container-lowest rounded-[15px] shadow-[0px_4px_20px_rgba(18,30,92,0.05)] hover:shadow-lg transition-all group relative border border-transparent hover:border-surface-variant flex flex-col">
+<div class="absolute top-3 left-3 z-10">
+<input class="w-5 h-5 rounded border-outline-variant text-secondary focus:ring-secondary cursor-pointer product-checkbox" type="checkbox"/>
+</div>
+<div class="absolute top-3 right-3 z-10">
+<span class="bg-surface-tint text-on-primary px-2 py-1 rounded-full font-label-sm text-label-sm shadow-sm">Stokta</span>
+</div>
+<div class="w-full h-48 bg-surface-variant rounded-t-[15px] overflow-hidden relative">
+<img alt="Premium Smart Watch" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A high-end modern smartwatch resting on a clean, minimal white surface. The lighting is soft and studio-like, highlighting the sleek metallic bezel and smooth silicone strap. The aesthetic perfectly matches a premium, high-performance corporate brand with subtle hints of turquoise reflection. The overall mood is sophisticated and technologically advanced." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5ASTvxEuR6u0eHbt821BXSw4TQsTKYYRBXlYs-JY0cnszo5NeQ-YdzNCKbIzSqFSsiN08SbW0SpJNLmt4NCKrKMuv6YfQZSlG-iKs6z02CAbz2zxbQ5X1NMPGetobFYkJEoYI5JZ3dGVuTzC5HkdcYen8HhWSPYAT_lApMVP4TKW22Ki8aIeucEcIrcYDwY-Bn0CJZUI0ue0FgskjcKMm5_sQFDSpPxhSgH_XbWJ_msb0wZipJxZqt_UR6VT0Dv7bBW0XxE6Qy-se"/>
+</div>
+<div class="p-4 flex-1 flex flex-col">
+<div class="text-outline font-label-sm text-label-sm mb-1">SKU: SMW-8273</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-2 line-clamp-2">Premium Smart Watch Series 8</h3>
+<div class="flex items-center justify-between mt-auto pt-4">
+<span class="font-headline-lg text-title-md text-primary font-bold">₺4,299.00</span>
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-surface-container-lowest rounded-[15px] shadow-[0px_4px_20px_rgba(18,30,92,0.05)] hover:shadow-lg transition-all group relative border border-transparent hover:border-surface-variant flex flex-col">
+<div class="absolute top-3 left-3 z-10">
+<input class="w-5 h-5 rounded border-outline-variant text-secondary focus:ring-secondary cursor-pointer product-checkbox" type="checkbox"/>
+</div>
+<div class="absolute top-3 right-3 z-10">
+<span class="bg-error text-on-error px-2 py-1 rounded-full font-label-sm text-label-sm shadow-sm">Kritik Stok</span>
+</div>
+<div class="w-full h-48 bg-surface-variant rounded-t-[15px] overflow-hidden relative">
+<img alt="Wireless Noise-Cancelling Headphones" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Sleek, matte black over-ear wireless headphones displayed elegantly on a crisp white pedestal. High-key studio lighting casts very soft ambient shadows, emphasizing the premium build quality and minimalist design. The scene conveys a sense of high-performance luxury audio equipment, aligning with a sophisticated corporate SaaS aesthetic. Subtle cool-toned highlights accent the earcups." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVmp9Bnm2AJBWAyBq5NGLSg7x00jRgPq3FHiniVQItguV-oaFjgYBzWniCDmqstUvoNnF3_-75Dj_aR0GrTT_EpI_ggPrH3NewIRiEu0xuRuYfR6-e_u9haRcnCEeJvuk_znKg80rsWEg90iivvlY_zkikWMduGjXeTX3VtkoPXiIu7UfOiHQXL1KiuK--piHIauiX3igkc2hMKn-isnask_l7YzZreYxHvna6UdYR_xyS-ku6yMeFPvwivTz3K3z5zxfnKjYF2UZ8"/>
+</div>
+<div class="p-4 flex-1 flex flex-col">
+<div class="text-outline font-label-sm text-label-sm mb-1">SKU: AUD-9921</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-2 line-clamp-2">Pro Wireless ANC Headphones</h3>
+<div class="flex items-center justify-between mt-auto pt-4">
+<span class="font-headline-lg text-title-md text-primary font-bold">₺2,850.00</span>
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-surface-container-lowest rounded-[15px] shadow-[0px_4px_20px_rgba(18,30,92,0.05)] hover:shadow-lg transition-all group relative border border-transparent hover:border-surface-variant flex flex-col">
+<div class="absolute top-3 left-3 z-10">
+<input class="w-5 h-5 rounded border-outline-variant text-secondary focus:ring-secondary cursor-pointer product-checkbox" type="checkbox"/>
+</div>
+<div class="absolute top-3 right-3 z-10">
+<span class="bg-surface-tint text-on-primary px-2 py-1 rounded-full font-label-sm text-label-sm shadow-sm">Stokta</span>
+</div>
+<div class="w-full h-48 bg-surface-variant rounded-t-[15px] overflow-hidden relative">
+<img alt="Modern Minimalist Laptop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A modern, ultra-thin laptop slightly open on a pristine white desk. The lighting is exceptionally clean and bright, showcasing the sharp metallic edges and premium glass trackpad. The overall aesthetic is highly professional, efficient, and refined, perfectly suited for an enterprise software interface. The colors are muted silvers and deep blacks against an airy background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqT_RhK5xosnrMulHYOeEd34FcwXiICK7pnQG195-NPr0uHHcZFfdS6MFz9Eq7wDMl3NzvBhRNIAbckARFNkS3nc_aryE65whEMkcmYBrf4PVVGawzWQ5Qu2uwpPemZzUquHjGL8-u52jtPxhH1Rc7MLH_B-ZmLfIKGw-HU3OtsDqptbb5XDQuMZvylQAfe6JFY_fY90kSH-EWmqDxesLMAHofq8trTBJkP0DSBAp-rAmvHvBbn1vdWxCOYAmwLKsSzbasxhUuctMq"/>
+</div>
+<div class="p-4 flex-1 flex flex-col">
+<div class="text-outline font-label-sm text-label-sm mb-1">SKU: LPT-4002</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-2 line-clamp-2">UltraBook Pro 14" M2</h3>
+<div class="flex items-center justify-between mt-auto pt-4">
+<span class="font-headline-lg text-title-md text-primary font-bold">₺34,999.00</span>
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Simple logic to enable/disable bulk action button based on checkbox selection
+        const checkboxes = document.querySelectorAll('.product-checkbox');
+        const bulkButton = document.getElementById('bulkActionButton');
+
+        checkboxes.forEach(box => {
+            box.addEventListener('change', () => {
+                const anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+                if (anyChecked) {
+                    bulkButton.classList.remove('opacity-80', 'cursor-not-allowed');
+                    bulkButton.removeAttribute('disabled');
+                } else {
+                    bulkButton.classList.add('opacity-80', 'cursor-not-allowed');
+                    bulkButton.setAttribute('disabled', 'true');
+                }
+            });
+        });
+    </script>
+</body></html>

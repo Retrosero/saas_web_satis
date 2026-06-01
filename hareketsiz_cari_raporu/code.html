@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hareketsiz Cariler Raporu</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#006a60",
+                        "on-surface": "#0b1c30",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-secondary-fixed-variant": "#005048",
+                        "on-primary-container": "#7d88cb",
+                        "tertiary-fixed-dim": "#c3c7cd",
+                        "primary-fixed-dim": "#bac3ff",
+                        "outline": "#767681",
+                        "error-container": "#ffdad6",
+                        "background": "#f8f9ff",
+                        "on-surface-variant": "#454650",
+                        "tertiary-container": "#21252a",
+                        "primary-container": "#121e5c",
+                        "secondary-container": "#51fbe7",
+                        "on-primary-fixed": "#061353",
+                        "surface": "#f8f9ff",
+                        "on-tertiary-container": "#888c92",
+                        "on-primary-fixed-variant": "#374280",
+                        "surface-variant": "#d3e4fe",
+                        "surface-tint": "#4f5a99",
+                        "inverse-surface": "#213145",
+                        "error": "#ba1a1a",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed": "#dfe2e9",
+                        "secondary-fixed": "#51fbe7",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#bac3ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-dim": "#cbdbf5",
+                        "secondary-fixed-dim": "#1edecb",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "on-error-container": "#93000a",
+                        "primary": "#00083d",
+                        "on-background": "#0b1c30",
+                        "surface-bright": "#f8f9ff",
+                        "primary-fixed": "#dee0ff",
+                        "tertiary": "#0c1015",
+                        "surface-container-high": "#dce9ff",
+                        "on-secondary-container": "#007167",
+                        "on-secondary-fixed": "#00201c",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#c6c5d1",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#181c21",
+                        "surface-container": "#e5eeff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sidebar-width": "280px",
+                        "md": "1.5rem",
+                        "lg": "2rem",
+                        "gutter": "24px",
+                        "xs": "0.5rem",
+                        "base": "4px",
+                        "xl": "3rem",
+                        "sm": "1rem"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0px 4px 20px rgba(18, 30, 92, 0.05);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex">
+<!-- Navigation Drawer -->
+<aside class="fixed left-0 top-0 bottom-0 z-40 bg-primary dark:bg-primary w-sidebar-width h-full border-r border-white/10 flex flex-col hidden md:flex">
+<!-- Header Profile -->
+<div class="p-lg border-b border-white/10 flex items-center gap-sm">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest overflow-hidden">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A professional headshot of a corporate manager, soft natural lighting, light neutral background, high resolution, corporate modern aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWCh8WhO3Arq9tEsNC78dsY8F4FQtLo3mPyY_l4Jrlb2EiZdkyJzIaZrAL4r_F2obUSXPkNm4xezfPOX2msr98fxoOKQDkFi0x3S40z_1T1lHcCucnP47mF7DO1t8-42AZyITxY3LW7ypzU4rnHv5rAe5oIzzPzWMvECCT8olWXhS6DHbuiEMcHy_jagkS8D5CA1F51akR-1MXSH4ViFBKMUzhRmC8zTricE4DJcnl1owl4EmXHHaVQFMHZdHBTJKvreiddFreMj6Z"/>
+</div>
+<div>
+<h2 class="font-title-md text-title-md text-secondary-fixed">Operations Manager</h2>
+<p class="font-label-sm text-label-sm text-on-primary-fixed-variant">Enterprise Admin</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 py-md overflow-y-auto font-body-md text-body-md">
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 hover:bg-primary-container hover:text-white transition-colors duration-200 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+                Dashboard
+            </a>
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 hover:bg-primary-container hover:text-white transition-colors duration-200 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3">inventory_2</span>
+                Stock Management
+            </a>
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 hover:bg-primary-container hover:text-white transition-colors duration-200 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3">inventory</span>
+                Product Catalog
+            </a>
+<a class="bg-secondary-fixed text-primary rounded-[15px] flex items-center px-4 py-3 mx-2 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+                Transactions
+            </a>
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 hover:bg-primary-container hover:text-white transition-colors duration-200 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3">settings</span>
+                Settings
+            </a>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<div class="flex-1 ml-0 md:ml-sidebar-width flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-xl py-md bg-surface dark:bg-surface shadow-sm full-width top-0 sticky z-30">
+<div class="flex items-center gap-sm">
+<button class="md:hidden text-primary p-2 hover:bg-surface-container-low rounded-full transition-transform scale-95">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-title-md text-title-md text-primary font-bold">Operations Console</h1>
+</div>
+<button class="text-on-surface-variant p-2 hover:bg-surface-container-low rounded-full transition-transform scale-95 relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+</header>
+<!-- Main Workspace -->
+<main class="flex-1 p-xl">
+<div class="mb-lg flex justify-between items-end">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary mb-2">Hareketsiz Cariler Raporu</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Son işlem tarihi üzerinden uzun süre geçmiş, riskli veya potansiyel müşterilerin detaylı analizi.</p>
+</div>
+<div class="flex gap-sm">
+<button class="bg-surface-container-lowest text-primary border border-outline-variant px-6 py-3 rounded-[15px] font-title-md text-title-md hover:bg-surface-container-low transition-colors shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">download</span>
+                        Dışa Aktar
+                    </button>
+<button class="bg-[#00D7C4] text-primary px-6 py-3 rounded-[15px] font-title-md text-title-md hover:opacity-90 transition-opacity shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+                        Filtrele
+                    </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Summary Card 1 -->
+<div class="col-span-1 md:col-span-4 glass-card rounded-xl p-lg flex flex-col justify-between">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-full bg-error-container text-error flex items-center justify-center">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<span class="bg-surface-container text-on-surface-variant font-label-sm text-label-sm px-2 py-1 rounded-full">+12% Artış</span>
+</div>
+<div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-1">Yüksek Riskli Cariler</p>
+<h3 class="font-display-lg text-display-lg text-primary">24</h3>
+<p class="font-label-sm text-label-sm text-error mt-2">Toplam Bakiye: 1.250.000 TL</p>
+</div>
+</div>
+<!-- Summary Card 2 -->
+<div class="col-span-1 md:col-span-4 glass-card rounded-xl p-lg flex flex-col justify-between">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest text-primary flex items-center justify-center">
+<span class="material-symbols-outlined">schedule</span>
+</div>
+</div>
+<div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-1">Ortalama Hareketsizlik</p>
+<h3 class="font-display-lg text-display-lg text-primary">85 Gün</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-2">Sektör Ortalaması: 45 Gün</p>
+</div>
+</div>
+<!-- Summary Card 3 -->
+<div class="col-span-1 md:col-span-4 glass-card rounded-xl p-lg flex flex-col justify-between">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed text-primary flex items-center justify-center">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+</div>
+</div>
+<div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-1">Toplam Alacak Bakiyesi</p>
+<h3 class="font-display-lg text-display-lg text-primary">3.4M TL</h3>
+<p class="font-label-sm text-label-sm text-secondary mt-2">Bekleyen Tahsilat</p>
+</div>
+</div>
+<!-- Main Data Table / List -->
+<div class="col-span-1 md:col-span-12 glass-card rounded-xl overflow-hidden mt-sm">
+<div class="p-lg border-b border-surface-container flex justify-between items-center bg-surface-container-lowest">
+<h3 class="font-title-md text-title-md text-primary">Kritik Cari Listesi (90+ Gün Hareketsiz)</h3>
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 transform -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 rounded-[15px] border border-outline-variant bg-surface-bright focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed font-body-md text-body-md text-on-surface" placeholder="Cari Ara..." type="text"/>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-bright border-b border-surface-container">
+<th class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Cari Ünvanı</th>
+<th class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Son İşlem</th>
+<th class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Hareketsiz Süre</th>
+<th class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-right">Bakiye</th>
+<th class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-center">Risk</th>
+<th class="p-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider text-center">İşlem</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container bg-surface-container-lowest">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container text-white flex items-center justify-center font-title-md text-title-md">AK</div>
+<div>
+<p class="font-title-md text-title-md text-primary">Akdeniz Yapı Malzemeleri A.Ş.</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">TR-34-9821</p>
+</div>
+</div>
+</td>
+<td class="p-4 font-body-md text-body-md text-on-surface">12 Ağu 2023</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-error-container text-error">
+                                            142 Gün
+                                        </span>
+</td>
+<td class="p-4 font-body-md text-body-md text-on-surface text-right font-semibold">450.000,00 ₺</td>
+<td class="p-4 text-center">
+<span class="material-symbols-outlined text-error" title="Yüksek Risk">warning</span>
+</td>
+<td class="p-4 text-center">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-tertiary-container text-white flex items-center justify-center font-title-md text-title-md">DT</div>
+<div>
+<p class="font-title-md text-title-md text-primary">Doğu Tekstil Sanayi Ltd. Şti.</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">TR-35-1104</p>
+</div>
+</div>
+</td>
+<td class="p-4 font-body-md text-body-md text-on-surface">05 Eyl 2023</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container-highest text-on-surface">
+                                            118 Gün
+                                        </span>
+</td>
+<td class="p-4 font-body-md text-body-md text-on-surface text-right font-semibold">125.500,00 ₺</td>
+<td class="p-4 text-center">
+<span class="material-symbols-outlined text-[#F59E0B]" title="Orta Risk">info</span>
+</td>
+<td class="p-4 text-center">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container text-white flex items-center justify-center font-title-md text-title-md">MR</div>
+<div>
+<p class="font-title-md text-title-md text-primary">Marmara Lojistik A.Ş.</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">TR-34-5562</p>
+</div>
+</div>
+</td>
+<td class="p-4 font-body-md text-body-md text-on-surface">22 Eyl 2023</td>
+<td class="p-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-label-sm text-label-sm bg-surface-container-highest text-on-surface">
+                                            101 Gün
+                                        </span>
+</td>
+<td class="p-4 font-body-md text-body-md text-on-surface text-right font-semibold">-15.000,00 ₺</td>
+<td class="p-4 text-center">
+<span class="material-symbols-outlined text-secondary" title="Düşük Risk">check_circle</span>
+</td>
+<td class="p-4 text-center">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

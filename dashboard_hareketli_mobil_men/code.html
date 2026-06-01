@@ -1,0 +1,469 @@
+<!DOCTYPE html><html class="light" lang="tr"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>OpsCommand - B2B Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#82f9be",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "on-tertiary-container": "#ffca81",
+                        "on-primary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#0c56d0",
+                        "secondary-container": "#82f9be",
+                        "error": "#ba1a1a",
+                        "surface": "#faf9ff",
+                        "on-background": "#051a3e",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#e1e8ff",
+                        "secondary-fixed-dim": "#65dca4",
+                        "tertiary-fixed-dim": "#ffb950",
+                        "surface-variant": "#d8e2ff",
+                        "secondary": "#006c47",
+                        "on-primary-fixed-variant": "#0040a2",
+                        "on-primary-container": "#c4d2ff",
+                        "primary-container": "#0052cc",
+                        "surface-container-highest": "#d8e2ff",
+                        "primary-fixed": "#dae2ff",
+                        "outline-variant": "#c3c6d6",
+                        "tertiary-fixed": "#ffddb3",
+                        "primary": "#003d9b",
+                        "tertiary": "#5e3c00",
+                        "surface-dim": "#ccdaff",
+                        "on-error": "#ffffff",
+                        "background": "#faf9ff",
+                        "on-secondary-container": "#00734c",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#624000",
+                        "surface-container": "#e9edff",
+                        "surface-bright": "#faf9ff",
+                        "on-secondary-fixed": "#002113",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#b2c5ff",
+                        "tertiary-container": "#7d5200",
+                        "surface-container-low": "#f1f3ff",
+                        "inverse-on-surface": "#edf0ff",
+                        "outline": "#737685",
+                        "on-surface": "#051a3e",
+                        "on-primary-fixed": "#001848",
+                        "on-tertiary-fixed": "#291800",
+                        "on-surface-variant": "#434654",
+                        "inverse-surface": "#1d3054",
+                        "on-secondary-fixed-variant": "#005235",
+                        "on-secondary": "#ffffff",
+                        "brand-navy": "#001848",
+                        "brand-turquoise": "#82f9be"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "15px",
+                        "lg": "15px",
+                        "xl": "15px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "32px",
+                        "sm": "8px",
+                        "max-width": "1440px",
+                        "base": "4px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "gutter": "16px",
+                        "lg": "24px",
+                        "margin": "24px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "mono-label": ["JetBrains Mono"],
+                        "display-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "mono-label": ["13px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c3c6d6; border-radius: 10px; }
+        
+        .sidebar-transition { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        #sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            transform: translateX(-100%);
+            width: 280px;
+            z-index: 70;
+        }
+        #sidebar.open { transform: translateX(0); }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased overflow-hidden flex h-screen">
+<!-- Mobile Sidebar Overlay -->
+<div class="fixed inset-0 bg-brand-navy/50 z-[60] hidden backdrop-blur-sm transition-opacity opacity-0" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+<!-- Sidebar (Drawer) -->
+<aside class="sidebar-transition flex flex-col py-lg bg-brand-navy w-[280px] shadow-2xl shrink-0 h-full" id="sidebar">
+<!-- Sidebar Header -->
+<div class="px-md mb-xl flex items-center justify-between">
+<div class="flex items-center gap-sm">
+<span class="font-headline-lg text-white font-bold text-2xl">OpsCommand</span>
+</div>
+<button class="p-xs rounded-lg hover:bg-white/10 text-white transition-colors" onclick="toggleSidebar()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Sidebar Content -->
+<div class="flex-1 overflow-y-auto space-y-6">
+<!-- Genel Section -->
+<div>
+<p class="px-lg text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2">GENEL</p>
+<nav class="space-y-1">
+<a class="flex items-center gap-md mx-md px-md py-2 bg-brand-turquoise text-brand-navy rounded-xl transition-all shadow-[0_0_15px_rgba(130,249,190,0.3)]" href="#">
+<span class="material-symbols-outlined shrink-0">grid_view</span>
+<span class="font-semibold whitespace-nowrap">Dashboard</span>
+</a>
+<a class="flex items-center gap-md mx-md px-md py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined shrink-0">inventory_2</span>
+<span class="font-semibold whitespace-nowrap">Ürün Yönetimi</span>
+</a>
+<a class="flex items-center gap-md mx-md px-md py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined shrink-0">sell</span>
+<span class="font-semibold whitespace-nowrap">Kategoriler</span>
+</a>
+</nav>
+</div>
+<!-- Satış & Operasyon Section -->
+<div>
+<p class="px-lg text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2">SATIŞ &amp; OPERASYON</p>
+<nav class="space-y-1">
+<a class="flex items-center gap-md mx-md px-md py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined shrink-0">bolt</span>
+<span class="font-semibold whitespace-nowrap">Hızlı Satış</span>
+</a>
+<a class="flex items-center justify-between mx-md px-md py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined shrink-0">shopping_cart</span>
+<span class="font-semibold whitespace-nowrap">Siparişler</span>
+</div>
+<span class="bg-error w-5 h-5 flex items-center justify-center rounded-full text-[10px] text-white">2</span>
+</a>
+<a class="flex items-center gap-md mx-md px-md py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined shrink-0">account_balance_wallet</span>
+<span class="font-semibold whitespace-nowrap">Tahsilatlar</span>
+</a>
+<a class="flex items-center gap-md mx-md px-md py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined shrink-0">group</span>
+<span class="font-semibold whitespace-nowrap">Müşteriler</span>
+</a>
+</nav>
+</div>
+</div>
+<!-- Sidebar Footer -->
+<div class="mt-auto pt-md border-t border-white/10 px-md">
+<div class="flex items-center gap-md mb-md">
+<div class="w-10 h-10 rounded-full bg-brand-turquoise flex items-center justify-center text-brand-navy font-bold">SE</div>
+<div>
+<p class="font-bold text-white text-sm">Engin</p>
+<p class="text-[10px] text-white/50 uppercase">Sales Executive</p>
+</div>
+</div>
+<button class="w-full bg-white/10 hover:bg-white/20 text-white py-md rounded-xl flex items-center justify-center gap-sm transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined shrink-0">logout</span>
+<span class="font-semibold text-sm">Çıkış Yap</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col h-screen overflow-hidden bg-background relative w-full">
+<!-- TopNavBar -->
+<header class="bg-white h-16 border-b border-outline-variant sticky top-0 z-50 flex justify-between items-center w-full px-lg">
+<div class="flex items-center gap-md">
+<button class="text-brand-navy hover:bg-surface-container-high p-sm rounded-xl transition-colors" onclick="toggleSidebar()">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="font-headline-md text-xl font-bold text-brand-navy hidden sm:block">Dashboard</span>
+</div>
+<div class="flex-1 max-w-md relative mx-lg hidden md:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-full pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" placeholder="Ara..." type="text">
+</div>
+<div class="flex items-center gap-sm">
+<button class="text-brand-navy hover:bg-surface-container-high transition-colors p-sm rounded-full relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full border border-white"></span>
+</button>
+<button class="text-brand-navy hover:bg-surface-container-high transition-colors p-sm rounded-full">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 overflow-y-auto p-gutter space-y-lg">
+<!-- Page Header & Actions -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-md">
+<div>
+<h1 class="font-headline-lg text-brand-navy mb-1">Günlük Özet</h1>
+<p class="text-sm text-on-surface-variant">24 Ekim 2023, Salı - Bölge Performansı</p>
+</div>
+<div class="flex items-center gap-sm">
+<button class="flex items-center gap-sm px-4 py-2 bg-primary text-white rounded-xl font-bold text-xs hover:opacity-90 transition-all shadow-md">
+<span class="material-symbols-outlined text-sm">add</span>
+                    Yeni Satış
+                </button>
+<button class="flex items-center gap-sm px-4 py-2 bg-white text-primary border border-outline-variant rounded-xl font-bold text-xs hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined text-sm">qr_code_scanner</span>
+                    Tarama
+                </button>
+</div>
+</div>
+<!-- Tab System -->
+<div class="space-y-md">
+<div class="flex border-b border-outline-variant/30">
+<button class="px-lg py-3 text-xs font-bold border-b-2 border-primary text-primary transition-all" id="tab-field" onclick="switchTab('field')">Saha Operasyonu</button>
+<button class="px-lg py-3 text-xs font-bold border-b-2 border-transparent text-on-surface-variant hover:text-primary transition-all" id="tab-ecom" onclick="switchTab('ecom')">E-Ticaret Satış</button>
+</div>
+<!-- Tab Panels -->
+<div class="block" id="field-ops-view">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-md">
+<!-- KPI Cards -->
+<div class="bg-white border border-outline-variant rounded-xl p-md flex flex-col justify-between transition-all hover:shadow-lg">
+<div class="flex justify-between items-start mb-2">
+<div class="p-1.5 bg-primary/5 rounded-lg text-primary">
+<span class="material-symbols-outlined text-lg">payments</span>
+</div>
+<span class="text-[10px] font-bold text-secondary bg-secondary-container/20 px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[8px]">arrow_upward</span> 12%
+                            </span>
+</div>
+<div>
+<div class="text-[11px] text-on-surface-variant font-semibold">Günlük Satış (TL)</div>
+<div class="font-headline-lg text-2xl text-primary">₺142.5K</div>
+</div>
+</div>
+<div class="bg-white border border-outline-variant rounded-xl p-md flex flex-col justify-between transition-all hover:shadow-lg">
+<div class="flex justify-between items-start mb-2">
+<div class="p-1.5 bg-primary/5 rounded-lg text-primary">
+<span class="material-symbols-outlined text-lg">account_balance_wallet</span>
+</div>
+<span class="text-[10px] font-bold text-secondary bg-secondary-container/20 px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[8px]">arrow_upward</span> 5%
+                            </span>
+</div>
+<div>
+<div class="text-[11px] text-on-surface-variant font-semibold">Tahsilat (TL)</div>
+<div class="font-headline-lg text-2xl text-primary">₺89.2K</div>
+</div>
+</div>
+<div class="bg-white border border-outline-variant rounded-xl p-md flex flex-col justify-between transition-all hover:shadow-lg">
+<div class="flex justify-between items-start mb-2">
+<div class="p-1.5 bg-primary/5 rounded-lg text-primary">
+<span class="material-symbols-outlined text-lg">receipt_long</span>
+</div>
+</div>
+<div>
+<div class="text-[11px] text-on-surface-variant font-semibold">Sipariş Sayısı</div>
+<div class="font-headline-lg text-2xl text-primary">342</div>
+</div>
+</div>
+<div class="bg-white border border-outline-variant rounded-xl p-md flex flex-col justify-between transition-all hover:shadow-lg">
+<div class="flex justify-between items-start mb-2">
+<div class="p-1.5 bg-error-container/20 rounded-lg text-error">
+<span class="material-symbols-outlined text-lg">assignment_return</span>
+</div>
+<span class="text-[10px] font-bold text-error bg-error-container/20 px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[8px]">arrow_downward</span> 2
+                            </span>
+</div>
+<div>
+<div class="text-[11px] text-on-surface-variant font-semibold">İade Sayısı</div>
+<div class="font-headline-lg text-2xl text-primary">14</div>
+</div>
+</div>
+</div>
+</div>
+<div class="hidden" id="ecommerce-view">
+<div class="flex overflow-x-auto gap-md no-scrollbar pb-2 -mx-gutter px-gutter">
+<!-- Marketplace Cards -->
+<div class="flex-shrink-0 w-[160px] h-[160px] bg-white border border-outline-variant rounded-xl p-md flex flex-col justify-between transition-all hover:shadow-lg">
+<div class="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600">
+<span class="material-symbols-outlined">shopping_cart</span>
+</div>
+<div>
+<div class="text-[11px] text-on-surface-variant font-bold">Trendyol</div>
+<div class="font-headline-md text-primary">842</div>
+<div class="text-[10px] text-secondary mt-1 flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[8px]">trending_up</span> %14
+                            </div>
+</div>
+</div>
+<div class="flex-shrink-0 w-[160px] h-[160px] bg-white border border-outline-variant rounded-xl p-md flex flex-col justify-between transition-all hover:shadow-lg">
+<div class="w-8 h-8 rounded-lg bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-500">
+<span class="material-symbols-outlined">store</span>
+</div>
+<div>
+<div class="text-[11px] text-on-surface-variant font-bold">Hepsiburada</div>
+<div class="font-headline-md text-primary">512</div>
+<div class="text-[10px] text-secondary mt-1 flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[8px]">trending_up</span> %8
+                            </div>
+</div>
+</div>
+<div class="flex-shrink-0 w-[160px] h-[160px] bg-white border border-outline-variant rounded-xl p-md flex flex-col justify-between transition-all hover:shadow-lg">
+<div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-800">
+<span class="material-symbols-outlined">public</span>
+</div>
+<div>
+<div class="text-[11px] text-on-surface-variant font-bold">Amazon</div>
+<div class="font-headline-md text-primary">245</div>
+<div class="text-[10px] text-secondary mt-1 flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[8px]">trending_up</span> %22
+                            </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-md">
+<!-- Recent Transactions -->
+<div class="lg:col-span-2 bg-white border border-outline-variant rounded-xl flex flex-col h-[400px]">
+<div class="p-md border-b border-outline-variant/30 flex justify-between items-center">
+<h2 class="font-headline-md text-primary">Son İşlemler</h2>
+<button class="text-primary hover:underline text-xs font-bold">Tümünü Gör</button>
+</div>
+<div class="flex-1 overflow-y-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low sticky top-0 z-10 text-[11px] text-on-surface-variant uppercase font-bold tracking-wider">
+<tr>
+<th class="py-sm px-md border-b border-outline-variant/30">Müşteri</th>
+<th class="py-sm px-md border-b border-outline-variant/30">Tutar</th>
+<th class="py-sm px-md border-b border-outline-variant/30 text-right">Durum</th>
+</tr>
+</thead>
+<tbody class="text-sm text-on-background">
+<tr class="hover:bg-surface-container-low transition-colors border-b border-outline-variant/10">
+<td class="py-sm px-md">
+<div class="font-bold text-primary">Mega Market A.Ş.</div>
+<div class="text-[10px] text-on-surface-variant">Bugün, 14:30</div>
+</td>
+<td class="py-sm px-md font-bold text-primary">₺12,450</td>
+<td class="py-sm px-md text-right">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold bg-secondary-container/30 text-secondary">
+<span class="w-1 h-1 rounded-full bg-secondary"></span> Ödendi
+                                    </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors border-b border-outline-variant/10">
+<td class="py-sm px-md">
+<div class="font-bold text-primary">Yıldız Bakkalyesi</div>
+<div class="text-[10px] text-on-surface-variant">Bugün, 11:15</div>
+</td>
+<td class="py-sm px-md font-bold text-primary">₺3,200</td>
+<td class="py-sm px-md text-right">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold bg-surface-dim text-on-surface-variant">
+<span class="w-1 h-1 rounded-full bg-on-surface-variant"></span> Bekliyor
+                                    </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Alerts & Quick Access -->
+<div class="flex flex-col gap-md">
+<div class="bg-surface-container-low border border-outline-variant/30 rounded-xl p-md">
+<h3 class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-sm">Bekleyen Onaylar</h3>
+<div class="flex items-center justify-between bg-white p-3 rounded-xl border border-outline-variant/20 mb-2">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-primary/5 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-sm">local_shipping</span>
+</div>
+<div>
+<div class="font-bold text-xs text-primary">Özel İskonto Talebi</div>
+<div class="text-[10px] text-on-surface-variant">Büyük Müşteri A.Ş.</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+</div>
+<div class="bg-white border border-outline-variant rounded-xl p-md flex-1">
+<h3 class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-md">Aylık Hedef</h3>
+<div class="flex flex-col gap-3">
+<div class="h-4 bg-surface-container-low rounded-full w-3/4"></div>
+<div class="h-12 bg-surface-container-low rounded-xl w-full mt-2"></div>
+<div class="h-3 bg-surface-container-low rounded-full w-1/2 mt-1"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        const isOpen = sidebar.classList.contains('open');
+
+        if (isOpen) {
+            sidebar.classList.remove('open');
+            overlay.classList.add('opacity-0');
+            setTimeout(() => overlay.classList.add('hidden'), 300);
+        } else {
+            sidebar.classList.add('open');
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+        }
+    }
+
+    function switchTab(view) {
+        const fieldView = document.getElementById('field-ops-view');
+        const ecomView = document.getElementById('ecommerce-view');
+        const tabField = document.getElementById('tab-field');
+        const tabEcom = document.getElementById('tab-ecom');
+
+        if (view === 'field') {
+            fieldView.classList.remove('hidden');
+            ecomView.classList.add('hidden');
+            tabField.classList.add('border-primary', 'text-primary');
+            tabField.classList.remove('border-transparent', 'text-on-surface-variant');
+            tabEcom.classList.remove('border-primary', 'text-primary');
+            tabEcom.classList.add('border-transparent', 'text-on-surface-variant');
+        } else {
+            fieldView.classList.add('hidden');
+            ecomView.classList.remove('hidden');
+            tabEcom.classList.add('border-primary', 'text-primary');
+            tabEcom.classList.remove('border-transparent', 'text-on-surface-variant');
+            tabField.classList.remove('border-primary', 'text-primary');
+            tabField.classList.add('border-transparent', 'text-on-surface-variant');
+        }
+    }
+</script>
+</body></html>

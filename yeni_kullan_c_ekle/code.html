@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Yeni Kullanıcı Ekle - Operations Console</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#e5eeff",
+                        "secondary-fixed": "#51fbe7",
+                        "on-tertiary-container": "#888c92",
+                        "on-background": "#0b1c30",
+                        "on-primary-container": "#7d88cb",
+                        "background": "#f8f9ff",
+                        "surface-variant": "#d3e4fe",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#121e5c",
+                        "on-error": "#ffffff",
+                        "on-surface": "#0b1c30",
+                        "tertiary-fixed-dim": "#c3c7cd",
+                        "outline-variant": "#c6c5d1",
+                        "tertiary-container": "#21252a",
+                        "surface-container-high": "#dce9ff",
+                        "on-secondary-container": "#007167",
+                        "on-secondary-fixed": "#00201c",
+                        "on-primary-fixed": "#061353",
+                        "inverse-surface": "#213145",
+                        "tertiary-fixed": "#dfe2e9",
+                        "secondary": "#006a60",
+                        "surface-container-low": "#eff4ff",
+                        "outline": "#767681",
+                        "surface-bright": "#f8f9ff",
+                        "surface-tint": "#4f5a99",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#00083d",
+                        "on-tertiary-fixed": "#181c21",
+                        "surface": "#f8f9ff",
+                        "primary-fixed": "#dee0ff",
+                        "secondary-fixed-dim": "#1edecb",
+                        "primary-fixed-dim": "#bac3ff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#0c1015",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#cbdbf5",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#005048",
+                        "on-primary-fixed-variant": "#374280",
+                        "surface-container-highest": "#d3e4fe",
+                        "secondary-container": "#51fbe7",
+                        "on-surface-variant": "#454650",
+                        "inverse-primary": "#bac3ff",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#43474d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "3rem",
+                        "md": "1.5rem",
+                        "sm": "1rem",
+                        "lg": "2rem",
+                        "xs": "0.5rem",
+                        "gutter": "24px",
+                        "base": "4px",
+                        "sidebar-width": "280px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface flex min-h-screen">
+<!-- NavigationDrawer -->
+<nav class="bg-primary text-secondary-fixed font-body-md text-body-md w-sidebar-width h-full border-r border-white/10 flat no shadows fixed left-0 top-0 bottom-0 z-40 hidden md:flex flex-col">
+<!-- Header -->
+<div class="p-6 border-b border-white/10 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container overflow-hidden">
+<img alt="User profile avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZuvfuzMm65OFuxscbF63Wi9jFwKLOxr6RTZz7jTwTn5lNmZJudQYiqB5PASrQUpVbDzBhrF9dLtfg2z0loW-nSAAy6NcTHsnKYBnDemRzfNxhHfg9a4MwywgS64wX4g5PZcwWWodi9vMcP-nI3OG7bF046gepTGD3atCBXrMIvVGm5WqG4COuiJBqDNDoFy5XJOrcQ9WM4i-oE80PPTjszm_uf0xObkhMubDuj8gDCuW780imdT2WVSX_GbC2V0gCzKodQC9wuJma"/>
+</div>
+<div class="flex-1">
+<div class="font-title-md text-title-md font-bold truncate">Operations Manager</div>
+<div class="text-sm opacity-70 truncate">Enterprise Admin</div>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 overflow-y-auto py-4">
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 hover:bg-primary-container hover:text-white transition-colors duration-200 rounded-[15px] group" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+                Dashboard
+            </a>
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 hover:bg-primary-container hover:text-white transition-colors duration-200 rounded-[15px] group" href="#">
+<span class="material-symbols-outlined mr-3">inventory_2</span>
+                Stock Management
+            </a>
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 hover:bg-primary-container hover:text-white transition-colors duration-200 rounded-[15px] group" href="#">
+<span class="material-symbols-outlined mr-3">inventory</span>
+                Product Catalog
+            </a>
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 hover:bg-primary-container hover:text-white transition-colors duration-200 rounded-[15px] group" href="#">
+<span class="material-symbols-outlined mr-3">receipt_long</span>
+                Transactions
+            </a>
+<a class="bg-secondary-fixed text-primary rounded-[15px] flex items-center px-4 py-3 mx-2 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3" style="font-variation-settings: 'FILL' 1;">settings</span>
+                Settings
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col md:ml-sidebar-width min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-surface text-primary full-width top-0 shadow-sm flex justify-between items-center px-xl py-md z-30 sticky">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-primary hover:bg-surface-container-low p-2 rounded-full scale-95 transition-transform">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-title-md text-title-md text-primary font-bold">Operations Console</h1>
+</div>
+<div>
+<button class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full scale-95 transition-transform">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 p-md md:p-xl overflow-y-auto">
+<div class="max-w-4xl mx-auto">
+<!-- Page Header -->
+<div class="mb-lg flex items-center justify-between">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2 hidden md:block">Yeni Kullanıcı Ekle</h2>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary mb-2 md:hidden">Yeni Kullanıcı Ekle</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Sisteme yeni bir personel tanımlayın ve yetkilerini belirleyin.</p>
+</div>
+</div>
+<!-- Form Card -->
+<div class="bg-surface-container-lowest rounded-[15px] p-lg shadow-[0_4px_20px_rgba(18,30,92,0.05)] border border-surface-variant/50">
+<form action="#" method="POST">
+<!-- Personal Info Section -->
+<div class="mb-xl">
+<h3 class="font-title-md text-title-md text-primary mb-md border-b border-surface-variant pb-2">Kişisel Bilgiler</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="first_name">AD</label>
+<input class="w-full bg-surface border-outline-variant rounded-[15px] px-4 py-3 font-body-md text-body-md text-on-surface focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors" id="first_name" name="first_name" placeholder="Kullanıcı adı" required="" type="text"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="last_name">SOYAD</label>
+<input class="w-full bg-surface border-outline-variant rounded-[15px] px-4 py-3 font-body-md text-body-md text-on-surface focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors" id="last_name" name="last_name" placeholder="Kullanıcı soyadı" required="" type="text"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="email">E-POSTA ADRESİ</label>
+<input class="w-full bg-surface border-outline-variant rounded-[15px] px-4 py-3 font-body-md text-body-md text-on-surface focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors" id="email" name="email" placeholder="ornek@sirket.com" required="" type="email"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="phone">TELEFON (OPSİYONEL)</label>
+<input class="w-full bg-surface border-outline-variant rounded-[15px] px-4 py-3 font-body-md text-body-md text-on-surface focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors" id="phone" name="phone" placeholder="+90 (5XX) XXX XX XX" type="tel"/>
+</div>
+</div>
+</div>
+<!-- Account Settings Section -->
+<div class="mb-xl">
+<h3 class="font-title-md text-title-md text-primary mb-md border-b border-surface-variant pb-2">Hesap Ayarları</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="role">KULLANICI ROLÜ</label>
+<select class="w-full bg-surface border-outline-variant rounded-[15px] px-4 py-3 font-body-md text-body-md text-on-surface focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors" id="role" name="role">
+<option value="">Rol Seçiniz</option>
+<option value="admin">Sistem Yöneticisi</option>
+<option value="manager">Operasyon Yöneticisi</option>
+<option value="editor">İçerik Editörü</option>
+<option value="viewer">Görüntüleyici</option>
+</select>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs" for="password">GEÇİCİ ŞİFRE</label>
+<input class="w-full bg-surface border-outline-variant rounded-[15px] px-4 py-3 font-body-md text-body-md text-on-surface focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+<p class="mt-1 text-xs text-on-surface-variant opacity-70">Kullanıcı ilk girişte şifresini değiştirmek zorundadır.</p>
+</div>
+</div>
+</div>
+<!-- Permissions Section (Bento Grid Style) -->
+<div class="mb-xl">
+<div class="flex justify-between items-end mb-md border-b border-surface-variant pb-2">
+<h3 class="font-title-md text-title-md text-primary">Sayfa ve Modül Yetkileri</h3>
+<button class="text-sm text-secondary hover:text-on-secondary-container transition-colors" type="button">Tümünü Seç</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Permission Card 1 -->
+<label class="flex items-start p-4 border border-outline-variant rounded-[15px] cursor-pointer hover:bg-surface-container-low transition-colors bg-surface relative overflow-hidden group">
+<div class="absolute inset-y-0 left-0 w-1 bg-transparent group-hover:bg-secondary-fixed transition-colors"></div>
+<div class="flex items-center h-5">
+<input class="w-5 h-5 text-secondary-fixed border-outline-variant rounded focus:ring-secondary-fixed focus:ring-2 bg-surface" type="checkbox"/>
+</div>
+<div class="ml-3">
+<span class="block font-title-md text-[16px] text-primary">Dashboard</span>
+<span class="block font-body-md text-[14px] text-on-surface-variant mt-1">Ana metrikleri ve raporları görüntüleme yetkisi.</span>
+</div>
+</label>
+<!-- Permission Card 2 -->
+<label class="flex items-start p-4 border border-outline-variant rounded-[15px] cursor-pointer hover:bg-surface-container-low transition-colors bg-surface relative overflow-hidden group">
+<div class="absolute inset-y-0 left-0 w-1 bg-transparent group-hover:bg-secondary-fixed transition-colors"></div>
+<div class="flex items-center h-5">
+<input class="w-5 h-5 text-secondary-fixed border-outline-variant rounded focus:ring-secondary-fixed focus:ring-2 bg-surface" type="checkbox"/>
+</div>
+<div class="ml-3">
+<span class="block font-title-md text-[16px] text-primary">Stok Yönetimi</span>
+<span class="block font-body-md text-[14px] text-on-surface-variant mt-1">Stok ekleme, düzenleme ve silme yetkisi.</span>
+</div>
+</label>
+<!-- Permission Card 3 -->
+<label class="flex items-start p-4 border border-outline-variant rounded-[15px] cursor-pointer hover:bg-surface-container-low transition-colors bg-surface relative overflow-hidden group">
+<div class="absolute inset-y-0 left-0 w-1 bg-transparent group-hover:bg-secondary-fixed transition-colors"></div>
+<div class="flex items-center h-5">
+<input class="w-5 h-5 text-secondary-fixed border-outline-variant rounded focus:ring-secondary-fixed focus:ring-2 bg-surface" type="checkbox"/>
+</div>
+<div class="ml-3">
+<span class="block font-title-md text-[16px] text-primary">Ürün Kataloğu</span>
+<span class="block font-body-md text-[14px] text-on-surface-variant mt-1">Ürün detaylarını ve görsellerini yönetme.</span>
+</div>
+</label>
+<!-- Permission Card 4 -->
+<label class="flex items-start p-4 border border-outline-variant rounded-[15px] cursor-pointer hover:bg-surface-container-low transition-colors bg-surface relative overflow-hidden group">
+<div class="absolute inset-y-0 left-0 w-1 bg-transparent group-hover:bg-secondary-fixed transition-colors"></div>
+<div class="flex items-center h-5">
+<input class="w-5 h-5 text-secondary-fixed border-outline-variant rounded focus:ring-secondary-fixed focus:ring-2 bg-surface" type="checkbox"/>
+</div>
+<div class="ml-3">
+<span class="block font-title-md text-[16px] text-primary">İşlemler (Finans)</span>
+<span class="block font-body-md text-[14px] text-on-surface-variant mt-1">Faturaları ve ödeme hareketlerini görüntüleme.</span>
+</div>
+</label>
+<!-- Permission Card 5 -->
+<label class="flex items-start p-4 border border-outline-variant rounded-[15px] cursor-pointer hover:bg-surface-container-low transition-colors bg-surface relative overflow-hidden group opacity-60">
+<div class="flex items-center h-5">
+<input class="w-5 h-5 text-secondary-fixed border-outline-variant rounded bg-surface-variant cursor-not-allowed" disabled="" type="checkbox"/>
+</div>
+<div class="ml-3">
+<span class="block font-title-md text-[16px] text-primary flex items-center gap-2">Sistem Ayarları <span class="material-symbols-outlined text-[16px]">lock</span></span>
+<span class="block font-body-md text-[14px] text-on-surface-variant mt-1">Sadece Admin yetkisine sahip kullanıcılar içindir.</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Form Actions -->
+<div class="flex justify-end gap-4 pt-6 border-t border-surface-variant mt-lg">
+<button class="px-6 py-3 rounded-[15px] font-title-md text-[16px] text-primary bg-transparent border-[1.5px] border-primary hover:bg-surface-container-low transition-colors" type="button">
+                                İptal Et
+                            </button>
+<button class="px-6 py-3 rounded-[15px] font-title-md text-[16px] text-primary bg-secondary-fixed hover:bg-secondary-fixed-dim transition-colors shadow-sm" type="submit">
+                                Kullanıcıyı Kaydet
+                            </button>
+</div>
+</form>
+</div>
+</div>
+</main>
+</div>
+</body></html>

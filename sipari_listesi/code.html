@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sipariş Listesi - Operations Console</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container": "#e5eeff",
+                      "secondary-fixed": "#51fbe7",
+                      "on-tertiary-container": "#888c92",
+                      "on-background": "#0b1c30",
+                      "on-primary-container": "#7d88cb",
+                      "background": "#f8f9ff",
+                      "surface-variant": "#d3e4fe",
+                      "error-container": "#ffdad6",
+                      "primary-container": "#121e5c",
+                      "on-error": "#ffffff",
+                      "on-surface": "#0b1c30",
+                      "tertiary-fixed-dim": "#c3c7cd",
+                      "outline-variant": "#c6c5d1",
+                      "tertiary-container": "#21252a",
+                      "surface-container-high": "#dce9ff",
+                      "on-secondary-container": "#007167",
+                      "on-secondary-fixed": "#00201c",
+                      "on-primary-fixed": "#061353",
+                      "inverse-surface": "#213145",
+                      "tertiary-fixed": "#dfe2e9",
+                      "secondary": "#006a60",
+                      "surface-container-low": "#eff4ff",
+                      "outline": "#767681",
+                      "surface-bright": "#f8f9ff",
+                      "surface-tint": "#4f5a99",
+                      "inverse-on-surface": "#eaf1ff",
+                      "surface-container-lowest": "#ffffff",
+                      "primary": "#00083d",
+                      "on-tertiary-fixed": "#181c21",
+                      "surface": "#f8f9ff",
+                      "primary-fixed": "#dee0ff",
+                      "secondary-fixed-dim": "#1edecb",
+                      "primary-fixed-dim": "#bac3ff",
+                      "on-tertiary": "#ffffff",
+                      "tertiary": "#0c1015",
+                      "on-secondary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "surface-dim": "#cbdbf5",
+                      "on-error-container": "#93000a",
+                      "on-secondary-fixed-variant": "#005048",
+                      "on-primary-fixed-variant": "#374280",
+                      "surface-container-highest": "#d3e4fe",
+                      "secondary-container": "#51fbe7",
+                      "on-surface-variant": "#454650",
+                      "inverse-primary": "#bac3ff",
+                      "on-primary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#43474d"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px",
+                      "component": "15px"
+              },
+              "spacing": {
+                      "xl": "3rem",
+                      "md": "1.5rem",
+                      "sm": "1rem",
+                      "lg": "2rem",
+                      "xs": "0.5rem",
+                      "gutter": "24px",
+                      "base": "4px",
+                      "sidebar-width": "280px"
+              },
+              "fontFamily": {
+                      "display-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "title-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "label-sm": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg-mobile": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-md": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "title-md": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              },
+              boxShadow: {
+                  'soft': '0px 4px 20px rgba(18, 30, 92, 0.05)',
+                  'hover': '0px 8px 30px rgba(18, 30, 92, 0.1)',
+              }
+            },
+          }
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; background-color: #f8f9ff; }
+        .glass-panel { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.3); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface antialiased flex h-screen overflow-hidden">
+<!-- Navigation Drawer -->
+<nav class="bg-primary dark:bg-primary font-body-md text-body-md w-sidebar-width h-full border-r border-white/10 flat no shadows fixed left-0 top-0 bottom-0 z-40 hidden md:flex flex-col">
+<div class="p-6">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center text-primary font-bold text-xl overflow-hidden">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A close-up portrait of a professional corporate operations manager. The subject is wearing a crisp white shirt, softly illuminated by natural light in a modern office setting. The mood is confident and approachable, reflecting high-performance SaaS enterprise aesthetics. Cool off-white background with subtle depth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7vhgBVpklaoNWYuIc3hDf8Q6xB9425yodaBvM6_czV3xD2TE9GxZgogWks3x4TFItR52B4mbYH2XLgmO2NzAM2-CNPOJihxc5YRjLGNsUNbTEWB9sRbaATsl7e27Mr9V52leeof5SKbt3gPfVX1JKvChwwuSn7LMnrZo6dWDus2xueNh3MIIHU87iXhCiv-eMbbyPw2l_WkFFGF9-Y_hNFWxluOi-bYIv7sAVVuqb6vLh7YhvkH8Jg800ycVj5H3wcKq-nm5_8MH_"/>
+</div>
+<div>
+<h2 class="font-title-md text-title-md text-secondary-fixed">Operations Manager</h2>
+<p class="text-on-primary-fixed-variant opacity-80 text-sm">Enterprise Admin</p>
+</div>
+</div>
+<div class="font-display-lg text-display-lg text-secondary-fixed mb-8 hidden">
+                Operations Console
+            </div>
+<ul class="space-y-2">
+<li>
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 hover:bg-primary-container hover:text-white transition-colors duration-200 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="dashboard">dashboard</span>
+                        Dashboard
+                    </a>
+</li>
+<li>
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 hover:bg-primary-container hover:text-white transition-colors duration-200 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="inventory_2">inventory_2</span>
+                        Stock Management
+                    </a>
+</li>
+<li>
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 hover:bg-primary-container hover:text-white transition-colors duration-200 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="inventory">inventory</span>
+                        Product Catalog
+                    </a>
+</li>
+<li>
+<a class="bg-secondary-fixed text-primary rounded-[15px] flex items-center px-4 py-3 mx-2 transition-colors duration-200 shadow-[inset_1px_1px_0_rgba(255,255,255,0.1)]" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="receipt_long" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+                        Transactions
+                    </a>
+</li>
+<li>
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 hover:bg-primary-container hover:text-white transition-colors duration-200 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="settings">settings</span>
+                        Settings
+                    </a>
+</li>
+</ul>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-screen md:ml-sidebar-width overflow-hidden">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface font-title-md text-title-md full-width top-0 bg-surface shadow-sm flex justify-between items-center px-xl py-md z-30">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-primary p-2 hover:bg-surface-container-low rounded-full scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-title-md text-title-md text-primary font-bold">Operations Console</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-primary hover:bg-surface-container-low p-2 rounded-full scale-95 transition-transform relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-2.5 h-2.5 bg-error rounded-full"></span>
+</button>
+</div>
+</header>
+<!-- Canvas -->
+<div class="flex-1 overflow-y-auto p-4 md:p-xl">
+<div class="max-w-7xl mx-auto space-y-6">
+<!-- Header & Actions -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+<div>
+<h2 class="font-headline-lg text-headline-lg md:font-display-lg md:text-display-lg text-primary mb-2">Sipariş Listesi</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Tüm işlemleri ve müşteri siparişlerini yönetin.</p>
+</div>
+<button class="bg-secondary-fixed text-primary px-6 py-3 rounded-component font-title-md text-title-md hover:bg-secondary-fixed-dim transition-colors shadow-soft hover:shadow-hover">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined">add</span>
+                            Yeni Sipariş
+                        </span>
+</button>
+</div>
+<!-- Filters Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8">
+<!-- Search -->
+<div class="bg-surface-container-lowest rounded-component p-6 shadow-soft col-span-1 md:col-span-4">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase block mb-2">Arama</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-component py-3 pl-10 pr-4 focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed font-body-md text-body-md text-on-surface transition-colors" placeholder="Sipariş ID, Müşteri adı..." type="text"/>
+</div>
+</div>
+<!-- Status Filter -->
+<div class="bg-surface-container-lowest rounded-component p-6 shadow-soft col-span-1 md:col-span-5">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase block mb-3">Durum Filtresi</label>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 rounded-full border border-secondary-fixed bg-secondary-fixed text-primary font-label-sm text-label-sm transition-colors">Tümü</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant bg-transparent text-on-surface-variant hover:border-secondary-fixed hover:text-primary font-label-sm text-label-sm transition-colors">Beklemede</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant bg-transparent text-on-surface-variant hover:border-secondary-fixed hover:text-primary font-label-sm text-label-sm transition-colors">Kargolandı</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant bg-transparent text-on-surface-variant hover:border-secondary-fixed hover:text-primary font-label-sm text-label-sm transition-colors">Teslim Edildi</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant bg-transparent text-on-surface-variant hover:border-secondary-fixed hover:text-primary font-label-sm text-label-sm transition-colors">İptal</button>
+</div>
+</div>
+<!-- Date Filter -->
+<div class="bg-surface-container-lowest rounded-component p-6 shadow-soft col-span-1 md:col-span-3">
+<label class="font-label-sm text-label-sm text-on-surface-variant uppercase block mb-2">Tarih Aralığı</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">calendar_month</span>
+<select class="w-full bg-surface-container-low border border-outline-variant rounded-component py-3 pl-10 pr-10 focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed font-body-md text-body-md text-on-surface appearance-none cursor-pointer">
+<option>Son 7 Gün</option>
+<option>Son 30 Gün</option>
+<option>Bu Ay</option>
+<option>Özel Aralık</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Order Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-component p-6 shadow-soft hover:shadow-hover transition-shadow relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary-fixed/10 rounded-bl-full -mr-8 -mt-8 pointer-events-none"></div>
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div>
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider block mb-1">Sipariş ID</span>
+<span class="font-title-md text-title-md text-primary font-bold">#ORD-9821</span>
+</div>
+<span class="px-3 py-1 bg-surface-container-highest text-primary-container rounded-full font-label-sm text-label-sm border border-outline-variant/30 flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed-dim"></span>
+                                Beklemede
+                            </span>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-outline">person</span>
+<span class="font-body-md text-body-md">Ayşe Yılmaz</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-outline">calendar_today</span>
+<span class="font-body-md text-body-md">24 Eki 2023, 14:30</span>
+</div>
+</div>
+<div class="flex items-center justify-between border-t border-surface-container-highest pt-4">
+<div>
+<span class="font-label-sm text-label-sm text-outline uppercase block mb-1">Toplam Tutar</span>
+<span class="font-title-md text-title-md text-primary">₺1,250.00</span>
+</div>
+<button class="text-primary border-1.5 border-primary px-4 py-2 rounded-component font-title-md text-title-md text-sm hover:bg-primary hover:text-white transition-colors">
+                                Detaylar
+                            </button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-component p-6 shadow-soft hover:shadow-hover transition-shadow relative overflow-hidden group">
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div>
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider block mb-1">Sipariş ID</span>
+<span class="font-title-md text-title-md text-primary font-bold">#ORD-9820</span>
+</div>
+<span class="px-3 py-1 bg-surface-container-high text-primary rounded-full font-label-sm text-label-sm border border-outline-variant/30 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">local_shipping</span>
+                                Kargolandı
+                            </span>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-outline">person</span>
+<span class="font-body-md text-body-md">Mehmet Demir</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-outline">calendar_today</span>
+<span class="font-body-md text-body-md">23 Eki 2023, 09:15</span>
+</div>
+</div>
+<div class="flex items-center justify-between border-t border-surface-container-highest pt-4">
+<div>
+<span class="font-label-sm text-label-sm text-outline uppercase block mb-1">Toplam Tutar</span>
+<span class="font-title-md text-title-md text-primary">₺845.50</span>
+</div>
+<button class="text-primary border-1.5 border-primary px-4 py-2 rounded-component font-title-md text-title-md text-sm hover:bg-primary hover:text-white transition-colors">
+                                Detaylar
+                            </button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-component p-6 shadow-soft hover:shadow-hover transition-shadow relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-transparent to-surface-container-lowest opacity-50 pointer-events-none"></div>
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div>
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider block mb-1">Sipariş ID</span>
+<span class="font-title-md text-title-md text-primary font-bold">#ORD-9819</span>
+</div>
+<span class="px-3 py-1 bg-[#d1fae5] text-[#065f46] rounded-full font-label-sm text-label-sm border border-[#34d399]/30 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                Teslim Edildi
+                            </span>
+</div>
+<div class="space-y-3 mb-6 relative z-10">
+<div class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-outline">person</span>
+<span class="font-body-md text-body-md">Zeynep Kaya</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-outline">calendar_today</span>
+<span class="font-body-md text-body-md">22 Eki 2023, 16:45</span>
+</div>
+</div>
+<div class="flex items-center justify-between border-t border-surface-container-highest pt-4 relative z-10">
+<div>
+<span class="font-label-sm text-label-sm text-outline uppercase block mb-1">Toplam Tutar</span>
+<span class="font-title-md text-title-md text-primary">₺3,400.00</span>
+</div>
+<button class="text-primary border-1.5 border-primary px-4 py-2 rounded-component font-title-md text-title-md text-sm hover:bg-primary hover:text-white transition-colors">
+                                Detaylar
+                            </button>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest rounded-component p-6 shadow-soft hover:shadow-hover transition-shadow relative overflow-hidden group opacity-80">
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div>
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider block mb-1">Sipariş ID</span>
+<span class="font-title-md text-title-md text-outline font-bold line-through">#ORD-9818</span>
+</div>
+<span class="px-3 py-1 bg-error-container text-on-error-container rounded-full font-label-sm text-label-sm border border-error/20 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">cancel</span>
+                                İptal
+                            </span>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex items-center gap-3 text-outline">
+<span class="material-symbols-outlined">person</span>
+<span class="font-body-md text-body-md">Can Özcan</span>
+</div>
+<div class="flex items-center gap-3 text-outline">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-body-md text-body-md">21 Eki 2023, 11:20</span>
+</div>
+</div>
+<div class="flex items-center justify-between border-t border-surface-container-highest pt-4">
+<div>
+<span class="font-label-sm text-label-sm text-outline uppercase block mb-1">Toplam Tutar</span>
+<span class="font-title-md text-title-md text-outline">₺120.00</span>
+</div>
+<button class="text-outline border-1.5 border-outline px-4 py-2 rounded-component font-title-md text-title-md text-sm hover:bg-surface-container-high transition-colors">
+                                Detaylar
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

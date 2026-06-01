@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Katalog Sepeti</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#bac3ff",
+                        "on-tertiary-fixed": "#181c21",
+                        "on-surface": "#0b1c30",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "surface-container-high": "#dce9ff",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#bac3ff",
+                        "outline": "#767681",
+                        "surface-variant": "#d3e4fe",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-bright": "#f8f9ff",
+                        "on-tertiary-container": "#888c92",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#51fbe7",
+                        "error": "#ba1a1a",
+                        "tertiary": "#0c1015",
+                        "surface": "#f8f9ff",
+                        "background": "#f8f9ff",
+                        "on-primary-fixed-variant": "#374280",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#e5eeff",
+                        "on-primary-fixed": "#061353",
+                        "tertiary-fixed": "#dfe2e9",
+                        "outline-variant": "#c6c5d1",
+                        "on-primary-container": "#7d88cb",
+                        "on-secondary-container": "#007167",
+                        "surface-container-low": "#eff4ff",
+                        "secondary-fixed-dim": "#1edecb",
+                        "on-secondary-fixed-variant": "#005048",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#454650",
+                        "primary-fixed": "#dee0ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#4f5a99",
+                        "on-secondary-fixed": "#00201c",
+                        "secondary": "#006a60",
+                        "inverse-surface": "#213145",
+                        "tertiary-container": "#21252a",
+                        "error-container": "#ffdad6",
+                        "primary": "#00083d",
+                        "primary-container": "#121e5c",
+                        "on-background": "#0b1c30",
+                        "surface-dim": "#cbdbf5",
+                        "secondary-container": "#51fbe7",
+                        "inverse-on-surface": "#eaf1ff",
+                        "tertiary-fixed-dim": "#c3c7cd"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sidebar-width": "280px",
+                        "xl": "3rem",
+                        "md": "1.5rem",
+                        "sm": "1rem",
+                        "base": "4px",
+                        "xs": "0.5rem",
+                        "lg": "2rem",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md antialiased md:hidden flex flex-col min-h-screen">
+<!-- TopAppBar equivalent for Sub-page -->
+<header class="bg-surface sticky top-0 z-10 flex justify-between items-center px-sm py-sm shadow-sm">
+<button class="text-primary hover:bg-surface-container-low p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-title-md text-title-md text-primary font-bold">Katalog Sepeti</h1>
+<button class="text-primary hover:bg-surface-container-low p-2 rounded-full transition-colors relative">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="absolute top-1 right-1 bg-error text-on-error font-label-sm text-label-sm w-4 h-4 rounded-full flex items-center justify-center">3</span>
+</button>
+</header>
+<main class="flex-grow p-sm space-y-md overflow-y-auto">
+<!-- Cart Items List -->
+<section class="space-y-sm">
+<!-- Product Item 1 -->
+<article class="bg-surface-container-lowest rounded-[15px] p-sm shadow-[0_4px_20px_rgba(18,30,92,0.05)] flex flex-col gap-sm">
+<div class="flex items-center gap-sm">
+<img alt="Akıllı Saat Siyah Model" class="w-20 h-20 rounded-[10px] object-cover border border-outline-variant/30" data-alt="A high-quality product photograph of a sleek, modern black smartwatch against a clean white background. The lighting is bright and soft, highlighting the metallic finish of the watch bezel and the matte texture of the silicone strap. The image reflects a premium, corporate modern aesthetic with deep navy and subtle turquoise color tones nearby, ensuring high visibility." src="https://lh3.googleusercontent.com/aida-public/AB6AXuArda55HfO6DVFQJCko2eAjoC46V6T5XtNRuE_Kuk-h8qnQXEmRMl6qgZ0UqbAyS1eySSmPVUIqgpdQ3G8ZRuZPRZL7WS-GtjYtB0FeNznbsMcsWZ_6jUNe3Wq1gSRRCEHEXqndWIR5hmjTpSBLLzCEa04-VU_4bk3toNOB8thFifgZsdueZqy15HQH6d64NDBkG1rALK_mG9w6Czeb6DWFweQqOfp0MR9Ny70eBQBTBZPCAJ-bebPYalVXAT06iG5Y77pAiXHg22ZO"/>
+<div class="flex-grow">
+<h3 class="font-title-md text-title-md text-on-surface line-clamp-2">Premium Akıllı Saat - Siyah</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Stok Kodu: WTC-092</p>
+<p class="font-title-md text-title-md text-primary mt-1">₺2,450.00</p>
+</div>
+<button class="text-outline hover:text-error self-start p-1 transition-colors">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+<div class="flex items-center justify-between border-t border-outline-variant/30 pt-sm mt-xs">
+<div class="flex items-center bg-surface-container-low rounded-[15px] p-1 border border-outline-variant/50">
+<button class="w-8 h-8 flex items-center justify-center text-primary hover:bg-surface-variant rounded-[10px] transition-colors">
+<span class="material-symbols-outlined" data-icon="remove">remove</span>
+</button>
+<span class="font-title-md text-title-md text-on-surface w-10 text-center">1</span>
+<button class="w-8 h-8 flex items-center justify-center text-primary hover:bg-surface-variant rounded-[10px] transition-colors">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+<div class="flex-grow ml-sm">
+<input class="w-full bg-surface-container-low border border-outline-variant/50 rounded-[15px] px-3 py-2 font-body-md text-body-md text-on-surface focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed focus:outline-none transition-colors placeholder:text-on-surface-variant/60 text-sm" placeholder="Sipariş Notu Ekle..." type="text"/>
+</div>
+</div>
+</article>
+<!-- Product Item 2 -->
+<article class="bg-surface-container-lowest rounded-[15px] p-sm shadow-[0_4px_20px_rgba(18,30,92,0.05)] flex flex-col gap-sm">
+<div class="flex items-center gap-sm">
+<img alt="Gürültü Önleyici Kulaklık" class="w-20 h-20 rounded-[10px] object-cover border border-outline-variant/30" data-alt="A professional studio shot of over-ear noise-canceling headphones in a sophisticated dark grey color. The product is placed on a pristine, light surface with soft, diffused shadows creating a sense of depth. The aesthetic is clean, technical, and premium, fitting a modern corporate design system with subtle cool off-white tints in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5w_avFTT4SvbabsJHDah8PPNWOd2Q8gn0pT-FOvVbrg4Lfp12joFz8U_2xV7g_mc-wmJImYlxFbf2aqt0_dfx26j1Nbl_cn7c-efw8AWsQiZAGFhFZlhTVB7JakovzgZ48Fonb-_aw0dlw3NvIZXWKExjJTdhMT6cylF5uFzPCZ_jP7OD5Vs9GWjyG6WqJCMHWx-yp7Nutfg0Mf3Ga23TAHRDLXw2MsDkWXx8hx9GTl1Ei3lMzWpbjATuegzJbGHk9eRwSewGlu4B"/>
+<div class="flex-grow">
+<h3 class="font-title-md text-title-md text-on-surface line-clamp-2">Gürültü Önleyici Pro Kulaklık</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Stok Kodu: AUD-441</p>
+<p class="font-title-md text-title-md text-primary mt-1">₺3,890.00</p>
+</div>
+<button class="text-outline hover:text-error self-start p-1 transition-colors">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+<div class="flex items-center justify-between border-t border-outline-variant/30 pt-sm mt-xs">
+<div class="flex items-center bg-surface-container-low rounded-[15px] p-1 border border-outline-variant/50">
+<button class="w-8 h-8 flex items-center justify-center text-primary hover:bg-surface-variant rounded-[10px] transition-colors">
+<span class="material-symbols-outlined" data-icon="remove">remove</span>
+</button>
+<span class="font-title-md text-title-md text-on-surface w-10 text-center">2</span>
+<button class="w-8 h-8 flex items-center justify-center text-primary hover:bg-surface-variant rounded-[10px] transition-colors">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+<div class="flex-grow ml-sm">
+<input class="w-full bg-surface-container-low border border-outline-variant/50 rounded-[15px] px-3 py-2 font-body-md text-body-md text-on-surface focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed focus:outline-none transition-colors placeholder:text-on-surface-variant/60 text-sm" placeholder="Sipariş Notu Ekle..." type="text"/>
+</div>
+</div>
+</article>
+</section>
+</main>
+<!-- Bottom Action Panel (Fixed) -->
+<section class="bg-surface-container-lowest shadow-[0_-4px_20px_rgba(18,30,92,0.1)] rounded-t-[20px] p-sm mt-auto z-20">
+<div class="space-y-2 mb-sm border-b border-outline-variant/30 pb-sm">
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-on-surface-variant">Ara Toplam</span>
+<span class="font-title-md text-title-md text-on-surface">₺10,230.00</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-on-surface-variant">KDV (%20)</span>
+<span class="font-title-md text-title-md text-on-surface">₺2,046.00</span>
+</div>
+</div>
+<div class="flex justify-between items-center mb-sm">
+<span class="font-title-md text-title-md text-primary font-bold">Genel Toplam</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary">₺12,276.00</span>
+</div>
+<button class="w-full bg-[#00D7C4] text-primary-container font-title-md text-title-md py-3 px-6 rounded-[15px] flex items-center justify-center gap-2 hover:bg-secondary-fixed-dim transition-colors shadow-sm">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+            Siparişe Dönüştür
+        </button>
+</section>
+</body></html>

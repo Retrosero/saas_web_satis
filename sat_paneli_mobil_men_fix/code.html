@@ -1,0 +1,487 @@
+<!DOCTYPE html><html class="light" lang="tr"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>OpsCommand | Satış Ekranı</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-dim": "#cbdbf5",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#51fbe7",
+                        "tertiary": "#0c1015",
+                        "secondary-fixed": "#51fbe7",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-secondary-fixed-variant": "#005048",
+                        "surface-container-low": "#eff4ff",
+                        "primary": "#00083d",
+                        "secondary": "#006a60",
+                        "surface-tint": "#4f5a99",
+                        "on-secondary-fixed": "#00201c",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c6c5d1",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#454650",
+                        "primary-container": "#121e5c",
+                        "on-primary-container": "#7d88cb",
+                        "outline": "#767681",
+                        "on-background": "#0b1c30",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-container": "#007167",
+                        "on-surface": "#0b1c30",
+                        "surface-variant": "#d3e4fe",
+                        "surface-container-high": "#dce9ff",
+                        "on-tertiary-container": "#888c92",
+                        "primary-fixed": "#dee0ff",
+                        "inverse-primary": "#bac3ff",
+                        "on-tertiary-fixed": "#181c21",
+                        "surface": "#f8f9ff",
+                        "on-primary-fixed-variant": "#374280",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#21252a",
+                        "secondary-fixed-dim": "#1edecb",
+                        "on-primary-fixed": "#061353",
+                        "tertiary-fixed-dim": "#c3c7cd",
+                        "surface-container": "#e5eeff",
+                        "surface-bright": "#f8f9ff",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#213145",
+                        "tertiary-fixed": "#dfe2e9",
+                        "background": "#f8f9ff",
+                        "primary-fixed-dim": "#bac3ff",
+                        "error": "#ba1a1a",
+                        "brand-navy": "#121e5c",
+                        "brand-turquoise": "#51fbe7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.5rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "xl": "3rem",
+                        "sm": "1rem",
+                        "md": "1.5rem",
+                        "lg": "2rem",
+                        "xs": "0.5rem",
+                        "sidebar-width": "280px",
+                        "sidebar-collapsed": "80px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c6c5d1; border-radius: 10px; }
+        .drawer-transition { transition: transform 0.3s ease-in-out; }
+        .sidebar-transition { transition: width 0.2s ease-in-out, transform 0.3s ease-in-out; }
+        
+        @media (max-width: 1024px) {
+            #sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                height: 100vh;
+                transform: translateX(-100%);
+            }
+            #sidebar.open {
+                transform: translateX(0);
+            }
+        }
+
+        .sidebar-collapsed .sidebar-text { display: none; }
+        .sidebar-collapsed .sidebar-header-text { display: none; }
+        .sidebar-collapsed .sidebar-section-label { display: none; }
+        .sidebar-collapsed { width: 80px; }
+        .sidebar-collapsed .sidebar-item { justify-content: center; padding-left: 0; padding-right: 0; margin-left: 12px; margin-right: 12px; }
+        .sidebar-collapsed .user-info { display: none; }
+        .sidebar-collapsed .logout-btn span:last-child { display: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md overflow-hidden">
+<!-- Main Layout Wrapper -->
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar -->
+<aside class="sidebar-transition flex flex-col py-lg bg-brand-navy w-[280px] z-[65] relative shadow-xl shrink-0" id="sidebar">
+<!-- Sidebar Header -->
+<div class="px-md mb-xl flex items-center justify-between">
+<div class="flex items-center gap-sm sidebar-header-text">
+<span class="font-headline-lg text-white font-bold text-2xl">OpsCommand</span>
+</div>
+<button class="p-xs rounded-lg hover:bg-white/10 text-white transition-colors" id="sidebar-toggle">
+<span class="material-symbols-outlined">menu_open</span>
+</button>
+</div>
+<!-- Sidebar Content -->
+<div class="flex-1 overflow-y-auto space-y-4">
+<!-- Genel Section -->
+<div>
+<p class="sidebar-section-label px-lg text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2">GENEL</p>
+<nav class="space-y-1">
+<a class="sidebar-item flex items-center gap-md mx-md px-md py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="sidebar-text font-semibold">Panel</span>
+</a>
+<a class="sidebar-item flex items-center gap-md mx-md px-md py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="sidebar-text font-semibold">Ürün Yönetimi</span>
+</a>
+<a class="sidebar-item flex items-center gap-md mx-md px-md py-2 bg-brand-turquoise text-brand-navy rounded-xl transition-all shadow-[0_0_15px_rgba(81,251,231,0.3)]" href="#">
+<span class="material-symbols-outlined">sell</span>
+<span class="sidebar-text font-semibold">Kategoriler</span>
+</a>
+<a class="sidebar-item flex items-center gap-md mx-md px-md py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">book</span>
+<span class="sidebar-text font-semibold">Kataloglar</span>
+</a>
+</nav>
+</div>
+<!-- Satış & Operasyon Section -->
+<div>
+<p class="sidebar-section-label px-lg text-white/50 text-[10px] font-bold uppercase tracking-widest mb-2">SATIŞ &amp; OPERASYON</p>
+<nav class="space-y-1">
+<a class="sidebar-item flex items-center gap-md mx-md px-md py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">bolt</span>
+<span class="sidebar-text font-semibold">Hızlı Satış</span>
+</a>
+<a class="sidebar-item flex items-center justify-between mx-md px-md py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="sidebar-text font-semibold">Siparişler</span>
+</div>
+<span class="sidebar-text bg-error w-5 h-5 flex items-center justify-center rounded-full text-[10px] text-white">2</span>
+</a>
+<a class="sidebar-item flex items-center gap-md mx-md px-md py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="sidebar-text font-semibold">Tahsilatlar</span>
+</a>
+<a class="sidebar-item flex items-center gap-md mx-md px-md py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="sidebar-text font-semibold">Alış Faturaları</span>
+</a>
+<a class="sidebar-item flex items-center gap-md mx-md px-md py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">warehouse</span>
+<span class="sidebar-text font-semibold">Depo</span>
+</a>
+<a class="sidebar-item flex items-center gap-md mx-md px-md py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="sidebar-text font-semibold">Müşteriler</span>
+</a>
+</nav>
+</div>
+</div>
+<!-- Sidebar Footer -->
+<div class="mt-auto pt-md border-t border-white/10 px-md">
+<div class="flex items-center gap-md mb-md user-info">
+<div class="w-10 h-10 rounded-full bg-brand-turquoise flex items-center justify-center text-brand-navy font-bold">EN</div>
+<div>
+<p class="font-bold text-white text-sm">Engin</p>
+<p class="text-[10px] text-white/50 uppercase">Yönetici</p>
+</div>
+</div>
+<button class="logout-btn w-full bg-white/10 hover:bg-white/20 text-white py-md rounded-xl flex items-center justify-center gap-sm transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-semibold text-sm">Çıkış Yap</span>
+</button>
+</div>
+</aside>
+<!-- Right Side: Content + Header -->
+<div class="flex-1 flex flex-col overflow-hidden">
+<!-- Redesigned TopNavBar -->
+<header class="h-16 flex items-center justify-between px-lg bg-white border-b border-outline-variant z-30 shrink-0">
+<div class="flex items-center gap-md flex-1">
+<button class="lg:hidden p-2 rounded-lg hover:bg-surface-container-high text-brand-navy transition-colors" id="mobile-menu-toggle">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="font-headline-lg text-xl text-brand-navy whitespace-nowrap hidden sm:block">Satış Paneli</h2>
+<div class="flex items-center gap-sm flex-1 max-w-2xl ml-xs">
+<div class="relative flex items-center flex-1">
+<span class="material-symbols-outlined absolute left-md text-outline">search</span>
+<input class="w-full pl-[48px] pr-md py-2 bg-surface-container-low border border-outline-variant rounded-full text-sm focus:ring-2 focus:ring-brand-navy focus:border-brand-navy transition-all" placeholder="Ürün veya Barkod Ara..." type="text">
+</div>
+<button class="p-2 rounded-full hover:bg-surface-container-high text-brand-navy transition-colors hidden sm:flex">
+<span class="material-symbols-outlined">barcode_scanner</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container-high text-brand-navy transition-colors" id="toggle-filter">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-md ml-lg">
+<button class="relative p-2 rounded-full hover:bg-surface-container-high text-brand-navy transition-colors" id="toggle-cart">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="absolute top-0 right-0 bg-error text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full border-2 border-white">3</span>
+</button>
+<div class="h-8 w-px bg-outline-variant mx-xs hidden sm:block"></div>
+<button class="p-2 rounded-full hover:bg-surface-container-high text-brand-navy transition-colors hidden sm:flex">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto bg-surface p-lg relative">
+<div class="mb-lg flex justify-between items-end">
+<div>
+<p class="text-on-surface-variant text-sm">Katalog üzerinden ürün seçerek sipariş oluşturun.</p>
+</div>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-md pb-xl">
+<script>
+                    const products = [
+                        { name: "Pro-X Industrial Drill", code: "IND-9921", barcode: "86812345678", price: "2.450,00", stock: "142" },
+                        { name: "Heavy Duty Compressor", code: "CMP-4402", barcode: "86812345679", price: "5.120,00", stock: "12" },
+                        { name: "Precision Laser Level", code: "LAS-1022", barcode: "86812345680", price: "890,00", stock: "85" },
+                        { name: "Magnesium Tool Chest", code: "TCH-5510", barcode: "86812345681", price: "12.300,00", stock: "5" },
+                        { name: "Titanium Wrench Set", code: "WRN-0021", barcode: "86812345682", price: "450,00", stock: "210" },
+                        { name: "Electric Impact Driver", code: "IMP-3311", barcode: "86812345683", price: "1.750,00", stock: "44" },
+                        { name: "Safety Gear Bundle", code: "SFY-8821", barcode: "86812345684", price: "320,00", stock: "1000+" },
+                        { name: "High-Volt Multimeter", code: "MUL-7721", barcode: "86812345685", price: "640,00", stock: "32" },
+                        { name: "Workbench Alpha v2", code: "WRK-9900", barcode: "86812345686", price: "4.200,00", stock: "8" },
+                        { name: "LED Site Lighting", code: "LIT-1123", barcode: "86812345687", price: "980,00", stock: "115" }
+                    ];
+
+                    products.forEach(p => {
+                        document.write(`
+                            <div class="bg-white border border-outline-variant rounded-xl overflow-hidden flex flex-col hover:shadow-xl transition-all group hover:-translate-y-1">
+                                <div class="h-44 bg-surface-container-low relative overflow-hidden">
+                                    <img src="https://images.unsplash.com/photo-1581244276891-6bc61a7a1680?q=80&w=1000" 
+                                         alt="${p.name}" 
+                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    <div class="absolute top-2 right-2 bg-brand-navy/90 backdrop-blur-sm px-2 py-1 rounded-full text-[10px] font-bold text-brand-turquoise uppercase tracking-wider shadow-sm">
+                                        STOK: ${p.stock}
+                                    </div>
+                                </div>
+                                <div class="p-md flex flex-col flex-1">
+                                    <div class="mb-sm">
+                                        <h3 class="font-bold text-brand-navy leading-tight mb-1 text-sm line-clamp-2 min-h-[2.5rem]">${p.name}</h3>
+                                        <div class="flex flex-col text-on-surface-variant font-mono text-[11px] opacity-70">
+                                            <span>#${p.code}</span>
+                                            <span>${p.barcode}</span>
+                                        </div>
+                                    </div>
+                                    <div class="mt-auto">
+                                        <p class="text-lg text-brand-navy font-bold mb-md">₺${p.price}</p>
+                                        <div class="flex items-center gap-sm">
+                                            <div class="flex items-center border border-outline-variant rounded-lg overflow-hidden bg-surface shrink-0">
+                                                <button class="w-8 h-9 flex items-center justify-center hover:bg-surface-container-high transition-colors text-brand-navy font-bold">-</button>
+                                                <input type="text" value="1" class="w-8 h-9 border-none p-0 text-center text-xs font-bold focus:ring-0 bg-transparent">
+                                                <button class="w-8 h-9 flex items-center justify-center hover:bg-surface-container-high transition-colors text-brand-navy font-bold">+</button>
+                                            </div>
+                                            <button class="flex-1 bg-brand-navy hover:bg-primary-container text-white h-9 rounded-lg font-bold text-xs flex items-center justify-center gap-1 transition-all active:scale-95 px-sm">
+                                                <span class="material-symbols-outlined text-[16px]">add_shopping_cart</span>
+                                                EKLE
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    });
+                </script>
+</div>
+</main>
+</div>
+</div>
+<!-- Filters Sidebar (Drawer) -->
+<aside class="fixed right-0 top-0 h-full w-[320px] bg-white shadow-2xl z-[80] translate-x-full drawer-transition border-l border-outline-variant flex flex-col" id="filter-drawer">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center bg-brand-navy text-white">
+<h3 class="font-bold">Filtreler</h3>
+<button class="material-symbols-outlined text-white hover:opacity-70" id="close-filter">close</button>
+</div>
+<div class="p-lg flex-1 overflow-y-auto space-y-xl">
+<div>
+<label class="font-bold text-brand-navy text-xs mb-md block">Kategoriler</label>
+<div class="space-y-sm">
+<label class="flex items-center gap-md cursor-pointer">
+<input checked="" class="rounded border-outline-variant text-brand-navy focus:ring-brand-navy" type="checkbox">
+<span class="text-sm">Elektrikli El Aletleri</span>
+</label>
+<label class="flex items-center gap-md cursor-pointer">
+<input class="rounded border-outline-variant text-brand-navy focus:ring-brand-navy" type="checkbox">
+<span class="text-sm">Hırdavat &amp; Aksesuar</span>
+</label>
+</div>
+</div>
+<div>
+<label class="font-bold text-brand-navy text-xs mb-md block">Fiyat Aralığı (₺)</label>
+<div class="grid grid-cols-2 gap-md">
+<input class="rounded-lg border-outline-variant bg-surface-container-low p-2 text-sm" placeholder="Min" type="number">
+<input class="rounded-lg border-outline-variant bg-surface-container-low p-2 text-sm" placeholder="Max" type="number">
+</div>
+</div>
+</div>
+<div class="p-lg border-t border-outline-variant bg-surface-container-low grid grid-cols-2 gap-md">
+<button class="py-2 border border-outline-variant rounded-lg font-bold text-xs text-outline hover:bg-white transition-colors">TEMİZLE</button>
+<button class="py-2 bg-brand-navy text-white rounded-lg font-bold text-xs shadow-md hover:bg-brand-navy/90 transition-colors">UYGULA</button>
+</div>
+</aside>
+<!-- Shopping Cart Drawer -->
+<aside class="fixed right-0 top-0 h-full w-full sm:w-[400px] bg-white shadow-2xl z-[90] translate-x-full drawer-transition border-l border-outline-variant flex flex-col" id="cart-drawer">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center bg-brand-navy text-white">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined">shopping_cart</span>
+<h3 class="font-bold">Sepetim (3 Ürün)</h3>
+</div>
+<button class="material-symbols-outlined text-white hover:opacity-70 transition-opacity" id="close-cart">close</button>
+</div>
+<div class="flex-1 overflow-y-auto p-lg space-y-md">
+<div class="flex gap-md border-b border-outline-variant pb-md">
+<div class="w-20 h-20 bg-surface-container-low rounded-lg shrink-0 overflow-hidden border border-outline-variant">
+<img alt="Item" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcJeFa7cNmQNFtNUzeTdosLjVnbJ8cOjfaTlE1-DFfBDlnMZiUeFUd8rTwB3Ul_B4SifH8ui1nTJPYthi2Fc08GvHyLLDC7xMn7z56ByZ5eq1lCPXxtut5sa38jYUd21pflHuj030abYRaNn6ea2jl7F5UrdMOWDR4WYsTRJkYdbSvuVWlZAApiPbOiRQ6BxsH0JnZ5wHnrIWNnGUWuT3qEDU6ylIiX4hnBBBAllmo9KalMMSrHdSaanck-EwxRgKzKU8ofFM7_nsm">
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<p class="font-bold text-brand-navy text-sm line-clamp-1">Pro-X Industrial Drill</p>
+<p class="text-xs text-on-surface-variant">2 Adet x ₺2.450,00</p>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-brand-navy font-bold">₺4.900,00</span>
+<button class="text-error text-xs flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-[14px]">delete</span> Sil
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<div class="p-lg bg-surface-container-low border-t border-outline-variant">
+<div class="space-y-sm mb-lg">
+<div class="flex justify-between text-on-surface-variant text-sm">
+<span>Ara Toplam</span>
+<span>₺10.020,00</span>
+</div>
+<div class="flex justify-between text-brand-navy font-bold text-xl pt-sm border-t border-outline-variant">
+<span>TOPLAM</span>
+<span class="text-brand-navy">₺12.024,00</span>
+</div>
+</div>
+<button class="w-full bg-brand-turquoise hover:opacity-90 text-brand-navy py-4 rounded-xl font-bold shadow-lg transition-all active:scale-[0.98]">
+            SİPARİŞİ TAMAMLA
+        </button>
+</div>
+</aside>
+<!-- Overlay -->
+<div class="fixed inset-0 bg-brand-navy/60 z-[60] hidden backdrop-blur-sm transition-opacity opacity-0" id="drawer-overlay"></div>
+<script>
+    // Elements
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const filterDrawer = document.getElementById('filter-drawer');
+    const cartDrawer = document.getElementById('cart-drawer');
+    const overlay = document.getElementById('drawer-overlay');
+    const body = document.body;
+
+    // Sidebar Collapse Toggle (Desktop)
+    sidebarToggle.addEventListener('click', () => {
+        if (window.innerWidth > 1024) {
+            sidebar.classList.toggle('sidebar-collapsed');
+            const icon = sidebarToggle.querySelector('span');
+            icon.innerText = sidebar.classList.contains('sidebar-collapsed') ? 'menu' : 'menu_open';
+        } else {
+            // On mobile, just close it
+            closeAll();
+        }
+    });
+
+    // Mobile Menu Toggle
+    mobileMenuToggle.addEventListener('click', () => {
+        openMobileMenu();
+    });
+
+    function openMobileMenu() {
+        sidebar.classList.add('open');
+        overlay.classList.remove('hidden');
+        setTimeout(() => overlay.classList.add('opacity-100'), 10);
+        body.classList.add('overflow-hidden');
+    }
+
+    function openDrawer(drawer) {
+        drawer.classList.remove('translate-x-full');
+        overlay.classList.remove('hidden');
+        setTimeout(() => overlay.classList.add('opacity-100'), 10);
+        body.classList.add('overflow-hidden');
+    }
+
+    function closeAll() {
+        // Reset sidebar (mobile)
+        sidebar.classList.remove('open');
+        // Reset drawers
+        filterDrawer.classList.add('translate-x-full');
+        cartDrawer.classList.add('translate-x-full');
+        // Hide overlay
+        overlay.classList.remove('opacity-100');
+        setTimeout(() => overlay.classList.add('hidden'), 300);
+        body.classList.remove('overflow-hidden');
+    }
+
+    document.getElementById('toggle-filter').addEventListener('click', () => openDrawer(filterDrawer));
+    document.getElementById('toggle-cart').addEventListener('click', () => openDrawer(cartDrawer));
+    document.getElementById('close-filter').addEventListener('click', closeAll);
+    document.getElementById('close-cart').addEventListener('click', closeAll);
+    overlay.addEventListener('click', closeAll);
+
+    // Sidebar items close the menu on mobile after selection
+    const sidebarItems = document.querySelectorAll('.sidebar-item');
+    sidebarItems.forEach(item => {
+        item.addEventListener('click', () => {
+            if (window.innerWidth <= 1024) {
+                closeAll();
+            }
+        });
+    });
+
+    // Simple Quantity Counter Interaction
+    document.addEventListener('click', function(e) {
+        if (e.target.tagName === 'BUTTON' && (e.target.innerText === '+' || e.target.innerText === '-')) {
+            const input = e.target.parentElement.querySelector('input');
+            let val = parseInt(input.value);
+            if (e.target.innerText === '+') val++;
+            else if (val > 1) val--;
+            input.value = val;
+        }
+    });
+
+    // Handle Resize
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 1024) {
+            sidebar.classList.remove('open');
+            if (overlay.classList.contains('opacity-100')) {
+                // If the overlay was only for the mobile sidebar, close it
+                if (filterDrawer.classList.contains('translate-x-full') && cartDrawer.classList.contains('translate-x-full')) {
+                    closeAll();
+                }
+            }
+        }
+    });
+</script>
+</body></html>

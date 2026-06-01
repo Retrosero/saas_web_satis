@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Katalog Link Yönetimi</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#0b1c30",
+                        "inverse-on-surface": "#eaf1ff",
+                        "secondary-fixed-dim": "#1edecb",
+                        "on-secondary-fixed": "#00201c",
+                        "on-primary-fixed": "#061353",
+                        "on-primary-container": "#7d88cb",
+                        "secondary": "#006a60",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "tertiary": "#0c1015",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#eff4ff",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed": "#dfe2e9",
+                        "on-surface": "#0b1c30",
+                        "on-secondary-fixed-variant": "#005048",
+                        "surface-variant": "#d3e4fe",
+                        "on-error-container": "#93000a",
+                        "background": "#f8f9ff",
+                        "tertiary-container": "#21252a",
+                        "inverse-surface": "#213145",
+                        "on-tertiary-container": "#888c92",
+                        "surface-dim": "#cbdbf5",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "on-surface-variant": "#454650",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f8f9ff",
+                        "on-secondary-container": "#007167",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-tint": "#4f5a99",
+                        "secondary-fixed": "#51fbe7",
+                        "on-tertiary-fixed": "#181c21",
+                        "primary": "#00083d",
+                        "on-primary-fixed-variant": "#374280",
+                        "primary-container": "#121e5c",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#c6c5d1",
+                        "outline": "#767681",
+                        "inverse-primary": "#bac3ff",
+                        "primary-fixed-dim": "#bac3ff",
+                        "surface": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "tertiary-fixed-dim": "#c3c7cd",
+                        "surface-container": "#e5eeff",
+                        "secondary-container": "#51fbe7",
+                        "primary-fixed": "#dee0ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "2rem",
+                        "xs": "0.5rem",
+                        "md": "1.5rem",
+                        "sm": "1rem",
+                        "base": "4px",
+                        "gutter": "24px",
+                        "xl": "3rem",
+                        "sidebar-width": "280px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col md:flex-row">
+<!-- NavigationDrawer (Sidebar) - Desktop Only -->
+<aside class="bg-primary dark:bg-primary w-sidebar-width h-full fixed left-0 top-0 border-r border-white/10 hidden md:flex flex-col pt-6 z-50">
+<div class="px-6 mb-8 flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary-fixed text-3xl" style="font-variation-settings: 'FILL' 1;">business_center</span>
+<div class="flex flex-col">
+<span class="font-headline-lg text-headline-lg font-bold text-secondary-fixed leading-none">B2B Portal</span>
+<span class="font-label-sm text-label-sm text-white/50">Enterprise v2.4.0</span>
+</div>
+</div>
+<div class="px-4 mb-6">
+<div class="flex items-center gap-3 bg-white/5 p-3 rounded-[15px]">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed text-primary flex items-center justify-center font-bold">OM</div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-white text-sm">Operations Manager</span>
+<span class="font-label-sm text-label-sm text-white/70">Admin</span>
+</div>
+</div>
+</div>
+<nav class="flex flex-col gap-2 flex-grow">
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 hover:bg-white/5 rounded-[15px] group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">sync</span>
+<span class="font-title-md text-title-md text-base">Order Sync</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 hover:bg-white/5 rounded-[15px] group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">edit</span>
+<span class="font-title-md text-title-md text-base">Product Edit</span>
+</a>
+<a class="bg-secondary-fixed text-primary rounded-[15px] mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 shadow-[inset_1px_0_0_0_rgba(255,255,255,0.1)] group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">link</span>
+<span class="font-title-md text-title-md text-base">Katalog Linkleri</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 hover:bg-white/5 rounded-[15px] group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">rule</span>
+<span class="font-title-md text-title-md text-base">Approval Center</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 hover:bg-white/5 rounded-[15px] group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">input</span>
+<span class="font-title-md text-title-md text-base">Goods Receipt</span>
+</a>
+</nav>
+<div class="mt-auto pb-6">
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 hover:bg-white/5 rounded-[15px] group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">settings</span>
+<span class="font-title-md text-title-md text-base">Settings</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 md:ml-sidebar-width flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-background w-full sticky top-0 z-40 shadow-sm flex items-center justify-between px-xl h-20 transition-all">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-primary p-2 hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-lg text-headline-lg md:font-headline-lg text-primary tracking-tight">Müşteri Katalog Linkleri</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center bg-surface-container-low px-4 py-2 rounded-[15px] border border-outline-variant focus-within:ring-2 focus-within:ring-secondary focus-within:border-secondary transition-all">
+<span class="material-symbols-outlined text-outline mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 p-0 text-on-surface font-body-md text-body-md placeholder:text-outline w-64" placeholder="Müşteri veya link ara..." type="text"/>
+</div>
+<button class="bg-secondary-fixed text-primary px-6 py-2.5 rounded-[15px] font-title-md text-title-md text-sm flex items-center gap-2 hover:bg-[#3ce5d2] transition-colors shadow-sm">
+<span class="material-symbols-outlined text-sm">add</span>
+                    Yeni Link Oluştur
+                </button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 p-6 md:p-xl space-y-8 overflow-y-auto pb-24 md:pb-xl">
+<!-- Bento Grid Layout for Links -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Quick Stats Card (Spans 1 col) -->
+<div class="bg-white rounded-[15px] p-6 shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-outline-variant/30 flex flex-col justify-between">
+<div>
+<h2 class="font-title-md text-title-md text-primary-container mb-1">Aktif Linkler</h2>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm">Toplam paylaşılan aktif katalog linkleri</p>
+</div>
+<div class="mt-6 flex items-end justify-between">
+<span class="text-5xl font-bold text-primary">24</span>
+<div class="flex items-center text-secondary bg-surface-container-low px-3 py-1 rounded-[15px] font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] mr-1">trending_up</span>
+                            +3 bu hafta
+                        </div>
+</div>
+</div>
+<!-- Link Generation Tool (Spans 2 cols) -->
+<div class="bg-white rounded-[15px] p-6 shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-outline-variant/30 lg:col-span-2 flex flex-col relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-surface-container to-surface-variant rounded-full blur-3xl -mr-20 -mt-20 opacity-50 pointer-events-none"></div>
+<h2 class="font-title-md text-title-md text-primary-container mb-4 relative z-10">Hızlı Link Oluştur</h2>
+<form class="flex flex-col sm:flex-row gap-4 relative z-10">
+<div class="flex-1">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Müşteri Seçimi</label>
+<select class="w-full bg-surface-bright border border-outline-variant rounded-[15px] px-4 py-3 font-body-md text-body-md text-on-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all">
+<option>Aka Kimya A.Ş.</option>
+<option>Bora Tekstil</option>
+<option>Cem Lojistik</option>
+</select>
+</div>
+<div class="flex-1">
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1">Geçerlilik Süresi</label>
+<select class="w-full bg-surface-bright border border-outline-variant rounded-[15px] px-4 py-3 font-body-md text-body-md text-on-surface focus:ring-2 focus:ring-secondary focus:border-secondary transition-all">
+<option>7 Gün</option>
+<option>14 Gün</option>
+<option>30 Gün</option>
+<option>Süresiz</option>
+</select>
+</div>
+<div class="flex items-end">
+<button class="w-full sm:w-auto bg-primary text-on-primary px-6 py-3 rounded-[15px] font-title-md text-title-md text-sm hover:bg-primary-container transition-colors shadow-sm whitespace-nowrap h-[46px]" type="button">
+                                Link Üret
+                            </button>
+</div>
+</form>
+</div>
+</div>
+<!-- List Section -->
+<div class="bg-white rounded-[15px] shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-outline-variant/30 overflow-hidden">
+<div class="p-6 border-b border-outline-variant/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<h3 class="font-title-md text-title-md text-primary-container">Mevcut Linkler</h3>
+<div class="flex gap-2">
+<button class="bg-surface-container px-4 py-2 rounded-[15px] font-label-sm text-label-sm text-on-surface hover:bg-surface-variant transition-colors">Tümü</button>
+<button class="bg-transparent px-4 py-2 rounded-[15px] font-label-sm text-label-sm text-on-surface-variant hover:bg-surface-container-low transition-colors">Aktif</button>
+<button class="bg-transparent px-4 py-2 rounded-[15px] font-label-sm text-label-sm text-on-surface-variant hover:bg-surface-container-low transition-colors">Pasif</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-bright border-b border-outline-variant/50">
+<th class="p-4 font-label-sm text-label-sm text-on-surface-variant font-semibold">MÜŞTERİ</th>
+<th class="p-4 font-label-sm text-label-sm text-on-surface-variant font-semibold">LİNK &amp; KOPYALA</th>
+<th class="p-4 font-label-sm text-label-sm text-on-surface-variant font-semibold">DURUM</th>
+<th class="p-4 font-label-sm text-label-sm text-on-surface-variant font-semibold">GEÇERLİLİK</th>
+<th class="p-4 font-label-sm text-label-sm text-on-surface-variant font-semibold text-right">İŞLEMLER</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="p-4">
+<div class="font-title-md text-title-md text-sm text-on-surface">Aka Kimya A.Ş.</div>
+<div class="font-body-md text-body-md text-xs text-on-surface-variant mt-1">Oluşturan: Ahmet Y.</div>
+</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<div class="bg-surface-container px-3 py-1.5 rounded-[15px] font-body-md text-body-md text-sm text-on-surface truncate max-w-[200px] border border-outline-variant/50">
+                                            b2b.portal.com/k/a7x9...
+                                        </div>
+<button class="text-outline hover:text-secondary transition-colors" onclick="alert('Link kopyalandı!')" title="Kopyala">
+<span class="material-symbols-outlined text-[20px]">content_copy</span>
+</button>
+</div>
+</td>
+<td class="p-4">
+<span class="inline-flex items-center gap-1.5 bg-surface-container-high text-primary-container px-2.5 py-1 rounded-[15px] font-label-sm text-label-sm text-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Aktif
+                                    </span>
+</td>
+<td class="p-4">
+<div class="font-body-md text-body-md text-sm text-on-surface">12 Eki 2023</div>
+<div class="font-body-md text-body-md text-xs text-on-surface-variant mt-1">Kalan: 5 Gün</div>
+</td>
+<td class="p-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-[15px] flex items-center justify-center bg-surface-container hover:bg-surface-variant text-on-surface transition-colors" title="Paylaş">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+<button class="w-8 h-8 rounded-[15px] flex items-center justify-center bg-surface-container hover:bg-surface-variant text-on-surface transition-colors" title="Düzenle">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="w-8 h-8 rounded-[15px] flex items-center justify-center bg-error-container hover:bg-[#fecdd3] text-error transition-colors" title="Pasife Al">
+<span class="material-symbols-outlined text-[18px]">block</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="p-4">
+<div class="font-title-md text-title-md text-sm text-on-surface">Bora Tekstil</div>
+<div class="font-body-md text-body-md text-xs text-on-surface-variant mt-1">Oluşturan: Elif S.</div>
+</td>
+<td class="p-4">
+<div class="flex items-center gap-2 opacity-60">
+<div class="bg-surface-container px-3 py-1.5 rounded-[15px] font-body-md text-body-md text-sm text-on-surface truncate max-w-[200px] border border-outline-variant/50">
+                                            b2b.portal.com/k/m4k2...
+                                        </div>
+</div>
+</td>
+<td class="p-4">
+<span class="inline-flex items-center gap-1.5 bg-surface-container text-on-surface-variant px-2.5 py-1 rounded-[15px] font-label-sm text-label-sm text-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span> Pasif
+                                    </span>
+</td>
+<td class="p-4">
+<div class="font-body-md text-body-md text-sm text-on-surface-variant">Süresi Doldu</div>
+<div class="font-body-md text-body-md text-xs text-on-surface-variant mt-1">01 Eki 2023</div>
+</td>
+<td class="p-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-[15px] flex items-center justify-center bg-surface-container hover:bg-surface-variant text-on-surface transition-colors" title="Tekrar Aktif Et">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-lowest transition-colors group">
+<td class="p-4">
+<div class="font-title-md text-title-md text-sm text-on-surface">Cem Lojistik</div>
+<div class="font-body-md text-body-md text-xs text-on-surface-variant mt-1">Oluşturan: Sistem</div>
+</td>
+<td class="p-4">
+<div class="flex items-center gap-2">
+<div class="bg-surface-container px-3 py-1.5 rounded-[15px] font-body-md text-body-md text-sm text-on-surface truncate max-w-[200px] border border-outline-variant/50">
+                                            b2b.portal.com/k/p9l1...
+                                        </div>
+<button class="text-outline hover:text-secondary transition-colors" title="Kopyala">
+<span class="material-symbols-outlined text-[20px]">content_copy</span>
+</button>
+</div>
+</td>
+<td class="p-4">
+<span class="inline-flex items-center gap-1.5 bg-surface-container-high text-primary-container px-2.5 py-1 rounded-[15px] font-label-sm text-label-sm text-xs">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Aktif
+                                    </span>
+</td>
+<td class="p-4">
+<div class="font-body-md text-body-md text-sm text-on-surface">Süresiz</div>
+</td>
+<td class="p-4 text-right">
+<div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-[15px] flex items-center justify-center bg-surface-container hover:bg-surface-variant text-on-surface transition-colors" title="Paylaş">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+<button class="w-8 h-8 rounded-[15px] flex items-center justify-center bg-surface-container hover:bg-surface-variant text-on-surface transition-colors" title="Düzenle">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="w-8 h-8 rounded-[15px] flex items-center justify-center bg-error-container hover:bg-[#fecdd3] text-error transition-colors" title="Pasife Al">
+<span class="material-symbols-outlined text-[18px]">block</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</div>
+<!-- BottomNavBar - Mobile Only -->
+<nav class="bg-surface-container dark:bg-surface-container-highest fixed bottom-0 w-full z-50 lg:hidden shadow-[0px_-4px_20px_rgba(18,30,92,0.05)] border-t border-outline-variant flex justify-around items-center px-4 py-3">
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80 scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mb-1">shopping_cart</span>
+<span class="font-label-sm text-label-sm text-[10px]">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80 scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mb-1">inventory_2</span>
+<span class="font-label-sm text-label-sm text-[10px]">Products</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-fixed text-primary rounded-[15px] px-6 py-2 shadow-sm" href="#">
+<span class="material-symbols-outlined mb-0.5" style="font-variation-settings: 'FILL' 1;">link</span>
+<span class="font-label-sm text-label-sm text-[10px]">Linkler</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80 scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mb-1">settings</span>
+<span class="font-label-sm text-label-sm text-[10px]">Settings</span>
+</a>
+</nav>
+</body></html>

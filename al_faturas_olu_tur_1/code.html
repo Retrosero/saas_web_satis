@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>B2B Purchase Invoice Mobile</title>
+<!-- Google Fonts: Hanken Grotesk -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline": "#767681",
+                        "surface-container-low": "#eff4ff",
+                        "on-surface": "#0b1c30",
+                        "tertiary-fixed-dim": "#c3c7cd",
+                        "primary-container": "#121e5c",
+                        "primary": "#00083d",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#d3e4fe",
+                        "secondary-fixed-dim": "#1edecb",
+                        "on-background": "#0b1c30",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#bac3ff",
+                        "primary-fixed": "#dee0ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "secondary-container": "#51fbe7",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#7d88cb",
+                        "secondary": "#006a60",
+                        "outline-variant": "#c6c5d1",
+                        "on-tertiary-container": "#888c92",
+                        "inverse-surface": "#213145",
+                        "on-secondary-fixed-variant": "#005048",
+                        "on-secondary-container": "#007167",
+                        "on-primary-fixed-variant": "#374280",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "surface-tint": "#4f5a99",
+                        "on-secondary-fixed": "#00201c",
+                        "secondary-fixed": "#51fbe7",
+                        "on-primary-fixed": "#061353",
+                        "surface-dim": "#cbdbf5",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-surface-variant": "#454650",
+                        "on-secondary": "#ffffff",
+                        "background": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "surface-bright": "#f8f9ff",
+                        "primary-fixed-dim": "#bac3ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "tertiary-fixed": "#dfe2e9",
+                        "on-tertiary-fixed": "#181c21",
+                        "tertiary": "#0c1015",
+                        "error": "#ba1a1a",
+                        "surface-container": "#e5eeff",
+                        "tertiary-container": "#21252a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "xs": "0.5rem",
+                        "sidebar-width": "280px",
+                        "gutter": "24px",
+                        "xl": "3rem",
+                        "sm": "1rem",
+                        "md": "1.5rem",
+                        "lg": "2rem"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased relative min-h-screen pb-[100px]">
+<!-- Overlay for NavigationDrawer (Mobile) -->
+<div class="fixed inset-0 bg-primary/40 z-40 hidden transition-opacity" id="drawer-overlay" onclick="toggleDrawer()"></div>
+<!-- NavigationDrawer Component (Hidden on mobile by default, toggled) -->
+<nav class="bg-primary dark:bg-primary h-screen w-[280px] fixed left-0 top-0 z-50 border-r border-white/10 flat no shadows flex flex-col gap-xs p-sm -translate-x-full transition-transform duration-300 ease-in-out md:hidden" id="side-drawer">
+<div class="mb-lg flex items-center gap-xs px-sm py-xs">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-primary font-bold">
+                AM
+            </div>
+<div>
+<h2 class="font-title-md text-title-md text-secondary dark:text-secondary-fixed">Alex Miller</h2>
+<p class="font-label-sm text-label-sm text-white/70">Operations Lead</p>
+</div>
+</div>
+<div class="flex flex-col gap-base">
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="bg-secondary text-primary rounded-[15px] mx-xs px-sm py-xs flex items-center gap-xs font-bold hover:bg-white/10 transition-all cursor-pointer transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-body-md text-body-md">Inventory</span>
+</a>
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-body-md text-body-md">Orders</span>
+</a>
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+<span class="font-body-md text-body-md">Logistics</span>
+</a>
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-body-md text-body-md">Analytics</span>
+</a>
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</div>
+</nav>
+<!-- TopAppBar Component -->
+<header class="bg-surface dark:bg-on-background shadow-sm shadow-[0px_4px_20px_rgba(18,30,92,0.05)] docked full-width top-0 z-30 sticky flex items-center justify-between px-md w-full h-16">
+<div class="flex items-center gap-sm">
+<button class="text-primary dark:text-inverse-primary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform p-xs rounded-full" onclick="toggleDrawer()">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary dark:text-inverse-primary font-bold tracking-tight">Alış Faturası</h1>
+</div>
+<button class="text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-low transition-colors active:scale-95 transition-transform flex items-center gap-xs px-xs py-base rounded-full">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="p-sm flex flex-col gap-sm">
+<!-- Header Actions (Import) -->
+<div class="flex justify-end">
+<button class="flex items-center gap-xs text-primary font-label-sm text-label-sm bg-surface-container-high px-sm py-xs rounded-[15px] hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[16px]">upload_file</span>
+                Toplu Aktarım
+            </button>
+</div>
+<!-- Supplier Section (Card) -->
+<section class="bg-surface-container-lowest rounded-[15px] p-sm shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-white/20">
+<label class="font-label-sm text-label-sm text-on-surface-variant mb-xs block">Tedarikçi Seçimi</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline">storefront</span>
+<input class="w-full bg-surface rounded-[15px] border border-outline-variant focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed pl-[40px] pr-sm py-sm font-body-md text-body-md text-primary placeholder:text-outline-variant outline-none transition-all" placeholder="Ünvan, VKN veya Cari Kodu girin..." type="text"/>
+</div>
+</section>
+<!-- Invoice Details Section (Card) -->
+<section class="bg-surface-container-lowest rounded-[15px] p-sm shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-white/20">
+<div class="grid grid-cols-2 gap-sm">
+<div>
+<label class="font-label-sm text-label-sm text-on-surface-variant mb-base block">Seri / Sıra No</label>
+<div class="flex gap-xs">
+<input class="w-1/3 bg-surface rounded-[15px] border border-outline-variant focus:border-secondary-fixed px-sm py-xs font-body-md text-body-md text-primary outline-none uppercase" placeholder="Seri" type="text"/>
+<input class="w-2/3 bg-surface rounded-[15px] border border-outline-variant focus:border-secondary-fixed px-sm py-xs font-body-md text-body-md text-primary outline-none" placeholder="Sıra No" type="text"/>
+</div>
+</div>
+<div>
+<label class="font-label-sm text-label-sm text-on-surface-variant mb-base block">Fatura Tarihi</label>
+<input class="w-full bg-surface rounded-[15px] border border-outline-variant focus:border-secondary-fixed px-sm py-xs font-body-md text-body-md text-primary outline-none" type="date" value="2023-10-24"/>
+</div>
+<div class="col-span-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant mb-base block">Vade Tarihi</label>
+<input class="w-full bg-surface rounded-[15px] border border-outline-variant focus:border-secondary-fixed px-sm py-xs font-body-md text-body-md text-primary outline-none text-outline-variant" type="date"/>
+</div>
+</div>
+</section>
+<!-- Product Addition Section (Card) -->
+<section class="bg-primary rounded-[15px] p-sm shadow-[0px_4px_20px_rgba(18,30,92,0.15)] relative overflow-hidden">
+<!-- Subtle background pattern for premium feel -->
+<div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 16px 16px;"></div>
+<h3 class="font-title-md text-title-md text-on-primary mb-sm relative z-10 flex items-center gap-xs">
+<span class="material-symbols-outlined">add_box</span> Hızlı Ürün Ekle
+            </h3>
+<div class="flex flex-col gap-sm relative z-10">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-white/50">barcode_scanner</span>
+<input class="w-full bg-white/10 rounded-[15px] border border-white/20 focus:border-secondary-fixed focus:bg-white/20 pl-[40px] pr-sm py-sm font-body-md text-body-md text-white placeholder:text-white/50 outline-none transition-all" placeholder="Stok Kodu, Barkod veya Ad" type="text"/>
+</div>
+<div class="flex gap-sm items-end">
+<div class="w-1/3">
+<label class="font-label-sm text-label-sm text-white/70 mb-base block">Miktar</label>
+<input class="w-full bg-white/10 rounded-[15px] border border-white/20 focus:border-secondary-fixed px-sm py-xs font-body-md text-body-md text-white text-center outline-none appearance-none" type="number" value="1"/>
+</div>
+<div class="w-1/2">
+<label class="font-label-sm text-label-sm text-white/70 mb-base block">Birim Fiyat (₺)</label>
+<input class="w-full bg-white/10 rounded-[15px] border border-white/20 focus:border-secondary-fixed px-sm py-xs font-body-md text-body-md text-white text-right outline-none" placeholder="0.00" type="number"/>
+</div>
+<button class="w-auto h-[42px] aspect-square bg-secondary-fixed text-primary rounded-[15px] flex items-center justify-center hover:bg-secondary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Line Items List -->
+<section class="flex flex-col gap-base">
+<h4 class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider px-xs">Kalemler (2)</h4>
+<!-- Item 1 -->
+<div class="bg-surface-container-lowest rounded-[15px] p-sm shadow-sm border border-outline-variant/30 flex flex-col gap-xs">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-title-md text-body-md text-primary font-bold">Asus ProArt Monitör 27"</p>
+<p class="font-label-sm text-label-sm text-outline">STK-00192 • Adet</p>
+</div>
+<div class="flex items-center gap-base">
+<button class="text-outline hover:text-primary transition-colors p-base"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="text-error/70 hover:text-error transition-colors p-base"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</div>
+<div class="flex justify-between items-end border-t border-outline-variant/20 pt-xs mt-xs">
+<div class="flex gap-md">
+<div>
+<span class="block font-label-sm text-[10px] text-outline">Miktar</span>
+<span class="font-body-md text-body-md text-primary">5</span>
+</div>
+<div>
+<span class="block font-label-sm text-[10px] text-outline">Fiyat</span>
+<span class="font-body-md text-body-md text-primary">12.500 ₺</span>
+</div>
+<div>
+<span class="block font-label-sm text-[10px] text-outline">İnd. / KDV</span>
+<span class="font-body-md text-body-md text-primary">%5 / %20</span>
+</div>
+</div>
+<div class="text-right">
+<span class="block font-label-sm text-[10px] text-outline">Satır Toplamı</span>
+<span class="font-title-md text-title-md text-secondary font-bold">71.250,00 ₺</span>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="bg-surface-container-lowest rounded-[15px] p-sm shadow-sm border border-outline-variant/30 flex flex-col gap-xs">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-title-md text-body-md text-primary font-bold">Logitech MX Master 3S</p>
+<p class="font-label-sm text-label-sm text-outline">STK-00451 • Adet</p>
+</div>
+<div class="flex items-center gap-base">
+<button class="text-outline hover:text-primary transition-colors p-base"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+<button class="text-error/70 hover:text-error transition-colors p-base"><span class="material-symbols-outlined text-[18px]">delete</span></button>
+</div>
+</div>
+<div class="flex justify-between items-end border-t border-outline-variant/20 pt-xs mt-xs">
+<div class="flex gap-md">
+<div>
+<span class="block font-label-sm text-[10px] text-outline">Miktar</span>
+<span class="font-body-md text-body-md text-primary">10</span>
+</div>
+<div>
+<span class="block font-label-sm text-[10px] text-outline">Fiyat</span>
+<span class="font-body-md text-body-md text-primary">2.800 ₺</span>
+</div>
+<div>
+<span class="block font-label-sm text-[10px] text-outline">İnd. / KDV</span>
+<span class="font-body-md text-body-md text-primary">- / %20</span>
+</div>
+</div>
+<div class="text-right">
+<span class="block font-label-sm text-[10px] text-outline">Satır Toplamı</span>
+<span class="font-title-md text-title-md text-secondary font-bold">33.600,00 ₺</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Financial Summary -->
+<section class="bg-surface-container-lowest rounded-[15px] p-sm shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-white/20 mt-xs">
+<div class="flex flex-col gap-xs font-body-md text-body-md">
+<div class="flex justify-between text-on-surface-variant">
+<span>Brüt Toplam</span>
+<span>90.500,00 ₺</span>
+</div>
+<div class="flex justify-between text-error">
+<span>Toplam İndirim</span>
+<span>-3.125,00 ₺</span>
+</div>
+<div class="flex justify-between text-primary font-semibold">
+<span>Ara Toplam</span>
+<span>87.375,00 ₺</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>KDV Toplamı</span>
+<span>17.475,00 ₺</span>
+</div>
+<div class="h-px bg-outline-variant/40 my-xs w-full"></div>
+<div class="flex justify-between items-center text-primary">
+<span class="font-title-md text-title-md font-bold">Genel Toplam</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-secondary">104.850,00 ₺</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Fixed Footer Actions -->
+<footer class="fixed bottom-0 w-full bg-surface-container-lowest border-t border-outline-variant/30 shadow-[0px_-4px_20px_rgba(18,30,92,0.08)] p-sm z-40 flex gap-sm">
+<button class="flex-1 bg-transparent border-[1.5px] border-primary text-primary rounded-[15px] py-sm font-title-md text-title-md flex justify-center items-center gap-xs active:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[20px]">delete_sweep</span>
+            Temizle
+        </button>
+<button class="flex-[2] bg-secondary-fixed text-primary rounded-[15px] py-sm font-title-md text-title-md font-bold flex justify-center items-center gap-xs shadow-md active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-[20px]">save</span>
+            Kaydet
+        </button>
+</footer>
+<!-- Script for Drawer Toggle -->
+<script>
+        function toggleDrawer() {
+            const drawer = document.getElementById('side-drawer');
+            const overlay = document.getElementById('drawer-overlay');
+            
+            if (drawer.classList.contains('-translate-x-full')) {
+                drawer.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.add('opacity-100'), 10);
+            } else {
+                drawer.classList.add('-translate-x-full');
+                overlay.classList.remove('opacity-100');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            }
+        }
+    </script>
+</body></html>

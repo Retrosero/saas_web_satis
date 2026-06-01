@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fiyat Analiz</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed": "#51fbe7",
+                    "error": "#ba1a1a",
+                    "tertiary": "#0c1015",
+                    "surface": "#f8f9ff",
+                    "background": "#f8f9ff",
+                    "on-primary-fixed-variant": "#374280",
+                    "on-primary": "#ffffff",
+                    "surface-container": "#e5eeff",
+                    "on-primary-fixed": "#061353",
+                    "tertiary-fixed": "#dfe2e9",
+                    "outline-variant": "#c6c5d1",
+                    "on-primary-container": "#7d88cb",
+                    "on-secondary-container": "#007167",
+                    "primary-fixed-dim": "#bac3ff",
+                    "on-tertiary-fixed": "#181c21",
+                    "on-surface": "#0b1c30",
+                    "on-tertiary-fixed-variant": "#43474d",
+                    "surface-container-high": "#dce9ff",
+                    "on-error": "#ffffff",
+                    "inverse-primary": "#bac3ff",
+                    "outline": "#767681",
+                    "surface-variant": "#d3e4fe",
+                    "surface-container-highest": "#d3e4fe",
+                    "surface-bright": "#f8f9ff",
+                    "on-tertiary-container": "#888c92",
+                    "on-secondary": "#ffffff",
+                    "tertiary-container": "#21252a",
+                    "error-container": "#ffdad6",
+                    "primary": "#00083d",
+                    "primary-container": "#121e5c",
+                    "on-background": "#0b1c30",
+                    "surface-dim": "#cbdbf5",
+                    "secondary-container": "#51fbe7",
+                    "inverse-on-surface": "#eaf1ff",
+                    "tertiary-fixed-dim": "#c3c7cd",
+                    "surface-container-low": "#eff4ff",
+                    "secondary-fixed-dim": "#1edecb",
+                    "on-secondary-fixed-variant": "#005048",
+                    "on-error-container": "#93000a",
+                    "on-surface-variant": "#454650",
+                    "primary-fixed": "#dee0ff",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-tint": "#4f5a99",
+                    "on-secondary-fixed": "#00201c",
+                    "secondary": "#006a60",
+                    "inverse-surface": "#213145"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px",
+                    "brand": "15px"
+            },
+            "spacing": {
+                    "xs": "0.5rem",
+                    "lg": "2rem",
+                    "gutter": "24px",
+                    "sm": "1rem",
+                    "base": "4px",
+                    "sidebar-width": "280px",
+                    "xl": "3rem",
+                    "md": "1.5rem"
+            },
+            "fontFamily": {
+                    "headline-lg": [
+                            "Hanken Grotesk"
+                    ],
+                    "body-md": [
+                            "Hanken Grotesk"
+                    ],
+                    "headline-lg-mobile": [
+                            "Hanken Grotesk"
+                    ],
+                    "title-md": [
+                            "Hanken Grotesk"
+                    ],
+                    "label-sm": [
+                            "Hanken Grotesk"
+                    ],
+                    "display-lg": [
+                            "Hanken Grotesk"
+                    ]
+            },
+            "fontSize": {
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "title-md": [
+                            "18px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Hanken Grotesk', sans-serif;
+        }
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface flex flex-col min-h-screen relative pb-20">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim text-primary dark:text-primary-fixed-dim font-headline-lg-mobile text-headline-lg-mobile w-full top-0 sticky shadow-sm dark:shadow-none shadow-[0px_4px_20px_rgba(18,30,92,0.05)] active:scale-95 duration-150 flex justify-between items-center px-lg h-20 w-full z-50">
+<button class="hover:bg-surface-container-high transition-colors p-2 rounded-brand flex items-center justify-center">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-secondary-fixed">
+            Operations Console
+        </div>
+<div class="hover:bg-surface-container-high transition-colors p-2 rounded-brand flex items-center justify-center">
+<img alt="User Profile" class="w-8 h-8 rounded-full border-2 border-secondary-fixed" data-alt="A small circular avatar placeholder image showing a generic user profile picture, suitable for a corporate dashboard. It blends in with a modern, professional, high-performance SaaS interface style with deep navy and vibrant turquoise accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5MJIh7NkNODMTxQoEVTYtamG6xFva4v9qymoUj2ctusSkr7OsF9ABui6l_Aps6HyYjWkVtDNdwoFd3cam52M2dU1Nl4_bQq6AfSIxhs2Lxhx1MqCajvnKx4Bie8XXdN5R-zzH1Ne4sbhqQjjkx-MkIlZQ7Setd0o8vicTJUaS5uD1i9FYndT1rjXIFCBw7j6uVA3UPK4OPPIr32DTv9q_AXewM41DwRF2PyWbxhjoHyuE46nK43lLM5t3XC8iuLdl9XYVcvmsOjyV"/>
+</div>
+</header>
+<!-- Page Content -->
+<main class="flex-grow flex flex-col px-sm py-sm gap-md">
+<!-- Header & Tabs -->
+<div class="flex flex-col gap-sm">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold">Fiyat Analiz</h1>
+<div class="flex bg-surface-container-high rounded-brand p-1 shadow-inner overflow-x-auto snap-x no-scrollbar">
+<button class="flex-1 snap-center py-2 px-4 rounded-brand bg-primary text-secondary-fixed font-title-md text-title-md text-center whitespace-nowrap shadow-md">
+                    Simülasyonlar
+                </button>
+<button class="flex-1 snap-center py-2 px-4 rounded-brand text-on-surface-variant opacity-70 hover:bg-surface-container transition-colors font-title-md text-title-md text-center whitespace-nowrap">
+                    Listeler
+                </button>
+<button class="flex-1 snap-center py-2 px-4 rounded-brand text-on-surface-variant opacity-70 hover:bg-surface-container transition-colors font-title-md text-title-md text-center whitespace-nowrap">
+                    Harita
+                </button>
+</div>
+</div>
+<!-- Margin Analysis Cards (Bento style) -->
+<div class="grid grid-cols-2 gap-sm">
+<div class="bg-white rounded-brand p-sm shadow-[0px_4px_20px_rgba(18,30,92,0.05)] flex flex-col gap-xs hover:shadow-lg transition-shadow border border-surface-container-high">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-surface-container rounded-brand text-primary">
+<span class="material-symbols-outlined fill">trending_up</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container-high px-2 py-1 rounded-brand">+2.4%</span>
+</div>
+<div class="text-on-surface-variant font-body-md text-body-md mt-2">Brüt Marj</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold">%34.2</div>
+</div>
+<div class="bg-white rounded-brand p-sm shadow-[0px_4px_20px_rgba(18,30,92,0.05)] flex flex-col gap-xs hover:shadow-lg transition-shadow border border-surface-container-high">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-surface-container rounded-brand text-primary">
+<span class="material-symbols-outlined fill">insights</span>
+</div>
+<span class="font-label-sm text-label-sm text-error bg-error-container px-2 py-1 rounded-brand">-0.8%</span>
+</div>
+<div class="text-on-surface-variant font-body-md text-body-md mt-2">Net Kar Marjı</div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold">%12.5</div>
+</div>
+</div>
+<!-- Price Comparison Table (Card style) -->
+<div class="bg-white rounded-brand p-sm shadow-[0px_4px_20px_rgba(18,30,92,0.05)] flex flex-col gap-sm border border-surface-container-high">
+<h2 class="font-title-md text-title-md text-primary flex items-center gap-xs border-b border-surface-container-high pb-xs">
+<span class="material-symbols-outlined">compare_arrows</span>
+                Fiyat Karşılaştırması
+            </h2>
+<div class="flex flex-col gap-xs">
+<!-- Row 1 -->
+<div class="flex items-center justify-between p-2 hover:bg-surface-container-low rounded-brand transition-colors">
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface">Ürün A (Enterprise)</span>
+<span class="font-body-md text-body-md text-on-surface-variant text-sm">Mevcut Liste</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-title-md text-title-md text-primary">₺12,450</span>
+<span class="font-label-sm text-label-sm text-secondary">Optimum: ₺12,800</span>
+</div>
+</div>
+<div class="h-px bg-surface-container w-full"></div>
+<!-- Row 2 -->
+<div class="flex items-center justify-between p-2 hover:bg-surface-container-low rounded-brand transition-colors bg-surface-container-low/50">
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface">Ürün B (Pro)</span>
+<span class="font-body-md text-body-md text-on-surface-variant text-sm">Rakip Analizi</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-title-md text-title-md text-primary">₺8,200</span>
+<span class="font-label-sm text-label-sm text-error">Ortalama: ₺7,900</span>
+</div>
+</div>
+<div class="h-px bg-surface-container w-full"></div>
+<!-- Row 3 -->
+<div class="flex items-center justify-between p-2 hover:bg-surface-container-low rounded-brand transition-colors">
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface">Hizmet Paketi C</span>
+<span class="font-body-md text-body-md text-on-surface-variant text-sm">Önerilen</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-title-md text-title-md text-primary">₺24,000</span>
+<span class="font-label-sm text-label-sm text-secondary">Pazar: ₺25,000</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Simulation Input Area -->
+<div class="bg-primary rounded-brand p-md text-white shadow-lg flex flex-col gap-sm relative overflow-hidden">
+<!-- Decorative gradient -->
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-secondary-fixed rounded-full blur-3xl opacity-20"></div>
+<h3 class="font-title-md text-title-md text-secondary-fixed flex items-center gap-xs z-10">
+<span class="material-symbols-outlined">science</span>
+                Yeni Simülasyon
+            </h3>
+<div class="flex flex-col gap-xs z-10">
+<label class="font-label-sm text-label-sm text-tertiary-fixed-dim">Senaryo Adı</label>
+<input class="bg-tertiary-container border border-surface-tint rounded-brand p-3 text-white placeholder:text-outline-variant focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-all font-body-md text-body-md" placeholder="Q3 İskonto Stratejisi" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-sm z-10 mt-2">
+<div class="flex flex-col gap-xs">
+<label class="font-label-sm text-label-sm text-tertiary-fixed-dim">Hedef Marj (%)</label>
+<input class="bg-tertiary-container border border-surface-tint rounded-brand p-3 text-white placeholder:text-outline-variant focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-all font-body-md text-body-md" type="number" value="35"/>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-label-sm text-label-sm text-tertiary-fixed-dim">İskonto Oranı (%)</label>
+<input class="bg-tertiary-container border border-surface-tint rounded-brand p-3 text-white placeholder:text-outline-variant focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-all font-body-md text-body-md" type="number" value="12"/>
+</div>
+</div>
+<button class="mt-sm bg-secondary-fixed text-primary font-title-md text-title-md font-bold py-3 px-4 rounded-brand w-full hover:bg-secondary-fixed-dim transition-colors z-10 flex justify-center items-center gap-2">
+<span class="material-symbols-outlined">save</span>
+                Simülasyonu Kaydet
+            </button>
+</div>
+</main>
+</body></html>

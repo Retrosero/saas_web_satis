@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Manuel Ürünler - Operations Console</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#bac3ff",
+                        "on-tertiary-fixed": "#181c21",
+                        "on-surface": "#0b1c30",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "surface-container-high": "#dce9ff",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#bac3ff",
+                        "outline": "#767681",
+                        "surface-variant": "#d3e4fe",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-bright": "#f8f9ff",
+                        "on-tertiary-container": "#888c92",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#51fbe7",
+                        "error": "#ba1a1a",
+                        "tertiary": "#0c1015",
+                        "surface": "#f8f9ff",
+                        "background": "#f8f9ff",
+                        "on-primary-fixed-variant": "#374280",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#e5eeff",
+                        "on-primary-fixed": "#061353",
+                        "tertiary-fixed": "#dfe2e9",
+                        "outline-variant": "#c6c5d1",
+                        "on-primary-container": "#7d88cb",
+                        "on-secondary-container": "#007167",
+                        "surface-container-low": "#eff4ff",
+                        "secondary-fixed-dim": "#1edecb",
+                        "on-secondary-fixed-variant": "#005048",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#454650",
+                        "primary-fixed": "#dee0ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#4f5a99",
+                        "on-secondary-fixed": "#00201c",
+                        "secondary": "#006a60",
+                        "inverse-surface": "#213145",
+                        "tertiary-container": "#21252a",
+                        "error-container": "#ffdad6",
+                        "primary": "#00083d",
+                        "primary-container": "#121e5c",
+                        "on-background": "#0b1c30",
+                        "surface-dim": "#cbdbf5",
+                        "secondary-container": "#51fbe7",
+                        "inverse-on-surface": "#eaf1ff",
+                        "tertiary-fixed-dim": "#c3c7cd"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sidebar-width": "280px",
+                        "xl": "3rem",
+                        "md": "1.5rem",
+                        "sm": "1rem",
+                        "base": "4px",
+                        "xs": "0.5rem",
+                        "lg": "2rem",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface antialiased">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-xl py-md full-width top-0 bg-surface shadow-sm sticky z-30">
+<button class="text-primary hover:bg-surface-container-low p-2 rounded-[15px] scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-title-md text-title-md text-primary font-bold">Manuel Ürünler</h1>
+<button class="text-primary hover:bg-surface-container-low p-2 rounded-[15px] scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="p-sm md:p-xl mb-24">
+<!-- Search and Filter -->
+<section class="flex flex-col gap-sm mb-lg">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface-container-highest border border-outline-variant focus:border-secondary-container rounded-[15px] pl-12 pr-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:ring-1 focus:ring-secondary-container transition-colors" placeholder="SKU veya Ürün Adı Ara..." type="text"/>
+</div>
+<div class="flex gap-sm overflow-x-auto pb-2 hide-scrollbar">
+<button class="bg-primary-container text-on-primary rounded-[15px] px-4 py-2 font-label-sm text-label-sm whitespace-nowrap shadow-sm">Tümü</button>
+<button class="bg-surface-container-highest text-on-surface-variant border border-outline-variant hover:bg-surface-container-high rounded-[15px] px-4 py-2 font-label-sm text-label-sm whitespace-nowrap transition-colors">Stokta Var</button>
+<button class="bg-surface-container-highest text-on-surface-variant border border-outline-variant hover:bg-surface-container-high rounded-[15px] px-4 py-2 font-label-sm text-label-sm whitespace-nowrap transition-colors">Kritik Seviye</button>
+<button class="bg-surface-container-highest text-on-surface-variant border border-outline-variant hover:bg-surface-container-high rounded-[15px] px-4 py-2 font-label-sm text-label-sm whitespace-nowrap flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="tune">tune</span> Filtrele
+                </button>
+</div>
+</section>
+<!-- Product List -->
+<section class="flex flex-col gap-sm">
+<!-- Product Item 1 -->
+<div class="bg-surface-container-lowest p-sm rounded-[15px] shadow-[0_4px_20px_rgba(18,30,92,0.05)] border border-surface-container-highest flex flex-col gap-sm hover:-translate-y-1 transition-transform duration-200 group">
+<div class="flex items-center gap-sm">
+<div class="w-12 h-12 bg-surface-container flex items-center justify-center rounded-[15px] text-primary">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+</div>
+<div class="flex-1 min-w-0">
+<h2 class="font-title-md text-title-md text-primary truncate">Endüstriyel Sensör X-200</h2>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-sm text-label-sm text-outline px-2 py-0.5 bg-surface-container rounded-md">SKU: SENS-X200</span>
+<span class="font-body-md text-[12px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="calendar_today">calendar_today</span> 12 Kas 2023
+                            </span>
+</div>
+</div>
+</div>
+<div class="flex gap-sm mt-2 border-t border-surface-container-highest pt-sm">
+<button class="flex-1 flex items-center justify-center gap-2 py-2 px-4 bg-transparent border-1.5 border-primary-container text-primary-container rounded-[15px] font-label-sm text-label-sm hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span> Düzenle
+                    </button>
+<button class="flex-1 flex items-center justify-center gap-2 py-2 px-4 bg-secondary-container text-primary-container rounded-[15px] font-label-sm text-label-sm hover:bg-secondary-fixed-dim transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="visibility">visibility</span> Ürün Kartı
+                    </button>
+</div>
+</div>
+<!-- Product Item 2 -->
+<div class="bg-surface-container-lowest p-sm rounded-[15px] shadow-[0_4px_20px_rgba(18,30,92,0.05)] border border-surface-container-highest flex flex-col gap-sm hover:-translate-y-1 transition-transform duration-200 group">
+<div class="flex items-center gap-sm">
+<div class="w-12 h-12 bg-surface-container flex items-center justify-center rounded-[15px] text-primary">
+<span class="material-symbols-outlined" data-icon="precision_manufacturing">precision_manufacturing</span>
+</div>
+<div class="flex-1 min-w-0">
+<h2 class="font-title-md text-title-md text-primary truncate">Kalibrasyon Modülü B</h2>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-sm text-label-sm text-outline px-2 py-0.5 bg-surface-container rounded-md">SKU: CAL-M02</span>
+<span class="font-body-md text-[12px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="calendar_today">calendar_today</span> 08 Eki 2023
+                            </span>
+</div>
+</div>
+</div>
+<div class="flex gap-sm mt-2 border-t border-surface-container-highest pt-sm">
+<button class="flex-1 flex items-center justify-center gap-2 py-2 px-4 bg-transparent border-1.5 border-primary-container text-primary-container rounded-[15px] font-label-sm text-label-sm hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span> Düzenle
+                    </button>
+<button class="flex-1 flex items-center justify-center gap-2 py-2 px-4 bg-secondary-container text-primary-container rounded-[15px] font-label-sm text-label-sm hover:bg-secondary-fixed-dim transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="visibility">visibility</span> Ürün Kartı
+                    </button>
+</div>
+</div>
+<!-- Product Item 3 -->
+<div class="bg-surface-container-lowest p-sm rounded-[15px] shadow-[0_4px_20px_rgba(18,30,92,0.05)] border border-surface-container-highest flex flex-col gap-sm hover:-translate-y-1 transition-transform duration-200 group relative overflow-hidden">
+<div class="absolute right-0 top-0 w-2 h-full bg-error"></div>
+<div class="flex items-center gap-sm">
+<div class="w-12 h-12 bg-surface-container flex items-center justify-center rounded-[15px] text-primary">
+<span class="material-symbols-outlined" data-icon="cable">cable</span>
+</div>
+<div class="flex-1 min-w-0">
+<h2 class="font-title-md text-title-md text-primary truncate">Yüksek Gerilim Kablosu 50m</h2>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-label-sm text-label-sm text-error px-2 py-0.5 bg-error-container rounded-md">SKU: CBL-HV50</span>
+<span class="font-body-md text-[12px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="calendar_today">calendar_today</span> 22 Eyl 2023
+                            </span>
+</div>
+</div>
+</div>
+<div class="flex gap-sm mt-2 border-t border-surface-container-highest pt-sm">
+<button class="flex-1 flex items-center justify-center gap-2 py-2 px-4 bg-transparent border-1.5 border-primary-container text-primary-container rounded-[15px] font-label-sm text-label-sm hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span> Düzenle
+                    </button>
+<button class="flex-1 flex items-center justify-center gap-2 py-2 px-4 bg-secondary-container text-primary-container rounded-[15px] font-label-sm text-label-sm hover:bg-secondary-fixed-dim transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="visibility">visibility</span> Ürün Kartı
+                    </button>
+</div>
+</div>
+</section>
+<!-- FAB for Add Product (Contextual) -->
+<button class="fixed bottom-24 right-4 bg-primary-container text-secondary-container w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform z-20">
+<span class="material-symbols-outlined text-[24px]" data-icon="add">add</span>
+</button>
+</main>
+<!-- Bottom Navigation Shell (Mobile) -->
+<nav class="fixed bottom-0 left-0 right-0 bg-surface border-t border-surface-container-highest px-4 py-2 flex justify-between items-center z-40 md:hidden shadow-[0_-4px_20px_rgba(18,30,92,0.05)]">
+<!-- Dashboard -->
+<a class="flex flex-col items-center p-2 text-on-primary-fixed-variant opacity-80" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="dashboard">dashboard</span>
+<span class="font-label-sm text-[10px]">Dashboard</span>
+</a>
+<!-- Product Catalog (Active mapping intent for Manuel Ürünler) -->
+<a class="flex flex-col items-center p-2 bg-secondary-fixed text-primary rounded-[15px]" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="inventory">inventory</span>
+<span class="font-label-sm text-[10px]">Katalog</span>
+</a>
+<!-- Stock Management -->
+<a class="flex flex-col items-center p-2 text-on-primary-fixed-variant opacity-80" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-sm text-[10px]">Stok</span>
+</a>
+<!-- Settings -->
+<a class="flex flex-col items-center p-2 text-on-primary-fixed-variant opacity-80" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="settings">settings</span>
+<span class="font-label-sm text-[10px]">Ayarlar</span>
+</a>
+</nav>
+<style>
+        /* Utility to hide scrollbar for horizontal filter list */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>

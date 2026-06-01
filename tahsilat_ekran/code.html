@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tahsilat Ekranı</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-container": "#888c92",
+                      "tertiary-container": "#21252a",
+                      "surface-tint": "#4f5a99",
+                      "tertiary-fixed": "#dfe2e9",
+                      "secondary": "#006a60",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed": "#51fbe7",
+                      "inverse-surface": "#213145",
+                      "on-background": "#0b1c30",
+                      "error": "#ba1a1a",
+                      "secondary-fixed-dim": "#1edecb",
+                      "on-tertiary": "#ffffff",
+                      "primary-container": "#121e5c",
+                      "on-tertiary-fixed-variant": "#43474d",
+                      "on-surface-variant": "#454650",
+                      "primary-fixed": "#dee0ff",
+                      "outline-variant": "#c6c5d1",
+                      "on-secondary-container": "#007167",
+                      "outline": "#767681",
+                      "surface": "#f8f9ff",
+                      "on-primary-fixed": "#061353",
+                      "on-error-container": "#93000a",
+                      "surface-container-low": "#eff4ff",
+                      "on-primary-container": "#7d88cb",
+                      "surface-container": "#e5eeff",
+                      "surface-bright": "#f8f9ff",
+                      "inverse-primary": "#bac3ff",
+                      "inverse-on-surface": "#eaf1ff",
+                      "on-primary-fixed-variant": "#374280",
+                      "on-secondary-fixed-variant": "#005048",
+                      "error-container": "#ffdad6",
+                      "surface-dim": "#cbdbf5",
+                      "surface-container-highest": "#d3e4fe",
+                      "on-surface": "#0b1c30",
+                      "on-error": "#ffffff",
+                      "primary-fixed-dim": "#bac3ff",
+                      "on-primary": "#ffffff",
+                      "background": "#f8f9ff",
+                      "tertiary": "#0c1015",
+                      "surface-variant": "#d3e4fe",
+                      "on-tertiary-fixed": "#181c21",
+                      "primary": "#00083d",
+                      "surface-container-high": "#dce9ff",
+                      "on-secondary-fixed": "#00201c",
+                      "tertiary-fixed-dim": "#c3c7cd",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-container": "#51fbe7"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xl": "3rem",
+                      "md": "1.5rem",
+                      "lg": "2rem",
+                      "gutter": "24px",
+                      "xs": "0.5rem",
+                      "sidebar-width": "280px",
+                      "sm": "1rem",
+                      "base": "4px"
+              },
+              "fontFamily": {
+                      "label-sm": ["Hanken Grotesk"],
+                      "body-md": ["Hanken Grotesk"],
+                      "display-lg": ["Hanken Grotesk"],
+                      "title-md": ["Hanken Grotesk"],
+                      "headline-lg-mobile": ["Hanken Grotesk"],
+                      "headline-lg": ["Hanken Grotesk"]
+              },
+              "fontSize": {
+                      "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                      "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                      "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                      "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                      "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                      "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Custom Input Styles */
+        .glass-input {
+            background-color: theme('colors.surface-container-low');
+            border: 1px solid theme('colors.outline-variant');
+            transition: all 0.2s ease;
+        }
+        .glass-input:focus-within {
+            border-color: theme('colors.secondary-fixed');
+            background-color: theme('colors.surface-container-lowest');
+            box-shadow: 0 0 0 4px rgba(81, 251, 231, 0.1);
+        }
+        
+        .payment-card {
+            border: 1.5px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .payment-card.active {
+            border-color: theme('colors.secondary-fixed');
+            background-color: rgba(81, 251, 231, 0.05);
+        }
+        .payment-card.active .icon-container {
+            color: theme('colors.secondary-fixed');
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col lg:flex-row antialiased selection:bg-secondary-fixed selection:text-primary">
+<!-- Mobile TopAppBar -->
+<header class="bg-surface dark:bg-on-background shadow-sm shadow-[0px_4px_20px_rgba(18,30,92,0.05)] flex items-center justify-between px-md w-full h-16 fixed top-0 z-40 lg:hidden">
+<button class="text-primary dark:text-inverse-primary hover:bg-surface-container-low transition-colors active:scale-95 transition-transform p-xs rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary dark:text-inverse-primary">Operations</h1>
+<button class="text-primary dark:text-inverse-primary font-title-md text-title-md hover:bg-surface-container-low transition-colors active:scale-95 transition-transform px-sm py-xs rounded-[15px]">
+            Search
+        </button>
+</header>
+<!-- Desktop NavigationDrawer -->
+<nav class="bg-primary dark:bg-primary h-screen w-[280px] fixed left-0 top-0 z-50 border-r border-white/10 flex-col gap-xs p-sm hidden lg:flex">
+<!-- Header Layout -->
+<div class="flex items-center gap-sm px-xs py-md mb-md border-b border-white/10">
+<img alt="User Profile" class="w-12 h-12 rounded-full border-2 border-secondary-fixed object-cover" data-alt="A professional headshot of a corporate manager in a modern office setting. The lighting is bright and clean, emphasizing a trustworthy and efficient persona. The image is cropped tightly on the face and shoulders." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdukTjFJCeu919toEpioCnSJil3hDC2FgpBP-dnE82HZ3xrYVrPd-fERN9hT92zCCG4gDLAqwJ_VqEEokmZTrp2P_GYSqauktLqXLkhlBlKe_QtGdxYVDuu8wD24slzeZupwkQiehPFQg4uxpJR9GZeqi2Q1Npzg3FmAgdnpxh357VIHxfD51qF_dlSE7GTIXeDhy9KQSz6IG8nekBTbB4KYrIj-lGEf-OH2Co1NyskJLStIOva0XfIxY0rMSbKMjo_E8qP2m7S0kt"/>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-secondary-fixed">Alex Miller</span>
+<span class="font-label-sm text-label-sm text-primary-fixed-dim">Operations Lead</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex flex-col gap-xs flex-1">
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-body-md text-body-md">Inventory</span>
+</a>
+<!-- Active State Navigation -->
+<a class="bg-secondary text-primary rounded-[15px] mx-xs px-sm py-xs flex items-center gap-xs font-bold cursor-pointer transition-all duration-200 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)]" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">shopping_cart</span>
+<span class="font-body-md text-body-md">Orders</span>
+</a>
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined">local_shipping</span>
+<span class="font-body-md text-body-md">Logistics</span>
+</a>
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-md text-body-md">Analytics</span>
+</a>
+</div>
+<div class="mt-auto">
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 lg:ml-[280px] pt-16 lg:pt-0 min-h-screen flex flex-col pb-20 lg:pb-0">
+<!-- Page Header -->
+<div class="px-md lg:px-xl py-lg flex flex-col lg:flex-row lg:items-end justify-between gap-md">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Finans Yönetimi</p>
+<h2 class="font-display-lg text-display-lg text-primary">Tahsilat Ekranı</h2>
+</div>
+<div class="flex items-center gap-sm">
+<button class="bg-surface-container-lowest text-primary border border-outline-variant hover:bg-surface-container-low px-md py-xs rounded-[15px] font-title-md text-title-md transition-all shadow-sm">
+                    İptal
+                </button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="px-md lg:px-xl pb-xl flex-1">
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-gutter">
+<!-- Form Section (8 Cols) -->
+<div class="xl:col-span-8 flex flex-col gap-gutter">
+<!-- Customer Selection Card -->
+<div class="bg-surface-container-lowest rounded-[15px] p-lg shadow-[0px_4px_20px_rgba(18,30,92,0.05)] flex flex-col gap-md">
+<div class="flex items-center gap-xs text-primary mb-2">
+<span class="material-symbols-outlined text-secondary-fixed">person_search</span>
+<h3 class="font-title-md text-title-md">Cari Seçimi</h3>
+</div>
+<div class="glass-input rounded-[15px] p-xs flex items-center gap-sm relative">
+<span class="material-symbols-outlined text-outline ml-sm">search</span>
+<input class="w-full bg-transparent border-none focus:ring-0 font-body-md text-body-md text-on-surface placeholder:text-outline p-2 outline-none" placeholder="Müşteri unvanı veya kodu ile ara..." type="text"/>
+<button class="bg-secondary-fixed text-primary-container rounded-[12px] px-sm py-xs font-label-sm text-label-sm hover:opacity-90 transition-opacity">
+                                Ara
+                            </button>
+</div>
+<!-- Selected Customer Mock (Visible after search in a real app) -->
+<div class="mt-xs bg-surface-container-low rounded-[15px] p-sm flex items-center justify-between border border-outline-variant/50">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-secondary-fixed font-title-md">
+                                    TN
+                                </div>
+<div>
+<div class="font-title-md text-title-md text-primary">TechNova Endüstriyel A.Ş.</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">VKN: 1234567890 • İstanbul</div>
+</div>
+</div>
+<button class="text-error hover:bg-error-container/20 p-xs rounded-full transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+</div>
+<!-- Payment Details Card -->
+<div class="bg-surface-container-lowest rounded-[15px] p-lg shadow-[0px_4px_20px_rgba(18,30,92,0.05)] flex flex-col gap-lg">
+<!-- Payment Type Segmented -->
+<div>
+<div class="flex items-center gap-xs text-primary mb-md">
+<span class="material-symbols-outlined text-secondary-fixed">payments</span>
+<h3 class="font-title-md text-title-md">Tahsilat Tipi</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-sm">
+<div class="payment-card active rounded-[15px] p-md bg-surface-container-low cursor-pointer flex flex-col items-center justify-center gap-sm text-center">
+<div class="icon-container text-outline h-12 w-12 rounded-full bg-surface-container-lowest flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-3xl">money</span>
+</div>
+<span class="font-title-md text-title-md text-primary">Nakit</span>
+</div>
+<div class="payment-card rounded-[15px] p-md bg-surface-container-low cursor-pointer flex flex-col items-center justify-center gap-sm text-center">
+<div class="icon-container text-outline h-12 w-12 rounded-full bg-surface-container-lowest flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-3xl">credit_card</span>
+</div>
+<span class="font-title-md text-title-md text-primary">Kredi Kartı</span>
+</div>
+<div class="payment-card rounded-[15px] p-md bg-surface-container-low cursor-pointer flex flex-col items-center justify-center gap-sm text-center">
+<div class="icon-container text-outline h-12 w-12 rounded-full bg-surface-container-lowest flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-3xl">account_balance</span>
+</div>
+<span class="font-title-md text-title-md text-primary">Banka Havalesi</span>
+</div>
+</div>
+</div>
+<hr class="border-outline-variant/30"/>
+<!-- Amount and Details Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Amount -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-sm text-label-sm text-on-surface-variant ml-1">Tutar</label>
+<div class="glass-input rounded-[15px] flex items-center overflow-hidden">
+<div class="bg-surface-container p-md border-r border-outline-variant flex items-center justify-center">
+<span class="font-title-md text-title-md text-primary font-bold">₺</span>
+</div>
+<input class="w-full bg-transparent border-none focus:ring-0 font-headline-lg-mobile text-headline-lg-mobile text-primary p-md outline-none text-right" id="amountInput" oninput="updateSummary()" placeholder="0.00" type="number"/>
+</div>
+</div>
+<!-- Date -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-sm text-label-sm text-on-surface-variant ml-1">İşlem Tarihi</label>
+<div class="glass-input rounded-[15px] flex items-center p-md">
+<span class="material-symbols-outlined text-outline mr-sm">calendar_today</span>
+<input class="w-full bg-transparent border-none focus:ring-0 font-body-md text-body-md text-primary outline-none" type="date" value="2023-10-27"/>
+</div>
+</div>
+<!-- Vault/Bank -->
+<div class="flex flex-col gap-xs md:col-span-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant ml-1">Kasa / Banka Hesabı</label>
+<div class="glass-input rounded-[15px] flex items-center p-sm relative">
+<span class="material-symbols-outlined text-outline ml-sm mr-sm">storefront</span>
+<select class="w-full bg-transparent border-none focus:ring-0 font-body-md text-body-md text-primary outline-none appearance-none cursor-pointer py-xs">
+<option value="kasa1">Merkez Nakit Kasası (TRY)</option>
+<option value="banka1">Garanti BBVA Ticari Hesap</option>
+<option value="banka2">Akbank Vadesiz</option>
+</select>
+<span class="material-symbols-outlined text-outline absolute right-4 pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Notes -->
+<div class="flex flex-col gap-xs md:col-span-2">
+<label class="font-label-sm text-label-sm text-on-surface-variant ml-1">Açıklama / Notlar</label>
+<div class="glass-input rounded-[15px] overflow-hidden">
+<textarea class="w-full bg-transparent border-none focus:ring-0 font-body-md text-body-md text-on-surface p-md outline-none resize-none" placeholder="Tahsilat ile ilgili ek bilgiler..." rows="3"></textarea>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Summary & Impact Panel (4 Cols) -->
+<div class="xl:col-span-4">
+<div class="bg-primary rounded-[15px] p-lg shadow-xl sticky top-24 flex flex-col gap-lg overflow-hidden relative">
+<!-- Decorative background element -->
+<div class="absolute -top-20 -right-20 w-64 h-64 bg-secondary-fixed/10 rounded-full blur-3xl pointer-events-none"></div>
+<div>
+<h3 class="font-title-md text-title-md text-white mb-1">İşlem Özeti</h3>
+<p class="font-label-sm text-label-sm text-primary-fixed-dim">Cari Bakiye Etkisi</p>
+</div>
+<div class="flex flex-col gap-md z-10">
+<!-- Current Balance -->
+<div class="bg-white/5 rounded-[12px] p-md border border-white/10">
+<p class="font-label-sm text-label-sm text-primary-fixed-dim mb-xs">Mevcut Bakiye (Borç)</p>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-white">
+                                    50.000,00 ₺
+                                </div>
+</div>
+<!-- Arrow indicator -->
+<div class="flex justify-center -my-2 z-20">
+<div class="bg-secondary-fixed text-primary rounded-full p-1 border-4 border-primary">
+<span class="material-symbols-outlined text-sm">arrow_downward</span>
+</div>
+</div>
+<!-- Collection Amount -->
+<div class="bg-secondary-fixed/10 rounded-[12px] p-md border border-secondary-fixed/30 flex justify-between items-center">
+<p class="font-label-sm text-label-sm text-secondary-fixed">Tahsil Edilen</p>
+<div class="font-title-md text-title-md text-secondary-fixed" id="summaryAmount">
+                                    - 0,00 ₺
+                                </div>
+</div>
+<hr class="border-white/10 my-xs"/>
+<!-- New Balance -->
+<div class="bg-white/10 rounded-[12px] p-md border border-white/20">
+<p class="font-label-sm text-label-sm text-white mb-xs">Yeni Bakiye (Tahmini)</p>
+<div class="font-headline-lg text-headline-lg text-secondary-fixed font-bold" id="newBalance">
+                                    50.000,00 ₺
+                                </div>
+</div>
+</div>
+<!-- Action Button -->
+<button class="mt-md bg-secondary-fixed hover:bg-secondary-fixed-dim text-primary-container font-title-md text-title-md py-md px-lg rounded-[15px] flex items-center justify-center gap-sm transition-all shadow-[0_4px_14px_0_rgba(81,251,231,0.39)] active:scale-95 w-full z-10">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Kaydet ve Onayla
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile BottomNavBar -->
+<nav class="bg-surface dark:bg-on-background border-t border-outline-variant shadow-[0px_-4px_12px_rgba(0,0,0,0.05)] fixed bottom-0 w-full z-50 lg:hidden flex justify-around items-center py-xs px-md">
+<a class="text-on-surface-variant dark:text-on-surface-variant flex flex-col items-center hover:bg-surface-container-low active:scale-90 transition-transform p-xs rounded-lg" href="#">
+<span class="material-symbols-outlined">home</span>
+</a>
+<a class="text-secondary dark:text-secondary-fixed flex flex-col items-center hover:bg-surface-container-low active:scale-90 transition-transform p-xs rounded-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">list_alt</span>
+</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant flex flex-col items-center hover:bg-surface-container-low active:scale-90 transition-transform p-xs rounded-lg" href="#">
+<span class="material-symbols-outlined">notifications</span>
+</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant flex flex-col items-center hover:bg-surface-container-low active:scale-90 transition-transform p-xs rounded-lg" href="#">
+<span class="material-symbols-outlined">person</span>
+</a>
+</nav>
+<script>
+        // Simple JS for interaction
+        const paymentCards = document.querySelectorAll('.payment-card');
+        paymentCards.forEach(card => {
+            card.addEventListener('click', () => {
+                paymentCards.forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+            });
+        });
+
+        // Dynamic Balance Calculator
+        const currentBalance = 50000;
+        function updateSummary() {
+            const input = document.getElementById('amountInput').value;
+            const amount = parseFloat(input) || 0;
+            
+            const summaryAmountEl = document.getElementById('summaryAmount');
+            const newBalanceEl = document.getElementById('newBalance');
+            
+            // Format numbers to Turkish locale
+            const formatter = new Intl.NumberFormat('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            
+            summaryAmountEl.textContent = `- ${formatter.format(amount)} ₺`;
+            
+            const newBal = currentBalance - amount;
+            newBalanceEl.textContent = `${formatter.format(newBal)} ₺`;
+            
+            // Visual feedback if overpaid
+            if (newBal < 0) {
+                newBalanceEl.classList.remove('text-secondary-fixed');
+                newBalanceEl.classList.add('text-error');
+            } else {
+                newBalanceEl.classList.add('text-secondary-fixed');
+                newBalanceEl.classList.remove('text-error');
+            }
+        }
+    </script>
+</body></html>

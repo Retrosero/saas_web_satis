@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fatura Yönetimi</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "surface-container-high": "#dce9ff",
+                            "primary": "#00083d",
+                            "on-primary-fixed": "#061353",
+                            "surface-container-highest": "#d3e4fe",
+                            "primary-container": "#121e5c",
+                            "inverse-primary": "#bac3ff",
+                            "surface-tint": "#4f5a99",
+                            "on-background": "#0b1c30",
+                            "outline": "#767681",
+                            "on-tertiary-fixed": "#181c21",
+                            "on-primary-container": "#7d88cb",
+                            "on-error-container": "#93000a",
+                            "surface-container": "#e5eeff",
+                            "surface-dim": "#cbdbf5",
+                            "on-error": "#ffffff",
+                            "on-secondary-container": "#007167",
+                            "inverse-on-surface": "#eaf1ff",
+                            "on-secondary": "#ffffff",
+                            "tertiary-container": "#21252a",
+                            "inverse-surface": "#213145",
+                            "background": "#f8f9ff",
+                            "secondary-container": "#51fbe7",
+                            "on-primary": "#ffffff",
+                            "primary-fixed-dim": "#bac3ff",
+                            "on-surface-variant": "#454650",
+                            "tertiary-fixed": "#dfe2e9",
+                            "on-tertiary-fixed-variant": "#43474d",
+                            "surface-container-low": "#eff4ff",
+                            "secondary-fixed-dim": "#1edecb",
+                            "surface-container-lowest": "#ffffff",
+                            "on-primary-fixed-variant": "#374280",
+                            "on-secondary-fixed": "#00201c",
+                            "error-container": "#ffdad6",
+                            "error": "#ba1a1a",
+                            "surface-variant": "#d3e4fe",
+                            "secondary": "#006a60",
+                            "on-tertiary-container": "#888c92",
+                            "surface-bright": "#f8f9ff",
+                            "primary-fixed": "#dee0ff",
+                            "on-surface": "#0b1c30",
+                            "surface": "#f8f9ff",
+                            "secondary-fixed": "#51fbe7",
+                            "tertiary-fixed-dim": "#c3c7cd",
+                            "outline-variant": "#c6c5d1",
+                            "on-tertiary": "#ffffff",
+                            "tertiary": "#0c1015",
+                            "on-secondary-fixed-variant": "#005048",
+                            "accent-turquoise": "#00D7C4"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "15px",
+                            "lg": "15px",
+                            "xl": "15px",
+                            "full": "9999px"
+                    },
+                    "spacing": {
+                            "xl": "3rem",
+                            "xs": "0.5rem",
+                            "sm": "1rem",
+                            "sidebar-width": "280px",
+                            "md": "1.5rem",
+                            "lg": "2rem",
+                            "gutter": "24px",
+                            "base": "4px"
+                    },
+                    "fontFamily": {
+                            "headline-lg-mobile": ["Hanken Grotesk"],
+                            "display-lg": ["Hanken Grotesk"],
+                            "body-md": ["Hanken Grotesk"],
+                            "title-md": ["Hanken Grotesk"],
+                            "headline-lg": ["Hanken Grotesk"],
+                            "label-sm": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                            "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                            "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                            "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                            "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                            "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col md:flex-row">
+<!-- Mobile Top App Bar -->
+<header class="md:hidden bg-surface dark:bg-on-background text-primary dark:text-inverse-primary font-title-md text-title-md docked full-width top-0 shadow-sm shadow-[0px_4px_20px_rgba(18,30,92,0.05)] flex items-center justify-between px-md w-full h-16 z-50 fixed">
+<div class="flex items-center gap-xs">
+<button class="hover:bg-surface-container-low transition-colors active:scale-95 transition-transform p-xs rounded-full">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<span class="font-headline-lg-mobile text-headline-lg-mobile font-bold tracking-tight">Operations</span>
+</div>
+<button class="hover:bg-surface-container-low transition-colors active:scale-95 transition-transform p-xs rounded-full flex items-center gap-xs text-on-surface-variant dark:text-on-surface-variant">
+<span class="font-label-sm text-label-sm">Search</span>
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+</header>
+<!-- Desktop Sidebar Navigation Drawer -->
+<nav class="hidden md:flex flex-col gap-xs p-sm bg-primary dark:bg-primary text-secondary dark:text-secondary-fixed h-screen w-[280px] fixed left-0 top-0 z-50 border-r border-white/10 shrink-0">
+<!-- Header Profile -->
+<div class="flex items-center gap-md px-sm py-md border-b border-white/10 mb-md">
+<div class="w-12 h-12 rounded-full bg-surface-container-high overflow-hidden shrink-0">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuClVWD-CA1bsG5cHaYqFBVMg9cw4JkGQz1OU6RstCcWwDOOobgaAjvO3k5wA0qMSgzi96ASFvDGuTOlHrSTQ_BkcrixkbfNkoe5Yfltze0YwmYD11L8WtR9ACxo3SobLQkXhowCVg5txatk1yKOEWc4d9dgKVKqSlZCxkfh7XS42fySYZ45DD5loPS0m4N7Fc8p_6ZwDzRow5otw-e5EAIx59ljiGwyCzXJkxGHjQuU6b8yFMzogLcO-VIh9LHVio8iOw0RCERWXg_b"/>
+</div>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-white font-semibold">Alex Miller</span>
+<span class="font-label-sm text-label-sm text-white/70">Operations Lead</span>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex flex-col gap-xs flex-grow">
+<!-- Inactive -->
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<!-- Active (Mapped by Intent to Fatura Yönetimi) -->
+<a class="bg-secondary text-primary rounded-[15px] mx-xs px-sm py-xs flex items-center gap-xs font-bold hover:bg-white/10 transition-all cursor-pointer duration-200 border border-white/10 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)]" href="#">
+<span class="material-symbols-outlined fill" data-icon="inventory_2" data-weight="fill">inventory_2</span>
+<span class="font-body-md text-body-md">Inventory</span>
+</a>
+<!-- Inactive -->
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-body-md text-body-md">Orders</span>
+</a>
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+<span class="font-body-md text-body-md">Logistics</span>
+</a>
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-body-md text-body-md">Analytics</span>
+</a>
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer duration-200 mt-auto" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-[280px] pt-16 md:pt-0 pb-20 md:pb-0 px-md md:px-xl py-lg w-full flex flex-col gap-lg min-h-screen">
+<!-- Header Section -->
+<header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-md">
+<div>
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary font-bold">Fatura Yönetimi</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Satış ve alış faturalarınızı listeleyin, filtreleyin ve yönetin.</p>
+</div>
+<button class="bg-accent-turquoise text-primary-container px-lg py-sm rounded-lg font-title-md text-title-md flex items-center gap-xs hover:shadow-md transition-shadow active:scale-95">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                Yeni Fatura
+            </button>
+</header>
+<!-- Filters Section (Glassmorphic Card) -->
+<section class="bg-surface-container-lowest p-md rounded-lg shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-surface-container flex flex-col gap-md">
+<div class="flex items-center gap-xs text-primary font-title-md text-title-md border-b border-surface-container pb-xs">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+<h2>Filtreler</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-md">
+<!-- Date Filter -->
+<div class="flex flex-col gap-base">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Tarih Aralığı</label>
+<div class="relative">
+<input class="w-full bg-surface-bright border border-outline-variant rounded-lg px-sm py-[10px] text-body-md font-body-md text-on-surface focus:border-accent-turquoise focus:ring-1 focus:ring-accent-turquoise transition-colors" type="date"/>
+</div>
+</div>
+<!-- Document No -->
+<div class="flex flex-col gap-base">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Belge No</label>
+<input class="w-full bg-surface-bright border border-outline-variant rounded-lg px-sm py-[10px] text-body-md font-body-md text-on-surface focus:border-accent-turquoise focus:ring-1 focus:ring-accent-turquoise transition-colors" placeholder="FAT-2023..." type="text"/>
+</div>
+<!-- Customer/Supplier Name -->
+<div class="flex flex-col gap-base">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Cari İsim</label>
+<input class="w-full bg-surface-bright border border-outline-variant rounded-lg px-sm py-[10px] text-body-md font-body-md text-on-surface focus:border-accent-turquoise focus:ring-1 focus:ring-accent-turquoise transition-colors" placeholder="Firma Adı..." type="text"/>
+</div>
+<!-- Type (Alış/Satış) -->
+<div class="flex flex-col gap-base">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Tür</label>
+<select class="w-full bg-surface-bright border border-outline-variant rounded-lg px-sm py-[10px] text-body-md font-body-md text-on-surface focus:border-accent-turquoise focus:ring-1 focus:ring-accent-turquoise transition-colors appearance-none">
+<option value="">Tümü</option>
+<option value="alis">Alış Faturası</option>
+<option value="satis">Satış Faturası</option>
+</select>
+</div>
+<!-- Amount Range -->
+<div class="flex flex-col gap-base">
+<label class="font-label-sm text-label-sm text-on-surface-variant">Tutar Aralığı (₺)</label>
+<div class="flex gap-xs">
+<input class="w-1/2 bg-surface-bright border border-outline-variant rounded-lg px-xs py-[10px] text-body-md font-body-md text-on-surface focus:border-accent-turquoise focus:ring-1 focus:ring-accent-turquoise transition-colors" placeholder="Min" type="number"/>
+<input class="w-1/2 bg-surface-bright border border-outline-variant rounded-lg px-xs py-[10px] text-body-md font-body-md text-on-surface focus:border-accent-turquoise focus:ring-1 focus:ring-accent-turquoise transition-colors" placeholder="Max" type="number"/>
+</div>
+</div>
+</div>
+<div class="flex justify-end gap-sm mt-xs">
+<button class="px-md py-xs rounded-lg border-[1.5px] border-primary text-primary font-title-md text-title-md hover:bg-surface-container-low transition-colors">Temizle</button>
+<button class="bg-primary text-white px-md py-xs rounded-lg font-title-md text-title-md hover:shadow-md transition-shadow">Uygula</button>
+</div>
+</section>
+<!-- Invoices List (Bento Grid Style) -->
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-md">
+<!-- Invoice Card 1: Satış, Ödendi -->
+<article class="bg-surface-container-lowest rounded-lg p-md shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-surface-container hover:shadow-[0px_8px_30px_rgba(18,30,92,0.1)] transition-shadow flex flex-col gap-md relative overflow-hidden group">
+<!-- Status Badge -->
+<div class="absolute top-md right-md bg-secondary text-on-secondary px-xs py-base rounded-full font-label-sm text-label-sm flex items-center gap-xs shadow-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle">check_circle</span>
+                    Ödendi
+                </div>
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<div class="flex items-center gap-xs text-on-surface-variant mb-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Satış Faturası</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary">FAT-2023-0891</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Tech Solutions Ltd. Şti.</p>
+</div>
+</div>
+<div class="flex justify-between items-end mt-auto pt-md border-t border-surface-container">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-base">DÜZENLEME TARİHİ</span>
+<span class="font-body-md text-body-md font-semibold text-primary">12 Eki 2023</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-base">TOPLAM TUTAR</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold">₺45,250.00</span>
+</div>
+</div>
+<!-- Hover Actions -->
+<div class="absolute inset-x-0 bottom-0 bg-primary/95 backdrop-blur-sm p-sm flex justify-center gap-md translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+<button class="text-white hover:text-accent-turquoise flex flex-col items-center gap-base transition-colors" title="Detay">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+<span class="font-label-sm text-label-sm text-[10px]">Detay</span>
+</button>
+<button class="text-white hover:text-accent-turquoise flex flex-col items-center gap-base transition-colors" title="Yazdır">
+<span class="material-symbols-outlined" data-icon="print">print</span>
+<span class="font-label-sm text-label-sm text-[10px]">Yazdır</span>
+</button>
+<button class="text-white hover:text-accent-turquoise flex flex-col items-center gap-base transition-colors" title="PDF İndir">
+<span class="material-symbols-outlined" data-icon="picture_as_pdf">picture_as_pdf</span>
+<span class="font-label-sm text-label-sm text-[10px]">PDF</span>
+</button>
+<button class="text-white hover:text-accent-turquoise flex flex-col items-center gap-base transition-colors" title="Excel İndir">
+<span class="material-symbols-outlined" data-icon="table_view">table_view</span>
+<span class="font-label-sm text-label-sm text-[10px]">Excel</span>
+</button>
+</div>
+</article>
+<!-- Invoice Card 2: Alış, Bekliyor -->
+<article class="bg-surface-container-lowest rounded-lg p-md shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-surface-container hover:shadow-[0px_8px_30px_rgba(18,30,92,0.1)] transition-shadow flex flex-col gap-md relative overflow-hidden group">
+<!-- Status Badge -->
+<div class="absolute top-md right-md bg-surface-tint text-white px-xs py-base rounded-full font-label-sm text-label-sm flex items-center gap-xs shadow-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="pending_actions">pending_actions</span>
+                    Bekliyor
+                </div>
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<div class="flex items-center gap-xs text-on-surface-variant mb-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="shopping_bag">shopping_bag</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Alış Faturası</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary">INV-8820-A</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Global Tedarik A.Ş.</p>
+</div>
+</div>
+<div class="flex justify-between items-end mt-auto pt-md border-t border-surface-container">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-base">DÜZENLEME TARİHİ</span>
+<span class="font-body-md text-body-md font-semibold text-primary">10 Eki 2023</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-base">TOPLAM TUTAR</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold">₺12,800.50</span>
+</div>
+</div>
+<!-- Hover Actions -->
+<div class="absolute inset-x-0 bottom-0 bg-primary/95 backdrop-blur-sm p-sm flex justify-center gap-md translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+<button class="text-white hover:text-accent-turquoise flex flex-col items-center gap-base transition-colors" title="Detay">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+<span class="font-label-sm text-label-sm text-[10px]">Detay</span>
+</button>
+<button class="text-white hover:text-accent-turquoise flex flex-col items-center gap-base transition-colors" title="Yazdır">
+<span class="material-symbols-outlined" data-icon="print">print</span>
+<span class="font-label-sm text-label-sm text-[10px]">Yazdır</span>
+</button>
+<button class="text-white hover:text-accent-turquoise flex flex-col items-center gap-base transition-colors" title="PDF İndir">
+<span class="material-symbols-outlined" data-icon="picture_as_pdf">picture_as_pdf</span>
+<span class="font-label-sm text-label-sm text-[10px]">PDF</span>
+</button>
+<button class="text-white hover:text-accent-turquoise flex flex-col items-center gap-base transition-colors" title="Excel İndir">
+<span class="material-symbols-outlined" data-icon="table_view">table_view</span>
+<span class="font-label-sm text-label-sm text-[10px]">Excel</span>
+</button>
+</div>
+</article>
+<!-- Invoice Card 3: Satış, İptal -->
+<article class="bg-surface-container-lowest rounded-lg p-md shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-surface-container hover:shadow-[0px_8px_30px_rgba(18,30,92,0.1)] transition-shadow flex flex-col gap-md relative overflow-hidden group opacity-80">
+<!-- Status Badge -->
+<div class="absolute top-md right-md bg-error-container text-error px-xs py-base rounded-full font-label-sm text-label-sm flex items-center gap-xs shadow-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="cancel">cancel</span>
+                    İptal Edildi
+                </div>
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<div class="flex items-center gap-xs text-on-surface-variant mb-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="receipt_long">receipt_long</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-error">İPTAL EDİLMİŞ SATIŞ</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary line-through">FAT-2023-0889</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Mega Market Zinciri</p>
+</div>
+</div>
+<div class="flex justify-between items-end mt-auto pt-md border-t border-surface-container">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-base">DÜZENLEME TARİHİ</span>
+<span class="font-body-md text-body-md font-semibold text-primary">05 Eki 2023</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-base">TOPLAM TUTAR</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold line-through">₺8,400.00</span>
+</div>
+</div>
+<!-- Hover Actions -->
+<div class="absolute inset-x-0 bottom-0 bg-primary/95 backdrop-blur-sm p-sm flex justify-center gap-md translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+<button class="text-white hover:text-accent-turquoise flex flex-col items-center gap-base transition-colors" title="Detay">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+<span class="font-label-sm text-label-sm text-[10px]">Detay</span>
+</button>
+<button class="text-white hover:text-accent-turquoise flex flex-col items-center gap-base transition-colors" title="Yazdır">
+<span class="material-symbols-outlined" data-icon="print">print</span>
+<span class="font-label-sm text-label-sm text-[10px]">Yazdır</span>
+</button>
+</div>
+</article>
+<!-- Invoice Card 4: Alış, Ödendi -->
+<article class="bg-surface-container-lowest rounded-lg p-md shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-surface-container hover:shadow-[0px_8px_30px_rgba(18,30,92,0.1)] transition-shadow flex flex-col gap-md relative overflow-hidden group">
+<!-- Status Badge -->
+<div class="absolute top-md right-md bg-secondary text-on-secondary px-xs py-base rounded-full font-label-sm text-label-sm flex items-center gap-xs shadow-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle">check_circle</span>
+                    Ödendi
+                </div>
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<div class="flex items-center gap-xs text-on-surface-variant mb-xs">
+<span class="material-symbols-outlined text-[18px]" data-icon="shopping_bag">shopping_bag</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">Alış Faturası</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary">GDR-991-X</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Ofis Kırtasiye Ltd.</p>
+</div>
+</div>
+<div class="flex justify-between items-end mt-auto pt-md border-t border-surface-container">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-base">DÜZENLEME TARİHİ</span>
+<span class="font-body-md text-body-md font-semibold text-primary">01 Eki 2023</span>
+</div>
+<div class="flex flex-col text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-base">TOPLAM TUTAR</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold">₺1,250.00</span>
+</div>
+</div>
+<!-- Hover Actions -->
+<div class="absolute inset-x-0 bottom-0 bg-primary/95 backdrop-blur-sm p-sm flex justify-center gap-md translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out">
+<button class="text-white hover:text-accent-turquoise flex flex-col items-center gap-base transition-colors" title="Detay">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+<span class="font-label-sm text-label-sm text-[10px]">Detay</span>
+</button>
+<button class="text-white hover:text-accent-turquoise flex flex-col items-center gap-base transition-colors" title="Yazdır">
+<span class="material-symbols-outlined" data-icon="print">print</span>
+<span class="font-label-sm text-label-sm text-[10px]">Yazdır</span>
+</button>
+<button class="text-white hover:text-accent-turquoise flex flex-col items-center gap-base transition-colors" title="PDF İndir">
+<span class="material-symbols-outlined" data-icon="picture_as_pdf">picture_as_pdf</span>
+<span class="font-label-sm text-label-sm text-[10px]">PDF</span>
+</button>
+<button class="text-white hover:text-accent-turquoise flex flex-col items-center gap-base transition-colors" title="Excel İndir">
+<span class="material-symbols-outlined" data-icon="table_view">table_view</span>
+<span class="font-label-sm text-label-sm text-[10px]">Excel</span>
+</button>
+</div>
+</article>
+</section>
+</main>
+<!-- Mobile Bottom Navigation Bar -->
+<nav class="md:hidden bg-surface dark:bg-on-background text-secondary dark:text-secondary-fixed font-label-sm text-label-sm fixed bottom-0 w-full z-50 lg:hidden shadow-[0px_-4px_12px_rgba(0,0,0,0.05)] flex justify-around items-center py-xs px-md">
+<!-- Inactive -->
+<a class="text-on-surface-variant dark:text-on-surface-variant flex flex-col items-center p-xs rounded-lg hover:bg-surface-container-low active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="mt-base">Dashboard</span>
+</a>
+<!-- Active -->
+<a class="text-secondary dark:text-secondary-fixed flex flex-col items-center p-xs rounded-lg bg-surface-container-low active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined fill" data-icon="inventory_2" data-weight="fill">inventory_2</span>
+<span class="mt-base font-bold">Inventory</span>
+</a>
+<!-- Inactive -->
+<a class="text-on-surface-variant dark:text-on-surface-variant flex flex-col items-center p-xs rounded-lg hover:bg-surface-container-low active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="mt-base">Orders</span>
+</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant flex flex-col items-center p-xs rounded-lg hover:bg-surface-container-low active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="mt-base">Analytics</span>
+</a>
+</nav>
+</body></html>

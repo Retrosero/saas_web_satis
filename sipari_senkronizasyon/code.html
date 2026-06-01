@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sipariş Senkronizasyon</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed": "#dfe2e9",
+                      "outline-variant": "#c6c5d1",
+                      "on-primary-container": "#7d88cb",
+                      "on-secondary-container": "#007167",
+                      "surface": "#f8f9ff",
+                      "background": "#f8f9ff",
+                      "on-primary-fixed-variant": "#374280",
+                      "on-primary": "#ffffff",
+                      "surface-container": "#e5eeff",
+                      "on-primary-fixed": "#061353",
+                      "secondary-fixed": "#51fbe7",
+                      "error": "#ba1a1a",
+                      "tertiary": "#0c1015",
+                      "surface-variant": "#d3e4fe",
+                      "surface-container-highest": "#d3e4fe",
+                      "surface-bright": "#f8f9ff",
+                      "on-tertiary-container": "#888c92",
+                      "on-secondary": "#ffffff",
+                      "inverse-primary": "#bac3ff",
+                      "outline": "#767681",
+                      "on-error": "#ffffff",
+                      "primary-fixed-dim": "#bac3ff",
+                      "on-tertiary-fixed": "#181c21",
+                      "on-surface": "#0b1c30",
+                      "on-tertiary-fixed-variant": "#43474d",
+                      "surface-container-high": "#dce9ff",
+                      "surface-dim": "#cbdbf5",
+                      "secondary-container": "#51fbe7",
+                      "inverse-on-surface": "#eaf1ff",
+                      "tertiary-fixed-dim": "#c3c7cd",
+                      "primary-container": "#121e5c",
+                      "on-background": "#0b1c30",
+                      "tertiary-container": "#21252a",
+                      "error-container": "#ffdad6",
+                      "primary": "#00083d",
+                      "surface-tint": "#4f5a99",
+                      "on-secondary-fixed": "#00201c",
+                      "secondary": "#006a60",
+                      "inverse-surface": "#213145",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "on-surface-variant": "#454650",
+                      "primary-fixed": "#dee0ff",
+                      "surface-container-low": "#eff4ff",
+                      "secondary-fixed-dim": "#1edecb",
+                      "on-secondary-fixed-variant": "#005048",
+                      "on-error-container": "#93000a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sidebar-width": "280px",
+                      "xl": "3rem",
+                      "md": "1.5rem",
+                      "sm": "1rem",
+                      "base": "4px",
+                      "xs": "0.5rem",
+                      "lg": "2rem",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Hanken Grotesk"
+                      ],
+                      "display-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg-mobile": [
+                              "Hanken Grotesk"
+                      ],
+                      "title-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-md": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "title-md": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+      </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-sans antialiased min-h-screen flex flex-col md:flex-row">
+<!-- NavigationDrawer (Desktop) -->
+<aside class="hidden md:flex flex-col bg-primary text-secondary-fixed w-sidebar-width h-full fixed left-0 top-0 border-r border-white/10 z-50">
+<div class="p-6 border-b border-white/10 flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed text-primary flex items-center justify-center font-bold text-xl">
+                O
+            </div>
+<div>
+<h2 class="font-title-md text-title-md text-white">Operations Manager</h2>
+<p class="font-label-sm text-label-sm text-white/60">B2B Enterprise Portal</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2 pt-6 px-2 flex-grow">
+<!-- Active: Order Sync -->
+<a class="bg-secondary-fixed text-primary rounded-[15px] mx-2 px-4 py-3 flex items-center transition-all duration-200 scale-98" href="#">
+<span class="material-symbols-outlined mr-3 icon-fill">sync</span>
+<span class="font-title-md text-title-md">Order Sync</span>
+</a>
+<!-- Inactive -->
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5" href="#">
+<span class="material-symbols-outlined mr-3">edit</span>
+<span class="font-title-md text-title-md">Product Edit</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5" href="#">
+<span class="material-symbols-outlined mr-3">assignment_return</span>
+<span class="font-title-md text-title-md">Returns</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5" href="#">
+<span class="material-symbols-outlined mr-3">rule</span>
+<span class="font-title-md text-title-md">Approval Center</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5" href="#">
+<span class="material-symbols-outlined mr-3">input</span>
+<span class="font-title-md text-title-md">Goods Receipt</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5" href="#">
+<span class="material-symbols-outlined mr-3">settings</span>
+<span class="font-title-md text-title-md">Settings</span>
+</a>
+</nav>
+<div class="p-4 text-center border-t border-white/10 mt-auto">
+<span class="font-label-sm text-label-sm text-white/40">v2.4.0</span>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col md:ml-sidebar-width w-full">
+<!-- TopAppBar -->
+<header class="bg-surface w-full sticky top-0 z-40 shadow-sm flex items-center justify-between px-xl h-20">
+<div class="flex items-center gap-4 text-primary">
+<button class="md:hidden p-2 -ml-2 rounded-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg">Dashboard</h1>
+</div>
+<div class="flex items-center">
+<button class="text-outline hover:bg-surface-container-low p-2 rounded-full transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined">search</span>
+<span class="hidden md:inline font-title-md text-title-md">Search</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 p-4 md:p-xl flex flex-col gap-8 pb-24 md:pb-xl">
+<!-- Page Title & Global Actions -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-outline-variant/30 pb-6">
+<div>
+<h2 class="font-display-lg text-headline-lg-mobile md:text-display-lg text-on-surface mb-2">Sipariş Senkronizasyon</h2>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-sm">schedule</span>
+                        Son başarılı senkronizasyon: <span class="font-semibold text-on-surface">Bugün, 14:30</span>
+</p>
+</div>
+<button class="bg-primary text-secondary-fixed hover:bg-primary/90 px-6 py-3 rounded-[15px] font-title-md text-title-md flex items-center gap-2 shadow-sm transition-transform active:scale-95">
+<span class="material-symbols-outlined icon-fill">sync</span>
+                    Tümünü Manuel Tetikle
+                </button>
+</div>
+<!-- Platform Sync Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Trendyol Card -->
+<div class="bg-surface-container-lowest rounded-[15px] shadow-[0px_4px_20px_rgba(18,30,92,0.05)] p-6 border border-outline-variant/20 hover:shadow-[0px_8px_30px_rgba(18,30,92,0.08)] transition-shadow">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-[15px] bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">storefront</span>
+</div>
+<span class="px-3 py-1 bg-surface-container-high text-on-surface rounded-full font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> Aktif
+                        </span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Trendyol API</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 text-sm">Son 24 saatte 142 sipariş çekildi.</p>
+<button class="w-full bg-surface text-primary border border-primary/20 hover:border-primary hover:bg-surface-container-low px-4 py-3 rounded-[15px] font-title-md text-title-md transition-colors">
+                        Siparişleri Çek
+                    </button>
+</div>
+<!-- Hepsiburada Card -->
+<div class="bg-surface-container-lowest rounded-[15px] shadow-[0px_4px_20px_rgba(18,30,92,0.05)] p-6 border border-outline-variant/20 hover:shadow-[0px_8px_30px_rgba(18,30,92,0.08)] transition-shadow">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-[15px] bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">shopping_bag</span>
+</div>
+<span class="px-3 py-1 bg-error-container text-on-error-container rounded-full font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-error"></span> Uyarı
+                        </span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Hepsiburada API</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 text-sm">Bağlantı kararsız. 3 sipariş beklemede.</p>
+<button class="w-full bg-surface text-primary border border-primary/20 hover:border-primary hover:bg-surface-container-low px-4 py-3 rounded-[15px] font-title-md text-title-md transition-colors flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-sm">refresh</span> Tekrar Dene
+                    </button>
+</div>
+<!-- Amazon Card -->
+<div class="bg-surface-container-lowest rounded-[15px] shadow-[0px_4px_20px_rgba(18,30,92,0.05)] p-6 border border-outline-variant/20 hover:shadow-[0px_8px_30px_rgba(18,30,92,0.08)] transition-shadow">
+<div class="flex justify-between items-start mb-6">
+<div class="w-12 h-12 rounded-[15px] bg-surface-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">language</span>
+</div>
+<span class="px-3 py-1 bg-surface-container-high text-on-surface rounded-full font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> Aktif
+                        </span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-1">Amazon Seller</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6 text-sm">Son 24 saatte 58 sipariş çekildi.</p>
+<button class="w-full bg-surface text-primary border border-primary/20 hover:border-primary hover:bg-surface-container-low px-4 py-3 rounded-[15px] font-title-md text-title-md transition-colors">
+                        Siparişleri Çek
+                    </button>
+</div>
+</section>
+<!-- Error Logs Section -->
+<section class="bg-surface-container-lowest rounded-[15px] shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-outline-variant/20 overflow-hidden mt-4">
+<div class="p-6 border-b border-outline-variant/30 flex justify-between items-center bg-surface-bright">
+<h3 class="font-title-md text-title-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-error">warning</span>
+                        Senkronizasyon Hata Kayıtları
+                    </h3>
+<button class="text-primary hover:text-primary-fixed-dim font-label-sm text-label-sm uppercase tracking-wider">
+                        Tümünü Gör
+                    </button>
+</div>
+<div class="flex flex-col">
+<!-- Log Item 1 -->
+<div class="p-4 md:p-6 border-b border-outline-variant/10 flex flex-col md:flex-row md:items-center gap-4 hover:bg-surface-container-low transition-colors">
+<div class="flex-shrink-0">
+<span class="bg-error-container text-on-error-container font-label-sm text-label-sm px-3 py-1.5 rounded-[15px] border border-error/20">
+                                ERR-503
+                            </span>
+</div>
+<div class="flex-grow">
+<h4 class="font-title-md text-title-md text-on-surface mb-1">Hepsiburada API Timeout</h4>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm">
+                                Sunucudan yanıt alınamadı. İstek zaman aşımına uğradı (30000ms).
+                            </p>
+</div>
+<div class="flex-shrink-0 font-label-sm text-label-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                            14 Eki, 15:42
+                        </div>
+</div>
+<!-- Log Item 2 -->
+<div class="p-4 md:p-6 border-b border-outline-variant/10 flex flex-col md:flex-row md:items-center gap-4 hover:bg-surface-container-low transition-colors">
+<div class="flex-shrink-0">
+<span class="bg-surface-container-highest text-on-surface font-label-sm text-label-sm px-3 py-1.5 rounded-[15px] border border-outline-variant/40">
+                                VAL-102
+                            </span>
+</div>
+<div class="flex-grow">
+<h4 class="font-title-md text-title-md text-on-surface mb-1">Trendyol Eksik Veri</h4>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm">
+                                Sipariş #TY-9921 payload içerisinde teslimat adresi eksik. Kayıt atlandı.
+                            </p>
+</div>
+<div class="flex-shrink-0 font-label-sm text-label-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                            14 Eki, 11:15
+                        </div>
+</div>
+<!-- Log Item 3 -->
+<div class="p-4 md:p-6 flex flex-col md:flex-row md:items-center gap-4 hover:bg-surface-container-low transition-colors">
+<div class="flex-shrink-0">
+<span class="bg-error-container text-on-error-container font-label-sm text-label-sm px-3 py-1.5 rounded-[15px] border border-error/20">
+                                AUTH-401
+                            </span>
+</div>
+<div class="flex-grow">
+<h4 class="font-title-md text-title-md text-on-surface mb-1">Amazon Token Geçersiz</h4>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm">
+                                API erişim reddedildi. Yenileme token'ı süresi dolmuş olabilir.
+                            </p>
+</div>
+<div class="flex-shrink-0 font-label-sm text-label-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                            13 Eki, 09:00
+                        </div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface-container border-t border-outline-variant shadow-[0px_-4px_20px_rgba(18,30,92,0.05)] flex justify-around items-center px-4 py-3">
+<!-- Active Tab fallback (Orders since Order Sync is not in mobile nav array) -->
+<a class="flex flex-col items-center justify-center bg-secondary-fixed text-primary rounded-[15px] px-6 py-2 scale-95 duration-150" href="#">
+<span class="material-symbols-outlined icon-fill">shopping_cart</span>
+<span class="font-label-sm text-label-sm mt-1">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-sm text-label-sm mt-1">Products</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80" href="#">
+<span class="material-symbols-outlined">keyboard_return</span>
+<span class="font-label-sm text-label-sm mt-1">Returns</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm mt-1">Settings</span>
+</a>
+</nav>
+</body></html>

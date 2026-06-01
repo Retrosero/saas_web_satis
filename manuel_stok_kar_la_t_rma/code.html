@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sipariş Senkronizasyon Platformu - Manuel Eşleştirme</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed": "#061353",
+                      "surface-container-high": "#dce9ff",
+                      "primary": "#00083d",
+                      "primary-container": "#121e5c",
+                      "inverse-primary": "#bac3ff",
+                      "surface-container-highest": "#d3e4fe",
+                      "surface-tint": "#4f5a99",
+                      "on-background": "#0b1c30",
+                      "surface-container": "#e5eeff",
+                      "on-tertiary-fixed": "#181c21",
+                      "on-primary-container": "#7d88cb",
+                      "on-error-container": "#93000a",
+                      "outline": "#767681",
+                      "on-error": "#ffffff",
+                      "surface-dim": "#cbdbf5",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-container": "#007167",
+                      "inverse-on-surface": "#eaf1ff",
+                      "background": "#f8f9ff",
+                      "tertiary-container": "#21252a",
+                      "inverse-surface": "#213145",
+                      "secondary-container": "#51fbe7",
+                      "on-primary": "#ffffff",
+                      "tertiary-fixed": "#dfe2e9",
+                      "on-tertiary-fixed-variant": "#43474d",
+                      "primary-fixed-dim": "#bac3ff",
+                      "on-surface-variant": "#454650",
+                      "surface-container-low": "#eff4ff",
+                      "secondary-fixed-dim": "#1edecb",
+                      "error-container": "#ffdad6",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed": "#00201c",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed-variant": "#374280",
+                      "on-tertiary-container": "#888c92",
+                      "secondary": "#006a60",
+                      "surface-variant": "#d3e4fe",
+                      "on-surface": "#0b1c30",
+                      "primary-fixed": "#dee0ff",
+                      "surface-bright": "#f8f9ff",
+                      "surface": "#f8f9ff",
+                      "secondary-fixed": "#51fbe7",
+                      "on-secondary-fixed-variant": "#005048",
+                      "tertiary": "#0c1015",
+                      "outline-variant": "#c6c5d1",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-fixed-dim": "#c3c7cd"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "1.5rem",
+                      "lg": "2rem",
+                      "gutter": "24px",
+                      "base": "4px",
+                      "xs": "0.5rem",
+                      "sm": "1rem",
+                      "sidebar-width": "280px",
+                      "xl": "3rem"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": ["Hanken Grotesk"],
+                      "label-sm": ["Hanken Grotesk"],
+                      "title-md": ["Hanken Grotesk"],
+                      "headline-lg": ["Hanken Grotesk"],
+                      "display-lg": ["Hanken Grotesk"],
+                      "body-md": ["Hanken Grotesk"]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                      "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; background-color: theme('colors.background'); color: theme('colors.on-background'); }
+        .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .smooth-shadow { box-shadow: 0px 4px 20px rgba(18, 30, 92, 0.05); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex min-h-screen">
+<!-- Desktop Sidebar Navigation Drawer -->
+<nav class="hidden md:flex flex-col bg-primary text-secondary-fixed w-sidebar-width h-full fixed left-0 top-0 border-r border-white/10 pt-6">
+<div class="px-6 mb-8">
+<h1 class="font-headline-lg text-headline-lg font-bold text-secondary-fixed">Order Sync</h1>
+<div class="mt-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden flex-shrink-0">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="A professional headshot of an operations manager in a corporate setting. The lighting is soft and natural, emphasizing a trustworthy and competent demeanor. The background is a slightly blurred modern office space with cool tones. The overall aesthetic is clean, professional, and aligns with a premium corporate SaaS application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCW6I-Dy2bw_gS4tgvmSgwn1Or3uowQ1HvhzJ2cspWGiN4iq3wgMZqJGtGdQne4Sl6LiABDTRasmgfFVHCf6vV4HlGxMFDWtb9qVUA77UeaLtp_kJo5qZZ4kiCPtKiERjmXkejb5B29oJ71XYL-9zYzDT8yop7qD1Qre-O0KAxXsz0xqCBXn8ODPlziY1AuUhtzec8pVV0bKlq0duaYuTcWZp1W47BHGWfQ3vJip_GhK9aeq5h76VpDPa5eQcxbgCyNbyU1tYrrovGD"/>
+</div>
+<div>
+<p class="font-title-md text-title-md text-on-primary">Operations Manager</p>
+<p class="font-label-sm text-label-sm text-on-primary/70">B2B Enterprise Portal</p>
+</div>
+</div>
+</div>
+<ul class="flex flex-col gap-2 px-2 flex-grow">
+<li>
+<a class="bg-secondary-fixed text-primary rounded-[15px] mx-2 px-4 py-3 flex items-center transition-all duration-200 gap-3 font-title-md text-title-md" href="#">
+<span class="material-symbols-outlined" data-icon="sync" style="font-variation-settings: 'FILL' 1;">sync</span>
+                    Order Sync
+                </a>
+</li>
+<li>
+<a class="text-on-primary/80 hover:text-on-primary hover:bg-white/5 mx-2 px-4 py-3 flex items-center transition-all duration-200 gap-3 font-title-md text-title-md" href="#">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+                    Product Edit
+                </a>
+</li>
+<li>
+<a class="text-on-primary/80 hover:text-on-primary hover:bg-white/5 mx-2 px-4 py-3 flex items-center transition-all duration-200 gap-3 font-title-md text-title-md" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_return">assignment_return</span>
+                    Returns
+                </a>
+</li>
+<li>
+<a class="text-on-primary/80 hover:text-on-primary hover:bg-white/5 mx-2 px-4 py-3 flex items-center transition-all duration-200 gap-3 font-title-md text-title-md" href="#">
+<span class="material-symbols-outlined" data-icon="rule">rule</span>
+                    Approval Center
+                </a>
+</li>
+<li>
+<a class="text-on-primary/80 hover:text-on-primary hover:bg-white/5 mx-2 px-4 py-3 flex items-center transition-all duration-200 gap-3 font-title-md text-title-md" href="#">
+<span class="material-symbols-outlined" data-icon="input">input</span>
+                    Goods Receipt
+                </a>
+</li>
+</ul>
+<div class="p-4 mt-auto border-t border-white/10">
+<a class="text-on-primary/80 hover:text-on-primary hover:bg-white/5 mx-2 px-4 py-3 flex items-center transition-all duration-200 gap-3 font-title-md text-title-md" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+<p class="font-label-sm text-label-sm text-on-primary/50 text-center mt-4">v2.4.0</p>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-sidebar-width flex flex-col min-h-screen w-full">
+<!-- Top App Bar -->
+<header class="w-full sticky top-0 z-40 bg-surface shadow-sm h-20 flex items-center justify-between px-xl md:px-8">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-primary p-2">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h2 class="font-headline-lg text-headline-lg text-primary md:hidden">Dashboard</h2>
+<h2 class="font-headline-lg text-headline-lg text-primary hidden md:block">Manuel Stok Eşleştirme</h2>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden md:block w-64 focus-within:ring-2 focus-within:ring-secondary rounded-[15px]">
+<span class="material-symbols-outlined absolute left-3 top-1/2 transform -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant text-on-surface rounded-[15px] pl-10 pr-4 py-2 font-body-md text-body-md focus:outline-none focus:border-secondary transition-colors" placeholder="Search..." type="text"/>
+</div>
+<button class="text-outline hover:bg-surface-container-low p-2 rounded-full transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-4 md:p-xl flex-1 flex flex-col gap-6">
+<!-- Filters & Actions -->
+<section class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-surface-container-lowest p-6 rounded-[15px] smooth-shadow">
+<div class="flex gap-2">
+<button class="bg-primary text-secondary-fixed px-6 py-2 rounded-[15px] font-title-md text-title-md hover:opacity-90 transition-opacity">Eşleşmeyenler</button>
+<button class="bg-transparent border-[1.5px] border-primary text-primary px-6 py-2 rounded-[15px] font-title-md text-title-md hover:bg-surface-container transition-colors">Tümü</button>
+</div>
+<div class="flex gap-4 w-full sm:w-auto">
+<div class="relative flex-1 sm:w-80">
+<span class="material-symbols-outlined absolute left-3 top-1/2 transform -translate-y-1/2 text-outline" data-icon="manage_search">manage_search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant text-on-surface rounded-[15px] pl-10 pr-4 py-2 focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-colors font-body-md text-body-md" placeholder="Manuel ürün ara (SKU, Barkod...)" type="text"/>
+</div>
+</div>
+</section>
+<!-- Comparison Canvas -->
+<div class="flex-1 flex flex-col gap-4">
+<!-- Match Row 1 -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+<!-- E-commerce Source (Left) -->
+<div class="lg:col-span-5 bg-surface-container-lowest p-5 rounded-[15px] smooth-shadow border border-outline-variant/30 flex flex-col gap-3">
+<div class="flex justify-between items-start">
+<span class="bg-surface-container-high text-on-primary-fixed px-2 py-1 rounded-[15px] font-label-sm text-label-sm inline-block">Shopify E-Ticaret</span>
+<span class="text-outline font-label-sm text-label-sm">SKU: SHP-9921-BL</span>
+</div>
+<div class="flex gap-4">
+<div class="w-20 h-20 rounded-[15px] bg-surface-container overflow-hidden shrink-0">
+<img alt="Premium Wireless Headphones" class="w-full h-full object-cover" data-alt="Close up studio shot of premium wireless over-ear headphones in matte black finish. The lighting is dramatic and highlights the sleek curves and metallic accents of the product. The background is a clean, minimal white surface reflecting a corporate modern aesthetic. The image conveys high quality and professional audio equipment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJuJbrL6WVaKFMV4Dtx3nGigEX5CjwhDJrPWib_uFCOVBj_vBgvJqDYc2I4gM5IICD1C5pAqqFvAOpvG7wClu_63x1DqpfXOBfKbQyXydBlEujh6pwdi3mqcIBKYouDxl5TT4PSet-hRTsoD1od9SgXzLyQ455aTnP7Ej2Ieyq0cwWvm1rVl49bGVMOfPyY6vaHCGstIJYifuVgqxdzCRzFcds3rbvbJsPc0sQbCm0UHdIyUOy63gRaWDDpUVC7i5Uo_J7HekEDRUn"/>
+</div>
+<div class="flex flex-col justify-center">
+<h3 class="font-title-md text-title-md text-primary">Sony WH-1000XM4 Gürültü Engelleyici Kulaklık</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Renk: Siyah | Durum: Yeni</p>
+</div>
+</div>
+<div class="flex justify-between items-end mt-2 pt-3 border-t border-outline-variant/20">
+<div>
+<p class="font-label-sm text-label-sm text-outline">Listelenen Fiyat</p>
+<p class="font-title-md text-title-md text-primary font-bold">₺8,499.00</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-outline text-right">E-ticaret Stok</p>
+<p class="font-title-md text-title-md text-primary font-bold text-right">12 Adet</p>
+</div>
+</div>
+</div>
+<!-- Action/Metrics (Center) -->
+<div class="lg:col-span-2 flex flex-col items-center justify-center gap-3 py-4 lg:py-0">
+<div class="flex flex-col items-center bg-surface-container p-3 rounded-[15px] w-full max-w-[200px]">
+<div class="flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span>
+<span class="font-label-sm text-label-sm">Fiyat Farkı Yok</span>
+</div>
+<div class="flex items-center gap-1 text-error mt-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="warning">warning</span>
+<span class="font-label-sm text-label-sm">Stok Uyuşmazlığı (-4)</span>
+</div>
+</div>
+<button class="bg-secondary text-primary px-8 py-3 rounded-[15px] font-title-md text-title-md font-bold hover:bg-secondary-fixed transition-colors shadow-sm w-full max-w-[200px] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="link">link</span>
+                            Bağla
+                        </button>
+</div>
+<!-- ERP Local Source (Right) -->
+<div class="lg:col-span-5 bg-surface-container-lowest p-5 rounded-[15px] smooth-shadow border-2 border-secondary-fixed/50 relative flex flex-col gap-3">
+<div class="absolute -top-3 -right-3 bg-secondary-fixed text-primary px-3 py-1 rounded-full font-label-sm text-label-sm shadow-sm flex items-center gap-1 z-10">
+<span class="material-symbols-outlined text-[14px]" data-icon="auto_awesome">auto_awesome</span>
+                            Önerilen Eşleşme
+                        </div>
+<div class="flex justify-between items-start">
+<span class="bg-primary text-secondary-fixed px-2 py-1 rounded-[15px] font-label-sm text-label-sm inline-block">ERP Lokal Depo</span>
+<span class="text-outline font-label-sm text-label-sm">SKU: ERP-SNY-WH4-BLK</span>
+</div>
+<div class="flex gap-4 opacity-90">
+<div class="w-20 h-20 rounded-[15px] bg-surface-container overflow-hidden shrink-0">
+<img alt="Premium Wireless Headphones ERP" class="w-full h-full object-cover" data-alt="Close up studio shot of premium wireless over-ear headphones in matte black finish. The lighting is dramatic and highlights the sleek curves and metallic accents of the product. The background is a clean, minimal white surface reflecting a corporate modern aesthetic. The image conveys high quality and professional audio equipment. Same as source product image." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5Fem6EwxumFcxjK99LM91MfaRHPtvCgWEmz7kQGeWiFAWvRB0ga3SSA6O1574r4wrgzA0NH6lICiqfNFg_8Ir_AFzy0onJAAjzggC8L0y_09d5Ej9pe3VOjODUCVFPszmrthjENMAuB8QE8RmGJQqVQYDGCaPc0AKIxXwzpPLQC8om0rMW-AxPcdGEFWE1Okm0JMNi1mN5oRgPd86nn5dph8aySKinwkr74u35zWzJKmFKeZek7rnB80WpTEIJ_-jXy0yu29vws7q"/>
+</div>
+<div class="flex flex-col justify-center">
+<h3 class="font-title-md text-title-md text-primary">Sony WH-1000XM4 Kablosuz Siyah</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Kategori: Elektronik &gt; Ses</p>
+</div>
+</div>
+<div class="flex justify-between items-end mt-2 pt-3 border-t border-outline-variant/20">
+<div>
+<p class="font-label-sm text-label-sm text-outline">Birim Maliyet</p>
+<p class="font-title-md text-title-md text-primary font-bold">₺8,499.00</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-outline text-right">Lokal Stok</p>
+<p class="font-title-md text-title-md text-error font-bold text-right">8 Adet</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Match Row 2 (No clear match) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center opacity-80 hover:opacity-100 transition-opacity">
+<!-- E-commerce Source (Left) -->
+<div class="lg:col-span-5 bg-surface-container-lowest p-5 rounded-[15px] smooth-shadow border border-outline-variant/30 flex flex-col gap-3">
+<div class="flex justify-between items-start">
+<span class="bg-surface-container-high text-on-primary-fixed px-2 py-1 rounded-[15px] font-label-sm text-label-sm inline-block">WooCommerce</span>
+<span class="text-outline font-label-sm text-label-sm">SKU: WOO-CH-OFF</span>
+</div>
+<div class="flex gap-4">
+<div class="w-20 h-20 rounded-[15px] bg-surface-container overflow-hidden shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-outline text-3xl" data-icon="image">image</span>
+</div>
+<div class="flex flex-col justify-center">
+<h3 class="font-title-md text-title-md text-primary">Ergonomik Ofis Koltuğu Mesh</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Renk: Gri</p>
+</div>
+</div>
+<div class="flex justify-between items-end mt-2 pt-3 border-t border-outline-variant/20">
+<div>
+<p class="font-label-sm text-label-sm text-outline">Listelenen Fiyat</p>
+<p class="font-title-md text-title-md text-primary font-bold">₺3,250.00</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-outline text-right">E-ticaret Stok</p>
+<p class="font-title-md text-title-md text-primary font-bold text-right">5 Adet</p>
+</div>
+</div>
+</div>
+<!-- Action/Metrics (Center) -->
+<div class="lg:col-span-2 flex flex-col items-center justify-center gap-3 py-4 lg:py-0">
+<div class="text-center">
+<span class="font-label-sm text-label-sm text-outline block mb-2">Eşleşme Bulunamadı</span>
+</div>
+<button class="bg-transparent border-[1.5px] border-primary text-primary px-8 py-3 rounded-[15px] font-title-md text-title-md hover:bg-surface-container transition-colors w-full max-w-[200px] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+                            Manuel Ara
+                        </button>
+</div>
+<!-- ERP Local Source (Right) - Empty State -->
+<div class="lg:col-span-5 bg-surface-container border border-dashed border-outline-variant p-5 rounded-[15px] flex flex-col items-center justify-center min-h-[160px] text-center gap-2">
+<span class="material-symbols-outlined text-outline text-4xl" data-icon="link_off">link_off</span>
+<p class="font-title-md text-title-md text-on-surface-variant">Lokal sistemde bağlantılı ürün yok</p>
+<p class="font-label-sm text-label-sm text-outline">Arama yaparak eşleştirin veya yeni ürün oluşturun.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 lg:hidden bg-surface-container dark:bg-surface-container-highest border-t border-outline-variant shadow-[0px_-4px_20px_rgba(18,30,92,0.05)] flex justify-around items-center px-4 py-3">
+<a class="flex flex-col items-center justify-center bg-secondary-fixed text-primary rounded-[15px] px-6 py-2 scale-95 duration-150 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="sync" style="font-variation-settings: 'FILL' 1;">sync</span>
+<span class="font-label-sm text-label-sm mt-1">Order Sync</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant scale-95 duration-150 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+<span class="font-label-sm text-label-sm mt-1">Product Edit</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant scale-95 duration-150 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_return">assignment_return</span>
+<span class="font-label-sm text-label-sm mt-1">Returns</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant scale-95 duration-150 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-sm text-label-sm mt-1">Settings</span>
+</a>
+</nav>
+</body></html>

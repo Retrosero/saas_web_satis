@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Stok Yönetimi</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#bac3ff",
+                        "on-tertiary-fixed": "#181c21",
+                        "on-surface": "#0b1c30",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "surface-container-high": "#dce9ff",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#bac3ff",
+                        "outline": "#767681",
+                        "surface-variant": "#d3e4fe",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-bright": "#f8f9ff",
+                        "on-tertiary-container": "#888c92",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#51fbe7",
+                        "error": "#ba1a1a",
+                        "tertiary": "#0c1015",
+                        "surface": "#f8f9ff",
+                        "background": "#f8f9ff",
+                        "on-primary-fixed-variant": "#374280",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#e5eeff",
+                        "on-primary-fixed": "#061353",
+                        "tertiary-fixed": "#dfe2e9",
+                        "outline-variant": "#c6c5d1",
+                        "on-primary-container": "#7d88cb",
+                        "on-secondary-container": "#007167",
+                        "surface-container-low": "#eff4ff",
+                        "secondary-fixed-dim": "#1edecb",
+                        "on-secondary-fixed-variant": "#005048",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#454650",
+                        "primary-fixed": "#dee0ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#4f5a99",
+                        "on-secondary-fixed": "#00201c",
+                        "secondary": "#006a60",
+                        "inverse-surface": "#213145",
+                        "tertiary-container": "#21252a",
+                        "error-container": "#ffdad6",
+                        "primary": "#00083d",
+                        "primary-container": "#121e5c",
+                        "on-background": "#0b1c30",
+                        "surface-dim": "#cbdbf5",
+                        "secondary-container": "#51fbe7",
+                        "inverse-on-surface": "#eaf1ff",
+                        "tertiary-fixed-dim": "#c3c7cd"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sidebar-width": "280px",
+                        "xl": "3rem",
+                        "md": "1.5rem",
+                        "sm": "1rem",
+                        "base": "4px",
+                        "xs": "0.5rem",
+                        "lg": "2rem",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .custom-radius { border-radius: 15px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col pb-20 md:pb-0">
+<!-- TopAppBar Mobile -->
+<header class="bg-surface shadow-sm sticky top-0 z-30 md:hidden flex justify-between items-center px-sm py-sm custom-radius mx-xs mt-xs">
+<button class="text-primary p-2 custom-radius hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-title-md text-title-md text-primary font-bold">Stok Yönetimi</h1>
+<button class="text-primary p-2 custom-radius hover:bg-surface-container-low transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-[#E11D48] rounded-full"></span>
+</button>
+</header>
+<!-- NavigationDrawer Desktop -->
+<nav class="hidden md:flex flex-col bg-primary fixed left-0 top-0 bottom-0 z-40 w-sidebar-width border-r border-white/10 transition-colors duration-200">
+<div class="p-lg border-b border-white/10">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center font-display-lg text-primary">
+                    O
+                </div>
+<div>
+<h2 class="text-secondary-fixed font-title-md text-title-md">Operations Manager</h2>
+<p class="text-tertiary-fixed-dim font-label-sm text-label-sm">Enterprise Admin</p>
+</div>
+</div>
+</div>
+<ul class="flex-1 py-md overflow-y-auto">
+<li class="mb-xs">
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 custom-radius hover:bg-primary-container hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined mr-sm" style="font-variation-settings: 'wght' 300, 'FILL' 0;">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+</li>
+<li class="mb-xs">
+<a class="bg-secondary-fixed text-primary flex items-center px-4 py-3 mx-2 custom-radius transition-colors" href="#">
+<span class="material-symbols-outlined mr-sm" style="font-variation-settings: 'wght' 600, 'FILL' 1;">inventory_2</span>
+<span class="font-body-md text-body-md font-bold">Stock Management</span>
+</a>
+</li>
+<li class="mb-xs">
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 custom-radius hover:bg-primary-container hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined mr-sm" style="font-variation-settings: 'wght' 300, 'FILL' 0;">inventory</span>
+<span class="font-body-md text-body-md">Product Catalog</span>
+</a>
+</li>
+<li class="mb-xs">
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 custom-radius hover:bg-primary-container hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined mr-sm" style="font-variation-settings: 'wght' 300, 'FILL' 0;">receipt_long</span>
+<span class="font-body-md text-body-md">Transactions</span>
+</a>
+</li>
+<li class="mb-xs">
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 custom-radius hover:bg-primary-container hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined mr-sm" style="font-variation-settings: 'wght' 300, 'FILL' 0;">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 md:ml-sidebar-width p-sm md:p-xl flex flex-col gap-sm">
+<!-- Filters & Search Area -->
+<section class="glass-panel p-sm custom-radius flex flex-col gap-sm shadow-[0_4px_20px_rgba(18,30,92,0.05)]">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 transform -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-bright border border-outline-variant text-on-surface pl-10 pr-4 py-3 custom-radius focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed font-body-md text-body-md outline-none transition-colors" placeholder="Ürün Adı veya SKU Ara..." type="text"/>
+</div>
+<div class="flex flex-wrap gap-sm">
+<div class="flex-1 min-w-[120px]">
+<select class="w-full bg-surface-bright border border-outline-variant text-on-surface px-3 py-3 custom-radius focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed font-body-md text-body-md outline-none appearance-none cursor-pointer">
+<option value="">Kategori Seç</option>
+<option value="electronics">Elektronik</option>
+<option value="office">Ofis Malzemeleri</option>
+<option value="hardware">Donanım</option>
+</select>
+</div>
+<div class="flex-1 min-w-[120px]">
+<select class="w-full bg-surface-bright border border-outline-variant text-on-surface px-3 py-3 custom-radius focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed font-body-md text-body-md outline-none appearance-none cursor-pointer">
+<option value="">Marka Seç</option>
+<option value="techcorp">TechCorp</option>
+<option value="officemax">OfficeMax</option>
+</select>
+</div>
+<div class="flex items-center gap-2 bg-surface-bright border border-outline-variant px-3 py-3 custom-radius">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Sadece Aktif</span>
+<label class="relative inline-flex items-center cursor-pointer ml-auto">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary-fixed"></div>
+</label>
+</div>
+</div>
+</section>
+<!-- Product List -->
+<section class="flex flex-col gap-sm">
+<!-- Product Item 1 -->
+<div class="bg-surface-container-lowest p-sm custom-radius flex flex-col gap-sm shadow-[0_4px_20px_rgba(18,30,92,0.05)] hover:-translate-y-1 transition-transform duration-200">
+<div class="flex gap-sm items-start">
+<div class="w-20 h-20 bg-surface-variant custom-radius flex-shrink-0 overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="A high-end, sleek black enterprise server rack unit resting on a clean white studio background. The lighting is bright and modern, highlighting the metallic textures and technological nature of the hardware. The aesthetic aligns with a corporate modern light-mode design system, feeling professional and authoritative." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBaF21QX87MPn16jgHG-Ghk-dP7QGpZLEhIYG47TDiyS440gxq07VcR3h67y8ZlId35GFpKuOKpxljBnyDmLseTIze8ALEAeOcRWrnMAoXGVHtnEnqFQihvqUeHwF7GXN-w9Y81yU5U9r728c0whPYMyJSR_UdgFGBcpI-8fo3_KJYbO5axEKG_iQ1jqqLj6yURqZjVU4Vch9LpTZMfk8wPgah2-WzeudRU8duTjCrAX4ljE73KxGY85BLMT5PHXByNDm07JwEzqy1"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-title-md text-title-md text-primary">Kurumsal Sunucu A-1</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">SKU: SRV-2023-A1</p>
+</div>
+<span class="bg-[#E6F4EA] text-[#137333] px-2 py-1 rounded-md font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Stokta
+                            </span>
+</div>
+<div class="mt-2 font-headline-lg-mobile text-headline-lg-mobile text-on-surface">₺45,000</div>
+</div>
+</div>
+<div class="flex gap-xs mt-xs pt-xs border-t border-outline-variant/30">
+<button class="flex-1 bg-surface-bright text-primary border border-primary/20 py-2 custom-radius font-label-sm text-label-sm hover:bg-surface-variant transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">edit</span> Hızlı Düzenle
+                    </button>
+<button class="flex-1 bg-secondary-fixed text-primary py-2 custom-radius font-label-sm text-label-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">visibility</span> Detaylar
+                    </button>
+</div>
+</div>
+<!-- Product Item 2 -->
+<div class="bg-surface-container-lowest p-sm custom-radius flex flex-col gap-sm shadow-[0_4px_20px_rgba(18,30,92,0.05)] hover:-translate-y-1 transition-transform duration-200">
+<div class="flex gap-sm items-start">
+<div class="w-20 h-20 bg-surface-variant custom-radius flex-shrink-0 overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="A modern, premium business laptop open slightly, resting on a minimalist desk surface. The scene is brightly lit with cool, white studio lighting to emphasize the sleek metallic finish and high-tech corporate aesthetic. The mood is efficient and professional, perfectly suited for an enterprise management dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVUVolZN4P-dQh4WraFXNDu31PdceWVjdcZkaazfC4pMvq9h8ej1ix2ZpZmSMp1cHGhD39I_TJE3d4Kpl5tqaCBnGCM87NqbWwf0x2sKJcoFSo2cEZjpj1AdCJK89aC4Epi1zbZ7JVcQUC-FVTIk2fB4s17Nui9xF0Jkohh5aqXKp5neAceg3L55Dm_ugd18zqC__Stt5g4UadRqz0a4ThtNJ5e9U16Z08yMrCOGdOrO3Ik4XPEhueDWN0jIWYBNqu2LxJU-Rein5-"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-title-md text-title-md text-primary">Pro Laptop 15"</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">SKU: LPT-PRO-15</p>
+</div>
+<span class="bg-[#FEF7E0] text-[#B06000] px-2 py-1 rounded-md font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">warning</span> Azalan Stok (3)
+                            </span>
+</div>
+<div class="mt-2 font-headline-lg-mobile text-headline-lg-mobile text-on-surface">₺32,500</div>
+</div>
+</div>
+<div class="flex gap-xs mt-xs pt-xs border-t border-outline-variant/30">
+<button class="flex-1 bg-surface-bright text-primary border border-primary/20 py-2 custom-radius font-label-sm text-label-sm hover:bg-surface-variant transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">edit</span> Hızlı Düzenle
+                    </button>
+<button class="flex-1 bg-secondary-fixed text-primary py-2 custom-radius font-label-sm text-label-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">visibility</span> Detaylar
+                    </button>
+</div>
+</div>
+<!-- Product Item 3 -->
+<div class="bg-surface-container-lowest p-sm custom-radius flex flex-col gap-sm shadow-[0_4px_20px_rgba(18,30,92,0.05)] hover:-translate-y-1 transition-transform duration-200 opacity-75">
+<div class="flex gap-sm items-start">
+<div class="w-20 h-20 bg-surface-variant custom-radius flex-shrink-0 overflow-hidden relative grayscale">
+<div class="absolute inset-0 flex items-center justify-center bg-outline/20">
+<span class="material-symbols-outlined text-outline text-3xl">image_not_supported</span>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-title-md text-title-md text-on-surface-variant">Yönetici Koltuğu Ergonomik</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">SKU: FUR-CHR-01</p>
+</div>
+<span class="bg-[#FCE8E6] text-[#C5221F] px-2 py-1 rounded-md font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">error</span> Stokta Yok
+                            </span>
+</div>
+<div class="mt-2 font-headline-lg-mobile text-headline-lg-mobile text-on-surface-variant">₺5,200</div>
+</div>
+</div>
+<div class="flex gap-xs mt-xs pt-xs border-t border-outline-variant/30">
+<button class="flex-1 bg-surface-bright text-on-surface-variant border border-outline-variant py-2 custom-radius font-label-sm text-label-sm hover:bg-surface-variant transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">edit</span> Hızlı Düzenle
+                    </button>
+<button class="flex-1 bg-surface-variant text-primary py-2 custom-radius font-label-sm text-label-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">visibility</span> Detaylar
+                    </button>
+</div>
+</div>
+</section>
+<!-- Floating Action Button for Adding Product (Mobile mostly) -->
+<button class="fixed bottom-24 right-4 md:bottom-8 md:right-8 w-14 h-14 bg-primary text-secondary-fixed rounded-full shadow-lg flex items-center justify-center hover:scale-105 transition-transform z-30">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'wght' 600, 'FILL' 1;">add</span>
+</button>
+</main>
+<!-- Bottom Navigation Mobile -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface shadow-[0_-4px_20px_rgba(18,30,92,0.05)] z-40 px-xs pb-4 pt-2 flex justify-around items-center custom-radius mx-xs mb-xs">
+<a class="flex flex-col items-center p-2 text-on-surface-variant opacity-80 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1 text-xl" style="font-variation-settings: 'wght' 300, 'FILL' 0;">dashboard</span>
+<span class="font-label-sm text-[10px]">Dashboard</span>
+</a>
+<a class="flex flex-col items-center p-2 text-primary transition-colors relative" href="#">
+<div class="absolute -top-1 left-1/2 -translate-x-1/2 w-12 h-1 bg-secondary-fixed rounded-b-md"></div>
+<span class="material-symbols-outlined mb-1 text-xl" style="font-variation-settings: 'wght' 600, 'FILL' 1;">inventory_2</span>
+<span class="font-label-sm text-[10px] font-bold">Stok</span>
+</a>
+<a class="flex flex-col items-center p-2 text-on-surface-variant opacity-80 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1 text-xl" style="font-variation-settings: 'wght' 300, 'FILL' 0;">receipt_long</span>
+<span class="font-label-sm text-[10px]">İşlemler</span>
+</a>
+<a class="flex flex-col items-center p-2 text-on-surface-variant opacity-80 transition-colors" href="#">
+<span class="material-symbols-outlined mb-1 text-xl" style="font-variation-settings: 'wght' 300, 'FILL' 0;">settings</span>
+<span class="font-label-sm text-[10px]">Ayarlar</span>
+</a>
+</nav>
+</body></html>

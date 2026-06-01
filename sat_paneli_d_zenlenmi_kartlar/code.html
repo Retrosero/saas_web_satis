@@ -1,0 +1,392 @@
+<!DOCTYPE html><html class="light" lang="tr"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>OpsCommand | Satış Ekranı</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#0052cc",
+                        "primary": "#003d9b",
+                        "tertiary-fixed-dim": "#ffb950",
+                        "outline": "#737685",
+                        "on-surface": "#051a3e",
+                        "surface-container-low": "#f1f3ff",
+                        "primary-fixed": "#dae2ff",
+                        "secondary-container": "#82f9be",
+                        "surface-container-highest": "#d8e2ff",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#b2c5ff",
+                        "surface-variant": "#d8e2ff",
+                        "secondary-fixed-dim": "#65dca4",
+                        "on-background": "#051a3e",
+                        "on-primary-container": "#c4d2ff",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-container": "#ffca81",
+                        "inverse-surface": "#1d3054",
+                        "outline-variant": "#c3c6d6",
+                        "on-secondary-fixed-variant": "#005235",
+                        "on-secondary-container": "#00734c",
+                        "secondary": "#006c47",
+                        "on-primary-fixed": "#001848",
+                        "secondary-fixed": "#82f9be",
+                        "surface-dim": "#ccdaff",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#624000",
+                        "on-primary-fixed-variant": "#0040a2",
+                        "on-secondary-fixed": "#002113",
+                        "surface-tint": "#0c56d0",
+                        "surface-container-high": "#e1e8ff",
+                        "background": "#faf9ff",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "surface": "#faf9ff",
+                        "on-surface-variant": "#434654",
+                        "surface-bright": "#faf9ff",
+                        "primary-fixed-dim": "#b2c5ff",
+                        "inverse-on-surface": "#edf0ff",
+                        "tertiary-container": "#7d5200",
+                        "surface-container": "#e9edff",
+                        "on-tertiary-fixed": "#291800",
+                        "tertiary-fixed": "#ffddb3",
+                        "error": "#ba1a1a",
+                        "tertiary": "#5e3c00"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "15px",
+                        "lg": "15px",
+                        "xl": "15px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "xl": "32px",
+                        "gutter": "16px",
+                        "max-width": "1440px",
+                        "xs": "4px",
+                        "base": "4px",
+                        "margin": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "mono-label": ["JetBrains Mono"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "mono-label": ["13px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c3c6d6; border-radius: 10px; }
+        .drawer-transition { transition: transform 0.3s ease-in-out; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md overflow-hidden">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-50 flex justify-between items-center w-full px-lg py-sm bg-surface dark:bg-surface-container-low border-b border-outline-variant dark:border-outline shadow-none">
+<div class="flex items-center gap-xl">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary">OpsCommand</span>
+<div class="hidden md:flex items-center gap-lg">
+<nav class="flex gap-md">
+<a class="font-body-md text-body-md px-md py-xs text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors" href="#">Ana Sayfa</a>
+<a class="font-body-md text-body-md px-md py-xs text-primary dark:text-primary-fixed-dim font-bold border-b-2 border-primary" href="#">Satış Ekranı</a>
+<a class="font-body-md text-body-md px-md py-xs text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high dark:hover:bg-surface-variant transition-colors" href="#">Raporlar</a>
+</nav>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="relative flex items-center bg-surface-container rounded-full px-md py-xs border border-outline-variant">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-64" placeholder="Ürün veya Barkod Ara..." type="text">
+</div>
+<button class="p-sm rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+</button>
+<button class="p-sm rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<div class="flex h-[calc(100vh-64px)] overflow-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen flex flex-col py-lg bg-inverse-surface dark:bg-surface-container-lowest w-[280px] z-40 transition-all duration-200 ease-in-out shadow-md">
+<div class="px-lg mb-xl mt-12">
+<h1 class="font-headline-md text-headline-md text-on-primary-fixed">OpsCommand</h1>
+<div class="mt-md flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold">SE</div>
+<div>
+<p class="font-label-md text-label-md text-primary-fixed">Sales Executive</p>
+<p class="text-[10px] text-surface-variant uppercase tracking-wider">North Region</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-md mx-md px-md py-md text-surface-variant hover:text-white hover:bg-surface-variant/10 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md mx-md px-md py-md bg-primary-container text-on-primary-container border-l-4 border-secondary-fixed-dim rounded-r-full" href="#">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+<span class="font-label-md text-label-md">Sales</span>
+</a>
+<a class="flex items-center gap-md mx-md px-md py-md text-surface-variant hover:text-white hover:bg-surface-variant/10 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+<span class="font-label-md text-label-md">Fast Sales</span>
+</a>
+<a class="flex items-center gap-md mx-md px-md py-md text-surface-variant hover:text-white hover:bg-surface-variant/10 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-md text-label-md">Inventory</span>
+</a>
+<a class="flex items-center gap-md mx-md px-md py-md text-surface-variant hover:text-white hover:bg-surface-variant/10 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Customers</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline/20 pt-md space-y-1">
+<a class="flex items-center gap-md mx-md px-md py-md text-surface-variant hover:text-white hover:bg-surface-variant/10 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-md mx-md px-md py-md text-surface-variant hover:text-white hover:bg-surface-variant/10 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-[280px] overflow-y-auto bg-background p-lg relative">
+<!-- Context Header -->
+<div class="flex justify-between items-center mb-lg">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Satış Paneli</h2>
+<p class="text-on-surface-variant font-body-sm text-body-sm">Katalog üzerinden ürün seçerek sipariş oluşturun.</p>
+</div>
+<div class="flex items-center gap-md">
+<button class="flex items-center gap-sm bg-white border border-outline-variant px-md py-sm rounded-lg hover:shadow-sm transition-all text-on-surface-variant" id="toggle-filter">
+<span class="material-symbols-outlined">filter_list</span>
+<span class="font-label-md text-label-md">Filtreler</span>
+</button>
+<button class="relative flex items-center gap-sm bg-primary text-white px-md py-sm rounded-lg hover:bg-primary-container transition-all shadow-md" id="toggle-cart">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-label-md text-label-md">Sepetim</span>
+<span class="absolute -top-2 -right-2 bg-error text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full border-2 border-background">3</span>
+</button>
+</div>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-lg pb-xl">
+<!-- Product Card Loop (Simulated) -->
+<script>
+                const products = [
+                    { name: "Pro-X Industrial Drill", code: "IND-9921", barcode: "86812345678", price: "2.450,00", stock: "142" },
+                    { name: "Heavy Duty Compressor", code: "CMP-4402", barcode: "86812345679", price: "5.120,00", stock: "12" },
+                    { name: "Precision Laser Level", code: "LAS-1022", barcode: "86812345680", price: "890,00", stock: "85" },
+                    { name: "Magnesium Tool Chest", code: "TCH-5510", barcode: "86812345681", price: "12.300,00", stock: "5" },
+                    { name: "Titanium Wrench Set", code: "WRN-0021", barcode: "86812345682", price: "450,00", stock: "210" },
+                    { name: "Electric Impact Driver", code: "IMP-3311", barcode: "86812345683", price: "1.750,00", stock: "44" },
+                    { name: "Safety Gear Bundle", code: "SFY-8821", barcode: "86812345684", price: "320,00", stock: "1000+" },
+                    { name: "High-Volt Multimeter", code: "MUL-7721", barcode: "86812345685", price: "640,00", stock: "32" },
+                    { name: "Workbench Alpha v2", code: "WRK-9900", barcode: "86812345686", price: "4.200,00", stock: "8" },
+                    { name: "LED Site Lighting", code: "LIT-1123", barcode: "86812345687", price: "980,00", stock: "115" }
+                ];
+
+                products.forEach(p => {
+                    document.write(`
+                        <div class="bg-white border border-outline-variant rounded-[15px] overflow-hidden flex flex-col hover:shadow-lg transition-all group">
+                            <div class="h-48 bg-surface-container-low relative overflow-hidden">
+                                <img src="https://images.unsplash.com/photo-1581244276891-6bc61a7a1680?q=80&w=1000" 
+                                     alt="${p.name}" 
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <div class="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-sm py-1 rounded-full text-[10px] font-bold text-secondary uppercase tracking-tighter">
+                                    Stok: ${p.stock}
+                                </div>
+                            </div>
+                            <div class="p-md flex flex-col flex-1">
+                                <div class="mb-sm">
+                                    <h3 class="font-headline-md text-on-surface leading-tight mb-xs text-[16px]">${p.name}</h3>
+                                    <div class="flex gap-md text-on-surface-variant font-mono-label text-mono-label">
+                                        <span>#${p.code}</span>
+                                        <span>${p.barcode}</span>
+                                    </div>
+                                </div>
+                                <div class="mt-auto pt-md border-t border-outline-variant">
+                                    <div class="mb-md">
+                                        <p class="text-headline-md text-primary font-bold">₺${p.price}</p>
+                                    </div>
+                                    <div class="flex items-center gap-sm">
+                                        <div class="flex items-center border border-outline-variant rounded-[15px] overflow-hidden bg-surface-container-lowest shrink-0">
+                                            <button class="w-8 h-10 flex items-center justify-center hover:bg-surface-container-high transition-colors text-on-surface-variant font-bold">-</button>
+                                            <input type="text" value="1" class="w-10 h-10 border-none p-0 text-center text-body-md focus:ring-0 bg-transparent">
+                                            <button class="w-8 h-10 flex items-center justify-center hover:bg-surface-container-high transition-colors text-on-surface-variant font-bold">+</button>
+                                        </div>
+                                        <button class="flex-1 bg-primary hover:bg-primary-container text-white h-10 rounded-[15px] font-label-md text-label-md flex items-center justify-center gap-xs transition-all active:scale-95 px-sm">
+                                            <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+                                            EKLE
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                });
+            </script>
+</div>
+</main>
+<!-- Filters Sidebar -->
+<aside class="fixed right-0 top-0 h-full w-[320px] bg-white shadow-xl z-[60] translate-x-full drawer-transition border-l border-outline-variant flex flex-col" id="filter-drawer">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-headline-md text-on-surface">Katalog Filtreleri</h3>
+<button class="material-symbols-outlined text-outline hover:text-on-surface" id="close-filter">close</button>
+</div>
+<div class="p-lg flex-1 overflow-y-auto space-y-xl">
+<div>
+<label class="font-label-md text-on-surface-variant mb-sm block">Kategoriler</label>
+<div class="space-y-sm">
+<label class="flex items-center gap-md cursor-pointer">
+<input checked="" class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox">
+<span class="text-body-md">Elektrikli El Aletleri</span>
+</label>
+<label class="flex items-center gap-md cursor-pointer">
+<input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox">
+<span class="text-body-md">Hırdavat &amp; Aksesuar</span>
+</label>
+<label class="flex items-center gap-md cursor-pointer">
+<input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox">
+<span class="text-body-md">Ölçüm Cihazları</span>
+</label>
+</div>
+</div>
+<div>
+<label class="font-label-md text-on-surface-variant mb-sm block">Fiyat Aralığı (₺)</label>
+<div class="grid grid-cols-2 gap-md">
+<input class="rounded-[15px] border-outline-variant bg-surface-container-low p-sm text-body-md" placeholder="Min" type="number">
+<input class="rounded-[15px] border-outline-variant bg-surface-container-low p-sm text-body-md" placeholder="Max" type="number">
+</div>
+</div>
+<div>
+<label class="font-label-md text-on-surface-variant mb-sm block">Marka</label>
+<div class="flex flex-wrap gap-sm">
+<button class="px-md py-xs rounded-full border border-primary text-primary bg-primary-fixed font-label-md">OpsPro</button>
+<button class="px-md py-xs rounded-full border border-outline-variant text-on-surface-variant font-label-md">Makita</button>
+<button class="px-md py-xs rounded-full border border-outline-variant text-on-surface-variant font-label-md">Bosch</button>
+</div>
+</div>
+</div>
+<div class="p-lg border-t border-outline-variant bg-surface-container-lowest grid grid-cols-2 gap-md">
+<button class="py-sm border border-outline-variant rounded-[15px] font-label-md text-outline">TEMİZLE</button>
+<button class="py-sm bg-primary text-white rounded-[15px] font-label-md shadow-md">UYGULA</button>
+</div>
+</aside>
+<!-- Shopping Cart Drawer -->
+<aside class="fixed right-0 top-0 h-full w-[400px] bg-white shadow-2xl z-[70] translate-x-full drawer-transition border-l border-outline-variant flex flex-col" id="cart-drawer">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center bg-primary text-white">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined">shopping_cart</span>
+<h3 class="font-headline-md">Sipariş Sepeti</h3>
+</div>
+<button class="material-symbols-outlined text-white hover:opacity-70 transition-opacity" id="close-cart">close</button>
+</div>
+<div class="flex-1 overflow-y-auto p-lg space-y-md">
+<div class="flex gap-md border-b border-outline-variant pb-md">
+<div class="w-16 h-16 bg-surface-container-low rounded-lg shrink-0 overflow-hidden">
+<img alt="Item" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4JT37GWqRze8XspKZ60U3G8KQD1PwmGKokzYYeMfV7taZRJ8vf5RjBfYOxId6Kc856j_kdGeG4e_D2vmjcMP-ZBTCqmwVb4UX86Iwjp8C-Sw3grg4-UsSqYY09fuUsojknSouFDn2czHuw85lXJNfa2iutU6-_QcRXjlWbjSjP__dGUc88iJd7nlRkj0a4HZ_cVV7L8Q8wS19cEa35eLdzxxIN6MyA5ZClqei80Y5iTnyO1JUn_OCo8LDcx3ESy0LLdgTt2L86Yww">
+</div>
+<div class="flex-1">
+<p class="font-body-md text-on-surface font-semibold line-clamp-1">Pro-X Industrial Drill</p>
+<p class="text-body-sm text-on-surface-variant">2 Adet x ₺2.450,00</p>
+<div class="flex justify-between items-center mt-sm">
+<span class="text-primary font-bold">₺4.900,00</span>
+<button class="text-error text-body-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">delete</span> Sil
+                        </button>
+</div>
+</div>
+</div>
+</div>
+<div class="p-lg bg-surface-container-low border-t border-outline-variant">
+<div class="space-y-sm mb-lg">
+<div class="flex justify-between text-on-surface-variant text-body-md">
+<span>Ara Toplam</span>
+<span>₺10.020,00</span>
+</div>
+<div class="flex justify-between text-on-surface font-bold text-headline-md pt-sm border-t border-outline-variant">
+<span>TOPLAM</span>
+<span class="text-primary">₺12.024,00</span>
+</div>
+</div>
+<button class="w-full bg-secondary hover:bg-on-secondary-container text-white py-md rounded-[15px] font-headline-md shadow-lg transition-all active:scale-[0.98]">
+                SİPARİŞİ TAMAMLA
+            </button>
+</div>
+</aside>
+<!-- Overlay -->
+<div class="fixed inset-0 bg-black/40 z-50 hidden backdrop-blur-sm transition-opacity opacity-0" id="drawer-overlay"></div>
+</div>
+<script>
+    // Drawer Interactions
+    const filterDrawer = document.getElementById('filter-drawer');
+    const cartDrawer = document.getElementById('cart-drawer');
+    const overlay = document.getElementById('drawer-overlay');
+    const body = document.body;
+
+    function openDrawer(drawer) {
+        drawer.classList.remove('translate-x-full');
+        overlay.classList.remove('hidden');
+        setTimeout(() => overlay.classList.add('opacity-100'), 10);
+        body.classList.add('overflow-hidden');
+    }
+
+    function closeAll() {
+        filterDrawer.classList.add('translate-x-full');
+        cartDrawer.classList.add('translate-x-full');
+        overlay.classList.remove('opacity-100');
+        setTimeout(() => overlay.classList.add('hidden'), 300);
+        body.classList.remove('overflow-hidden');
+    }
+
+    document.getElementById('toggle-filter').addEventListener('click', () => openDrawer(filterDrawer));
+    document.getElementById('toggle-cart').addEventListener('click', () => openDrawer(cartDrawer));
+    document.getElementById('close-filter').addEventListener('click', closeAll);
+    document.getElementById('close-cart').addEventListener('click', closeAll);
+    overlay.addEventListener('click', closeAll);
+
+    // Simple Quantity Counter Interaction
+    document.addEventListener('click', function(e) {
+        if (e.target.tagName === 'BUTTON' && (e.target.innerText === '+' || e.target.innerText === '-')) {
+            const input = e.target.parentElement.querySelector('input');
+            let val = parseInt(input.value);
+            if (e.target.innerText === '+') val++;
+            else if (val > 1) val--;
+            input.value = val;
+        }
+    });
+</script>
+</body></html>

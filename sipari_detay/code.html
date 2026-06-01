@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sipariş Detayı</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#e5eeff",
+                        "secondary-fixed": "#51fbe7",
+                        "on-tertiary-container": "#888c92",
+                        "on-background": "#0b1c30",
+                        "on-primary-container": "#7d88cb",
+                        "background": "#f8f9ff",
+                        "surface-variant": "#d3e4fe",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#121e5c",
+                        "on-error": "#ffffff",
+                        "on-surface": "#0b1c30",
+                        "tertiary-fixed-dim": "#c3c7cd",
+                        "outline-variant": "#c6c5d1",
+                        "tertiary-container": "#21252a",
+                        "surface-container-high": "#dce9ff",
+                        "on-secondary-container": "#007167",
+                        "on-secondary-fixed": "#00201c",
+                        "on-primary-fixed": "#061353",
+                        "inverse-surface": "#213145",
+                        "tertiary-fixed": "#dfe2e9",
+                        "secondary": "#006a60",
+                        "surface-container-low": "#eff4ff",
+                        "outline": "#767681",
+                        "surface-bright": "#f8f9ff",
+                        "surface-tint": "#4f5a99",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#00083d",
+                        "on-tertiary-fixed": "#181c21",
+                        "surface": "#f8f9ff",
+                        "primary-fixed": "#dee0ff",
+                        "secondary-fixed-dim": "#1edecb",
+                        "primary-fixed-dim": "#bac3ff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#0c1015",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#cbdbf5",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#005048",
+                        "on-primary-fixed-variant": "#374280",
+                        "surface-container-highest": "#d3e4fe",
+                        "secondary-container": "#51fbe7",
+                        "on-surface-variant": "#454650",
+                        "inverse-primary": "#bac3ff",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#43474d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "3rem",
+                        "md": "1.5rem",
+                        "sm": "1rem",
+                        "lg": "2rem",
+                        "xs": "0.5rem",
+                        "gutter": "24px",
+                        "base": "4px",
+                        "sidebar-width": "280px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Soft ambient shadow for bento cards */
+        .ambient-shadow {
+            box-shadow: 0px 4px 20px rgba(18, 30, 92, 0.05);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background flex min-h-screen font-body-md selection:bg-secondary-fixed selection:text-primary">
+<!-- NavigationDrawer (Sidebar) - Hidden on mobile -->
+<aside class="bg-primary hidden md:block w-sidebar-width h-full fixed left-0 top-0 bottom-0 z-40 border-r border-white/10 flex flex-col justify-between">
+<div class="flex flex-col">
+<!-- Header (Profile Type) -->
+<div class="flex items-center gap-4 px-xl py-lg border-b border-white/10 mb-md">
+<img alt="User profile avatar" class="w-12 h-12 rounded-full border-2 border-secondary-fixed object-cover" data-alt="A clean, minimalist 3D rendering of an abstract corporate avatar. The avatar is composed of smooth, glossy geometric shapes in pristine white, set against a vibrant turquoise background. The lighting is soft and even, highlighting the rounded contours of the shapes to create a premium, high-tech identity icon." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjl58n4B4IJlsVZNukig6iyv3-5vBjGV27SBFCD8xQGidoCnR8QDo4TJ1MPrQVJb-Y_yU0cGmeHirVd6J1_dkn5KQOPOJdIXmwIu2aPstBpCCfhiy964zjpaF7jrx10tPOc-Eyfq3ImMNl3OsxnzdBTgYXbxz7gPwcvTjEMIFlK-cFG-dn1llaOmXDFduZHwZNTJiVE4pQCD2xHwJ-vWZqoPHU2iuBlbqMBwQY4w0mxUujcOP-xbjdWVmljyMaKlDPvEWTm_BDQSb_"/>
+<div class="left_align">
+<h2 class="font-title-md text-title-md text-secondary-fixed">Operations Manager</h2>
+<p class="font-label-sm text-label-sm text-on-primary-fixed-variant opacity-80">Enterprise Admin</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex flex-col gap-1 font-body-md text-body-md">
+<!-- Dashboard (Inactive) -->
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 rounded-[15px] hover:bg-primary-container hover:text-white transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 group-hover:text-secondary-fixed transition-colors">dashboard</span>
+                    Dashboard
+                </a>
+<!-- Stock Management (Inactive) -->
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 rounded-[15px] hover:bg-primary-container hover:text-white transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 group-hover:text-secondary-fixed transition-colors">inventory_2</span>
+                    Stock Management
+                </a>
+<!-- Product Catalog (Inactive) -->
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 rounded-[15px] hover:bg-primary-container hover:text-white transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 group-hover:text-secondary-fixed transition-colors">inventory</span>
+                    Product Catalog
+                </a>
+<!-- Transactions (ACTIVE - Semantically matches Order Details) -->
+<a class="bg-secondary-fixed text-primary rounded-[15px] flex items-center px-4 py-3 mx-2 transition-colors duration-200 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)]" href="#">
+<span class="material-symbols-outlined mr-3 fill">receipt_long</span>
+                    Transactions
+                </a>
+<!-- Settings (Inactive) -->
+<a class="text-on-primary-fixed-variant opacity-80 flex items-center px-4 py-3 mx-2 rounded-[15px] hover:bg-primary-container hover:text-white transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 group-hover:text-secondary-fixed transition-colors">settings</span>
+                    Settings
+                </a>
+</nav>
+</div>
+<!-- Bottom Branding (Optional based on design system hints) -->
+<div class="px-xl py-lg text-center opacity-50 font-label-sm text-label-sm text-white">
+            v2.4.1 Enterprise
+        </div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 md:ml-sidebar-width flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-surface sticky full-width top-0 z-30 shadow-sm flex justify-between items-center px-xl py-md">
+<!-- Leading Icon & Title -->
+<div class="flex items-center gap-4">
+<button class="md:hidden text-primary p-2 hover:bg-surface-container-low rounded-xl transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-title-md text-title-md text-primary font-bold">Sipariş Detayı</h1>
+</div>
+<!-- Trailing Icon -->
+<button class="text-on-surface-variant p-2 hover:bg-surface-container-low rounded-xl scale-95 transition-transform relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-[#E11D48] rounded-full"></span>
+</button>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 p-md md:p-xl flex flex-col gap-lg">
+<!-- Page Header: Title & Actions -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary">Sipariş #ORD-2023-8472</h2>
+<span class="bg-surface-container-high text-primary px-3 py-1 rounded-full font-label-sm text-label-sm border border-outline-variant/30">Hazırlanıyor</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                        24 Ekim 2023, 14:30
+                    </p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center justify-center gap-2 px-6 py-3 border-[1.5px] border-primary text-primary rounded-xl font-title-md text-title-md hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">print</span>
+                        Yazdır
+                    </button>
+<button class="flex items-center justify-center gap-2 px-6 py-3 bg-secondary-fixed text-primary rounded-xl font-title-md text-title-md shadow-sm hover:brightness-105 transition-all">
+<span class="material-symbols-outlined">edit</span>
+                        Düzenle
+                    </button>
+</div>
+</div>
+<!-- Status Timeline Bento Block -->
+<div class="bg-surface-container-lowest ambient-shadow rounded-xl p-lg border border-outline-variant/20">
+<div class="flex flex-col md:flex-row justify-between items-center relative">
+<!-- Progress Line Background -->
+<div class="hidden md:block absolute top-1/2 left-0 w-full h-[2px] bg-surface-variant -z-10 -translate-y-1/2"></div>
+<!-- Progress Line Active -->
+<div class="hidden md:block absolute top-1/2 left-0 w-[50%] h-[2px] bg-secondary-fixed -z-10 -translate-y-1/2"></div>
+<!-- Step 1: Received -->
+<div class="flex flex-row md:flex-col items-center gap-3 md:gap-2 w-full md:w-auto relative mb-4 md:mb-0 z-10 bg-surface-container-lowest md:px-4">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed text-primary flex items-center justify-center ring-4 ring-surface-container-lowest">
+<span class="material-symbols-outlined fill">check</span>
+</div>
+<div class="text-left md:text-center">
+<p class="font-title-md text-title-md text-primary">Sipariş Alındı</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">24 Eki, 14:30</p>
+</div>
+</div>
+<!-- Step 2: Preparing (Current) -->
+<div class="flex flex-row md:flex-col items-center gap-3 md:gap-2 w-full md:w-auto relative mb-4 md:mb-0 z-10 bg-surface-container-lowest md:px-4">
+<div class="w-10 h-10 rounded-full bg-primary text-secondary-fixed flex items-center justify-center ring-4 ring-surface-container-lowest shadow-md">
+<span class="material-symbols-outlined fill">inventory_2</span>
+</div>
+<div class="text-left md:text-center">
+<p class="font-title-md text-title-md text-primary font-bold">Hazırlanıyor</p>
+<p class="font-label-sm text-label-sm text-secondary">Şu anki aşama</p>
+</div>
+</div>
+<!-- Step 3: Shipped -->
+<div class="flex flex-row md:flex-col items-center gap-3 md:gap-2 w-full md:w-auto relative mb-4 md:mb-0 z-10 bg-surface-container-lowest md:px-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center ring-4 ring-surface-container-lowest">
+<span class="material-symbols-outlined">local_shipping</span>
+</div>
+<div class="text-left md:text-center">
+<p class="font-title-md text-title-md text-on-surface-variant">Kargoya Verildi</p>
+<p class="font-label-sm text-label-sm text-outline">Bekleniyor</p>
+</div>
+</div>
+<!-- Step 4: Delivered -->
+<div class="flex flex-row md:flex-col items-center gap-3 md:gap-2 w-full md:w-auto relative z-10 bg-surface-container-lowest md:px-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center ring-4 ring-surface-container-lowest">
+<span class="material-symbols-outlined">home</span>
+</div>
+<div class="text-left md:text-center">
+<p class="font-title-md text-title-md text-on-surface-variant">Teslim Edildi</p>
+<p class="font-label-sm text-label-sm text-outline">Bekleniyor</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bento Grid Main Content -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column (Items & Details) -->
+<div class="lg:col-span-8 flex flex-col gap-gutter">
+<!-- Customer Information Card -->
+<section class="bg-surface-container-lowest ambient-shadow rounded-xl p-lg border border-outline-variant/20">
+<h3 class="font-title-md text-title-md text-primary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">person</span>
+                            Müşteri Bilgileri
+                        </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Contact Details -->
+<div>
+<h4 class="font-label-sm text-label-sm text-outline mb-2 uppercase tracking-wider">İletişim</h4>
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary">
+<span class="font-title-md text-title-md font-bold">AK</span>
+</div>
+<div>
+<p class="font-body-md text-body-md text-primary font-bold">Ayşe Yılmaz</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Kurumsal Müşteri</p>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-[16px]">mail</span> ayse.yilmaz@sirket.com
+                                </p>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">call</span> +90 555 123 45 67
+                                </p>
+</div>
+<!-- Delivery Address -->
+<div>
+<h4 class="font-label-sm text-label-sm text-outline mb-2 uppercase tracking-wider">Teslimat Adresi</h4>
+<p class="font-body-md text-body-md text-primary leading-relaxed">
+                                    Teknopark İstanbul, 4. Blok, No: 124<br/>
+                                    Pendik, İstanbul<br/>
+                                    Türkiye, 34906
+                                </p>
+<button class="mt-3 text-secondary-fixed font-title-md text-title-md text-[14px] flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-[16px]">map</span>
+                                    Haritada Gör
+                                </button>
+</div>
+</div>
+</section>
+<!-- Order Items Table -->
+<section class="bg-surface-container-lowest ambient-shadow rounded-xl border border-outline-variant/20 overflow-hidden">
+<div class="p-lg border-b border-outline-variant/20 flex justify-between items-center bg-surface-bright">
+<h3 class="font-title-md text-title-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">shopping_cart</span>
+                                Sipariş Kalemleri
+                            </h3>
+<span class="bg-primary-container text-secondary-fixed px-3 py-1 rounded-full font-label-sm text-label-sm">3 Ürün</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low/50">
+<tr>
+<th class="p-4 font-label-sm text-label-sm text-outline uppercase font-semibold">Ürün</th>
+<th class="p-4 font-label-sm text-label-sm text-outline uppercase font-semibold">SKU</th>
+<th class="p-4 font-label-sm text-label-sm text-outline uppercase font-semibold text-right">Birim Fiyat</th>
+<th class="p-4 font-label-sm text-label-sm text-outline uppercase font-semibold text-center">Adet</th>
+<th class="p-4 font-label-sm text-label-sm text-outline uppercase font-semibold text-right">Toplam</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20">
+<!-- Item 1 -->
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-surface-variant flex-shrink-0 overflow-hidden border border-outline-variant/30">
+<img alt="Tech Product" class="w-full h-full object-cover" data-alt="A macro shot of a sleek, dark metallic technological component resting on a soft white surface. The object features precise, machined edges and a minimalist aesthetic. Soft, diffused studio lighting highlights the premium matte finish, creating a sophisticated corporate visual suitable for an enterprise catalog." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIpHDePuDsCttRut3G_U2-C8OV58ZyiOjaVutOzQ8JZRnrsTj_dQiMVacrT-pvapebcn256K4NVYgskTGSahoWCHljzMbNVJKzy3jq4_opOg_FER51UJE-yAVb8X3byFwcRvS42rVWfFt_3gXv6r3namhi0jkvNgkQnn-D1Ueb8geQxydS-dODRvRaxsD_3sZspeEWOiA1HauHWsmLQQPaNKk5QkA4qd-KIJEZHvARfEYDo3-1eIRzidRf4uom3_lncY9Q1b68Hge9"/>
+</div>
+<div>
+<p class="font-title-md text-title-md text-primary text-[15px]">Enterprise Sunucu Modülü X-200</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">Kapasite: 2TB NVMe</p>
+</div>
+</div>
+</td>
+<td class="p-4 font-body-md text-body-md text-on-surface-variant">SRV-X200-2T</td>
+<td class="p-4 font-body-md text-body-md text-primary text-right">₺12.450,00</td>
+<td class="p-4 font-body-md text-body-md text-primary text-center">2</td>
+<td class="p-4 font-title-md text-title-md text-primary text-right">₺24.900,00</td>
+</tr>
+<!-- Item 2 -->
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="p-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-surface-variant flex-shrink-0 overflow-hidden border border-outline-variant/30">
+<div class="w-full h-full bg-gradient-to-br from-surface-container to-surface-variant flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">router</span>
+</div>
+</div>
+<div>
+<p class="font-title-md text-title-md text-primary text-[15px]">Ağ Anahtarı (Switch) 24 Port</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">Marka: NetCore</p>
+</div>
+</div>
+</td>
+<td class="p-4 font-body-md text-body-md text-on-surface-variant">NET-SW-24P</td>
+<td class="p-4 font-body-md text-body-md text-primary text-right">₺4.200,00</td>
+<td class="p-4 font-body-md text-body-md text-primary text-center">1</td>
+<td class="p-4 font-title-md text-title-md text-primary text-right">₺4.200,00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+<!-- Right Column (Summary & Notes) -->
+<div class="lg:col-span-4 flex flex-col gap-gutter">
+<!-- Order Summary Glassmorphism-hinted Card -->
+<section class="bg-primary text-white rounded-xl p-lg ambient-shadow relative overflow-hidden isolate">
+<!-- Abstract background element for premium feel -->
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-secondary-fixed/20 rounded-full blur-3xl -z-10"></div>
+<div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-primary-container to-transparent -z-10"></div>
+<h3 class="font-title-md text-title-md mb-6 flex items-center gap-2 border-b border-white/10 pb-4">
+<span class="material-symbols-outlined text-secondary-fixed">receipt</span>
+                            Sipariş Özeti
+                        </h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center font-body-md text-body-md opacity-90">
+<span>Ara Toplam</span>
+<span>₺29.100,00</span>
+</div>
+<div class="flex justify-between items-center font-body-md text-body-md opacity-90">
+<span>İndirim (Kurumsal)</span>
+<span class="text-secondary-fixed">-₺1.455,00</span>
+</div>
+<div class="flex justify-between items-center font-body-md text-body-md opacity-90">
+<span>Kargo Tutarı</span>
+<span>₺0,00</span>
+</div>
+<div class="flex justify-between items-center font-body-md text-body-md opacity-90 pb-4 border-b border-white/10">
+<span>KDV (%20)</span>
+<span>₺5.529,00</span>
+</div>
+<div class="flex justify-between items-end pt-2">
+<span class="font-title-md text-title-md text-secondary-fixed">Genel Toplam</span>
+<span class="font-display-lg text-headline-lg-mobile md:text-headline-lg font-bold">₺33.174,00</span>
+</div>
+</div>
+<button class="w-full mt-8 bg-secondary-fixed text-primary py-3 rounded-xl font-title-md text-title-md hover:brightness-110 transition-all flex justify-center items-center gap-2">
+<span class="material-symbols-outlined">payments</span>
+                            Ödeme Alındı
+                        </button>
+</section>
+<!-- Order Notes Card -->
+<section class="bg-surface-container-low rounded-xl p-lg border border-outline-variant/30 border-dashed">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-title-md text-title-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant">note_alt</span>
+                                Sipariş Notları
+                            </h3>
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/20">
+<p class="font-body-md text-body-md text-on-surface-variant italic">
+                                "Lütfen teslimatı mesai saatleri içerisinde (09:00 - 17:00) depo girişinden yapınız. Kurulum ekibi ayrıca yönlendirilecektir."
+                            </p>
+<div class="mt-3 text-right">
+<span class="font-label-sm text-label-sm text-outline">- Müşteri Notu</span>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+</div>
+</body></html>

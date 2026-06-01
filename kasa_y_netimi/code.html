@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kasa Yönetimi - B2B Enterprise Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#21252a",
+                        "surface-container-high": "#dce9ff",
+                        "tertiary-fixed-dim": "#c3c7cd",
+                        "outline-variant": "#c6c5d1",
+                        "on-error": "#ffffff",
+                        "on-surface": "#0b1c30",
+                        "surface-variant": "#d3e4fe",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#121e5c",
+                        "background": "#f8f9ff",
+                        "secondary-fixed": "#51fbe7",
+                        "on-tertiary-container": "#888c92",
+                        "on-background": "#0b1c30",
+                        "on-primary-container": "#7d88cb",
+                        "surface-container": "#e5eeff",
+                        "primary": "#00083d",
+                        "on-tertiary-fixed": "#181c21",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-bright": "#f8f9ff",
+                        "surface-tint": "#4f5a99",
+                        "surface-container-low": "#eff4ff",
+                        "outline": "#767681",
+                        "tertiary-fixed": "#dfe2e9",
+                        "secondary": "#006a60",
+                        "on-secondary-fixed": "#00201c",
+                        "on-primary-fixed": "#061353",
+                        "inverse-surface": "#213145",
+                        "on-secondary-container": "#007167",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#0c1015",
+                        "primary-fixed-dim": "#bac3ff",
+                        "primary-fixed": "#dee0ff",
+                        "secondary-fixed-dim": "#1edecb",
+                        "surface": "#f8f9ff",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed-variant": "#005048",
+                        "on-primary-fixed-variant": "#374280",
+                        "surface-container-highest": "#d3e4fe",
+                        "secondary-container": "#51fbe7",
+                        "on-surface-variant": "#454650",
+                        "inverse-primary": "#bac3ff",
+                        "surface-dim": "#cbdbf5",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "3rem",
+                        "md": "1.5rem",
+                        "sm": "1rem",
+                        "lg": "2rem",
+                        "xs": "0.5rem",
+                        "gutter": "24px",
+                        "base": "4px",
+                        "sidebar-width": "280px"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0px 4px 20px rgba(18, 30, 92, 0.05);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex">
+<!-- NavigationDrawer -->
+<aside class="hidden md:flex flex-col bg-primary dark:bg-primary w-sidebar-width h-full fixed left-0 top-0 border-r border-white/10 pt-6 z-50">
+<div class="px-6 mb-8 flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary-fixed text-3xl" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+<div>
+<h1 class="font-headline-lg text-headline-lg font-bold text-secondary-fixed text-[24px] leading-tight">FinansPort</h1>
+<p class="font-label-sm text-label-sm text-on-primary/60">B2B Enterprise Portal</p>
+</div>
+</div>
+<div class="px-6 mb-8">
+<div class="flex items-center gap-4 mb-2">
+<img alt="User Profile Avatar" class="w-12 h-12 rounded-full border-2 border-white/20" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG43smZaESgi7wY0Sg9-YH7J8zSj8A45c1u2H3tUyOU43KD-7b4iDgUraf_Yb7hSn030BwEk3CjHlHrL3XzEWEfxYQHhis8aTTpcTyPSGPYBkTp7HqucsG_Fm-fXM-lMIPPzxOnpnkwsD4YXYazgj75rAr9_Ggl2vSK-eExswPl39MvHESCkWDgEfycd2DsbxabHL-yYeqFWFpb1V9Pn47WODAcsCrgRAMDVdnQTxqOCtxcAion-agT15rvhfME3j1QQdInDir-zin"/>
+<div>
+<h2 class="font-title-md text-title-md text-on-primary">Operations Manager</h2>
+<p class="font-label-sm text-label-sm text-on-primary/60">v2.4.0</p>
+</div>
+</div>
+</div>
+<nav class="flex flex-col gap-2 flex-1 overflow-y-auto">
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 hover:bg-white/5 rounded-[15px]" href="#">
+<span class="material-symbols-outlined">sync</span>
+<span class="font-title-md text-title-md">Order Sync</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 hover:bg-white/5 rounded-[15px]" href="#">
+<span class="material-symbols-outlined">edit</span>
+<span class="font-title-md text-title-md">Product Edit</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 hover:bg-white/5 rounded-[15px]" href="#">
+<span class="material-symbols-outlined">assignment_return</span>
+<span class="font-title-md text-title-md">Returns</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 hover:bg-white/5 rounded-[15px]" href="#">
+<span class="material-symbols-outlined">rule</span>
+<span class="font-title-md text-title-md">Approval Center</span>
+</a>
+<!-- Active State using semantic mapping (Finans/Kasa relates to Goods/Money Receipt) -->
+<a class="bg-secondary-fixed text-primary rounded-[15px] mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 scale-98 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)]" href="#">
+<span class="material-symbols-outlined">input</span>
+<span class="font-title-md text-title-md">Goods Receipt</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center gap-3 transition-all duration-200 hover:bg-white/5 rounded-[15px] mt-auto mb-4" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-title-md text-title-md">Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-sidebar-width flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-background w-full sticky top-0 z-40 shadow-sm flex items-center justify-between px-xl h-20 transition-all duration-300">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-primary p-2 hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-lg text-headline-lg text-primary md:font-headline-lg md:text-headline-lg font-headline-lg-mobile text-headline-lg-mobile">Kasa Yönetimi</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex relative focus-within:ring-2 focus-within:ring-secondary rounded-[15px] transition-all">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-[15px] focus:outline-none focus:border-secondary text-on-surface w-64 font-body-md text-body-md" placeholder="Ara..." type="text"/>
+</div>
+<button class="md:hidden text-primary p-2 hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="text-primary p-2 hover:bg-surface-container-low rounded-full transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2.5 h-2.5 bg-error rounded-full border border-surface"></span>
+</button>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-xl flex-1 flex flex-col gap-gutter max-w-7xl mx-auto w-full">
+<!-- Top Actions -->
+<div class="flex justify-between items-center flex-wrap gap-4">
+<div>
+<h2 class="font-display-lg text-display-lg text-primary">₺ 1,245,670.00</h2>
+<p class="font-body-md text-body-md text-outline mt-1">Toplam Kasa Bakiyesi</p>
+</div>
+<div class="flex gap-4">
+<button class="bg-surface-container text-primary font-title-md text-title-md px-6 py-3 rounded-[15px] border border-primary flex items-center gap-2 hover:bg-surface-container-low transition-colors shadow-sm">
+<span class="material-symbols-outlined">arrow_downward</span>
+                        Ödeme Çıkışı
+                    </button>
+<button class="bg-secondary-fixed text-primary font-title-md text-title-md px-6 py-3 rounded-[15px] flex items-center gap-2 hover:opacity-90 transition-opacity shadow-sm">
+<span class="material-symbols-outlined">arrow_upward</span>
+                        Tahsilat Girişi
+                    </button>
+</div>
+</div>
+<!-- Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mt-4">
+<!-- Kasa Listesi -->
+<div class="md:col-span-2 glass-card rounded-[15px] p-6 flex flex-col hover:-translate-y-1 transition-transform duration-300">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-md text-title-md text-primary">Aktif Kasalar</h3>
+<button class="text-secondary font-title-md text-title-md hover:underline">Tümünü Gör</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Kasa Item -->
+<div class="bg-surface-container-low p-4 rounded-[15px] border border-outline-variant hover:border-secondary transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<div class="bg-primary text-white p-2 rounded-lg">
+<span class="material-symbols-outlined">storefront</span>
+</div>
+<span class="bg-secondary-fixed/20 text-on-secondary-fixed-variant px-2 py-1 rounded-md font-label-sm text-label-sm">Ana Kasa</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface mb-1">Merkez Nakit Kasa</h4>
+<p class="font-headline-lg text-headline-lg text-primary text-[24px]">₺ 450,230.00</p>
+</div>
+<!-- Kasa Item -->
+<div class="bg-surface-container-low p-4 rounded-[15px] border border-outline-variant hover:border-secondary transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<div class="bg-primary text-white p-2 rounded-lg">
+<span class="material-symbols-outlined">account_balance</span>
+</div>
+<span class="bg-secondary-fixed/20 text-on-secondary-fixed-variant px-2 py-1 rounded-md font-label-sm text-label-sm">Banka</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface mb-1">Akbank Ticari</h4>
+<p class="font-headline-lg text-headline-lg text-primary text-[24px]">₺ 680,100.00</p>
+</div>
+<!-- Kasa Item -->
+<div class="bg-surface-container-low p-4 rounded-[15px] border border-outline-variant hover:border-secondary transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<div class="bg-primary text-white p-2 rounded-lg">
+<span class="material-symbols-outlined">credit_card</span>
+</div>
+<span class="bg-secondary-fixed/20 text-on-secondary-fixed-variant px-2 py-1 rounded-md font-label-sm text-label-sm">POS</span>
+</div>
+<h4 class="font-title-md text-title-md text-on-surface mb-1">Garanti POS</h4>
+<p class="font-headline-lg text-headline-lg text-primary text-[24px]">₺ 115,340.00</p>
+</div>
+<!-- Add New -->
+<div class="bg-surface border-2 border-dashed border-outline-variant p-4 rounded-[15px] flex flex-col items-center justify-center text-outline hover:border-secondary hover:text-secondary transition-colors cursor-pointer min-h-[140px]">
+<span class="material-symbols-outlined text-3xl mb-2">add_circle</span>
+<span class="font-title-md text-title-md">Yeni Kasa Ekle</span>
+</div>
+</div>
+</div>
+<!-- Özet & Grafikler (Placeholder) -->
+<div class="glass-card rounded-[15px] p-6 flex flex-col hover:-translate-y-1 transition-transform duration-300">
+<h3 class="font-title-md text-title-md text-primary mb-6">Haftalık Nakit Akışı</h3>
+<div class="flex-1 flex items-end gap-2 h-40">
+<div class="w-full bg-secondary-fixed/30 rounded-t-lg h-[40%] relative group">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-primary text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">Pzt</div>
+</div>
+<div class="w-full bg-secondary-fixed/60 rounded-t-lg h-[70%] relative group"></div>
+<div class="w-full bg-secondary-fixed rounded-t-lg h-[90%] relative group"></div>
+<div class="w-full bg-primary-fixed rounded-t-lg h-[50%] relative group"></div>
+<div class="w-full bg-secondary-fixed/80 rounded-t-lg h-[80%] relative group"></div>
+<div class="w-full bg-primary-fixed/50 rounded-t-lg h-[30%] relative group"></div>
+<div class="w-full bg-secondary-fixed/40 rounded-t-lg h-[60%] relative group"></div>
+</div>
+<div class="flex justify-between mt-4 font-label-sm text-label-sm text-outline">
+<span>Pzt</span>
+<span>Paz</span>
+</div>
+</div>
+</div>
+<!-- Son Hareketler Listesi -->
+<div class="glass-card rounded-[15px] p-6 mt-4 flex-1">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-title-md text-title-md text-primary">Son Kasa Hareketleri</h3>
+<div class="flex gap-2">
+<button class="p-2 border border-outline-variant rounded-[15px] hover:bg-surface-container-low text-on-surface">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+<button class="p-2 border border-outline-variant rounded-[15px] hover:bg-surface-container-low text-on-surface">
+<span class="material-symbols-outlined">download</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant/50 text-outline font-label-sm text-label-sm">
+<th class="py-3 px-4 font-normal">Tarih</th>
+<th class="py-3 px-4 font-normal">İşlem Tipi</th>
+<th class="py-3 px-4 font-normal">Kasa/Banka</th>
+<th class="py-3 px-4 font-normal">Açıklama</th>
+<th class="py-3 px-4 font-normal text-right">Tutar</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-on-surface divide-y divide-outline-variant/30">
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="py-4 px-4 text-outline">24 Eki 2023, 14:30</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1 text-secondary bg-secondary/10 px-2 py-1 rounded-md text-sm font-medium">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+                                        Tahsilat
+                                    </span>
+</td>
+<td class="py-4 px-4 font-medium">Merkez Nakit Kasa</td>
+<td class="py-4 px-4 text-outline truncate max-w-[200px]">Müşteri A.Ş. Cari Ödemesi</td>
+<td class="py-4 px-4 text-right font-medium text-secondary">+ ₺ 15,000.00</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="py-4 px-4 text-outline">24 Eki 2023, 11:15</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1 text-error bg-error/10 px-2 py-1 rounded-md text-sm font-medium">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+                                        Ödeme
+                                    </span>
+</td>
+<td class="py-4 px-4 font-medium">Akbank Ticari</td>
+<td class="py-4 px-4 text-outline truncate max-w-[200px]">Ekim Ayı Ofis Kirası</td>
+<td class="py-4 px-4 text-right font-medium text-on-surface">- ₺ 42,500.00</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="py-4 px-4 text-outline">23 Eki 2023, 16:45</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1 text-secondary bg-secondary/10 px-2 py-1 rounded-md text-sm font-medium">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+                                        Tahsilat
+                                    </span>
+</td>
+<td class="py-4 px-4 font-medium">Garanti POS</td>
+<td class="py-4 px-4 text-outline truncate max-w-[200px]">Gün Sonu Kapanış Transferi</td>
+<td class="py-4 px-4 text-right font-medium text-secondary">+ ₺ 8,240.00</td>
+</tr>
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="py-4 px-4 text-outline">23 Eki 2023, 09:20</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1 text-primary bg-primary/10 px-2 py-1 rounded-md text-sm font-medium">
+<span class="material-symbols-outlined text-[16px]">swap_horiz</span>
+                                        Virman
+                                    </span>
+</td>
+<td class="py-4 px-4 font-medium">Merkez Nakit -&gt; Akbank</td>
+<td class="py-4 px-4 text-outline truncate max-w-[200px]">Nakit Fazlası Banka Yatırma</td>
+<td class="py-4 px-4 text-right font-medium text-outline">₺ 50,000.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface-container dark:bg-surface-container-highest fixed bottom-0 w-full z-50 border-t border-outline-variant shadow-[0px_-4px_20px_rgba(18,30,92,0.05)] flex justify-around items-center px-4 py-3">
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80 scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-label-sm text-label-sm mt-1">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80 scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-sm text-label-sm mt-1">Products</span>
+</a>
+<!-- Active State for Mobile (Relating to Finans/Receipts roughly mapped to Returns/Goods) -->
+<a class="flex flex-col items-center justify-center bg-secondary-fixed text-primary rounded-[15px] px-6 py-2 scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">keyboard_return</span>
+<span class="font-label-sm text-label-sm mt-1">Returns</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80 scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm mt-1">Settings</span>
+</a>
+</nav>
+</body></html>

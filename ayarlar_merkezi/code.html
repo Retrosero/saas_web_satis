@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ayarlar Merkezi</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#dfe2e9",
+                        "outline-variant": "#c6c5d1",
+                        "on-primary-container": "#7d88cb",
+                        "on-secondary-container": "#007167",
+                        "surface": "#f8f9ff",
+                        "background": "#f8f9ff",
+                        "on-primary-fixed-variant": "#374280",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#e5eeff",
+                        "on-primary-fixed": "#061353",
+                        "secondary-fixed": "#51fbe7",
+                        "error": "#ba1a1a",
+                        "tertiary": "#0c1015",
+                        "surface-variant": "#d3e4fe",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-bright": "#f8f9ff",
+                        "on-tertiary-container": "#888c92",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#bac3ff",
+                        "outline": "#767681",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#bac3ff",
+                        "on-tertiary-fixed": "#181c21",
+                        "on-surface": "#0b1c30",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "surface-container-high": "#dce9ff",
+                        "surface-dim": "#cbdbf5",
+                        "secondary-container": "#51fbe7",
+                        "inverse-on-surface": "#eaf1ff",
+                        "tertiary-fixed-dim": "#c3c7cd",
+                        "primary-container": "#121e5c",
+                        "on-background": "#0b1c30",
+                        "tertiary-container": "#21252a",
+                        "error-container": "#ffdad6",
+                        "primary": "#00083d",
+                        "surface-tint": "#4f5a99",
+                        "on-secondary-fixed": "#00201c",
+                        "secondary": "#006a60",
+                        "inverse-surface": "#213145",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#454650",
+                        "primary-fixed": "#dee0ff",
+                        "surface-container-low": "#eff4ff",
+                        "secondary-fixed-dim": "#1edecb",
+                        "on-secondary-fixed-variant": "#005048",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sidebar-width": "280px",
+                        "xl": "3rem",
+                        "md": "1.5rem",
+                        "sm": "1rem",
+                        "base": "4px",
+                        "xs": "0.5rem",
+                        "lg": "2rem",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: theme('colors.surface'); color: theme('colors.on-surface'); font-family: 'Hanken Grotesk', sans-serif; }
+        .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.3); }
+        .soft-shadow { box-shadow: 0px 4px 20px rgba(18, 30, 92, 0.05); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased min-h-screen flex">
+<!-- Web Navigation Drawer (Sidebar) -->
+<aside class="hidden md:flex w-sidebar-width h-full fixed left-0 top-0 border-r border-white/10 bg-primary flex-col pt-6 z-50">
+<!-- Brand Profile Header -->
+<div class="px-6 mb-8">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-[15px] bg-secondary-fixed flex items-center justify-center text-primary font-bold text-xl">
+                    OP
+                </div>
+<div>
+<h2 class="font-title-md text-title-md text-secondary-fixed font-bold">Operations Manager</h2>
+<p class="font-label-sm text-label-sm text-on-primary/70">B2B Enterprise Portal</p>
+</div>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex flex-col gap-2 flex-1">
+<!-- Inactive Items -->
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 rounded-[15px] scale-98 transition-transform font-title-md text-title-md" href="#">
+<span class="material-symbols-outlined mr-4" style="font-variation-settings: 'wght' 300;">sync</span>
+                Order Sync
+            </a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 rounded-[15px] scale-98 transition-transform font-title-md text-title-md" href="#">
+<span class="material-symbols-outlined mr-4" style="font-variation-settings: 'wght' 300;">edit</span>
+                Product Edit
+            </a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 rounded-[15px] scale-98 transition-transform font-title-md text-title-md" href="#">
+<span class="material-symbols-outlined mr-4" style="font-variation-settings: 'wght' 300;">assignment_return</span>
+                Returns
+            </a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 rounded-[15px] scale-98 transition-transform font-title-md text-title-md" href="#">
+<span class="material-symbols-outlined mr-4" style="font-variation-settings: 'wght' 300;">rule</span>
+                Approval Center
+            </a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 rounded-[15px] scale-98 transition-transform font-title-md text-title-md" href="#">
+<span class="material-symbols-outlined mr-4" style="font-variation-settings: 'wght' 300;">input</span>
+                Goods Receipt
+            </a>
+<!-- Active Item (Settings) -->
+<a class="bg-secondary-fixed text-primary rounded-[15px] mx-2 px-4 py-3 flex items-center transition-all duration-200 scale-98 transition-transform font-title-md text-title-md font-bold" href="#">
+<span class="material-symbols-outlined mr-4" style="font-variation-settings: 'FILL' 1;">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="p-6 mt-auto">
+<p class="font-label-sm text-label-sm text-on-primary/50">v2.4.0</p>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<main class="flex-1 flex flex-col md:ml-[280px] min-h-screen">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-40 bg-surface shadow-sm flex items-center justify-between px-6 md:px-xl h-20 transition-all focus-within:ring-2 focus-within:ring-secondary">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-primary hover:bg-surface-container-low p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary font-bold tracking-tight">Ayarlar</h1>
+</div>
+<button class="text-primary hover:bg-surface-container-low px-4 py-2 rounded-[15px] flex items-center gap-2 font-title-md text-title-md transition-colors">
+                Search
+                <span class="material-symbols-outlined">search</span>
+</button>
+</header>
+<!-- Page Canvas -->
+<div class="p-6 md:p-xl flex-1 max-w-7xl mx-auto w-full">
+<div class="flex flex-col lg:flex-row gap-gutter">
+<!-- Local Settings Navigation (Left Menu) -->
+<nav class="w-full lg:w-72 flex-shrink-0 space-y-2 mb-8 lg:mb-0">
+<a class="block bg-surface-container-lowest soft-shadow rounded-[15px] px-5 py-4 flex items-center gap-4 border border-secondary-fixed/50 text-primary group transition-all" href="#">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary group-hover:bg-secondary-fixed transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">tune</span>
+</div>
+<span class="font-title-md text-title-md font-bold">Genel</span>
+</a>
+<a class="block px-5 py-4 flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-low rounded-[15px] transition-colors group" href="#">
+<div class="w-10 h-10 rounded-lg bg-transparent flex items-center justify-center text-outline group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">domain</span>
+</div>
+<span class="font-title-md text-title-md">Firma Bilgileri</span>
+</a>
+<a class="block px-5 py-4 flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-low rounded-[15px] transition-colors group" href="#">
+<div class="w-10 h-10 rounded-lg bg-transparent flex items-center justify-center text-outline group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">description</span>
+</div>
+<span class="font-title-md text-title-md">Belge Şablonları</span>
+</a>
+<a class="block px-5 py-4 flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-low rounded-[15px] transition-colors group" href="#">
+<div class="w-10 h-10 rounded-lg bg-transparent flex items-center justify-center text-outline group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">palette</span>
+</div>
+<span class="font-title-md text-title-md">Görünüm Ayarları</span>
+</a>
+<a class="block px-5 py-4 flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-low rounded-[15px] transition-colors group" href="#">
+<div class="w-10 h-10 rounded-lg bg-transparent flex items-center justify-center text-outline group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">category</span>
+</div>
+<span class="font-title-md text-title-md">Tanımlamalar</span>
+</a>
+<a class="block px-5 py-4 flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-low rounded-[15px] transition-colors group" href="#">
+<div class="w-10 h-10 rounded-lg bg-transparent flex items-center justify-center text-outline group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">integration_instructions</span>
+</div>
+<span class="font-title-md text-title-md">XML Entegrasyonları</span>
+</a>
+<a class="block px-5 py-4 flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-low rounded-[15px] transition-colors group" href="#">
+<div class="w-10 h-10 rounded-lg bg-transparent flex items-center justify-center text-outline group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">folder_open</span>
+</div>
+<span class="font-title-md text-title-md">Evrak Ayarları</span>
+</a>
+<a class="block px-5 py-4 flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-low rounded-[15px] transition-colors group" href="#">
+<div class="w-10 h-10 rounded-lg bg-transparent flex items-center justify-center text-outline group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined">dns</span>
+</div>
+<span class="font-title-md text-title-md">Sistem Ayarları</span>
+</a>
+</nav>
+<!-- Form Area (Right Side) -->
+<div class="flex-1 bg-surface-container-lowest rounded-[15px] soft-shadow p-6 md:p-10 border border-outline-variant/30">
+<div class="mb-8 border-b border-outline-variant/30 pb-6 flex items-center justify-between">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary font-bold">Genel Ayarlar</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Sistemdeki temel tercihlerinizi ve bölgesel ayarlarınızı yapılandırın.</p>
+</div>
+</div>
+<form class="space-y-8">
+<!-- Form Section: Preferences -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-primary uppercase tracking-wider">Varsayılan Dil</label>
+<div class="relative">
+<select class="w-full appearance-none bg-surface border border-outline-variant rounded-[15px] px-4 py-3 font-body-md text-body-md text-on-surface focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed outline-none transition-all">
+<option>Türkçe (TR)</option>
+<option>English (US)</option>
+<option>Deutsch (DE)</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-outline pointer-events-none">expand_more</span>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-primary uppercase tracking-wider">Zaman Dilimi</label>
+<div class="relative">
+<select class="w-full appearance-none bg-surface border border-outline-variant rounded-[15px] px-4 py-3 font-body-md text-body-md text-on-surface focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed outline-none transition-all">
+<option>(GMT+03:00) Istanbul</option>
+<option>(GMT+00:00) London</option>
+<option>(GMT+01:00) Berlin</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-outline pointer-events-none">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Form Section: Toggles / Switches -->
+<div class="bg-surface rounded-[15px] p-6 border border-outline-variant/50 space-y-6">
+<div class="flex items-center justify-between">
+<div>
+<h4 class="font-title-md text-title-md text-primary">Otomatik Kaydetme</h4>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm mt-1">Formlardaki değişiklikleri çıkış yaparken otomatik kaydet.</p>
+</div>
+<!-- Toggle Switch -->
+<button class="relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-secondary-fixed transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-secondary-fixed focus:ring-offset-2" type="button">
+<span aria-hidden="true" class="translate-x-5 pointer-events-none inline-block h-6 w-6 transform rounded-full bg-primary shadow ring-0 transition duration-200 ease-in-out"></span>
+</button>
+</div>
+<div class="h-px bg-outline-variant/30 w-full"></div>
+<div class="flex items-center justify-between">
+<div>
+<h4 class="font-title-md text-title-md text-primary">Bildirim Sesleri</h4>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm mt-1">Yeni onay ve sipariş bildirimlerinde ses çal.</p>
+</div>
+<!-- Toggle Switch Off -->
+<button class="relative inline-flex h-7 w-12 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-outline-variant transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-secondary-fixed focus:ring-offset-2" type="button">
+<span aria-hidden="true" class="translate-x-0 pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"></span>
+</button>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center justify-end gap-4 pt-6 mt-8 border-t border-outline-variant/30">
+<button class="px-6 py-3 rounded-[15px] font-title-md text-title-md text-primary border border-outline-variant hover:bg-surface-container transition-colors" type="button">
+                                İptal
+                            </button>
+<button class="px-8 py-3 rounded-[15px] bg-secondary-fixed text-primary font-title-md text-title-md font-bold hover:opacity-90 shadow-sm transition-all flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-sm">save</span>
+                                Değişiklikleri Kaydet
+                            </button>
+</div>
+</form>
+</div>
+</div>
+</div>
+<!-- Mobile padding to account for BottomNav -->
+<div class="h-24 md:hidden"></div>
+</main>
+<!-- Mobile Bottom Navigation Bar -->
+<nav class="fixed bottom-0 w-full z-50 md:hidden border-t border-outline-variant shadow-[0px_-4px_20px_rgba(18,30,92,0.05)] bg-surface-container flex justify-around items-center px-4 py-3">
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80 scale-95 duration-150 p-2" href="#">
+<span class="material-symbols-outlined mb-1">shopping_cart</span>
+<span class="font-label-sm text-label-sm">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80 scale-95 duration-150 p-2" href="#">
+<span class="material-symbols-outlined mb-1">inventory_2</span>
+<span class="font-label-sm text-label-sm">Products</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant active:opacity-80 scale-95 duration-150 p-2" href="#">
+<span class="material-symbols-outlined mb-1">keyboard_return</span>
+<span class="font-label-sm text-label-sm">Returns</span>
+</a>
+<!-- Active Nav Item -->
+<a class="flex flex-col items-center justify-center bg-secondary-fixed text-primary rounded-[15px] px-6 py-2 active:opacity-80 scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-label-sm text-label-sm font-bold">Settings</span>
+</a>
+</nav>
+</body></html>

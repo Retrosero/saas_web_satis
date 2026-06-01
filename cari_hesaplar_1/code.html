@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cari Hesap Listesi</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#dce9ff",
+                        "primary": "#00083d",
+                        "on-primary-fixed": "#061353",
+                        "surface-container-highest": "#d3e4fe",
+                        "primary-container": "#121e5c",
+                        "inverse-primary": "#bac3ff",
+                        "surface-tint": "#4f5a99",
+                        "on-background": "#0b1c30",
+                        "outline": "#767681",
+                        "on-tertiary-fixed": "#181c21",
+                        "on-primary-container": "#7d88cb",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#e5eeff",
+                        "surface-dim": "#cbdbf5",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#007167",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#21252a",
+                        "inverse-surface": "#213145",
+                        "background": "#f8f9ff",
+                        "secondary-container": "#51fbe7",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#bac3ff",
+                        "on-surface-variant": "#454650",
+                        "tertiary-fixed": "#dfe2e9",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "surface-container-low": "#eff4ff",
+                        "secondary-fixed-dim": "#1edecb",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#374280",
+                        "on-secondary-fixed": "#00201c",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#d3e4fe",
+                        "secondary": "#006a60",
+                        "on-tertiary-container": "#888c92",
+                        "surface-bright": "#f8f9ff",
+                        "primary-fixed": "#dee0ff",
+                        "on-surface": "#0b1c30",
+                        "surface": "#f8f9ff",
+                        "secondary-fixed": "#51fbe7",
+                        "tertiary-fixed-dim": "#c3c7cd",
+                        "outline-variant": "#c6c5d1",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#0c1015",
+                        "on-secondary-fixed-variant": "#005048"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "15px",
+                        "lg": "15px",
+                        "xl": "15px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "3rem",
+                        "xs": "0.5rem",
+                        "sm": "1rem",
+                        "sidebar-width": "280px",
+                        "md": "1.5rem",
+                        "lg": "2rem",
+                        "gutter": "24px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col md:flex-row font-body-md text-body-md overflow-x-hidden">
+<!-- Sidebar (Desktop) -->
+<aside class="hidden md:flex flex-col gap-xs p-sm h-screen w-sidebar-width fixed left-0 top-0 z-50 bg-primary border-r border-white/10 shrink-0">
+<!-- Logo Area -->
+<div class="px-sm py-md mb-md">
+<h1 class="font-headline-lg text-headline-lg text-secondary">CariPro</h1>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-1 flex flex-col gap-xs">
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+                Inventory
+            </a>
+<a aria-current="page" class="bg-secondary text-primary rounded-[15px] mx-xs px-sm py-xs flex items-center gap-xs font-bold cursor-pointer transition-all duration-200" href="#">
+<span class="material-symbols-outlined font-variation-settings: 'FILL' 1;" data-icon="contacts" data-weight="fill">contacts</span>
+                Cari Hesaplar
+            </a>
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+                Orders
+            </a>
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+                Analytics
+            </a>
+<a class="text-white/80 hover:text-white px-sm py-xs flex items-center gap-xs hover:bg-white/10 rounded-[15px] transition-all cursor-pointer duration-200 mt-auto" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+</nav>
+<!-- User Profile -->
+<div class="mt-auto px-sm py-sm border-t border-white/10 flex items-center gap-sm">
+<img alt="Alex Miller" class="w-10 h-10 rounded-full border-2 border-secondary" data-alt="A professional headshot of a man with short brown hair, wearing a dark navy blazer over a crisp white shirt. The background is a blurred modern office setting with bright, natural lighting. The overall mood is confident and corporate, fitting a high-performance SaaS environment. The image is a clear, high-resolution portrait." src="https://lh3.googleusercontent.com/aida-public/AB6AXuASKjVpZKkMEVBmbYInNPxQIJmdYKE-f6jO4Bd0UQcNBqGN33iDjkS_B5JkuvQ_Qqvu5n-7LDFr7O8LHfgFapD1bYF2rzjhOxiw-t_1na5ipAFuAWyYSvJCrYSKGObBfqdtRQoVi-4KTRe_Ay8wGVwZAh09rpKUdahbfyYLeUlOprkWwrOWwbxppBhgVDcQbGsCTV8I9IJSXKssXgwZa29z1JSCfaZWKsqfH2c9c7EwrKQfWPi2yIQUTc65-QPxNGL9iqvzWlZEq6gW"/>
+<div>
+<div class="font-title-md text-title-md text-white">Alex Miller</div>
+<div class="font-label-sm text-label-sm text-white/70">Operations Lead</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<div class="flex-1 md:ml-sidebar-width flex flex-col min-h-screen">
+<!-- Top App Bar (Mobile) -->
+<header class="md:hidden flex items-center justify-between px-md w-full h-16 bg-surface shadow-sm shadow-[0px_4px_20px_rgba(18,30,92,0.05)] docked full-width top-0 z-40 sticky">
+<div class="flex items-center gap-sm">
+<button class="text-primary hover:bg-surface-container-low transition-colors p-xs rounded-full">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Cari Hesaplar</h1>
+</div>
+<button class="text-primary hover:bg-surface-container-low transition-colors p-xs rounded-full">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 p-md lg:p-xl xl:max-w-7xl mx-auto w-full">
+<!-- Header Section (Desktop) -->
+<div class="hidden md:flex justify-between items-end mb-lg">
+<div>
+<h2 class="font-display-lg text-display-lg text-primary">Cari Hesap Listesi</h2>
+<p class="text-on-surface-variant mt-xs">Müşteri ve tedarikçi hesaplarınızı yönetin.</p>
+</div>
+</div>
+<!-- Search & Filter Bar -->
+<div class="bg-surface-container-lowest p-md rounded-DEFAULT shadow-[0px_4px_20px_rgba(18,30,92,0.05)] mb-lg flex flex-col md:flex-row gap-md items-center justify-between">
+<!-- Search Input -->
+<div class="relative w-full md:w-1/2 lg:w-1/3">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full pl-xl pr-sm py-sm rounded-DEFAULT border border-outline-variant bg-surface-bright focus:border-secondary focus:ring-1 focus:ring-secondary outline-none transition-all text-on-surface placeholder:text-outline-variant" placeholder="Cari unvanı veya vergi no ile ara..." type="text"/>
+</div>
+<!-- Filters -->
+<div class="flex gap-sm w-full md:w-auto overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
+<button class="px-md py-xs rounded-DEFAULT bg-primary text-on-primary font-title-md text-title-md whitespace-nowrap active:scale-95 transition-transform">Tümü</button>
+<button class="px-md py-xs rounded-DEFAULT border border-outline-variant text-on-surface hover:bg-surface-container-low font-title-md text-title-md whitespace-nowrap transition-colors active:scale-95">Müşteriler</button>
+<button class="px-md py-xs rounded-DEFAULT border border-outline-variant text-on-surface hover:bg-surface-container-low font-title-md text-title-md whitespace-nowrap transition-colors active:scale-95">Tedarikçiler</button>
+</div>
+</div>
+<!-- Bento Grid List -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Card 1: Müşteri - Alacaklı (Biz alacaklıyız) -->
+<div class="bg-surface-container-lowest rounded-DEFAULT p-md shadow-[0px_4px_20px_rgba(18,30,92,0.05)] hover:-translate-y-1 hover:shadow-lg transition-all duration-300 flex flex-col border-l-4 border-l-secondary">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<span class="inline-block px-xs py-[2px] rounded-sm bg-surface-container-highest text-primary font-label-sm text-label-sm mb-xs">Müşteri</span>
+<h3 class="font-title-md text-title-md text-primary">TechNova Bilişim A.Ş.</h3>
+<p class="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="tag">tag</span> VN: 1234567890
+                            </p>
+</div>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+<div class="my-md flex-1">
+<div class="text-on-surface-variant font-label-sm text-label-sm mb-1">Güncel Bakiye</div>
+<div class="font-headline-lg text-headline-lg text-secondary">₺ 45,250.00</div>
+<div class="text-secondary text-xs flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="arrow_upward">arrow_upward</span> Alacaklıyız
+                        </div>
+</div>
+<div class="flex justify-between items-center border-t border-outline-variant/30 pt-sm mt-auto">
+<div class="text-on-surface-variant text-xs flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="history">history</span> Son İşlem: 2 gün önce
+                        </div>
+<button class="text-primary hover:text-secondary font-title-md text-title-md flex items-center gap-1 transition-colors">
+                            Profili Görüntüle <span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Card 2: Tedarikçi - Borçlu -->
+<div class="bg-surface-container-lowest rounded-DEFAULT p-md shadow-[0px_4px_20px_rgba(18,30,92,0.05)] hover:-translate-y-1 hover:shadow-lg transition-all duration-300 flex flex-col border-l-4 border-error">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<span class="inline-block px-xs py-[2px] rounded-sm bg-surface-container text-on-surface-variant font-label-sm text-label-sm mb-xs">Tedarikçi</span>
+<h3 class="font-title-md text-title-md text-primary">Global Lojistik Ltd.</h3>
+<p class="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="tag">tag</span> VN: 9876543210
+                            </p>
+</div>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+<div class="my-md flex-1">
+<div class="text-on-surface-variant font-label-sm text-label-sm mb-1">Güncel Bakiye</div>
+<div class="font-headline-lg text-headline-lg text-error">₺ 12,800.50</div>
+<div class="text-error text-xs flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="arrow_downward">arrow_downward</span> Borçluyuz
+                        </div>
+</div>
+<div class="flex justify-between items-center border-t border-outline-variant/30 pt-sm mt-auto">
+<div class="text-on-surface-variant text-xs flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="history">history</span> Son İşlem: Bugün
+                        </div>
+<button class="text-primary hover:text-secondary font-title-md text-title-md flex items-center gap-1 transition-colors">
+                            Profili Görüntüle <span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Card 3: Müşteri - Sıfır Bakiye -->
+<div class="bg-surface-container-lowest rounded-DEFAULT p-md shadow-[0px_4px_20px_rgba(18,30,92,0.05)] hover:-translate-y-1 hover:shadow-lg transition-all duration-300 flex flex-col border-l-4 border-outline-variant">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<span class="inline-block px-xs py-[2px] rounded-sm bg-surface-container-highest text-primary font-label-sm text-label-sm mb-xs">Müşteri</span>
+<h3 class="font-title-md text-title-md text-primary">Apex Danışmanlık</h3>
+<p class="text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="tag">tag</span> VN: 4561237890
+                            </p>
+</div>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+<div class="my-md flex-1">
+<div class="text-on-surface-variant font-label-sm text-label-sm mb-1">Güncel Bakiye</div>
+<div class="font-headline-lg text-headline-lg text-on-surface">₺ 0.00</div>
+<div class="text-outline text-xs flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="horizontal_rule">horizontal_rule</span> Kapandı
+                        </div>
+</div>
+<div class="flex justify-between items-center border-t border-outline-variant/30 pt-sm mt-auto">
+<div class="text-on-surface-variant text-xs flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="history">history</span> Son İşlem: 1 hafta önce
+                        </div>
+<button class="text-primary hover:text-secondary font-title-md text-title-md flex items-center gap-1 transition-colors">
+                            Profili Görüntüle <span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Floating Action Button (FAB) - Right Bottom -->
+<button class="fixed bottom-20 md:bottom-lg right-md md:right-lg w-14 h-14 bg-secondary text-primary rounded-full shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center justify-center z-40 active:scale-95 group">
+<span class="material-symbols-outlined text-[28px] group-hover:rotate-90 transition-transform duration-300" data-icon="add">add</span>
+</button>
+<!-- Bottom Navigation Bar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface border-t border-outline-variant shadow-[0px_-4px_12px_rgba(0,0,0,0.05)] flex justify-around items-center py-xs px-md pb-safe">
+<a class="text-on-surface-variant flex flex-col items-center p-xs rounded-DEFAULT hover:bg-surface-container-low transition-colors w-16" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="font-label-sm text-[10px]">Home</span>
+</a>
+<a aria-current="page" class="text-secondary flex flex-col items-center p-xs rounded-DEFAULT bg-surface-container-low transition-colors w-16" href="#">
+<span class="material-symbols-outlined font-variation-settings: 'FILL' 1; mb-1" data-icon="list_alt" data-weight="fill">list_alt</span>
+<span class="font-label-sm text-[10px]">Liste</span>
+</a>
+<a class="text-on-surface-variant flex flex-col items-center p-xs rounded-DEFAULT hover:bg-surface-container-low transition-colors w-16 relative" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-3 w-2 h-2 bg-error rounded-full border border-surface"></span>
+<span class="font-label-sm text-[10px]">Notif</span>
+</a>
+<a class="text-on-surface-variant flex flex-col items-center p-xs rounded-DEFAULT hover:bg-surface-container-low transition-colors w-16" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="font-label-sm text-[10px]">Profil</span>
+</a>
+</nav>
+<style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Mobile safe area padding for bottom nav */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .pb-safe {
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+        }
+    </style>
+</body></html>

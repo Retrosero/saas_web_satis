@@ -1,0 +1,163 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>İşlem Detayları</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "outline": "#767681",
+                        "surface-container-low": "#eff4ff",
+                        "on-surface": "#0b1c30",
+                        "tertiary-fixed-dim": "#c3c7cd",
+                        "primary-container": "#121e5c",
+                        "primary": "#00083d",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#d3e4fe",
+                        "secondary-fixed-dim": "#1edecb",
+                        "on-background": "#0b1c30",
+                        "on-tertiary": "#ffffff",
+                        "inverse-primary": "#bac3ff",
+                        "primary-fixed": "#dee0ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "secondary-container": "#51fbe7",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#7d88cb",
+                        "secondary": "#006a60",
+                        "outline-variant": "#c6c5d1",
+                        "on-tertiary-container": "#888c92",
+                        "inverse-surface": "#213145",
+                        "on-secondary-fixed-variant": "#005048",
+                        "on-secondary-container": "#007167",
+                        "on-primary-fixed-variant": "#374280",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "surface-tint": "#4f5a99",
+                        "on-secondary-fixed": "#00201c",
+                        "secondary-fixed": "#51fbe7",
+                        "on-primary-fixed": "#061353",
+                        "surface-dim": "#cbdbf5",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "surface": "#f8f9ff",
+                        "on-surface-variant": "#454650",
+                        "on-secondary": "#ffffff",
+                        "background": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "surface-bright": "#f8f9ff",
+                        "primary-fixed-dim": "#bac3ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "tertiary-fixed": "#dfe2e9",
+                        "on-tertiary-fixed": "#181c21",
+                        "tertiary": "#0c1015",
+                        "error": "#ba1a1a",
+                        "surface-container": "#e5eeff",
+                        "tertiary-container": "#21252a"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "15px",
+                        "lg": "15px",
+                        "xl": "15px",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "base": "4px",
+                        "xs": "0.5rem",
+                        "sidebar-width": "280px",
+                        "gutter": "24px",
+                        "xl": "3rem",
+                        "sm": "1rem",
+                        "md": "1.5rem",
+                        "lg": "2rem"
+                    },
+                    fontFamily: {
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"]
+                    },
+                    fontSize: {
+                        "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "600" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "title-md": ["18px", { lineHeight: "24px", fontWeight: "600" }],
+                        "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "700" }],
+                        "headline-lg-mobile": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen">
+<!-- Top App Bar (Task-Focused - No Global Nav) -->
+<header class="bg-primary text-on-primary flex items-center justify-between px-md w-full h-16 sticky top-0 z-50">
+<button aria-label="Go back" class="flex items-center justify-center p-xs rounded-full hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-title-md text-title-md absolute left-1/2 -translate-x-1/2">İşlem Detayları</h1>
+<div class="w-10"></div> <!-- Spacer for centering -->
+</header>
+<!-- Main Content Canvas -->
+<main class="p-sm md:p-lg max-w-3xl mx-auto space-y-md">
+<!-- Header Card -->
+<section class="bg-surface-container-lowest p-md rounded-lg shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-surface-container flex flex-col items-center text-center">
+<div class="w-16 h-16 bg-surface-container-low rounded-full flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="receipt_long">receipt_long</span>
+</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-base">Fatura Ödemesi</h2>
+<div class="inline-flex items-center gap-xs bg-surface-container-low text-primary px-sm py-xs rounded-full font-label-sm text-label-sm"><span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span>Tamamlandı</div>
+</section>
+<!-- Amount Focus -->
+<section class="bg-primary-container text-on-primary rounded-lg p-lg shadow-sm flex flex-col items-center justify-center relative overflow-hidden">
+<!-- Subtle background pattern -->
+<div class="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white to-transparent"></div>
+<p class="font-label-sm text-label-sm text-inverse-primary uppercase tracking-wider mb-xs relative z-10">TRANSFER EDİLEN TUTAR</p>
+<p class="font-display-lg text-display-lg text-[#00D7C4] relative z-10">-$4,250.00</p>
+</section>
+<!-- Details List -->
+<section class="bg-surface-container-lowest rounded-lg shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-surface-container divide-y divide-surface-container">
+<div class="p-sm flex justify-between items-center">
+<span class="font-body-md text-body-md text-on-surface-variant flex items-center gap-xs"><span class="material-symbols-outlined text-[18px]" data-icon="calendar_today">calendar_today</span>Tarih</span>
+<span class="font-title-md text-title-md text-on-surface">Oct 24, 2023, 14:30</span>
+</div>
+<div class="p-sm flex flex-col gap-xs">
+<span class="font-body-md text-body-md text-on-surface-variant flex items-center gap-xs"><span class="material-symbols-outlined text-[18px]" data-icon="description">description</span>Açıklama</span>
+<p class="font-body-md text-body-md text-on-surface bg-surface-container-low p-sm rounded-lg">Q3 Sunucu Altyapısı ve Bakım Hizmetleri Ödemesi (Fatura #INV-2023-089).</p>
+</div>
+<div class="p-sm flex justify-between items-center">
+<span class="font-body-md text-body-md text-on-surface-variant flex items-center gap-xs"><span class="material-symbols-outlined text-[18px]" data-icon="account_balance">account_balance</span>Hesap</span>
+<span class="font-title-md text-title-md text-on-surface">Ana İşletme Hesabı ****4092</span>
+</div>
+<div class="p-sm flex justify-between items-center">
+<span class="font-body-md text-body-md text-on-surface-variant flex items-center gap-xs"><span class="material-symbols-outlined text-[18px]" data-icon="link">link</span>Kaynak Belge</span>
+<a class="font-title-md text-title-md text-secondary hover:underline flex items-center gap-base" href="#">
+                    INV-2023-089
+                    <span class="material-symbols-outlined text-[16px]" data-icon="open_in_new">open_in_new</span>
+</a>
+</div>
+<div class="p-sm flex justify-between items-center">
+<span class="font-body-md text-body-md text-on-surface-variant flex items-center gap-xs"><span class="material-symbols-outlined text-[18px]" data-icon="tag">tag</span>İşlem Kimliği</span>
+<span class="font-body-md text-body-md text-on-surface font-mono text-sm bg-surface-variant px-xs py-base rounded">TRX-98273-AB9</span>
+</div>
+</section>
+<!-- Actions -->
+<div class="flex gap-sm pt-sm pb-xl">
+<button class="flex-1 border-[1.5px] border-primary text-primary font-title-md text-title-md py-sm rounded-lg hover:bg-surface-container transition-colors flex items-center justify-center gap-xs"><span class="material-symbols-outlined" data-icon="share">share</span>Paylaş</button>
+<button class="flex-1 bg-[#00D7C4] text-[#121E5C] font-title-md text-title-md py-sm rounded-lg hover:brightness-110 transition-all flex items-center justify-center gap-xs"><span class="material-symbols-outlined" data-icon="download">download</span>Makbuz</button>
+</div>
+</main>
+
+
+</body></html>

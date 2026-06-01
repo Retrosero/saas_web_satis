@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Katalog Yönetim Paneli</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed": "#51fbe7",
+                      "surface-dim": "#cbdbf5",
+                      "outline-variant": "#c6c5d1",
+                      "surface-container-low": "#eff4ff",
+                      "error": "#ba1a1a",
+                      "surface-bright": "#f8f9ff",
+                      "tertiary-fixed": "#dfe2e9",
+                      "on-secondary-fixed": "#00201c",
+                      "surface-tint": "#4f5a99",
+                      "on-surface-variant": "#454650",
+                      "on-error": "#ffffff",
+                      "surface": "#f8f9ff",
+                      "on-surface": "#0b1c30",
+                      "on-tertiary-container": "#888c92",
+                      "tertiary-container": "#21252a",
+                      "on-secondary": "#ffffff",
+                      "surface-variant": "#d3e4fe",
+                      "secondary-container": "#51fbe7",
+                      "inverse-on-surface": "#eaf1ff",
+                      "secondary-fixed-dim": "#1edecb",
+                      "on-primary-fixed-variant": "#374280",
+                      "on-tertiary-fixed-variant": "#43474d",
+                      "primary-fixed-dim": "#bac3ff",
+                      "on-secondary-container": "#007167",
+                      "surface-container-high": "#dce9ff",
+                      "error-container": "#ffdad6",
+                      "surface-container-highest": "#d3e4fe",
+                      "surface-container": "#e5eeff",
+                      "secondary": "#006a60",
+                      "on-primary-fixed": "#061353",
+                      "tertiary": "#0c1015",
+                      "primary-fixed": "#dee0ff",
+                      "inverse-surface": "#213145",
+                      "on-primary-container": "#7d88cb",
+                      "tertiary-fixed-dim": "#c3c7cd",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-container": "#121e5c",
+                      "on-error-container": "#93000a",
+                      "outline": "#767681",
+                      "on-tertiary": "#ffffff",
+                      "on-background": "#0b1c30",
+                      "on-primary": "#ffffff",
+                      "primary": "#00083d",
+                      "on-tertiary-fixed": "#181c21",
+                      "background": "#f8f9ff",
+                      "on-secondary-fixed-variant": "#005048",
+                      "inverse-primary": "#bac3ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px",
+                      "custom": "15px"
+              },
+              "spacing": {
+                      "sidebar-width": "280px",
+                      "xl": "3rem",
+                      "lg": "2rem",
+                      "md": "1.5rem",
+                      "xs": "0.5rem",
+                      "sm": "1rem",
+                      "base": "4px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg-mobile": [
+                              "Hanken Grotesk"
+                      ],
+                      "title-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "display-lg": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "title-md": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+            },
+          }
+        }
+    </script>
+<style>
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0px 4px 20px rgba(18, 30, 92, 0.05);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex">
+<!-- Sidebar (NavigationDrawer) -->
+<aside class="hidden md:flex flex-col w-sidebar-width h-screen sticky left-0 top-0 bg-primary dark:bg-primary border-r border-white/10 p-md z-50">
+<div class="mb-xl">
+<h1 class="font-headline-lg text-headline-lg text-secondary-fixed">Katalog<span class="text-white">Pro</span></h1>
+</div>
+<div class="flex items-center gap-sm mb-lg p-sm rounded-custom bg-white/5 border border-white/10">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-primary-container font-bold">
+                YB
+            </div>
+<div>
+<p class="font-title-md text-title-md text-white text-sm">Yönetici</p>
+<p class="font-label-sm text-label-sm text-white/70">Sistem Yetkilisi</p>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="text-white/80 hover:text-white flex items-center gap-sm px-md py-sm transition-colors hover:bg-white/10 rounded-custom" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="bg-secondary-fixed text-on-secondary-fixed rounded-custom flex items-center gap-sm px-md py-sm scale-98 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-body-md text-body-md font-semibold">Katalog Yönetimi</span>
+</a>
+<a class="text-white/80 hover:text-white flex items-center gap-sm px-md py-sm transition-colors hover:bg-white/10 rounded-custom" href="#">
+<span class="material-symbols-outlined" data-icon="category">category</span>
+<span class="font-body-md text-body-md">Kategoriler</span>
+</a>
+<a class="text-white/80 hover:text-white flex items-center gap-sm px-md py-sm transition-colors hover:bg-white/10 rounded-custom" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Ayarlar</span>
+</a>
+</nav>
+<div class="mt-auto">
+<a class="text-white/60 hover:text-error flex items-center gap-sm px-md py-sm transition-colors rounded-custom" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-body-md text-body-md">Çıkış Yap</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-xl py-md w-full bg-surface sticky top-0 z-40 shadow-sm">
+<div class="flex items-center gap-sm">
+<button class="md:hidden p-2 text-primary hover:bg-surface-container-high rounded-full">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h2 class="font-headline-lg text-headline-lg text-primary">Katalog Yönetimi</h2>
+</div>
+<div class="flex items-center gap-md">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-custom focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed outline-none w-64 text-sm" placeholder="Ürün ara..." type="text"/>
+</div>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="p-gutter lg:p-xl flex-1 space-y-lg">
+<!-- Actions & Filters -->
+<div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-md">
+<div class="flex flex-wrap gap-sm">
+<button class="px-4 py-2 bg-white border border-outline-variant rounded-custom text-on-surface text-sm font-semibold hover:bg-surface-container-low transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px]" data-icon="filter_list">filter_list</span> Filtrele
+                    </button>
+<div class="bg-white border border-outline-variant rounded-custom flex overflow-hidden">
+<button class="px-4 py-2 bg-surface-container-low text-primary text-sm font-semibold border-r border-outline-variant">Tümü (124)</button>
+<button class="px-4 py-2 hover:bg-surface-container-low text-on-surface text-sm transition-colors border-r border-outline-variant">Aktif (98)</button>
+<button class="px-4 py-2 hover:bg-surface-container-low text-on-surface text-sm transition-colors">Pasif (26)</button>
+</div>
+</div>
+<button class="px-6 py-3 bg-secondary-fixed text-primary-container font-title-md text-title-md font-bold rounded-custom hover:opacity-90 transition-opacity flex items-center gap-2 shadow-sm">
+<span class="material-symbols-outlined" data-icon="add">add</span> Yeni Ürün Ekle
+                </button>
+</div>
+<!-- Bento Grid Layout for Products -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter">
+<!-- Product Card 1 (Active) -->
+<div class="glass-card rounded-custom p-sm flex flex-col hover:-translate-y-1 transition-transform duration-300">
+<div class="relative h-48 rounded-lg overflow-hidden mb-sm bg-surface-variant">
+<img alt="Premium akıllı saat, modern ve şık tasarım, profesyonel aydınlatma altında beyaz arka plan." class="w-full h-full object-cover" data-alt="A sleek, modern smartwatch displayed against a pristine white background. The lighting is professional, high-key, and soft, highlighting the premium metallic finish and clean lines of the device. The overall aesthetic is corporate, high-tech, and minimalist, perfectly suited for an enterprise e-commerce catalog." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrYqp3Svgl3M3N4gian6QIyv-mayiKb8tFEBO_LUKSakM-B8RC9tYOuN_WfrSjYcczuZhGwoeSYkkkRutQvw1cQPMdSZHqyEMk4WCHKyEpL3Bu9_BhC1oWp1UPP7hRdBLQam3rlbIeMCC0ldH3LbIMaFivRq0f3Avc38Ovuo3Klt09KPq48F8S3dSLSyUFmQAdEqHru2RVAdCQSoIr3lJ4ZYuzAXGL5D5pmoCOja1H71cUA_F_4ZV1mb1nNHwhgYQXPt59Pcx22b_6"/>
+<div class="absolute top-2 right-2 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-md flex items-center gap-1 shadow-sm">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-xs font-semibold text-secondary">Yayında</span>
+</div>
+</div>
+<div class="flex-1 px-2">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-title-md text-title-md text-primary truncate pr-2">Pro Serisi Akıllı Saat</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">Elektronik</span>
+</div>
+<p class="text-sm text-on-tertiary-container mb-4 line-clamp-2">Gelişmiş sağlık takibi ve 5 gün pil ömrü ile premium akıllı saat modeli.</p>
+<div class="flex justify-between items-center mt-auto pt-4 border-t border-outline-variant/30">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary">₺4.299</span>
+<div class="flex gap-2">
+<button class="p-2 rounded-md hover:bg-surface-container text-on-surface transition-colors" title="Düzenle">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button class="p-2 rounded-md hover:bg-surface-container text-on-surface transition-colors" title="Katalogdan Çıkar">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility_off">visibility_off</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Card 2 (Inactive) -->
+<div class="glass-card rounded-custom p-sm flex flex-col hover:-translate-y-1 transition-transform duration-300 opacity-80">
+<div class="relative h-48 rounded-lg overflow-hidden mb-sm bg-surface-variant">
+<div class="absolute inset-0 bg-black/5 z-10"></div>
+<img alt="Gürültü önleyici kulaklık, siyah renk, profesyonel çekim." class="w-full h-full object-cover grayscale-[30%]" data-alt="High-end noise-canceling over-ear headphones in matte black, placed on a clean, light-colored surface. The lighting is studio-quality, emphasizing the texture of the ear cushions and the sleek design. The visual tone is highly professional, matching a premium corporate product catalog." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-6Q_BkPcMTXGK54VIHYIr4l2Gl7Lu5GMFKTIG9rocAiGL-CgN5Yo6cD2HfpUtTEvy-XdRCaaviFfZz8bHEYW4xcf8sk1g49AirucSMOOJB2bzsaj2QzV5gLjsQQ3_y4qUpmIKqfSj2ziEWSlfZulXR4tH73kj5E2m8cA-VBtW9JPtrQzPo3N9_BHziHlTzz9TXiXZ96o8u-PWETL42-c4WbJDno3BLIKt77YHJg_iwvs7LxeJV00DxxmRs7teJbN4KjdKDOV20o2t"/>
+<div class="absolute top-2 right-2 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-md flex items-center gap-1 shadow-sm z-20">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+<span class="text-xs font-semibold text-outline">Pasif</span>
+</div>
+</div>
+<div class="flex-1 px-2">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-title-md text-title-md text-primary truncate pr-2">Studio Master Kulaklık</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">Ses</span>
+</div>
+<p class="text-sm text-on-tertiary-container mb-4 line-clamp-2">Aktif gürültü engelleme teknolojisine sahip profesyonel stüdyo kulaklığı.</p>
+<div class="flex justify-between items-center mt-auto pt-4 border-t border-outline-variant/30">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary">₺2.850</span>
+<div class="flex gap-2">
+<button class="p-2 rounded-md hover:bg-surface-container text-on-surface transition-colors" title="Düzenle">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button class="p-2 rounded-md hover:bg-secondary-container text-secondary transition-colors" title="Kataloğa Ekle">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Card 3 (Active) -->
+<div class="glass-card rounded-custom p-sm flex flex-col hover:-translate-y-1 transition-transform duration-300">
+<div class="relative h-48 rounded-lg overflow-hidden mb-sm bg-surface-variant">
+<img alt="Kırmızı spor ayakkabı, dinamik aydınlatma, stüdyo çekimi." class="w-full h-full object-cover" data-alt="A vibrant red athletic shoe dynamically angled against a neutral background. Studio lighting creates sharp contrasts and highlights the shoe's textured materials. The image looks crisp and ready for a modern e-commerce platform, maintaining a clean, high-quality corporate visual standard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC55aJ9bsgHb4oqyInjntIfsTQn4q5S06gFq7vv_JYiIJLVhkUgWowUauxBNUMJVHmUubBqgZ8_A3eJe9GSbOg9B5Mwq-oHaKTpfVeiH7mMdlgW2MUgbScfuGHnr-b96GvSDNXPz3BvpDdYL6dqoqdvX2jiKgDvGwq5s0kne5peforr0lW4sCFb0CfNdSG1S2jycpPor6F-1fleeViJMJA2GsY5hvFfXCc_5gLpddoPE1CV9v6cjeMstweF-JUzu3_kMHOjxWYcZnyG"/>
+<div class="absolute top-2 right-2 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-md flex items-center gap-1 shadow-sm">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-xs font-semibold text-secondary">Yayında</span>
+</div>
+</div>
+<div class="flex-1 px-2">
+<div class="flex justify-between items-start mb-1">
+<h3 class="font-title-md text-title-md text-primary truncate pr-2">Ultra Boost Koşu Ayakkabısı</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">Giyim</span>
+</div>
+<p class="text-sm text-on-tertiary-container mb-4 line-clamp-2">Maksimum enerji dönüşümü sağlayan profesyonel koşu ayakkabısı.</p>
+<div class="flex justify-between items-center mt-auto pt-4 border-t border-outline-variant/30">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary">₺1.950</span>
+<div class="flex gap-2">
+<button class="p-2 rounded-md hover:bg-surface-container text-on-surface transition-colors" title="Düzenle">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button class="p-2 rounded-md hover:bg-surface-container text-on-surface transition-colors" title="Katalogdan Çıkar">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility_off">visibility_off</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="flex justify-center items-center gap-2 mt-8 pb-8">
+<button class="p-2 rounded-md border border-outline-variant text-on-surface hover:bg-surface-container transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-[20px]" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-md bg-primary text-white text-sm font-bold flex items-center justify-center">1</button>
+<button class="w-8 h-8 rounded-md border border-outline-variant text-on-surface hover:bg-surface-container text-sm font-semibold flex items-center justify-center transition-colors">2</button>
+<button class="w-8 h-8 rounded-md border border-outline-variant text-on-surface hover:bg-surface-container text-sm font-semibold flex items-center justify-center transition-colors">3</button>
+<span class="text-on-surface-variant px-1">...</span>
+<button class="w-8 h-8 rounded-md border border-outline-variant text-on-surface hover:bg-surface-container text-sm font-semibold flex items-center justify-center transition-colors">12</button>
+<button class="p-2 rounded-md border border-outline-variant text-on-surface hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</main>
+</body></html>

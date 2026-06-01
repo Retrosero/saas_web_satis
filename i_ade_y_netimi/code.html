@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>İade İşlemleri - B2B Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#dfe2e9",
+                        "outline-variant": "#c6c5d1",
+                        "on-primary-container": "#7d88cb",
+                        "on-secondary-container": "#007167",
+                        "surface": "#f8f9ff",
+                        "background": "#f8f9ff",
+                        "on-primary-fixed-variant": "#374280",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#e5eeff",
+                        "on-primary-fixed": "#061353",
+                        "secondary-fixed": "#51fbe7",
+                        "error": "#ba1a1a",
+                        "tertiary": "#0c1015",
+                        "surface-variant": "#d3e4fe",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-bright": "#f8f9ff",
+                        "on-tertiary-container": "#888c92",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#bac3ff",
+                        "outline": "#767681",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#bac3ff",
+                        "on-tertiary-fixed": "#181c21",
+                        "on-surface": "#0b1c30",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "surface-container-high": "#dce9ff",
+                        "surface-dim": "#cbdbf5",
+                        "secondary-container": "#51fbe7",
+                        "inverse-on-surface": "#eaf1ff",
+                        "tertiary-fixed-dim": "#c3c7cd",
+                        "primary-container": "#121e5c",
+                        "on-background": "#0b1c30",
+                        "tertiary-container": "#21252a",
+                        "error-container": "#ffdad6",
+                        "primary": "#00083d",
+                        "surface-tint": "#4f5a99",
+                        "on-secondary-fixed": "#00201c",
+                        "secondary": "#006a60",
+                        "inverse-surface": "#213145",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#454650",
+                        "primary-fixed": "#dee0ff",
+                        "surface-container-low": "#eff4ff",
+                        "secondary-fixed-dim": "#1edecb",
+                        "on-secondary-fixed-variant": "#005048",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sidebar-width": "280px",
+                        "xl": "3rem",
+                        "md": "1.5rem",
+                        "sm": "1rem",
+                        "base": "4px",
+                        "xs": "0.5rem",
+                        "lg": "2rem",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .custom-shadow { box-shadow: 0px 4px 20px rgba(18, 30, 92, 0.05); }
+        /* Toggle Switch CSS */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #51fbe7;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #51fbe7;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md text-body-md antialiased overflow-x-hidden">
+<!-- NavigationDrawer (Desktop) -->
+<nav class="w-sidebar-width h-full fixed left-0 top-0 bg-primary dark:bg-primary border-r border-white/10 hidden lg:flex flex-col gap-2 pt-6 z-50">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-primary" data-icon="person">person</span>
+</div>
+<div>
+<h2 class="font-title-md text-title-md text-on-primary font-bold">Operations Manager</h2>
+<p class="font-label-sm text-label-sm text-on-primary/70">B2B Enterprise Portal</p>
+</div>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto px-2 space-y-1">
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="sync">sync</span>
+<span class="font-title-md text-title-md">Order Sync</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="edit">edit</span>
+<span class="font-title-md text-title-md">Product Edit</span>
+</a>
+<!-- ACTIVE TAB: Returns -->
+<a class="bg-secondary-fixed text-primary rounded-[15px] mx-2 px-4 py-3 flex items-center transition-all duration-200 scale-98" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="assignment_return" style="font-variation-settings: 'FILL' 1;">assignment_return</span>
+<span class="font-title-md text-title-md font-bold">Returns</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="rule">rule</span>
+<span class="font-title-md text-title-md">Approval Center</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="input">input</span>
+<span class="font-title-md text-title-md">Goods Receipt</span>
+</a>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 rounded-[15px]" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="settings">settings</span>
+<span class="font-title-md text-title-md">Settings</span>
+</a>
+</div>
+<div class="p-6">
+<span class="font-label-sm text-label-sm text-on-primary/50">v2.4.0</span>
+</div>
+</nav>
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-40 bg-surface dark:bg-background flex items-center justify-between px-4 lg:px-xl h-20 lg:ml-sidebar-width lg:w-[calc(100%-280px)]">
+<div class="flex items-center">
+<button class="lg:hidden mr-4 text-primary">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile lg:font-headline-lg text-headline-lg-mobile lg:text-headline-lg text-primary font-extrabold tracking-tight">İade İşlemleri</h1>
+</div>
+<div>
+<button class="text-outline hover:bg-surface-container-low p-2 rounded-full transition-colors flex items-center">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="hidden md:inline ml-2 font-title-md text-title-md">Search</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="lg:ml-sidebar-width px-4 lg:px-xl py-8 pb-32 lg:pb-12 max-w-7xl mx-auto space-y-6">
+<!-- Fatura Seçimi (Invoice Selection) -->
+<section class="bg-surface-container-lowest rounded-[15px] p-6 lg:p-8 custom-shadow border border-outline-variant/20">
+<h2 class="font-title-md text-title-md text-primary mb-4 font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="receipt_long">receipt_long</span>
+                Referans Fatura Seçimi
+            </h2>
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline" data-icon="search">search</span>
+</div>
+<input class="w-full bg-surface-container-low border border-outline-variant text-on-surface rounded-[15px] pl-12 pr-4 py-4 focus:outline-none focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed transition-colors font-body-md" placeholder="Fatura numarası veya müşteri adı ile arayın..." type="text"/>
+<button class="absolute inset-y-2 right-2 bg-primary text-on-primary px-6 rounded-[10px] font-label-sm text-label-sm hover:bg-primary/90 transition-colors">
+                    Bul
+                </button>
+</div>
+<!-- Mock Result (Simulated state after search) -->
+<div class="mt-4 p-4 border border-outline-variant rounded-[15px] bg-surface flex justify-between items-center">
+<div>
+<p class="font-title-md text-title-md text-primary font-bold">FAT-2023-08912</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Acme Corp. • 12 Ekim 2023</p>
+</div>
+<button class="text-secondary-fixed hover:text-secondary transition-colors font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span> Seçili
+                </button>
+</div>
+</section>
+<!-- Main Workspace (Grid Layout) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- İade Kalemleri (Return Items) -->
+<section class="lg:col-span-2 bg-surface-container-lowest rounded-[15px] custom-shadow border border-outline-variant/20 overflow-hidden flex flex-col">
+<div class="p-6 border-b border-outline-variant/20 flex justify-between items-center bg-surface/50">
+<h2 class="font-title-md text-title-md text-primary font-bold">İade Edilecek Kalemler</h2>
+<span class="bg-surface-container text-primary font-label-sm text-label-sm px-3 py-1 rounded-full">2 Ürün</span>
+</div>
+<div class="p-6 space-y-6 flex-1">
+<!-- Item 1 -->
+<div class="flex flex-col md:flex-row gap-4 items-start md:items-center pb-6 border-b border-outline-variant/20">
+<div class="flex-1">
+<h3 class="font-title-md text-title-md text-on-surface font-semibold">Endüstriyel Sensör V2</h3>
+<p class="font-label-sm text-label-sm text-outline">SKU: SENS-V2-001</p>
+</div>
+<div class="flex items-center gap-4 w-full md:w-auto">
+<div class="flex-1 md:w-24">
+<label class="block font-label-sm text-label-sm text-outline mb-1">Adet</label>
+<input class="w-full bg-surface border border-outline-variant rounded-[15px] px-3 py-2 text-center focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed outline-none" type="number" value="2"/>
+</div>
+<div class="flex-1 md:w-40">
+<label class="block font-label-sm text-label-sm text-outline mb-1">Neden</label>
+<select class="w-full bg-surface border border-outline-variant rounded-[15px] px-3 py-2 focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed outline-none appearance-none">
+<option>Hasarlı Ürün</option>
+<option>Yanlış Sipariş</option>
+<option>Eksik Parça</option>
+</select>
+</div>
+<div class="text-right w-24">
+<label class="block font-label-sm text-label-sm text-outline mb-1">Tutar</label>
+<p class="font-title-md text-title-md text-primary font-bold">₺1.250</p>
+</div>
+<button class="text-error hover:text-error/80 p-2 mt-5">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex flex-col md:flex-row gap-4 items-start md:items-center">
+<div class="flex-1">
+<h3 class="font-title-md text-title-md text-on-surface font-semibold">Kontrol Paneli Anakartı</h3>
+<p class="font-label-sm text-label-sm text-outline">SKU: MB-CTRL-99</p>
+</div>
+<div class="flex items-center gap-4 w-full md:w-auto">
+<div class="flex-1 md:w-24">
+<label class="block font-label-sm text-label-sm text-outline mb-1">Adet</label>
+<input class="w-full bg-surface border border-outline-variant rounded-[15px] px-3 py-2 text-center focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed outline-none" type="number" value="1"/>
+</div>
+<div class="flex-1 md:w-40">
+<label class="block font-label-sm text-label-sm text-outline mb-1">Neden</label>
+<select class="w-full bg-surface border border-outline-variant rounded-[15px] px-3 py-2 focus:border-secondary-fixed focus:ring-1 focus:ring-secondary-fixed outline-none appearance-none">
+<option>Yanlış Sipariş</option>
+<option>Hasarlı Ürün</option>
+<option>Eksik Parça</option>
+</select>
+</div>
+<div class="text-right w-24">
+<label class="block font-label-sm text-label-sm text-outline mb-1">Tutar</label>
+<p class="font-title-md text-title-md text-primary font-bold">₺3.400</p>
+</div>
+<button class="text-error hover:text-error/80 p-2 mt-5">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Özet ve Ayarlar (Summary & Settings) -->
+<section class="flex flex-col gap-6">
+<!-- Settings Card -->
+<div class="bg-surface-container-lowest rounded-[15px] p-6 custom-shadow border border-outline-variant/20">
+<h2 class="font-title-md text-title-md text-primary font-bold mb-4">İşlem Ayarları</h2>
+<div class="flex items-center justify-between">
+<div>
+<p class="font-title-md text-title-md text-on-surface">Stok Geri Giriş Etkisi</p>
+<p class="font-label-sm text-label-sm text-outline">İade edilen ürünler stoğa eklensin mi?</p>
+</div>
+<!-- Custom Toggle -->
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-outline-variant top-0 bottom-0 m-auto z-10 transition-all duration-300" id="stockToggle" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-outline-variant cursor-pointer transition-colors duration-300" for="stockToggle"></label>
+</div>
+</div>
+</div>
+<!-- Summary Card -->
+<div class="bg-primary rounded-[15px] p-6 custom-shadow text-on-primary flex-1 flex flex-col justify-between relative overflow-hidden">
+<!-- Decorative Background element -->
+<div class="absolute -right-10 -top-10 w-40 h-40 bg-secondary-fixed/10 rounded-full blur-2xl"></div>
+<div class="relative z-10">
+<h2 class="font-title-md text-title-md font-bold mb-6 opacity-90">İade Özeti</h2>
+<div class="space-y-3 mb-8">
+<div class="flex justify-between font-body-md text-on-primary/80">
+<span>Ara Toplam</span>
+<span>₺4.650,00</span>
+</div>
+<div class="flex justify-between font-body-md text-on-primary/80">
+<span>KDV (%20)</span>
+<span>₺930,00</span>
+</div>
+<div class="h-px w-full bg-white/20 my-2"></div>
+<div class="flex justify-between items-end">
+<span class="font-title-md text-title-md">Toplam İade</span>
+<span class="font-headline-lg text-headline-lg font-bold text-secondary-fixed">₺5.580,00</span>
+</div>
+</div>
+</div>
+<button class="w-full bg-secondary-fixed text-primary rounded-[15px] py-4 px-6 font-title-md text-title-md font-bold flex items-center justify-center gap-2 hover:bg-secondary-fixed-dim transition-all duration-200 hover:scale-[0.98] relative z-10">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+                        Onaya Gönder
+                    </button>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="fixed bottom-0 w-full z-50 lg:hidden bg-surface-container dark:bg-surface-container-highest border-t border-outline-variant shadow-[0px_-4px_20px_rgba(18,30,92,0.05)] flex justify-around items-center px-4 py-3">
+<a class="flex flex-col items-center justify-center text-on-surface-variant w-16" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-label-sm text-label-sm text-[10px]">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant w-16" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-sm text-label-sm text-[10px]">Products</span>
+</a>
+<!-- ACTIVE TAB: Returns -->
+<a class="flex flex-col items-center justify-center bg-secondary-fixed text-primary rounded-[15px] px-6 py-2 scale-95 duration-150 active:opacity-80" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="keyboard_return" style="font-variation-settings: 'FILL' 1;">keyboard_return</span>
+<span class="font-label-sm text-label-sm text-[10px] font-bold">Returns</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant w-16" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="settings">settings</span>
+<span class="font-label-sm text-label-sm text-[10px]">Settings</span>
+</a>
+</nav>
+</body></html>

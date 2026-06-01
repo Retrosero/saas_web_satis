@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sayım Detay ve Onay</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+        /* Custom scrollbar for list */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #dfe2e9;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #c6c5d1;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#888c92",
+                        "tertiary-container": "#21252a",
+                        "surface-tint": "#4f5a99",
+                        "tertiary-fixed": "#dfe2e9",
+                        "secondary": "#006a60",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#51fbe7",
+                        "inverse-surface": "#213145",
+                        "on-background": "#0b1c30",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#1edecb",
+                        "on-tertiary": "#ffffff",
+                        "primary-container": "#121e5c",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "on-surface-variant": "#454650",
+                        "primary-fixed": "#dee0ff",
+                        "outline-variant": "#c6c5d1",
+                        "on-secondary-container": "#007167",
+                        "outline": "#767681",
+                        "surface": "#f8f9ff",
+                        "on-primary-fixed": "#061353",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#eff4ff",
+                        "on-primary-container": "#7d88cb",
+                        "surface-container": "#e5eeff",
+                        "surface-bright": "#f8f9ff",
+                        "inverse-primary": "#bac3ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-primary-fixed-variant": "#374280",
+                        "on-secondary-fixed-variant": "#005048",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#cbdbf5",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-surface": "#0b1c30",
+                        "on-error": "#ffffff",
+                        "primary-fixed-dim": "#bac3ff",
+                        "on-primary": "#ffffff",
+                        "background": "#f8f9ff",
+                        "tertiary": "#0c1015",
+                        "surface-variant": "#d3e4fe",
+                        "on-tertiary-fixed": "#181c21",
+                        "primary": "#00083d",
+                        "surface-container-high": "#dce9ff",
+                        "on-secondary-fixed": "#00201c",
+                        "tertiary-fixed-dim": "#c3c7cd",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#51fbe7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "3rem",
+                        "md": "1.5rem",
+                        "lg": "2rem",
+                        "gutter": "24px",
+                        "xs": "0.5rem",
+                        "sidebar-width": "280px",
+                        "sm": "1rem",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "title-md": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md text-body-md min-h-screen flex flex-col pb-[100px]">
+<!-- Contextual Header (Task Focused) -->
+<header class="bg-primary text-on-primary shadow-sm h-16 flex items-center px-md sticky top-0 z-50">
+<div class="max-w-7xl mx-auto w-full flex items-center justify-between">
+<div class="flex items-center gap-md">
+<button class="p-xs hover:bg-white/10 rounded-[15px] transition-colors group">
+<span class="material-symbols-outlined text-inverse-primary group-hover:text-white transition-colors">arrow_back</span>
+</button>
+<h1 class="font-title-md text-title-md tracking-wide">Sayım Detay ve Onay</h1>
+</div>
+<div class="flex items-center gap-xs bg-white/10 px-sm py-xs rounded-[15px]">
+<span class="material-symbols-outlined text-[18px] text-inverse-primary" style="font-variation-settings: 'FILL' 1;">warehouse</span>
+<span class="font-label-sm text-label-sm text-inverse-primary uppercase tracking-wider">Depo A - Sektör 4</span>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-7xl mx-auto w-full px-md md:px-xl py-lg flex flex-col gap-lg">
+<!-- Summary Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-md md:gap-lg">
+<!-- Total Count -->
+<div class="bg-surface-container-lowest rounded-[15px] p-md shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-outline-variant/30 flex items-center gap-md">
+<div class="w-12 h-12 rounded-[15px] bg-surface-container-low flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Toplam Sistem Stoğu</p>
+<p class="font-headline-lg text-headline-lg text-primary">1,248</p>
+</div>
+</div>
+<!-- Counted Items -->
+<div class="bg-surface-container-lowest rounded-[15px] p-md shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-outline-variant/30 flex items-center gap-md">
+<div class="w-12 h-12 rounded-[15px] bg-[#00D7C4]/10 flex items-center justify-center text-[#006a60]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">fact_check</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Sayım Yapılan</p>
+<p class="font-headline-lg text-headline-lg text-primary">1,242</p>
+</div>
+</div>
+<!-- Discrepancy -->
+<div class="bg-surface-container-lowest rounded-[15px] p-md shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-outline-variant/30 flex items-center gap-md">
+<div class="w-12 h-12 rounded-[15px] bg-error-container/30 flex items-center justify-center text-error">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-1">Fark Bulunan Ürün</p>
+<p class="font-headline-lg text-headline-lg text-error">3</p>
+</div>
+</div>
+</section>
+<!-- Product List Card (Interactive Table) -->
+<section class="bg-surface-container-lowest rounded-[15px] shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-outline-variant/30 flex flex-col overflow-hidden">
+<!-- Table Header -->
+<div class="bg-surface-container-low/50 border-b border-outline-variant/30 px-md py-sm grid grid-cols-12 gap-sm items-center">
+<div class="col-span-5 md:col-span-4 font-label-sm text-label-sm text-on-surface-variant uppercase">Ürün Detayı</div>
+<div class="hidden md:block col-span-2 font-label-sm text-label-sm text-on-surface-variant uppercase">SKU / Barkod</div>
+<div class="col-span-2 text-center font-label-sm text-label-sm text-on-surface-variant uppercase">Sistem</div>
+<div class="col-span-3 md:col-span-2 text-center font-label-sm text-label-sm text-primary uppercase">Sayım (Fiziksel)</div>
+<div class="col-span-2 text-right font-label-sm text-label-sm text-on-surface-variant uppercase">Fark</div>
+</div>
+<!-- List Items -->
+<div class="flex flex-col">
+<!-- Item 1 (No Difference) -->
+<div class="grid grid-cols-12 gap-sm items-center px-md py-sm border-b border-outline-variant/10 hover:bg-surface-container-low/20 transition-colors">
+<div class="col-span-5 md:col-span-4 flex items-center gap-sm">
+<div class="w-10 h-10 rounded-[10px] bg-surface-variant overflow-hidden flex-shrink-0">
+<img alt="Product thumbnail" class="w-full h-full object-cover" data-alt="A sleek, modern smartwatch with a minimalist white face and a light grey silicone band. The watch is placed on a clean, light-colored wooden surface, illuminated by soft, natural studio lighting that highlights its premium materials. The overall aesthetic is high-tech, clean, and commercial, fitting a modern light-mode interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjv7ld9tcGFNyRUaJxAz5NZiRXweIk0k18wCcm94ciddqEFJ8bhIjo9Leh-QuIiVnJRdHAWYoIbQtbYsMyMMkEp9y7psHaNkLvI0bXBw9yI4sJ2jB08HCmAVcSECmUjZTmuq3PZtFWYqH7gZj2fEOVaPxy8uRJMxAJtUNitUChdQZr15aoml6ubFsHJrDufo64rq1tftZr0xP6eH2GKX2GQaOp6mZFe7uGDsIVKGXw4vRvraT0cJ5qohrdonK56Vid-AgLIb4HWP1f"/>
+</div>
+<div>
+<p class="font-title-md text-title-md text-primary leading-tight line-clamp-1">Akıllı Saat X-Pro</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant md:hidden">SKU: WL-8492</p>
+</div>
+</div>
+<div class="hidden md:block col-span-2 font-body-md text-body-md text-on-surface-variant">WL-8492</div>
+<div class="col-span-2 text-center font-body-md text-body-md text-on-surface-variant">45</div>
+<div class="col-span-3 md:col-span-2 flex justify-center">
+<input class="w-16 md:w-20 text-center rounded-[15px] bg-surface border border-outline-variant/50 focus:border-[#00D7C4] focus:ring-1 focus:ring-[#00D7C4] py-xs font-body-md text-body-md text-primary outline-none transition-all placeholder:text-outline-variant" type="number" value="45"/>
+</div>
+<div class="col-span-2 text-right">
+<span class="inline-flex items-center justify-center px-xs py-[2px] rounded-[15px] bg-surface-container text-on-surface-variant font-label-sm text-label-sm">
+                            0
+                        </span>
+</div>
+</div>
+<!-- Item 2 (Shortage - Error) -->
+<div class="grid grid-cols-12 gap-sm items-center px-md py-sm border-b border-outline-variant/10 hover:bg-surface-container-low/20 transition-colors bg-error-container/10">
+<div class="col-span-5 md:col-span-4 flex items-center gap-sm">
+<div class="w-10 h-10 rounded-[10px] bg-surface-variant overflow-hidden flex-shrink-0">
+<img alt="Product thumbnail" class="w-full h-full object-cover" data-alt="A pair of premium over-ear wireless headphones in a dark matte grey finish. They are resting on a reflective dark surface under dramatic, moody studio lighting. The high-contrast lighting accentuates the sleek curves and brushed metal accents of the headphones, conveying a sense of high-end audio equipment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3b3VGpYrGdfrlPOIqYm7edfaw6PIQmYVZFJ-962ATHbDv6AcDrs8NZKAYQoY-66idcNSO4-Ps10YznIjj5bi5UtJnGNd4KsPjht5OowShBu_BP5QtbrZHbHreRPAXebdyyNzzAHsL_0v9J9ZmB4OYXjYjgUdM7irYFjRH9PGkm6EDUFFKXgBi-2q7lcQQYv9v3HWYM0o3zaR-lr1kQn4GuuHyvHVy8zk9nj2gAeEQhm_tmwLbfFLiayGHKvXb4iZLAzzVDuzUG7fb"/>
+</div>
+<div>
+<p class="font-title-md text-title-md text-primary leading-tight line-clamp-1">Kablosuz Kulaklık V2</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant md:hidden">SKU: AU-1029</p>
+</div>
+</div>
+<div class="hidden md:block col-span-2 font-body-md text-body-md text-on-surface-variant">AU-1029</div>
+<div class="col-span-2 text-center font-body-md text-body-md text-on-surface-variant">120</div>
+<div class="col-span-3 md:col-span-2 flex justify-center relative">
+<input class="w-16 md:w-20 text-center rounded-[15px] bg-white border-2 border-error/50 focus:border-error focus:ring-1 focus:ring-error py-xs font-title-md text-title-md text-error outline-none transition-all shadow-sm" type="number" value="115"/>
+</div>
+<div class="col-span-2 text-right">
+<span class="inline-flex items-center justify-center gap-[2px] px-sm py-[4px] rounded-[15px] bg-error/10 text-error font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">arrow_downward</span>
+                            -5
+                        </span>
+</div>
+</div>
+<!-- Item 3 (Surplus - Highlight) -->
+<div class="grid grid-cols-12 gap-sm items-center px-md py-sm border-b border-outline-variant/10 hover:bg-surface-container-low/20 transition-colors bg-[#00D7C4]/5">
+<div class="col-span-5 md:col-span-4 flex items-center gap-sm">
+<div class="w-10 h-10 rounded-[10px] bg-surface-variant overflow-hidden flex-shrink-0">
+<img alt="Product thumbnail" class="w-full h-full object-cover" data-alt="A vibrant red athletic running shoe featuring a dynamic, modern silhouette with a thick white sole. The shoe is dramatically lit against a deep, dark grey background, creating a high-contrast, energetic composition. The lighting emphasizes the texture of the breathable mesh upper and the sleek lines of the design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8937kdNYJSZ3tpvcHtKqtpg9D8l-APib1TP_TN4hWSPW5fmfpNl5G04Z8BpMUy5vXiLGQdslhAgs748YpKbDA-2biGrn4iytrMcmIaVeI6DV2onxYUQM3ppZJbo1RqidEbYT3yqhXuAwmjN3P1whjX6a1V_0MJMCEBfMtULgMiLElXqBXupVHEP4oRoRGVk7nN9-kv25bwsMGdLjmP-6Fyye0Pylic8I8JxTNZU1pxJ4WFoWoy5M4Wxfcix3U9y3P1HPp1otDmuAo"/>
+</div>
+<div>
+<p class="font-title-md text-title-md text-primary leading-tight line-clamp-1">Performans Koşu Ayakkabısı</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant md:hidden">SKU: SH-9921</p>
+</div>
+</div>
+<div class="hidden md:block col-span-2 font-body-md text-body-md text-on-surface-variant">SH-9921</div>
+<div class="col-span-2 text-center font-body-md text-body-md text-on-surface-variant">32</div>
+<div class="col-span-3 md:col-span-2 flex justify-center">
+<input class="w-16 md:w-20 text-center rounded-[15px] bg-white border-2 border-[#00D7C4]/50 focus:border-[#00D7C4] focus:ring-1 focus:ring-[#00D7C4] py-xs font-title-md text-title-md text-[#006a60] outline-none transition-all shadow-sm" type="number" value="34"/>
+</div>
+<div class="col-span-2 text-right">
+<span class="inline-flex items-center justify-center gap-[2px] px-sm py-[4px] rounded-[15px] bg-[#00D7C4]/20 text-[#006a60] font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+                            +2
+                        </span>
+</div>
+</div>
+<!-- Item 4 (No Difference) -->
+<div class="grid grid-cols-12 gap-sm items-center px-md py-sm hover:bg-surface-container-low/20 transition-colors">
+<div class="col-span-5 md:col-span-4 flex items-center gap-sm">
+<div class="w-10 h-10 rounded-[10px] bg-surface-variant flex items-center justify-center text-on-surface-variant flex-shrink-0">
+<span class="material-symbols-outlined">inventory_2</span>
+</div>
+<div>
+<p class="font-title-md text-title-md text-primary leading-tight line-clamp-1">Standart Kutu - Orta</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant md:hidden">SKU: PK-0044</p>
+</div>
+</div>
+<div class="hidden md:block col-span-2 font-body-md text-body-md text-on-surface-variant">PK-0044</div>
+<div class="col-span-2 text-center font-body-md text-body-md text-on-surface-variant">500</div>
+<div class="col-span-3 md:col-span-2 flex justify-center">
+<input class="w-16 md:w-20 text-center rounded-[15px] bg-surface border border-outline-variant/50 focus:border-[#00D7C4] focus:ring-1 focus:ring-[#00D7C4] py-xs font-body-md text-body-md text-primary outline-none transition-all placeholder:text-outline-variant" type="number" value="500"/>
+</div>
+<div class="col-span-2 text-right">
+<span class="inline-flex items-center justify-center px-xs py-[2px] rounded-[15px] bg-surface-container text-on-surface-variant font-label-sm text-label-sm">
+                            0
+                        </span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Sticky Footer Action Bar -->
+<div class="fixed bottom-0 left-0 w-full bg-surface-container-lowest border-t border-outline-variant/20 shadow-[0px_-8px_24px_rgba(18,30,92,0.05)] z-40">
+<div class="max-w-7xl mx-auto w-full px-md py-sm flex items-center justify-between">
+<div class="hidden md:flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">info</span>
+<span class="font-body-md text-body-md">Sadece fark bulunan ürünler güncellenecektir.</span>
+</div>
+<div class="flex items-center gap-sm w-full md:w-auto justify-end">
+<button class="px-lg py-sm rounded-[15px] font-title-md text-title-md text-primary border-2 border-primary/20 hover:bg-surface-container-low transition-colors w-1/2 md:w-auto">
+                    İptal
+                </button>
+<button class="px-lg py-sm rounded-[15px] font-title-md text-title-md bg-[#00D7C4] text-[#121E5C] hover:bg-[#1edecb] transition-colors shadow-sm flex items-center justify-center gap-xs w-1/2 md:w-auto">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+                    Farkları Uygula
+                </button>
+</div>
+</div>
+</div>
+</body></html>

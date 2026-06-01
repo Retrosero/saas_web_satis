@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sipariş Toplama | B2B Enterprise Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed": "#061353",
+                      "surface-container-high": "#dce9ff",
+                      "primary": "#00083d",
+                      "primary-container": "#121e5c",
+                      "inverse-primary": "#bac3ff",
+                      "surface-container-highest": "#d3e4fe",
+                      "surface-tint": "#4f5a99",
+                      "on-background": "#0b1c30",
+                      "surface-container": "#e5eeff",
+                      "on-tertiary-fixed": "#181c21",
+                      "on-primary-container": "#7d88cb",
+                      "on-error-container": "#93000a",
+                      "outline": "#767681",
+                      "on-error": "#ffffff",
+                      "surface-dim": "#cbdbf5",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-container": "#007167",
+                      "inverse-on-surface": "#eaf1ff",
+                      "background": "#f8f9ff",
+                      "tertiary-container": "#21252a",
+                      "inverse-surface": "#213145",
+                      "secondary-container": "#51fbe7",
+                      "on-primary": "#ffffff",
+                      "tertiary-fixed": "#dfe2e9",
+                      "on-tertiary-fixed-variant": "#43474d",
+                      "primary-fixed-dim": "#bac3ff",
+                      "on-surface-variant": "#454650",
+                      "surface-container-low": "#eff4ff",
+                      "secondary-fixed-dim": "#1edecb",
+                      "error-container": "#ffdad6",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed": "#00201c",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed-variant": "#374280",
+                      "on-tertiary-container": "#888c92",
+                      "secondary": "#006a60",
+                      "surface-variant": "#d3e4fe",
+                      "on-surface": "#0b1c30",
+                      "primary-fixed": "#dee0ff",
+                      "surface-bright": "#f8f9ff",
+                      "surface": "#f8f9ff",
+                      "secondary-fixed": "#51fbe7",
+                      "on-secondary-fixed-variant": "#005048",
+                      "tertiary": "#0c1015",
+                      "outline-variant": "#c6c5d1",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-fixed-dim": "#c3c7cd"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "1.5rem",
+                      "lg": "2rem",
+                      "gutter": "24px",
+                      "base": "4px",
+                      "xs": "0.5rem",
+                      "sm": "1rem",
+                      "sidebar-width": "280px",
+                      "xl": "3rem"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": [
+                              "Hanken Grotesk"
+                      ],
+                      "label-sm": [
+                              "Hanken Grotesk"
+                      ],
+                      "title-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "display-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-md": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "title-md": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased flex">
+<!-- NavigationDrawer -->
+<nav class="hidden md:flex w-sidebar-width h-full fixed left-0 top-0 bg-primary dark:bg-primary border-r border-white/10 flex-col gap-2 pt-6 z-50">
+<div class="px-6 pb-6">
+<h1 class="font-headline-lg text-headline-lg font-bold text-secondary-fixed">B2B Portal</h1>
+</div>
+<div class="flex items-center px-6 py-4 mb-4 gap-4 border-b border-white/5">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-primary" data-icon="person">person</span>
+</div>
+<div>
+<p class="font-title-md text-title-md text-on-primary">Operations Manager</p>
+<p class="font-label-sm text-label-sm text-on-primary/60">B2B Enterprise Portal</p>
+</div>
+</div>
+<ul class="flex flex-col gap-1 px-2">
+<li>
+<a class="bg-secondary-fixed text-primary rounded-[15px] mx-2 px-4 py-3 flex items-center transition-all duration-200 scale-98 transition-transform shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)] gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="sync">sync</span>
+<span class="font-title-md text-title-md">Order Sync</span>
+</a>
+</li>
+<li>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+<span class="font-title-md text-title-md">Product Edit</span>
+</a>
+</li>
+<li>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_return">assignment_return</span>
+<span class="font-title-md text-title-md">Returns</span>
+</a>
+</li>
+<li>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="rule">rule</span>
+<span class="font-title-md text-title-md">Approval Center</span>
+</a>
+</li>
+<li>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="input">input</span>
+<span class="font-title-md text-title-md">Goods Receipt</span>
+</a>
+</li>
+<li>
+<a class="text-on-primary/80 hover:text-on-primary mx-2 px-4 py-3 flex items-center transition-all duration-200 hover:bg-white/5 gap-3" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-title-md text-title-md">Settings</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto px-6 py-4">
+<p class="font-label-sm text-label-sm text-on-primary/40">v2.4.0</p>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-sidebar-width min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-40 bg-surface dark:bg-background shadow-sm flex items-center justify-between px-xl h-20">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h2 class="font-headline-lg text-headline-lg text-primary font-bold hidden md:block">Active Order Picking</h2>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold md:hidden">Order Picking</h2>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-[15px] focus:ring-2 focus:ring-secondary focus:border-secondary outline-none font-body-md text-body-md w-64 transition-shadow" placeholder="Search" type="text"/>
+</div>
+<button class="bg-surface-container-low p-2 rounded-[15px] text-primary hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="p-4 md:p-xl flex-1 flex flex-col gap-lg max-w-7xl mx-auto w-full">
+<!-- Header & Progress -->
+<div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 bg-surface-container-lowest p-6 rounded-[15px] shadow-[0px_4px_20px_rgba(18,30,92,0.05)] border border-outline-variant/20">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="bg-primary text-secondary-fixed font-label-sm text-label-sm px-3 py-1 rounded-full uppercase tracking-wider">Priority</span>
+<h3 class="font-title-md text-title-md text-outline">Order #ORD-2023-8942</h3>
+</div>
+<h1 class="font-display-lg text-display-lg text-primary">Pick List</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Zone C - Aisle 4, 5</p>
+</div>
+<div class="w-full lg:w-1/3">
+<div class="flex justify-between items-center mb-2">
+<span class="font-title-md text-title-md text-primary">Progress</span>
+<span class="font-title-md text-title-md text-primary font-bold">12/15</span>
+</div>
+<div class="w-full bg-surface-container h-4 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full w-[80%] transition-all duration-500 ease-out" style="width: 80%;"></div>
+</div>
+<p class="font-label-sm text-label-sm text-outline mt-2 text-right">80% Completed</p>
+</div>
+</div>
+<!-- Barcode Scanner Area -->
+<div class="bg-primary text-on-primary p-8 rounded-[15px] flex flex-col items-center justify-center gap-4 relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-r from-primary-container to-primary opacity-50"></div>
+<div class="z-10 flex flex-col items-center text-center">
+<div class="w-20 h-20 bg-secondary-fixed/20 rounded-full flex items-center justify-center mb-4 animate-pulse">
+<span class="material-symbols-outlined text-secondary-fixed text-4xl" data-icon="barcode_scanner">barcode_scanner</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-secondary-fixed mb-2">Scan Next Item</h3>
+<p class="font-body-md text-body-md text-on-primary/80 mb-6 max-w-md">Use your handheld scanner or enter the barcode manually to verify the next item.</p>
+<div class="flex gap-2 w-full max-w-sm">
+<input class="flex-1 bg-white/10 border border-white/20 rounded-[15px] px-4 py-3 text-on-primary placeholder:text-on-primary/50 focus:outline-none focus:ring-2 focus:ring-secondary-fixed font-body-md text-body-md" placeholder="Enter Barcode..." type="text"/>
+<button class="bg-secondary-fixed text-primary px-6 py-3 rounded-[15px] font-title-md text-title-md hover:bg-secondary-fixed-dim transition-colors flex items-center gap-2">
+                            Verify
+                        </button>
+</div>
+</div>
+</div>
+<!-- Warning Area (Example) -->
+<div class="bg-error-container border border-error/20 p-4 rounded-[15px] flex items-start gap-4">
+<span class="material-symbols-outlined text-error mt-1" data-icon="warning">warning</span>
+<div>
+<h4 class="font-title-md text-title-md text-on-error-container">Quantity Mismatch</h4>
+<p class="font-body-md text-body-md text-on-error-container/80">Scanned 3 items for SKU-992, but order requires 2. Please return 1 item to shelf.</p>
+</div>
+</div>
+<!-- Item List Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- Completed Item -->
+<div class="bg-surface-container-lowest p-5 rounded-[15px] border border-secondary/30 shadow-[0px_4px_20px_rgba(18,30,92,0.05)] relative overflow-hidden flex flex-col opacity-70">
+<div class="absolute top-0 right-0 bg-secondary text-on-secondary px-3 py-1 rounded-bl-[15px] font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span>
+                        Picked
+                    </div>
+<div class="flex gap-4 mb-4">
+<div class="w-20 h-20 bg-surface-container rounded-lg overflow-hidden shrink-0">
+<img alt="A sleek, modern wireless over-ear headphone in matte black, resting on a clean white surface. The lighting is studio-quality, highlighting the premium texture of the ear pads and headband. The aesthetic aligns with a high-end consumer electronics catalog, sharp and detailed." class="w-full h-full object-cover" data-alt="A sleek, modern wireless over-ear headphone in matte black, resting on a clean white surface. The lighting is studio-quality, highlighting the premium texture of the ear pads and headband. The aesthetic aligns with a high-end consumer electronics catalog, sharp and detailed." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAT2Mmw348PoymtVxC4kKQZzQGi5KknGqzWQHe2ylFehZuqOYc5L8qKG3qS0T9RUavUaibcNU3u5jXfYG12u_ECCBH_j4dD6a1B8RSdeuG6gR_LJmJNFFNBLXATGX-ZU3DQ3hHDJ37HRKsQ0wh--XI7KUuYF5ewr8RKi_v8aEekjgI4meD2UyexodeeHNNhepR_4AhvbhUGO-pPxm_n5ZqW5QPqTmXF2uHwJLQs1qBKh79P1h1uILfVXL-JVVuyPFAHIUf6z43ILhqT"/>
+</div>
+<div>
+<h4 class="font-title-md text-title-md text-primary leading-tight line-through">Sony WH-1000XM5</h4>
+<p class="font-label-sm text-label-sm text-outline mt-1">SKU: SNY-AUDIO-001</p>
+</div>
+</div>
+<div class="mt-auto grid grid-cols-2 gap-2 bg-surface-container-low p-3 rounded-lg">
+<div>
+<p class="font-label-sm text-label-sm text-outline uppercase">Location</p>
+<p class="font-title-md text-title-md text-primary">C-04-A12</p>
+</div>
+<div class="text-right">
+<p class="font-label-sm text-label-sm text-outline uppercase">Qty</p>
+<p class="font-title-md text-title-md text-primary">2 / 2</p>
+</div>
+</div>
+</div>
+<!-- Next Item to Pick (Active) -->
+<div class="bg-surface-container-lowest p-5 rounded-[15px] border-2 border-secondary-fixed shadow-[0px_8px_30px_rgba(81,251,231,0.15)] relative overflow-hidden flex flex-col transform scale-[1.02] transition-transform">
+<div class="absolute top-0 right-0 bg-primary text-secondary-fixed px-3 py-1 rounded-bl-[15px] font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span>
+                        Next Pick
+                    </div>
+<div class="flex gap-4 mb-4 mt-2">
+<div class="w-20 h-20 bg-surface-container rounded-lg overflow-hidden shrink-0">
+<img alt="A highly detailed close-up of a modern smart watch with a dark silicone band. The watch face displays a vibrant, abstract digital pattern. The lighting is dramatic, emphasizing the metallic bezel and sleek glass surface against a neutral background. Premium tech product photography style." class="w-full h-full object-cover" data-alt="A highly detailed close-up of a modern smart watch with a dark silicone band. The watch face displays a vibrant, abstract digital pattern. The lighting is dramatic, emphasizing the metallic bezel and sleek glass surface against a neutral background. Premium tech product photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlZrGiiZtDuU5bltJwKJWBNa3zHqcfSKiEYSQ9HTWeXLx44kCJqQKQQ8KPqiAlHt-U8-ni1eeXinJBaJQ8DTO_a0P1zr0GkQNN9l1seKRMeV4yf7EKP3QzKfdcpHXgQLIHg7-92yMLEBzM0FWnPFwCw8x9KHpsqUzHx_3ieXlZyMgyRDjCYlcP1pPpKAWGBF2PFO47wz4FJYpzumtDhBCBDpaaKPYZEhM6Zy2Prz9KFZuv-cD3UZ90QIDJUzqUO7y6eT8vioaBrJoo"/>
+</div>
+<div>
+<h4 class="font-title-md text-title-md text-primary leading-tight">Apple Watch Series 8</h4>
+<p class="font-label-sm text-label-sm text-outline mt-1">SKU: APL-WTCH-008</p>
+</div>
+</div>
+<div class="mt-auto grid grid-cols-2 gap-2 bg-primary/5 p-3 rounded-lg border border-primary/10">
+<div>
+<p class="font-label-sm text-label-sm text-primary-container uppercase font-bold">Location</p>
+<p class="font-headline-lg-mobile text-headline-lg-mobile text-primary">C-04-B02</p>
+</div>
+<div class="text-right">
+<p class="font-label-sm text-label-sm text-primary-container uppercase font-bold">Req. Qty</p>
+<p class="font-headline-lg-mobile text-headline-lg-mobile text-primary">1</p>
+</div>
+</div>
+</div>
+<!-- Pending Item -->
+<div class="bg-surface-container-lowest p-5 rounded-[15px] border border-outline-variant/30 shadow-[0px_4px_20px_rgba(18,30,92,0.05)] relative overflow-hidden flex flex-col">
+<div class="flex gap-4 mb-4">
+<div class="w-20 h-20 bg-surface-container rounded-lg overflow-hidden shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-outline text-3xl" data-icon="image">image</span>
+</div>
+<div>
+<h4 class="font-title-md text-title-md text-primary leading-tight">Logitech MX Master 3S</h4>
+<p class="font-label-sm text-label-sm text-outline mt-1">SKU: LOG-MSE-003</p>
+</div>
+</div>
+<div class="mt-auto grid grid-cols-2 gap-2 bg-surface-container-low p-3 rounded-lg">
+<div>
+<p class="font-label-sm text-label-sm text-outline uppercase">Location</p>
+<p class="font-title-md text-title-md text-primary">C-05-A01</p>
+</div>
+<div class="text-right">
+<p class="font-label-sm text-label-sm text-outline uppercase">Qty</p>
+<p class="font-title-md text-title-md text-primary">0 / 4</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Area -->
+<div class="mt-4 flex justify-end">
+<button class="bg-primary text-secondary-fixed px-8 py-4 rounded-[15px] font-title-md text-title-md hover:bg-primary-container transition-colors shadow-lg flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="done_all">done_all</span>
+                    Finish Picking Process
+                </button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 w-full z-50 md:hidden bg-surface-container dark:bg-surface-container-highest border-t border-outline-variant shadow-[0px_-4px_20px_rgba(18,30,92,0.05)] flex justify-around items-center px-4 py-3">
+<a class="flex flex-col items-center justify-center bg-secondary-fixed text-primary rounded-[15px] px-6 py-2 scale-95 duration-150 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-label-sm text-label-sm mt-1">Orders</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant scale-95 duration-150 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-sm text-label-sm mt-1">Products</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant scale-95 duration-150 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="keyboard_return">keyboard_return</span>
+<span class="font-label-sm text-label-sm mt-1">Returns</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant scale-95 duration-150 active:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-sm text-label-sm mt-1">Settings</span>
+</a>
+</nav>
+</body></html>

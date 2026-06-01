@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Giriş - OpsCommand</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "surface-variant": "#d3e4fe",
+                "inverse-on-surface": "#eaf1ff",
+                "background": "#f8f9ff",
+                "on-surface-variant": "#444651",
+                "tertiary": "#825246",
+                "on-error": "#ffffff",
+                "tertiary-container": "#c48b7d",
+                "surface": "#f8f9ff",
+                "on-secondary-fixed": "#002118",
+                "inverse-surface": "#213145",
+                "outline": "#757682",
+                "on-tertiary-fixed": "#331109",
+                "surface-container-low": "#eff4ff",
+                "tertiary-fixed": "#ffdad2",
+                "primary-fixed": "#dbe1ff",
+                "secondary-fixed": "#aff0d8",
+                "on-secondary-container": "#306f5c",
+                "tertiary-fixed-dim": "#f6b8a9",
+                "surface-tint": "#405ba6",
+                "surface-container-high": "#dce9ff",
+                "on-error-container": "#93000a",
+                "on-tertiary": "#ffffff",
+                "surface-container-lowest": "#ffffff",
+                "primary-fixed-dim": "#b4c5ff",
+                "error": "#ba1a1a",
+                "on-surface": "#0b1c30",
+                "surface-bright": "#f8f9ff",
+                "inverse-primary": "#b4c5ff",
+                "surface-dim": "#cbdbf5",
+                "secondary": "#296956",
+                "on-primary": "#ffffff",
+                "primary-container": "#7c96e6",
+                "secondary-fixed-dim": "#94d3bd",
+                "on-secondary": "#ffffff",
+                "primary": "#405ba6",
+                "on-primary-container": "#052b76",
+                "outline-variant": "#c4c6d3",
+                "error-container": "#ffdad6",
+                "on-tertiary-fixed-variant": "#673b30",
+                "on-tertiary-container": "#4d261c",
+                "on-primary-fixed": "#00174b",
+                "on-background": "#0b1c30",
+                "on-secondary-fixed-variant": "#07513f",
+                "surface-container": "#e5eeff",
+                "secondary-container": "#aff0d8",
+                "on-primary-fixed-variant": "#25428d",
+                "surface-container-highest": "#d3e4fe"
+        },
+        "borderRadius": {
+                "DEFAULT": "1rem",
+                "lg": "2rem",
+                "xl": "3rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "margin-desktop": "48px",
+                "xl": "80px",
+                "lg": "48px",
+                "margin-mobile": "16px",
+                "gutter": "24px",
+                "base": "8px",
+                "xs": "4px",
+                "sm": "12px",
+                "md": "24px"
+        },
+        "fontFamily": {
+                "display": [
+                        "Plus Jakarta Sans"
+                ],
+                "label-sm": [
+                        "Manrope"
+                ],
+                "headline-lg-mobile": [
+                        "Plus Jakarta Sans"
+                ],
+                "headline-md": [
+                        "Plus Jakarta Sans"
+                ],
+                "body-md": [
+                        "Manrope"
+                ],
+                "headline-lg": [
+                        "Plus Jakarta Sans"
+                ],
+                "body-lg": [
+                        "Manrope"
+                ]
+        },
+        "fontSize": {
+                "display": [
+                        "48px",
+                        {
+                                "lineHeight": "1.2",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "700"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "1.2",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "24px",
+                        {
+                                "lineHeight": "1.3",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "1.4",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "1.6",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "1.3",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "1.6",
+                                "fontWeight": "400"
+                        }
+                ]
+        }
+    }
+  }
+</script>
+<style>
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid #ffffff;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex items-center justify-center p-md">
+<main class="w-full max-w-md bg-surface-container-lowest border border-outline-variant rounded-lg p-lg shadow-[0_4px_24px_rgba(0,0,0,0.04)] relative overflow-hidden">
+<div class="mb-md text-center">
+<h1 class="font-display text-display text-primary tracking-tight mb-sm">OpsCommand</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Sisteme erişmek için lütfen giriş yapın.</p>
+</div>
+<form class="flex flex-col gap-md" id="loginForm" novalidate="">
+<div class="flex flex-col gap-xs">
+<label class="font-label-sm text-label-sm text-on-background" for="email">E-posta veya Kullanıcı Adı</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline" style="font-variation-settings: 'FILL' 0;">person</span>
+<input class="w-full h-[48px] pl-10 pr-sm bg-surface rounded border border-outline-variant font-body-md text-body-md text-on-background placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" id="email" name="email" placeholder="ornek@sirket.com" required="" type="text"/>
+</div>
+<div class="hidden flex items-center gap-xs mt-xs text-error" id="emailError">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">error</span>
+<span class="font-label-sm text-label-sm">Lütfen geçerli bir e-posta veya kullanıcı adı girin.</span>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="font-label-sm text-label-sm text-on-background" for="password">Şifre</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline" style="font-variation-settings: 'FILL' 0;">lock</span>
+<input class="w-full h-[48px] pl-10 pr-10 bg-surface rounded border border-outline-variant font-body-md text-body-md text-on-background placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+<button aria-label="Şifreyi Göster" class="absolute right-sm top-1/2 -translate-y-1/2 text-outline hover:text-on-background transition-colors focus:outline-none" id="togglePassword" type="button">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">visibility</span>
+</button>
+</div>
+<div class="hidden flex items-center gap-xs mt-xs text-error" id="passwordError">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">error</span>
+<span class="font-label-sm text-label-sm">Şifre alanı boş bırakılamaz.</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<label class="flex items-center gap-sm cursor-pointer group">
+<div class="relative flex items-center justify-center w-5 h-5">
+<input class="peer appearance-none w-5 h-5 border border-outline rounded-[4px] checked:bg-primary checked:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer" id="rememberMe" type="checkbox"/>
+<span class="material-symbols-outlined absolute text-on-primary text-[14px] pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant group-hover:text-on-background transition-colors">Beni Hatırla</span>
+</label>
+<a class="font-label-sm text-label-sm text-primary hover:text-primary-container font-medium transition-colors" href="#">Şifremi Unuttum</a>
+</div>
+<button class="w-full h-[48px] bg-primary text-on-primary rounded font-label-sm text-label-sm hover:bg-primary-container focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2 focus:ring-offset-background transition-all flex items-center justify-center gap-sm relative overflow-hidden" id="submitBtn" type="submit">
+<span id="btnText">Giriş Yap</span>
+<div class="hidden absolute inset-0 flex items-center justify-center bg-primary" id="btnSpinner">
+<div class="spinner"></div>
+</div>
+</button>
+<div class="hidden p-sm bg-error-container border border-error/20 rounded flex items-start gap-sm" id="globalError">
+<span class="material-symbols-outlined text-on-error-container mt-[2px]" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-label-sm text-label-sm text-on-error-container">Giriş başarısız. Lütfen bilgilerinizi kontrol edip tekrar deneyin.</span>
+</div>
+</form>
+<div class="mt-lg pt-md border-t border-outline-variant text-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Hesabınız yok mu?</span>
+<a class="font-label-sm text-label-sm text-primary hover:text-primary-container font-medium ml-xs transition-colors" href="#">Kayıt Ol</a>
+</div>
+<div class="fixed top-md right-md bg-secondary text-on-secondary px-lg py-sm rounded shadow-lg transform translate-x-full opacity-0 transition-all duration-300 flex items-center gap-sm z-50" id="successToast">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-md text-body-md font-medium">Giriş başarılı. Yönlendiriliyorsunuz...</span>
+</div>
+</main>
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('loginForm');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const togglePasswordBtn = document.getElementById('togglePassword');
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+            const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
+            const globalError = document.getElementById('globalError');
+            const successToast = document.getElementById('successToast');
+            
+            let isPasswordVisible = false;
+
+            togglePasswordBtn.addEventListener('click', () => {
+                isPasswordVisible = !isPasswordVisible;
+                passwordInput.type = isPasswordVisible ? 'text' : 'password';
+                togglePasswordBtn.innerHTML = `<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">${isPasswordVisible ? 'visibility_off' : 'visibility'}</span>`;
+            });
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Reset states
+                emailInput.classList.remove('border-error', 'focus:border-error', 'focus:ring-error/20');
+                passwordInput.classList.remove('border-error', 'focus:border-error', 'focus:ring-error/20');
+                emailError.classList.add('hidden');
+                passwordError.classList.add('hidden');
+                globalError.classList.add('hidden');
+
+                let isValid = true;
+
+                // Validation
+                if (!emailInput.value.trim()) {
+                    emailInput.classList.add('border-error', 'focus:border-error', 'focus:ring-error/20');
+                    emailError.classList.remove('hidden');
+                    isValid = false;
+                }
+
+                if (!passwordInput.value.trim()) {
+                    passwordInput.classList.add('border-error', 'focus:border-error', 'focus:ring-error/20');
+                    passwordError.classList.remove('hidden');
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    // Loading State
+                    btnText.classList.add('invisible');
+                    btnSpinner.classList.remove('hidden');
+                    submitBtn.disabled = true;
+                    emailInput.disabled = true;
+                    passwordInput.disabled = true;
+                    document.getElementById('rememberMe').disabled = true;
+
+                    // Simulation of API Call
+                    setTimeout(() => {
+                        const isSimulatedError = emailInput.value === 'error@sirket.com';
+
+                        if (isSimulatedError) {
+                            // Reset Loading, show error
+                            btnText.classList.remove('invisible');
+                            btnSpinner.classList.add('hidden');
+                            submitBtn.disabled = false;
+                            emailInput.disabled = false;
+                            passwordInput.disabled = false;
+                            document.getElementById('rememberMe').disabled = false;
+                            globalError.classList.remove('hidden');
+                        } else {
+                            // Success
+                            successToast.classList.remove('translate-x-full', 'opacity-0');
+                            setTimeout(() => {
+                                // Redirect Simulation
+                                document.body.innerHTML = '<div class="min-h-screen bg-surface flex flex-col items-center justify-center"><h1 class="font-display text-display text-primary mb-md">Dashboard</h1><p class="font-body-md text-body-md text-on-surface-variant">Yönlendirme tamamlandı.</p></div>';
+                            }, 1500);
+                        }
+                    }, 1200);
+                }
+            });
+            
+            // Clear errors on input
+            emailInput.addEventListener('input', () => {
+                emailInput.classList.remove('border-error', 'focus:border-error', 'focus:ring-error/20');
+                emailError.classList.add('hidden');
+                globalError.classList.add('hidden');
+            });
+            
+             passwordInput.addEventListener('input', () => {
+                passwordInput.classList.remove('border-error', 'focus:border-error', 'focus:ring-error/20');
+                passwordError.classList.add('hidden');
+                globalError.classList.add('hidden');
+            });
+        });
+    </script>
+</body></html>
