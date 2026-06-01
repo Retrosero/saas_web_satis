@@ -1,0 +1,52 @@
+/**
+ * Material 3 design token'ları — "CariPro Soft" birleşik tema.
+ * Tüm renk, tipografi, spacing, radius ve shadow değerleri burada.
+ */
+
+:root {
+  /* M3 Primary — Kurumsal lacivert */
+  --color-primary: #1e3a8a;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #dce3ff;
+  --color-on-primary-container: #001a41;
+
+  /* M3 Secondary — Turkuaz (aksiyon vurgu) */
+  --color-secondary: #0d9488;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #cff7f2;
+  --color-on-secondary-container: #00201c;
+
+  /* M3 Tertiary — Amber (uyarı/aksiyon) */
+  --color-tertiary: #d97706;
+  --color-on-tertiary: #ffffff;
+
+  /* M3 Error */
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #410002;
+
+  /* M3 Surface tones */
+  --color-background: #f8f9ff;
+  --color-on-background: #1a1c1e;
+  --color-surface: #f8f9ff;
+  --color-on-surface: #1a1c1e;
+  --color-surface-variant: #e1e2ec;
+  --color-on-surface-variant: #44464f;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f2f3f8;
+  --color-surface-container: #ecedf2;
+  --color-surface-container-high: #e6e7ec;
+  --color-surface-container-highest: #e0e1e7;
+
+  /* M3 Outline */
+  --color-outline: #74777f;
+  --color-outline-variant: #c4c6d0;
+
+  /* Border radius */
+  --radius-sm: 8px;
+  --radius-md: 15px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+}
