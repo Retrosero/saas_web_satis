@@ -3,16 +3,16 @@ import { LoginSchema, type LoginInput } from '@saas/shared';
 import { IsBoolean, IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class LoginDto implements LoginInput {
-  @ApiProperty({ example: 'admin@sistem.local', description: 'E-posta veya kullanýcý adý' })
+  @ApiProperty({ example: 'admin@sistem.local', description: 'E-posta veya kullanï¿½cï¿½ adï¿½' })
   @IsEmail()
   email!: string;
 
-  @ApiProperty({ example: 'ChangeMe123!', description: 'Þifre' })
+  @ApiProperty({ example: 'ChangeMe123!', description: 'ï¿½ifre' })
   @IsString()
   @MinLength(6)
   password!: string;
 
-  @ApiProperty({ required: false, description: 'Firma kodu (süper admin boþ býrakabilir)' })
+  @ApiProperty({ required: false, description: 'Firma kodu (sï¿½per admin boï¿½ bï¿½rakabilir)' })
   @IsOptional()
   @IsString()
   tenantCode?: string;

@@ -22,9 +22,7 @@ export class NotificationsService {
         // userId null ise tüm tenant kullanıcılarına açık
         { userId: null, tenantId: params.tenantId },
       ],
-      AND: [
-        { OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
-      ],
+      AND: [{ OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] }],
     };
     if (params.tenantId) where.tenantId = params.tenantId;
     if (typeof params.isRead === 'boolean') where.isRead = params.isRead;
@@ -68,14 +66,9 @@ export class NotificationsService {
   async unreadCount(tenantId: string | null, userId: string | null): Promise<{ count: number }> {
     const count = await this.prisma.client.notification.count({
       where: {
-        OR: [
-          { userId: userId ?? undefined },
-          { userId: null, tenantId },
-        ],
+        OR: [{ userId: userId ?? undefined }, { userId: null, tenantId }],
         isRead: false,
-        AND: [
-          { OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
-        ],
+        AND: [{ OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] }],
         ...(tenantId ? { tenantId } : {}),
       },
     });
@@ -86,13 +79,8 @@ export class NotificationsService {
   async recent(tenantId: string | null, userId: string | null, limit = 5) {
     const items = await this.prisma.client.notification.findMany({
       where: {
-        OR: [
-          { userId: userId ?? undefined },
-          { userId: null, tenantId },
-        ],
-        AND: [
-          { OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
-        ],
+        OR: [{ userId: userId ?? undefined }, { userId: null, tenantId }],
+        AND: [{ OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] }],
         ...(tenantId ? { tenantId } : {}),
       },
       orderBy: { createdAt: 'desc' },
@@ -132,10 +120,7 @@ export class NotificationsService {
   async markAllAsRead(tenantId: string | null, userId: string | null) {
     const result = await this.prisma.client.notification.updateMany({
       where: {
-        OR: [
-          { userId: userId ?? undefined },
-          { userId: null, tenantId },
-        ],
+        OR: [{ userId: userId ?? undefined }, { userId: null, tenantId }],
         isRead: false,
         ...(tenantId ? { tenantId } : {}),
       },

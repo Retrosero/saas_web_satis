@@ -113,7 +113,7 @@ The design style blends **Minimalism** with subtle **Glassmorphism**. It priorit
 
 ## Colors
 
-The color strategy for the design system replaces high-contrast corporate blues with a sophisticated pastel palette. 
+The color strategy for the design system replaces high-contrast corporate blues with a sophisticated pastel palette.
 
 - **Primary (Soft Blue):** A muted, airy blue used for primary actions and brand recognition. It provides a sense of stability without the aggression of darker shades.
 - **Secondary (Mint Green):** Used for accents, success states, and secondary call-outs, reinforcing the fresh and contemporary feel.
@@ -131,10 +131,10 @@ Typography in this design system balances the friendly, rounded terminals of **P
 
 ## Layout & Spacing
 
-The design system utilizes a **Fluid Grid** model built on an 8px baseline. 
+The design system utilizes a **Fluid Grid** model built on an 8px baseline.
 
 - **Grid:** A 12-column layout for desktop (max-width 1440px) and a 4-column layout for mobile.
-- **Rhythm:** Spacing should be generous. Use `md` (24px) for most internal padding to support the "light" brand feel. 
+- **Rhythm:** Spacing should be generous. Use `md` (24px) for most internal padding to support the "light" brand feel.
 - **Reflow:** On mobile, margins reduce to 16px to maximize screen real estate, while vertical spacing between sections remains high to prevent a cramped appearance. Components should stretch to full-width on mobile but sit in structured columns on desktop.
 
 ## Elevation & Depth
@@ -142,6 +142,7 @@ The design system utilizes a **Fluid Grid** model built on an 8px baseline.
 This design system eschews heavy, dark shadows in favor of **Tonal Layers** and **Ambient Softness**.
 
 Depth is communicated through:
+
 1.  **Surface Tiers:** Backgrounds are the lowest level. Cards and containers use a pure white surface to "pop" against the warm grey background.
 2.  **Soft Shadows:** When elevation is required (e.g., modals or floating buttons), use "Natural Light" shadows—highly diffused, with a 10-15% opacity and a slight tint of the primary blue color rather than pure grey.
 3.  **Backdrop Blurs:** Use a 12px-20px Gaussian blur on navigation bars and overlays to create a sense of vertical hierarchy without introducing heavy borders.
@@ -157,16 +158,21 @@ The shape language is the primary driver of the "approachable" feel. All interac
 ## Components
 
 ### Buttons
+
 Buttons are pill-shaped. The primary button uses a solid Soft Blue fill with white text. Secondary buttons should use a ghost style (border only) or a subtle secondary-color tint with 10% opacity.
 
 ### Cards
+
 Cards are the backbone of the B2B layout. They must feature a 24px corner radius, a subtle 1px border (#E2E8F0), and no shadow unless hovered. On hover, apply a soft ambient shadow to signal interactivity.
 
 ### Input Fields
+
 Inputs should have a 12px radius and a light grey background (#F1F5F9). Upon focus, the background turns white and the border transitions to the primary primary color.
 
 ### Chips & Tags
+
 Chips are fully rounded (pill-shaped) and use the pastel secondary and tertiary colors for categorization. Text within chips should always be semi-bold Manrope for legibility.
 
 ### Lists & Tables
+
 Lists should have generous vertical padding (16px) between items. Tables should avoid heavy borders; use subtle horizontal dividers and alternate row shading (Zebra striping) in very light warm-grey tints.

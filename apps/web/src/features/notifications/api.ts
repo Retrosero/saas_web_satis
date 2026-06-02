@@ -3,8 +3,18 @@ import type { PaginatedResponse } from '@saas/shared';
 
 export type NotificationType = 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR' | 'SYSTEM';
 export type NotificationCategory =
-  | 'SYSTEM' | 'SECURITY' | 'TENANT' | 'PLAN' | 'MODULE' | 'USER'
-  | 'SALE' | 'COLLECTION' | 'STOCK' | 'ORDER' | 'INVOICE' | 'REPORT';
+  | 'SYSTEM'
+  | 'SECURITY'
+  | 'TENANT'
+  | 'PLAN'
+  | 'MODULE'
+  | 'USER'
+  | 'SALE'
+  | 'COLLECTION'
+  | 'STOCK'
+  | 'ORDER'
+  | 'INVOICE'
+  | 'REPORT';
 
 export interface NotificationItem {
   id: string;
@@ -21,8 +31,13 @@ export interface NotificationItem {
 }
 
 export const notificationsApi = {
-  async list(params: { page?: number; pageSize?: number; isRead?: boolean; category?: string } = {}): Promise<PaginatedResponse<NotificationItem>> {
-    const res = await apiClient.get<{ data: PaginatedResponse<NotificationItem> }>('/notifications', { params });
+  async list(
+    params: { page?: number; pageSize?: number; isRead?: boolean; category?: string } = {},
+  ): Promise<PaginatedResponse<NotificationItem>> {
+    const res = await apiClient.get<{ data: PaginatedResponse<NotificationItem> }>(
+      '/notifications',
+      { params },
+    );
     return res.data.data;
   },
 
@@ -32,7 +47,9 @@ export const notificationsApi = {
   },
 
   async recent(limit = 5): Promise<NotificationItem[]> {
-    const res = await apiClient.get<{ data: NotificationItem[] }>('/notifications/recent', { params: { limit } });
+    const res = await apiClient.get<{ data: NotificationItem[] }>('/notifications/recent', {
+      params: { limit },
+    });
     return res.data.data;
   },
 
@@ -42,7 +59,9 @@ export const notificationsApi = {
   },
 
   async markAllAsRead(): Promise<{ updated: number }> {
-    const res = await apiClient.patch<{ data: { updated: number } }>('/notifications/mark-all-read');
+    const res = await apiClient.patch<{ data: { updated: number } }>(
+      '/notifications/mark-all-read',
+    );
     return res.data.data;
   },
 

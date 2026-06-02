@@ -30,11 +30,15 @@ export function SystemWarningBanner({
     <div className={cn('flex items-start gap-3 rounded-md border p-3', colors[variant], className)}>
       <AlertTriangle
         className={cn(
-          'h-5 w-5 flex-shrink-0 mt-0.5',
-          variant === 'error' ? 'text-error' : variant === 'warning' ? 'text-tertiary' : 'text-primary',
+          'mt-0.5 h-5 w-5 flex-shrink-0',
+          variant === 'error'
+            ? 'text-error'
+            : variant === 'warning'
+              ? 'text-tertiary'
+              : 'text-primary',
         )}
       />
-      <div className="flex-1 min-w-0">
+      <div className="min-w-0 flex-1">
         <p className="text-sm font-semibold">{title}</p>
         {message && <p className="mt-1 text-sm text-on-surface-variant">{message}</p>}
       </div>

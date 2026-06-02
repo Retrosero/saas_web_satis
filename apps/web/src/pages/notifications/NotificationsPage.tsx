@@ -1,5 +1,17 @@
 import { useState, useEffect, useRef } from 'react';
-import { Bell, Check, CheckCheck, Trash2, Filter, Info, AlertCircle, AlertTriangle, XCircle, CheckCircle2, Megaphone } from 'lucide-react';
+import {
+  Bell,
+  Check,
+  CheckCheck,
+  Trash2,
+  Filter,
+  Info,
+  AlertCircle,
+  AlertTriangle,
+  XCircle,
+  CheckCircle2,
+  Megaphone,
+} from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { LoadingState } from '@/components/data/LoadingState';
 import { ErrorState } from '@/components/data/ErrorState';
@@ -90,20 +102,34 @@ export function NotificationsPage() {
       />
 
       {/* Filtre çubuğu */}
-      <div className="card p-3 flex flex-col sm:flex-row gap-2">
-        <div className="flex gap-1 flex-1">
+      <div className="card flex flex-col gap-2 p-3 sm:flex-row">
+        <div className="flex flex-1 gap-1">
           <button
             onClick={() => setFilter('all')}
-            className={cn('px-3 h-9 rounded-md text-sm font-medium transition-colors', filter === 'all' ? 'bg-primary text-primary-foreground' : 'bg-surface-container text-foreground hover:bg-surface-container-high')}
+            className={cn(
+              'h-9 rounded-md px-3 text-sm font-medium transition-colors',
+              filter === 'all'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-surface-container text-foreground hover:bg-surface-container-high',
+            )}
           >
             Tümü
           </button>
           <button
             onClick={() => setFilter('unread')}
-            className={cn('px-3 h-9 rounded-md text-sm font-medium transition-colors flex items-center gap-1', filter === 'unread' ? 'bg-primary text-primary-foreground' : 'bg-surface-container text-foreground hover:bg-surface-container-high')}
+            className={cn(
+              'flex h-9 items-center gap-1 rounded-md px-3 text-sm font-medium transition-colors',
+              filter === 'unread'
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-surface-container text-foreground hover:bg-surface-container-high',
+            )}
           >
             Okunmamış
-            {unread?.count ? <span className="rounded-full bg-error text-error-foreground px-1.5 py-0.5 text-[10px] font-mono">{unread.count}</span> : null}
+            {unread?.count ? (
+              <span className="rounded-full bg-error px-1.5 py-0.5 font-mono text-[10px] text-error-foreground">
+                {unread.count}
+              </span>
+            ) : null}
           </button>
         </div>
         <div className="flex items-center gap-2">
@@ -111,11 +137,13 @@ export function NotificationsPage() {
           <select
             value={category ?? ''}
             onChange={(e) => setCategory(e.target.value || undefined)}
-            className="h-9 px-3 rounded-md bg-surface-container text-sm border border-outline-variant"
+            className="h-9 rounded-md border border-outline-variant bg-surface-container px-3 text-sm"
           >
             <option value="">Tüm kategoriler</option>
             {Object.entries(CATEGORY_LABEL).map(([code, label]) => (
-              <option key={code} value={code}>{label}</option>
+              <option key={code} value={code}>
+                {label}
+              </option>
             ))}
           </select>
         </div>
@@ -128,7 +156,11 @@ export function NotificationsPage() {
           <EmptyState
             icon={<Bell className="h-8 w-8" />}
             title={filter === 'unread' ? 'Okunmamış bildirim yok' : 'Henüz bildirim yok'}
-            description={filter === 'unread' ? 'Tüm bildirimleriniz okunmuş durumda.' : 'Sistem, paket, modül ve diğer olaylardan gelen bildirimler burada görünecek.'}
+            description={
+              filter === 'unread'
+                ? 'Tüm bildirimleriniz okunmuş durumda.'
+                : 'Sistem, paket, modül ve diğer olaylardan gelen bildirimler burada görünecek.'
+            }
           />
         </div>
       )}
@@ -157,7 +189,9 @@ export function NotificationsPage() {
             >
               Önceki
             </button>
-            <span>Sayfa {data.pagination.page} / {data.pagination.totalPages}</span>
+            <span>
+              Sayfa {data.pagination.page} / {data.pagination.totalPages}
+            </span>
             <button
               onClick={() => setPage((p) => p + 1)}
               disabled={!data.pagination.hasNext}
@@ -172,39 +206,57 @@ export function NotificationsPage() {
   );
 }
 
-function NotificationRow({ n, onRead, onDelete }: { n: NotificationItem; onRead: () => void; onDelete: () => void }) {
+function NotificationRow({
+  n,
+  onRead,
+  onDelete,
+}: {
+  n: NotificationItem;
+  onRead: () => void;
+  onDelete: () => void;
+}) {
   const Icon = TYPE_ICON[n.type];
   const color = TYPE_COLOR[n.type];
   return (
     <div
       className={cn(
-        'flex items-start gap-3 p-4 hover:bg-surface-container transition-colors group',
+        'group flex items-start gap-3 p-4 transition-colors hover:bg-surface-container',
         !n.isRead && 'bg-primary-container/20',
       )}
     >
-      <div className={cn('h-10 w-10 rounded-full flex items-center justify-center flex-shrink-0', color)}>
+      <div
+        className={cn(
+          'flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full',
+          color,
+        )}
+      >
         <Icon className="h-5 w-5" />
       </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1">
-          <h3 className={cn('text-sm truncate', !n.isRead ? 'font-bold text-foreground' : 'font-medium text-foreground')}>
+      <div className="min-w-0 flex-1">
+        <div className="mb-1 flex items-center gap-2">
+          <h3
+            className={cn(
+              'truncate text-sm',
+              !n.isRead ? 'font-bold text-foreground' : 'font-medium text-foreground',
+            )}
+          >
             {n.title}
           </h3>
           {!n.isRead && (
-            <span className="h-2 w-2 rounded-full bg-primary flex-shrink-0" title="Okunmamış" />
+            <span className="h-2 w-2 flex-shrink-0 rounded-full bg-primary" title="Okunmamış" />
           )}
-          <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-semibold flex-shrink-0">
+          <span className="flex-shrink-0 rounded bg-surface-container px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">
             {CATEGORY_LABEL[n.category] ?? n.category}
           </span>
         </div>
-        <p className="text-sm text-on-surface-variant line-clamp-2">{n.message}</p>
-        <div className="text-xs text-on-surface-variant mt-1.5">{formatRelative(n.createdAt)}</div>
+        <p className="line-clamp-2 text-sm text-on-surface-variant">{n.message}</p>
+        <div className="mt-1.5 text-xs text-on-surface-variant">{formatRelative(n.createdAt)}</div>
       </div>
-      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
         {!n.isRead && (
           <button
             onClick={onRead}
-            className="p-2 text-on-surface-variant hover:text-primary rounded-md hover:bg-surface"
+            className="rounded-md p-2 text-on-surface-variant hover:bg-surface hover:text-primary"
             title="Okundu olarak işaretle"
           >
             <Check className="h-4 w-4" />
@@ -212,7 +264,7 @@ function NotificationRow({ n, onRead, onDelete }: { n: NotificationItem; onRead:
         )}
         <button
           onClick={onDelete}
-          className="p-2 text-on-surface-variant hover:text-error rounded-md hover:bg-surface"
+          className="rounded-md p-2 text-on-surface-variant hover:bg-surface hover:text-error"
           title="Sil"
         >
           <Trash2 className="h-4 w-4" />

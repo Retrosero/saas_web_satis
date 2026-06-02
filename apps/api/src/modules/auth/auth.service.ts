@@ -17,7 +17,10 @@ export class AuthService {
 
   /** Süper admin veya tenant kullanıcısı için login. */
   @Throttle({ default: { limit: 5, ttl: 60_000 } })
-  async login(input: LoginInput, meta: { userAgent?: string; ipAddress?: string }): Promise<{
+  async login(
+    input: LoginInput,
+    meta: { userAgent?: string; ipAddress?: string },
+  ): Promise<{
     accessToken: string;
     refreshToken: string;
     user: UserWithRoles;
@@ -30,19 +33,25 @@ export class AuthService {
         isDeleted: false,
       },
       include: {
-        userRoles: { include: { role: { include: { permissions: { include: { permission: true } } } } } },
+        userRoles: {
+          include: { role: { include: { permissions: { include: { permission: true } } } } },
+        },
         tenant: true,
       },
     });
 
     if (!user && input.tenantCode) {
-      const tenant = await this.prisma.client.tenant.findUnique({ where: { code: input.tenantCode } });
+      const tenant = await this.prisma.client.tenant.findUnique({
+        where: { code: input.tenantCode },
+      });
       if (!tenant) throw new UnauthorizedException('Geçersiz e-posta veya şifre');
       tenantId = tenant.id;
       user = await this.prisma.client.user.findFirst({
         where: { email: input.email.toLowerCase(), tenantId, isDeleted: false },
         include: {
-          userRoles: { include: { role: { include: { permissions: { include: { permission: true } } } } } },
+          userRoles: {
+            include: { role: { include: { permissions: { include: { permission: true } } } } },
+          },
           tenant: true,
         },
       });
@@ -90,14 +99,25 @@ export class AuthService {
     return { accessToken, refreshToken, user: userWithRoles };
   }
 
-  async refresh(refreshToken: string, meta: { userAgent?: string; ipAddress?: string }): Promise<{
+  async refresh(
+    refreshToken: string,
+    meta: { userAgent?: string; ipAddress?: string },
+  ): Promise<{
     accessToken: string;
     refreshToken: string;
   }> {
     const tokenHash = this.hashToken(refreshToken);
     const record = await this.prisma.client.refreshToken.findUnique({
       where: { tokenHash },
-      include: { user: { include: { userRoles: { include: { role: { include: { permissions: { include: { permission: true } } } } } } } } },
+      include: {
+        user: {
+          include: {
+            userRoles: {
+              include: { role: { include: { permissions: { include: { permission: true } } } } },
+            },
+          },
+        },
+      },
     });
     if (!record || record.revokedAt || record.expiresAt < new Date()) {
       throw new UnauthorizedException('Geçersiz veya süresi dolmuş yenileme anahtarı');
@@ -177,7 +197,11 @@ export class AuthService {
     let activeModules: string[] = [];
     if (u.tenantId) {
       const tenantMods = await this.prisma.client.tenantModule.findMany({
-        where: { tenantId: u.tenantId, isActive: true, OR: [{ validUntil: null }, { validUntil: { gt: new Date() } }] },
+        where: {
+          tenantId: u.tenantId,
+          isActive: true,
+          OR: [{ validUntil: null }, { validUntil: { gt: new Date() } }],
+        },
         include: { module: true },
       });
       activeModules = tenantMods.map((m) => m.module.code);
@@ -213,7 +237,9 @@ export class AuthService {
     if (!match) return 7 * 24 * 60 * 60 * 1000;
     const n = Number(match[1]);
     const unit = match[2];
-    const mult = { s: 1000, m: 60_000, h: 3_600_000, d: 86_400_000 }[unit as 's' | 'm' | 'h' | 'd'] ?? 86_400_000;
+    const mult =
+      { s: 1000, m: 60_000, h: 3_600_000, d: 86_400_000 }[unit as 's' | 'm' | 'h' | 'd'] ??
+      86_400_000;
     return n * mult;
   }
 }

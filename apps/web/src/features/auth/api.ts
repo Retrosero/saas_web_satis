@@ -9,10 +9,9 @@ export const authApi = {
   }> {
     // İstemci tarafı doğrulama (UI hızlı feedback için)
     LoginSchema.parse(input);
-    const res = await apiClient.post<{ data: { accessToken: string; refreshToken: string; user: UserWithRoles } }>(
-      '/auth/login',
-      input,
-    );
+    const res = await apiClient.post<{
+      data: { accessToken: string; refreshToken: string; user: UserWithRoles };
+    }>('/auth/login', input);
     return res.data.data;
   },
 

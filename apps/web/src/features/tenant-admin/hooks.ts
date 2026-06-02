@@ -2,7 +2,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { tenantAdminApi } from './api';
 
 export function useTenantInfo() {
-  return useQuery({ queryKey: ['tenant-admin', 'me'], queryFn: tenantAdminApi.getMe, staleTime: 60_000 });
+  return useQuery({
+    queryKey: ['tenant-admin', 'me'],
+    queryFn: tenantAdminApi.getMe,
+    staleTime: 60_000,
+  });
 }
 
 export function useUpdateTenant() {
@@ -14,11 +18,19 @@ export function useUpdateTenant() {
 }
 
 export function useSubscription() {
-  return useQuery({ queryKey: ['tenant-admin', 'subscription'], queryFn: tenantAdminApi.getSubscription, staleTime: 30_000 });
+  return useQuery({
+    queryKey: ['tenant-admin', 'subscription'],
+    queryFn: tenantAdminApi.getSubscription,
+    staleTime: 30_000,
+  });
 }
 
 export function useTenantModules() {
-  return useQuery({ queryKey: ['tenant-admin', 'modules'], queryFn: tenantAdminApi.getModules, staleTime: 30_000 });
+  return useQuery({
+    queryKey: ['tenant-admin', 'modules'],
+    queryFn: tenantAdminApi.getModules,
+    staleTime: 30_000,
+  });
 }
 
 export function useToggleModule() {
@@ -35,7 +47,11 @@ export function useToggleModule() {
 }
 
 export function useTenantUsers(params: { page?: number; pageSize?: number; search?: string } = {}) {
-  return useQuery({ queryKey: ['tenant-admin', 'users', params], queryFn: () => tenantAdminApi.listUsers(params), staleTime: 10_000 });
+  return useQuery({
+    queryKey: ['tenant-admin', 'users', params],
+    queryFn: () => tenantAdminApi.listUsers(params),
+    staleTime: 10_000,
+  });
 }
 
 export function useCreateUser() {
@@ -52,8 +68,13 @@ export function useCreateUser() {
 export function useUpdateUser() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, input }: { id: string; input: { fullName?: string; phone?: string; status?: 'ACTIVE' | 'INACTIVE' | 'LOCKED' } }) =>
-      tenantAdminApi.updateUser(id, input),
+    mutationFn: ({
+      id,
+      input,
+    }: {
+      id: string;
+      input: { fullName?: string; phone?: string; status?: 'ACTIVE' | 'INACTIVE' | 'LOCKED' };
+    }) => tenantAdminApi.updateUser(id, input),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['tenant-admin', 'users'] }),
   });
 }
@@ -79,5 +100,9 @@ export function useAssignRole() {
 }
 
 export function useTenantRoles() {
-  return useQuery({ queryKey: ['tenant-admin', 'roles'], queryFn: tenantAdminApi.listRoles, staleTime: 60_000 });
+  return useQuery({
+    queryKey: ['tenant-admin', 'roles'],
+    queryFn: tenantAdminApi.listRoles,
+    staleTime: 60_000,
+  });
 }

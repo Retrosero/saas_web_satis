@@ -7,10 +7,7 @@ export const LoginSchema = z.object({
     .trim()
     .min(1, 'E-posta veya kullanıcı adı zorunludur')
     .max(255, 'E-posta çok uzun'),
-  password: z
-    .string()
-    .min(1, 'Şifre zorunludur')
-    .max(128, 'Şifre çok uzun'),
+  password: z.string().min(1, 'Şifre zorunludur').max(128, 'Şifre çok uzun'),
   tenantCode: z.string().trim().max(64).optional(),
   remember: z.boolean().optional(),
 });

@@ -12,11 +12,11 @@ export interface Permission {
 
 /** JWT access token payload. */
 export interface JwtPayload {
-  sub: string;        // user id
-  tid: string;        // tenant id (süper admin için "SYSTEM")
-  role: string;       // birincil rol kodu
-  perms: string[];    // izin kodları
-  mods: string[];     // aktif modül kodları
+  sub: string; // user id
+  tid: string; // tenant id (süper admin için "SYSTEM")
+  role: string; // birincil rol kodu
+  perms: string[]; // izin kodları
+  mods: string[]; // aktif modül kodları
   iat?: number;
   exp?: number;
 }

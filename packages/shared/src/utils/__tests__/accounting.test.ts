@@ -108,9 +108,9 @@ describe('calculateCustomerBalance', () => {
 
   it('ondalık hassasiyet korunur', () => {
     const m = [
-      { type: 'DEBIT' as const, amount: 100.10 },
-      { type: 'DEBIT' as const, amount: 50.20 },
-      { type: 'CREDIT' as const, amount: 75.30 },
+      { type: 'DEBIT' as const, amount: 100.1 },
+      { type: 'DEBIT' as const, amount: 50.2 },
+      { type: 'CREDIT' as const, amount: 75.3 },
     ];
     // 100.10 + 50.20 - 75.30 = 75.00
     expect(calculateCustomerBalance(m)).toBe(75);
@@ -129,8 +129,8 @@ describe('calculateStockQuantity', () => {
   it('ADJUST signed çalışır', () => {
     const m = [
       { type: 'IN' as const, quantity: 50 },
-      { type: 'ADJUST' as const, quantity: 5 },   // +5
-      { type: 'ADJUST' as const, quantity: -3 },  // -3
+      { type: 'ADJUST' as const, quantity: 5 }, // +5
+      { type: 'ADJUST' as const, quantity: -3 }, // -3
     ];
     // 50 + 5 - 3 = 52
     expect(calculateStockQuantity(m)).toBe(52);
@@ -140,14 +140,14 @@ describe('calculateStockQuantity', () => {
     const m = [
       { type: 'IN' as const, quantity: 100 },
       { type: 'TRANSFER' as const, quantity: -20 }, // çıkış (kaynak depoda)
-      { type: 'TRANSFER' as const, quantity: 20 },  // giriş (hedef depoda)
+      { type: 'TRANSFER' as const, quantity: 20 }, // giriş (hedef depoda)
     ];
     // Depo bazında ayrı ayrı hesaplanmalı
     // Burada karışık ama TRANSFER yansız olduğu için sadece IN etkili
     expect(calculateStockQuantity(m)).toBe(100);
   });
 
-  it('stok negatif olabilir (kontrol fonksiyona değil applySale\'a aittir)', () => {
+  it("stok negatif olabilir (kontrol fonksiyona değil applySale'a aittir)", () => {
     const m = [
       { type: 'IN' as const, quantity: 10 },
       { type: 'OUT' as const, quantity: 15 },
@@ -168,7 +168,7 @@ describe('calculateCashBalance', () => {
   it('TRANSFER yansız', () => {
     const m = [
       { type: 'IN' as const, amount: 500 },
-      { type: 'TRANSFER' as const, amount: 100 },  // kaynak OUT
+      { type: 'TRANSFER' as const, amount: 100 }, // kaynak OUT
       { type: 'TRANSFER' as const, amount: -100 }, // hedef IN
     ];
     // Bu hesap tek kasa için olduğundan 500 kalmalı
@@ -180,7 +180,7 @@ describe('validateSaleTotal', () => {
   it('doğru toplam → valid', () => {
     const items = [
       { quantity: 2, unitPrice: 100, vatRate: 20 }, // 240
-      { quantity: 1, unitPrice: 50, vatRate: 20 },  // 60
+      { quantity: 1, unitPrice: 50, vatRate: 20 }, // 60
     ];
     // 2*100 + 1*50 = 250 + %20 vat = 300
     const result = validateSaleTotal(items, 300);
@@ -190,9 +190,7 @@ describe('validateSaleTotal', () => {
   });
 
   it('iskonto dahil', () => {
-    const items = [
-      { quantity: 1, unitPrice: 100, discountRate: 10, vatRate: 20 },
-    ];
+    const items = [{ quantity: 1, unitPrice: 100, discountRate: 10, vatRate: 20 }];
     // 100 - 10 = 90, + %20 = 108
     const result = validateSaleTotal(items, 108);
     expect(result.valid).toBe(true);
@@ -207,9 +205,7 @@ describe('validateSaleTotal', () => {
 
 describe('computeSaleGrandTotal', () => {
   it('iskontosuz KDV dahil', () => {
-    const items = [
-      { quantity: 3, unitPrice: 50, vatRate: 20 },
-    ];
+    const items = [{ quantity: 3, unitPrice: 50, vatRate: 20 }];
     // 150 + 30 = 180
     expect(computeSaleGrandTotal(items)).toBe(180);
   });
@@ -260,9 +256,9 @@ describe('applySale', () => {
   });
 
   it('stok yetersiz → INSUFFICIENT_STOCK hatası', () => {
-    expect(() =>
-      applySale({ ...baseInput, currentStockQuantities: { 'p-1@wh-1': 1 } }),
-    ).toThrow(AccountingError);
+    expect(() => applySale({ ...baseInput, currentStockQuantities: { 'p-1@wh-1': 1 } })).toThrow(
+      AccountingError,
+    );
   });
 
   it('peşin tahsilat varsa kasa hareketi de üretir', () => {
@@ -361,14 +357,8 @@ describe('SIMETRİ KONTROLÜ: applySale + applySaleCancel = sıfır etki', () =>
     });
 
     // 3. TÜM hareketleri birleştir → başlangıç durumuna dönmeli
-    const allStockMovs = [
-      ...saleResult.stockMovements,
-      ...cancelResult.stockMovements,
-    ];
-    const allCustMovs = [
-      ...saleResult.customerMovements,
-      ...cancelResult.customerMovements,
-    ];
+    const allStockMovs = [...saleResult.stockMovements, ...cancelResult.stockMovements];
+    const allCustMovs = [...saleResult.customerMovements, ...cancelResult.customerMovements];
 
     const finalStock = calculateStockQuantity(
       allStockMovs.map((m) => ({ type: m.type, quantity: m.quantity })),
@@ -413,7 +403,9 @@ describe('SIMETRİ KONTROLÜ: applySale + applySaleCancel = sıfır etki', () =>
     expect(saleResult.stockMovements).toHaveLength(2);
     expect(cancelResult.stockMovements).toHaveLength(2);
     const allMovs = [...saleResult.stockMovements, ...cancelResult.stockMovements];
-    const finalStock = calculateStockQuantity(allMovs.map((m) => ({ type: m.type, quantity: m.quantity })));
+    const finalStock = calculateStockQuantity(
+      allMovs.map((m) => ({ type: m.type, quantity: m.quantity })),
+    );
     expect(finalStock).toBe(0);
   });
 });
@@ -604,7 +596,7 @@ describe('buildCustomerBalanceSnapshot', () => {
 describe('Property-based: hesaplamalar tutarlı', () => {
   it('calculateCustomerBalance + buildCustomerBalanceSnapshot aynı sonucu verir', () => {
     const movements = [
-      { id: 'm-1', customerId: 'c-1', type: 'DEBIT' as const, amount: 100.50 },
+      { id: 'm-1', customerId: 'c-1', type: 'DEBIT' as const, amount: 100.5 },
       { id: 'm-2', customerId: 'c-1', type: 'CREDIT' as const, amount: 30.25 },
       { id: 'm-3', customerId: 'c-2', type: 'DEBIT' as const, amount: 200 },
     ];

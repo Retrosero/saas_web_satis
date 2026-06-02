@@ -3,7 +3,9 @@ import { notificationsApi } from './api';
 
 export type { NotificationItem, NotificationType, NotificationCategory } from './api';
 
-export function useNotifications(params: { page?: number; pageSize?: number; isRead?: boolean; category?: string } = {}) {
+export function useNotifications(
+  params: { page?: number; pageSize?: number; isRead?: boolean; category?: string } = {},
+) {
   return useQuery({
     queryKey: ['notifications', params],
     queryFn: () => notificationsApi.list(params),

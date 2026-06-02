@@ -10,15 +10,18 @@
 ## 🎯 Bu Fazda Ne Yapıldı?
 
 ### 1. Muhasebe Kütüphanesi (`@saas/shared/src/utils/accounting.ts`)
+
 Projenin **en kritik parçası**. Event sourcing felsefesiyle yazıldı.
 
 **Hesaplama fonksiyonları:**
+
 - `calculateCustomerBalance(movements)` — DEBIT/CREDIT hareketlerden cari bakiye
 - `calculateStockQuantity(movements)` — IN/OUT/TRANSFER/ADJUST'tan stok miktarı
 - `calculateCashBalance(movements)` — IN/OUT'tan kasa bakiyesi
 - `buildInventorySnapshot / buildCustomerBalanceSnapshot / buildCashBalanceSnapshot` — toplu snapshot
 
 **Business action fonksiyonları:**
+
 - `applySale(input)` — satış için 1 cari DEBIT + N stok OUT (peşinse + kasa IN) üretir
 - `applySaleCancel(input)` — iptal için 1 cari CREDIT + N stok IN üretir (ters kayıt)
 - `applyCollection(input)` — tahsilat için 1 cari CREDIT + 1 kasa IN üretir
@@ -26,6 +29,7 @@ Projenin **en kritik parçası**. Event sourcing felsefesiyle yazıldı.
 - `applyStockAdjust(input)` — sayım düzeltme için ADJUST (signed) üretir
 
 **Validasyon:**
+
 - `AccountingError` sınıfı (INSUFFICIENT_STOCK, OVERPAYMENT, AMOUNT_MISMATCH, ...)
 - Stok yeterlilik kontrolü (applySale öncesi)
 - Tutar bütünlüğü kontrolü (grandTotal = subTotal + vat)
@@ -33,7 +37,9 @@ Projenin **en kritik parçası**. Event sourcing felsefesiyle yazıldı.
 - Tahsilat > cari borç kontrolü
 
 ### 2. Unit Test'ler (46 test, 100% geçti)
+
 `packages/shared/src/utils/__tests__/accounting.test.ts`:
+
 - ✅ Bakiye hesaplama doğruluğu (DEBIT/CREDIT)
 - ✅ Stok miktarı hesaplama (IN/OUT/ADJUST/TRANSFER)
 - ✅ Kasa bakiyesi
@@ -53,7 +59,9 @@ pnpm --filter @saas/shared test
 ```
 
 ### 3. Muhasebe Dokümanı (`docs/muhasebe-mantigi.md`, 12 KB)
+
 Proje genelinde referans olacak **tek doküman**:
+
 - Event sourcing felsefesi (neden bakiyeleri tutmuyoruz)
 - Tüm hareket türleri ve yönleri
 - İptal simetrisi açıklaması
@@ -66,12 +74,14 @@ Proje genelinde referans olacak **tek doküman**:
 - Gelecekteki genişletmeler
 
 ### 4. İlk Prisma Migration (`apps/api/prisma/migrations/20260601000000_init/migration.sql`)
+
 - 458 satır SQL
 - 12 SaaS çekirdek tablo + 3 log tablosu
 - Tüm enum'lar (12 enum)
 - Index'ler (PK, unique, FK, soft delete)
 
 **Lokal'de uygulamak için:**
+
 ```bash
 # 1. Docker ile postgres başlat
 docker compose up -d postgres
@@ -89,6 +99,7 @@ pnpm --filter @saas/api prisma:seed
 ```
 
 ### 5. Seed Güçlendirmesi
+
 - Modül kataloğu (25 modül)
 - Plan kataloğu (4 plan: starter/standard/professional/enterprise)
 - Permission kataloğu (40+ permission)
@@ -106,15 +117,15 @@ pnpm --filter @saas/api prisma:seed
 
 ## 📊 Doğrulamalar
 
-| Kontrol | Sonuç |
-|---------|-------|
-| `pnpm --filter @saas/shared test` | ✅ **46/46 geçti** |
-| `pnpm --filter @saas/shared build` | ✅ Geçti (dist/) |
-| `pnpm --filter @saas/api typecheck` | ✅ Geçti |
-| `pnpm --filter @saas/api build` | ✅ Geçti |
-| `pnpm --filter @saas/web typecheck` | ✅ Geçti |
-| `pnpm --filter @saas/web build` | ✅ Geçti (PWA) |
-| `prisma migrate diff` | ✅ 458 satır SQL üretildi |
+| Kontrol                             | Sonuç                     |
+| ----------------------------------- | ------------------------- |
+| `pnpm --filter @saas/shared test`   | ✅ **46/46 geçti**        |
+| `pnpm --filter @saas/shared build`  | ✅ Geçti (dist/)          |
+| `pnpm --filter @saas/api typecheck` | ✅ Geçti                  |
+| `pnpm --filter @saas/api build`     | ✅ Geçti                  |
+| `pnpm --filter @saas/web typecheck` | ✅ Geçti                  |
+| `pnpm --filter @saas/web build`     | ✅ Geçti (PWA)            |
+| `prisma migrate diff`               | ✅ 458 satır SQL üretildi |
 
 ---
 
@@ -124,6 +135,7 @@ pnpm --filter @saas/api prisma:seed
 - Önceki bundle (`saas-faz-1.bundle`) artık güncel değil — `faz-2` kullan
 
 **Uygulama:**
+
 ```bash
 # Önceki bundle'ı uyguladıysan:
 git fetch /path/to/saas-faz-2.bundle main:faz-2

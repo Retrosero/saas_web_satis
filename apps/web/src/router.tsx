@@ -4,25 +4,69 @@ import { AppLayout } from '@/layouts/AppLayout';
 import { AuthLayout } from '@/layouts/AuthLayout';
 import { LoadingState } from '@/components/data/LoadingState';
 
-const LoginPage = lazy(() => import('@/pages/auth/LoginPage').then((m) => ({ default: m.LoginPage })));
-const DashboardPage = lazy(() => import('@/pages/dashboard/DashboardPage').then((m) => ({ default: m.DashboardPage })));
-const TenantsPage = lazy(() => import('@/pages/super-admin/TenantsPage').then((m) => ({ default: m.TenantsPage })));
-const TenantDetailPage = lazy(() => import('@/pages/super-admin/TenantDetailPage').then((m) => ({ default: m.TenantDetailPage })));
-const SuperAdminDashboardPage = lazy(() => import('@/pages/super-admin/SuperAdminDashboardPage').then((m) => ({ default: m.SuperAdminDashboardPage })));
-const SuperAdminLogsPage = lazy(() => import('@/pages/super-admin/SuperAdminLogsPage').then((m) => ({ default: m.SuperAdminLogsPage })));
-const PlansPage = lazy(() => import('@/pages/super-admin/PlansPage').then((m) => ({ default: m.PlansPage })));
-const ModulesPage = lazy(() => import('@/pages/super-admin/ModulesPage').then((m) => ({ default: m.ModulesPage })));
-const UsersPage = lazy(() => import('@/pages/super-admin/UsersPage').then((m) => ({ default: m.UsersPage })));
-const NotificationsPage = lazy(() => import('@/pages/notifications/NotificationsPage').then((m) => ({ default: m.NotificationsPage })));
-const SettingsOverviewPage = lazy(() => import('@/pages/settings/SettingsOverviewPage').then((m) => ({ default: m.SettingsOverviewPage })));
-const SettingsSubscriptionPage = lazy(() => import('@/pages/settings/SettingsSubscriptionPage').then((m) => ({ default: m.SettingsSubscriptionPage })));
-const SettingsModulesPage = lazy(() => import('@/pages/settings/SettingsModulesPage').then((m) => ({ default: m.SettingsModulesPage })));
-const SettingsUsersPage = lazy(() => import('@/pages/settings/SettingsUsersPage').then((m) => ({ default: m.SettingsUsersPage })));
-const SettingsRolesPage = lazy(() => import('@/pages/settings/SettingsRolesPage').then((m) => ({ default: m.SettingsRolesPage })));
-const SettingsLogsPage = lazy(() => import('@/pages/settings/SettingsLogsPage').then((m) => ({ default: m.SettingsLogsPage })));
-const SettingsLayout = lazy(() => import('@/layouts/SettingsLayout').then((m) => ({ default: m.SettingsLayout })));
-const NotFoundPage = lazy(() => import('@/pages/errors/NotFoundPage').then((m) => ({ default: m.NotFoundPage })));
-const ForbiddenPage = lazy(() => import('@/pages/errors/ForbiddenPage').then((m) => ({ default: m.ForbiddenPage })));
+const LoginPage = lazy(() =>
+  import('@/pages/auth/LoginPage').then((m) => ({ default: m.LoginPage })),
+);
+const DashboardPage = lazy(() =>
+  import('@/pages/dashboard/DashboardPage').then((m) => ({ default: m.DashboardPage })),
+);
+const TenantsPage = lazy(() =>
+  import('@/pages/super-admin/TenantsPage').then((m) => ({ default: m.TenantsPage })),
+);
+const TenantDetailPage = lazy(() =>
+  import('@/pages/super-admin/TenantDetailPage').then((m) => ({ default: m.TenantDetailPage })),
+);
+const SuperAdminDashboardPage = lazy(() =>
+  import('@/pages/super-admin/SuperAdminDashboardPage').then((m) => ({
+    default: m.SuperAdminDashboardPage,
+  })),
+);
+const SuperAdminLogsPage = lazy(() =>
+  import('@/pages/super-admin/SuperAdminLogsPage').then((m) => ({ default: m.SuperAdminLogsPage })),
+);
+const PlansPage = lazy(() =>
+  import('@/pages/super-admin/PlansPage').then((m) => ({ default: m.PlansPage })),
+);
+const ModulesPage = lazy(() =>
+  import('@/pages/super-admin/ModulesPage').then((m) => ({ default: m.ModulesPage })),
+);
+const UsersPage = lazy(() =>
+  import('@/pages/super-admin/UsersPage').then((m) => ({ default: m.UsersPage })),
+);
+const NotificationsPage = lazy(() =>
+  import('@/pages/notifications/NotificationsPage').then((m) => ({ default: m.NotificationsPage })),
+);
+const SettingsOverviewPage = lazy(() =>
+  import('@/pages/settings/SettingsOverviewPage').then((m) => ({
+    default: m.SettingsOverviewPage,
+  })),
+);
+const SettingsSubscriptionPage = lazy(() =>
+  import('@/pages/settings/SettingsSubscriptionPage').then((m) => ({
+    default: m.SettingsSubscriptionPage,
+  })),
+);
+const SettingsModulesPage = lazy(() =>
+  import('@/pages/settings/SettingsModulesPage').then((m) => ({ default: m.SettingsModulesPage })),
+);
+const SettingsUsersPage = lazy(() =>
+  import('@/pages/settings/SettingsUsersPage').then((m) => ({ default: m.SettingsUsersPage })),
+);
+const SettingsRolesPage = lazy(() =>
+  import('@/pages/settings/SettingsRolesPage').then((m) => ({ default: m.SettingsRolesPage })),
+);
+const SettingsLogsPage = lazy(() =>
+  import('@/pages/settings/SettingsLogsPage').then((m) => ({ default: m.SettingsLogsPage })),
+);
+const SettingsLayout = lazy(() =>
+  import('@/layouts/SettingsLayout').then((m) => ({ default: m.SettingsLayout })),
+);
+const NotFoundPage = lazy(() =>
+  import('@/pages/errors/NotFoundPage').then((m) => ({ default: m.NotFoundPage })),
+);
+const ForbiddenPage = lazy(() =>
+  import('@/pages/errors/ForbiddenPage').then((m) => ({ default: m.ForbiddenPage })),
+);
 
 // FAZ 6 — Cari Modülü
 const CustomerListPage = lazy(() => import('@/pages/customers/CustomerListPage').then((m) => ({ default: m.CustomerListPage })));
@@ -54,7 +98,7 @@ function ComingSoon({ title }: { title: string }) {
   return (
     <div className="card p-8 text-center">
       <h2 className="text-xl font-semibold text-foreground">{title}</h2>
-      <p className="text-sm text-on-surface-variant mt-2">Bu modül ilerideki fazlarda eklenecek.</p>
+      <p className="mt-2 text-sm text-on-surface-variant">Bu modül ilerideki fazlarda eklenecek.</p>
     </div>
   );
 }
@@ -62,11 +106,7 @@ function ComingSoon({ title }: { title: string }) {
 const routes: RouteObject[] = [
   {
     path: '/login',
-    element: (
-      <AuthLayout>
-        {withSuspense(<LoginPage />)}
-      </AuthLayout>
-    ),
+    element: <AuthLayout>{withSuspense(<LoginPage />)}</AuthLayout>,
   },
   {
     path: '/',

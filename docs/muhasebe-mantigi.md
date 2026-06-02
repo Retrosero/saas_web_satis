@@ -35,6 +35,7 @@ Bu projede **bakiyeler, miktarlar ve tutarlar ASLA doğrudan güncellenmez**. Me
 ```
 
 **Neden böyle?**
+
 - **Geçmiş raporlar tutarlı kalır** — eski hareket değişmez.
 - **İptal/iptal-iptali mümkün** — her iptal yeni bir ters hareket ekler, orijinal kayıt kalır.
 - **Audit trail doğal olarak oluşur** — tüm değişiklikler hareket tablosunda.
@@ -47,36 +48,34 @@ Bu projede **bakiyeler, miktarlar ve tutarlar ASLA doğrudan güncellenmez**. Me
 
 ### 2.1 Hareket Türleri
 
-| Tür | Yön | Anlam | Örnek |
-|-----|-----|-------|-------|
-| **DEBIT** (Borç) | Müşterinin bize borcu **ARTAR** | Satış, vadeli satış, hizmet | Müşteriye 1000 TL'lik mal sattık |
-| **CREDIT** (Alacak) | Müşterinin bize borcu **AZALIR** | Tahsilat, iade, iptal | Müşteriden 500 TL tahsil ettik |
+| Tür                 | Yön                              | Anlam                       | Örnek                            |
+| ------------------- | -------------------------------- | --------------------------- | -------------------------------- |
+| **DEBIT** (Borç)    | Müşterinin bize borcu **ARTAR**  | Satış, vadeli satış, hizmet | Müşteriye 1000 TL'lik mal sattık |
+| **CREDIT** (Alacak) | Müşterinin bize borcu **AZALIR** | Tahsilat, iade, iptal       | Müşteriden 500 TL tahsil ettik   |
 
 ### 2.2 Bakiye Hesaplama
 
 ```typescript
 function calculateCustomerBalance(movements): number {
-  return movements.reduce((sum, m) =>
-    m.type === 'DEBIT' ? sum + m.amount : sum - m.amount
-  , 0);
+  return movements.reduce((sum, m) => (m.type === 'DEBIT' ? sum + m.amount : sum - m.amount), 0);
 }
 ```
 
 ### 2.3 Bakiye Yorumu
 
-| Bakiye | Anlam |
-|--------|-------|
-| `+₺1000` | Müşteri bize 1000 TL borçlu |
-| `₺0` | Hesap kapalı |
-| `-₺100` | Biz müşteriye 100 TL borçluyuz (avans, iade fazlası) |
+| Bakiye   | Anlam                                                |
+| -------- | ---------------------------------------------------- |
+| `+₺1000` | Müşteri bize 1000 TL borçlu                          |
+| `₺0`     | Hesap kapalı                                         |
+| `-₺100`  | Biz müşteriye 100 TL borçluyuz (avans, iade fazlası) |
 
 ### 2.4 Hareket Örnekleri
 
-| İşlem | Hareket | Açıklama |
-|-------|---------|----------|
-| Müşteriye 1000 TL'lik satış | DEBIT 1000 | Müşteri borçlandı |
-| Müşteriden 300 TL tahsilat | CREDIT 300 | Müşteri ödedi |
-| Satıştan 200 TL iade | CREDIT 200 | Müşteri alacaklandı |
+| İşlem                         | Hareket    | Açıklama             |
+| ----------------------------- | ---------- | -------------------- |
+| Müşteriye 1000 TL'lik satış   | DEBIT 1000 | Müşteri borçlandı    |
+| Müşteriden 300 TL tahsilat    | CREDIT 300 | Müşteri ödedi        |
+| Satıştan 200 TL iade          | CREDIT 200 | Müşteri alacaklandı  |
 | 500 TL'lik satışın tam iptali | CREDIT 500 | refType: SALE_CANCEL |
 
 ### 2.5 Bütünlük Kuralları
@@ -91,12 +90,12 @@ function calculateCustomerBalance(movements): number {
 
 ### 3.1 Hareket Türleri
 
-| Tür | Etki | Kullanım |
-|-----|------|----------|
-| **IN** | `+quantity` | Mal kabul, alış, üretim çıkışı (yarı mamul→mamul) |
-| **OUT** | `-quantity` | Satış çıkışı, fire, sayım eksiği (ADJUST ile) |
-| **TRANSFER** | **yansız** (depo bazında bakılır) | Depo A → Depo B transferi |
-| **ADJUST** | **signed** (`+` veya `-`) | Sayım sonucu düzeltme |
+| Tür          | Etki                              | Kullanım                                          |
+| ------------ | --------------------------------- | ------------------------------------------------- |
+| **IN**       | `+quantity`                       | Mal kabul, alış, üretim çıkışı (yarı mamul→mamul) |
+| **OUT**      | `-quantity`                       | Satış çıkışı, fire, sayım eksiği (ADJUST ile)     |
+| **TRANSFER** | **yansız** (depo bazında bakılır) | Depo A → Depo B transferi                         |
+| **ADJUST**   | **signed** (`+` veya `-`)         | Sayım sonucu düzeltme                             |
 
 ### 3.2 Depo Bazında Hesaplama
 
@@ -114,10 +113,12 @@ const inventory = {
 ### 3.3 Transfer Mantığı
 
 Transfer tek bir işlemdir ama **iki hareket** üretir:
+
 - Kaynak depoda: `type: TRANSFER, quantity: -X` (çıkış)
 - Hedef depoda: `type: TRANSFER, quantity: +X` (giriş)
 
 Bu sayede:
+
 - `calculateStockQuantity(depoA_movements)` kaynak depoda azalmayı gösterir
 - `calculateStockQuantity(depoB_movements)` hedef depoda artışı gösterir
 - `refId` aynı olduğu için birbirine bağlı oldukları anlaşılır
@@ -134,11 +135,11 @@ Bu sayede:
 
 ### 4.1 Hareket Türleri
 
-| Tür | Etki | Kullanım |
-|-----|------|----------|
-| **IN** | `+amount` | Tahsilat, satış tahsilatı, banka havalesi gelen |
-| **OUT** | `-amount` | Tediye (ödeme), gider, banka havalesi giden |
-| **TRANSFER** | **yansız** (kasa bazında bakılır) | Kasa A → Kasa B transferi |
+| Tür          | Etki                              | Kullanım                                        |
+| ------------ | --------------------------------- | ----------------------------------------------- |
+| **IN**       | `+amount`                         | Tahsilat, satış tahsilatı, banka havalesi gelen |
+| **OUT**      | `-amount`                         | Tediye (ödeme), gider, banka havalesi giden     |
+| **TRANSFER** | **yansız** (kasa bazında bakılır) | Kasa A → Kasa B transferi                       |
 
 ### 4.2 Kasa Açılış Bakiyesi
 
@@ -161,23 +162,24 @@ balance = opening_balance
 
 Bir satış onaylandığında `applySale()` şu hareketleri üretir:
 
-| # | Hareket Tablosu | Tür | Yön | Açıklama |
-|---|-----------------|-----|-----|----------|
-| 1 | `customer_movements` | DEBIT | `+grandTotal` | Müşteri borçlandı |
-| 2-N+1 | `stock_movements` | OUT | `-quantity` (her kalem için) | Her ürün için stok çıkışı |
-| (opsiyonel) | `cash_movements` | IN | `+paidAmount` | Peşin tahsilat varsa |
+| #           | Hareket Tablosu      | Tür   | Yön                          | Açıklama                  |
+| ----------- | -------------------- | ----- | ---------------------------- | ------------------------- |
+| 1           | `customer_movements` | DEBIT | `+grandTotal`                | Müşteri borçlandı         |
+| 2-N+1       | `stock_movements`    | OUT   | `-quantity` (her kalem için) | Her ürün için stok çıkışı |
+| (opsiyonel) | `cash_movements`     | IN    | `+paidAmount`                | Peşin tahsilat varsa      |
 
 ### 5.2 Satış İptali (applySaleCancel)
 
 İptal edildiğinde **orijinal satış kaydı silinmez**, sadece:
+
 - `sales.status = CANCELLED`
 - `sales.cancelled_at`, `cancelled_by`, `cancel_reason` set edilir
 - Ters hareketler eklenir:
 
-| # | Hareket Tablosu | Tür | Yön | Açıklama |
-|---|-----------------|-----|-----|----------|
-| 1 | `customer_movements` | CREDIT | `-grandTotal` (orijinal tutar) | Müşteri alacaklandı |
-| 2-N+1 | `stock_movements` | IN | `+quantity` (her kalem için) | Stok geri giriş |
+| #     | Hareket Tablosu      | Tür    | Yön                            | Açıklama            |
+| ----- | -------------------- | ------ | ------------------------------ | ------------------- |
+| 1     | `customer_movements` | CREDIT | `-grandTotal` (orijinal tutar) | Müşteri alacaklandı |
+| 2-N+1 | `stock_movements`    | IN     | `+quantity` (her kalem için)   | Stok geri giriş     |
 
 ### 5.3 Simetri (FaZ 2 Unit Test ile doğrulandı)
 
@@ -195,10 +197,10 @@ Sonuç:             BAŞLANGIÇ DURUMUNA DÖNÜŞ ✅
 
 `applyCollection()` şu hareketleri üretir:
 
-| # | Hareket Tablosu | Tür | Yön | Açıklama |
-|---|-----------------|-----|-----|----------|
-| 1 | `customer_movements` | CREDIT | `-amount` | Müşterinin borcu azaldı |
-| 2 | `cash_movements` | IN | `+amount` | Kasa/banka bakiyesi arttı |
+| #   | Hareket Tablosu      | Tür    | Yön       | Açıklama                  |
+| --- | -------------------- | ------ | --------- | ------------------------- |
+| 1   | `customer_movements` | CREDIT | `-amount` | Müşterinin borcu azaldı   |
+| 2   | `cash_movements`     | IN     | `+amount` | Kasa/banka bakiyesi arttı |
 
 ### 6.2 Kurallar
 
@@ -214,10 +216,10 @@ Sonuç:             BAŞLANGIÇ DURUMUNA DÖNÜŞ ✅
 
 `applyStockTransfer()` 2 hareket üretir:
 
-| # | Depo | Tür | Miktar | Yön |
-|---|------|-----|--------|-----|
-| 1 | Kaynak (source) | TRANSFER | `-X` | Stok azalır |
-| 2 | Hedef (target) | TRANSFER | `+X` | Stok artar |
+| #   | Depo            | Tür      | Miktar | Yön         |
+| --- | --------------- | -------- | ------ | ----------- |
+| 1   | Kaynak (source) | TRANSFER | `-X`   | Stok azalır |
+| 2   | Hedef (target)  | TRANSFER | `+X`   | Stok artar  |
 
 ### 7.2 Kurallar
 
@@ -233,8 +235,8 @@ Sonuç:             BAŞLANGIÇ DURUMUNA DÖNÜŞ ✅
 
 `applyStockAdjust()` tek bir ADJUST hareketi üretir:
 
-| Tür | Miktar | Yön |
-|-----|--------|-----|
+| Tür    | Miktar                      | Yön                                      |
+| ------ | --------------------------- | ---------------------------------------- |
 | ADJUST | **signed** (`+5` veya `-3`) | Pozitif: fazla stok; Negatif: eksik stok |
 
 ### 7.2 Kurallar
@@ -250,6 +252,7 @@ Sonuç:             BAŞLANGIÇ DURUMUNA DÖNÜŞ ✅
 MVP'de **tek para birimi** (tenant_default_currency, varsayılan TRY) desteklenir.
 
 **İleride (FAZ sonrası):**
+
 - Dövizli cari/stok/kasa hesabı
 - Günlük kur ile TRY'ye çevirme
 - Kur farkı hareketi (otomatik)
@@ -258,20 +261,21 @@ MVP'de **tek para birimi** (tenant_default_currency, varsayılan TRY) destekleni
 
 ## 10. SOFT DELETE VE İPTAL POLİTİKASI
 
-| Varlık | Silme Politikası |
-|--------|------------------|
-| Cari (`customers`) | Soft delete: `is_deleted=true`. İlişkili hareketler kalır. |
-| Ürün (`products`) | Soft delete. Stok hareketleri kalır. |
-| Satış (`sales`) | İptal: `status=CANCELLED` + `cancelled_at`. Asla `is_deleted=true`. |
-| Tahsilat (`collections`) | İptal: `status=CANCELLED`. Ters hareket. |
-| Cari hareket | Asla silinmez. Düzeltme = yeni ters hareket. |
-| Stok hareket | Asla silinmez. Düzeltme = yeni ters hareket. |
+| Varlık                   | Silme Politikası                                                    |
+| ------------------------ | ------------------------------------------------------------------- |
+| Cari (`customers`)       | Soft delete: `is_deleted=true`. İlişkili hareketler kalır.          |
+| Ürün (`products`)        | Soft delete. Stok hareketleri kalır.                                |
+| Satış (`sales`)          | İptal: `status=CANCELLED` + `cancelled_at`. Asla `is_deleted=true`. |
+| Tahsilat (`collections`) | İptal: `status=CANCELLED`. Ters hareket.                            |
+| Cari hareket             | Asla silinmez. Düzeltme = yeni ters hareket.                        |
+| Stok hareket             | Asla silinmez. Düzeltme = yeni ters hareket.                        |
 
 ---
 
 ## 11. AUDIT VE LOG
 
 Tüm `applySale / applySaleCancel / applyCollection / applyStockTransfer / applyStockAdjust` çağrıları:
+
 1. **Audit log** tablosuna `old_values`, `new_values` ile yazılır.
 2. **Hassas alanlar maskelenir** (şifre, token, kart bilgisi).
 3. **Risk seviyesi** belirlenir:
@@ -321,6 +325,7 @@ modules/sales/
 ### 12.3 Test Zorunlulukları
 
 Her modül için:
+
 - ✅ Unit test: muhasebe senaryoları (bakiye, stok, kasa)
 - ✅ Integration test: Prisma transaction (test DB ile)
 - ✅ E2E test: HTTP endpoint → muhasebe etkisi

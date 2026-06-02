@@ -6,7 +6,7 @@ export function formatCurrency(
   currency: string = 'TRY',
   locale: string = 'tr-TR',
 ): string {
-  const num = typeof value === 'string' ? parseFloat(value) : value ?? 0;
+  const num = typeof value === 'string' ? parseFloat(value) : (value ?? 0);
   if (Number.isNaN(num)) return '—';
   return new Intl.NumberFormat(locale, {
     style: 'currency',
@@ -17,14 +17,20 @@ export function formatCurrency(
 }
 
 /** Sayı formatla (binlik nokta ile). */
-export function formatNumber(value: number | string | null | undefined, locale: string = 'tr-TR'): string {
-  const num = typeof value === 'string' ? parseFloat(value) : value ?? 0;
+export function formatNumber(
+  value: number | string | null | undefined,
+  locale: string = 'tr-TR',
+): string {
+  const num = typeof value === 'string' ? parseFloat(value) : (value ?? 0);
   if (Number.isNaN(num)) return '—';
   return new Intl.NumberFormat(locale).format(num);
 }
 
 /** Tarih formatla (GG.AA.YYYY). */
-export function formatDate(value: string | Date | null | undefined, locale: string = 'tr-TR'): string {
+export function formatDate(
+  value: string | Date | null | undefined,
+  locale: string = 'tr-TR',
+): string {
   if (!value) return '—';
   const d = typeof value === 'string' ? new Date(value) : value;
   if (Number.isNaN(d.getTime())) return '—';
@@ -36,7 +42,10 @@ export function formatDate(value: string | Date | null | undefined, locale: stri
 }
 
 /** Tarih + saat formatla. */
-export function formatDateTime(value: string | Date | null | undefined, locale: string = 'tr-TR'): string {
+export function formatDateTime(
+  value: string | Date | null | undefined,
+  locale: string = 'tr-TR',
+): string {
   if (!value) return '—';
   const d = typeof value === 'string' ? new Date(value) : value;
   if (Number.isNaN(d.getTime())) return '—';
@@ -50,7 +59,10 @@ export function formatDateTime(value: string | Date | null | undefined, locale: 
 }
 
 /** Göreli tarih ("3 saat önce" gibi). */
-export function formatRelative(value: string | Date | null | undefined, locale: string = 'tr-TR'): string {
+export function formatRelative(
+  value: string | Date | null | undefined,
+  locale: string = 'tr-TR',
+): string {
   if (!value) return '—';
   const d = typeof value === 'string' ? new Date(value) : value;
   if (Number.isNaN(d.getTime())) return '—';

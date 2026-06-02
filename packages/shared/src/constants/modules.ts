@@ -124,5 +124,3 @@ export const MODULE_DEFINITIONS: ModuleDefinition[] = [
     description: 'Firma, kullanıcı ve sistem ayarları',
   },
 ];
-
-

@@ -25,7 +25,11 @@
  * Daha fazla detay: docs/muhasebe-mantigi.md
  */
 
-import type { CustomerMovementType, StockMovementType, CashMovementType } from '../enums/common.enum.js';
+import type {
+  CustomerMovementType,
+  StockMovementType,
+  CashMovementType,
+} from '../enums/common.enum.js';
 
 // =============================================================================
 // TİPLER
@@ -34,9 +38,9 @@ import type { CustomerMovementType, StockMovementType, CashMovementType } from '
 /** Müşteri/car hareketi (borç/alacak yönünde). */
 export interface CustomerMovementInput {
   type: CustomerMovementType; // 'DEBIT' | 'CREDIT'
-  amount: number;             // her zaman pozitif; yön type'tan gelir
-  currency?: string;          // varsayılan TRY
-  refType?: string;           // 'SALE', 'COLLECTION', 'RETURN', 'SALE_CANCEL', 'CANCEL'...
+  amount: number; // her zaman pozitif; yön type'tan gelir
+  currency?: string; // varsayılan TRY
+  refType?: string; // 'SALE', 'COLLECTION', 'RETURN', 'SALE_CANCEL', 'CANCEL'...
   refId?: string;
   refNumber?: string;
   description?: string;
@@ -47,8 +51,8 @@ export interface CustomerMovementInput {
 export interface StockMovementInput {
   productId: string;
   warehouseId: string;
-  type: StockMovementType;     // 'IN' | 'OUT' | 'TRANSFER' | 'ADJUST'
-  quantity: number;           // IN/OUT için pozitif; ADJUST için signed (+/-)
+  type: StockMovementType; // 'IN' | 'OUT' | 'TRANSFER' | 'ADJUST'
+  quantity: number; // IN/OUT için pozitif; ADJUST için signed (+/-)
   unitCost?: number;
   refType?: string;
   refId?: string;
@@ -63,16 +67,16 @@ export interface StockMovementInput {
 /** Kasa/banka hareketi. */
 export interface CashMovementInput {
   cashAccountId: string;
-  type: CashMovementType;     // 'IN' | 'OUT' | 'TRANSFER'
-  amount: number;             // her zaman pozitif
+  type: CashMovementType; // 'IN' | 'OUT' | 'TRANSFER'
+  amount: number; // her zaman pozitif
   currency?: string;
   refType?: string;
   refId?: string;
   refNumber?: string;
   description?: string;
   transactionDate?: Date;
-  sourceAccountId?: string;  // TRANSFER için
-  targetAccountId?: string;  // TRANSFER için
+  sourceAccountId?: string; // TRANSFER için
+  targetAccountId?: string; // TRANSFER için
 }
 
 // =============================================================================
@@ -189,9 +193,9 @@ export function applySale(input: {
     productId: string;
     quantity: number;
     unitPrice: number;
-    discountRate?: number;       // 0-100
-    discountAmount?: number;    // fixed
-    vatRate: number;             // 0-100
+    discountRate?: number; // 0-100
+    discountAmount?: number; // fixed
+    vatRate: number; // 0-100
   }>;
   /** Mevcut stok miktarları (ürün+depo bazında). applySale öncesi kontrol için. */
   currentStockQuantities: Record<string, number>;
@@ -538,7 +542,13 @@ export function isValidQuantity(value: number, allowZero: boolean = false): bool
 
 /** Tutar bütünlüğü kontrolü: items toplamı grandTotal'a eşit mi? */
 export function validateSaleTotal(
-  items: Array<{ quantity: number; unitPrice: number; discountAmount?: number; discountRate?: number; vatRate: number }>,
+  items: Array<{
+    quantity: number;
+    unitPrice: number;
+    discountAmount?: number;
+    discountRate?: number;
+    vatRate: number;
+  }>,
   grandTotal: number,
   tolerance: number = 0.01,
 ): { valid: boolean; computed: number; diff: number } {
@@ -549,7 +559,13 @@ export function validateSaleTotal(
 
 /** Sale item listesinden grand total hesapla. */
 export function computeSaleGrandTotal(
-  items: Array<{ quantity: number; unitPrice: number; discountAmount?: number; discountRate?: number; vatRate: number }>,
+  items: Array<{
+    quantity: number;
+    unitPrice: number;
+    discountAmount?: number;
+    discountRate?: number;
+    vatRate: number;
+  }>,
 ): number {
   const total = items.reduce((sum, item) => {
     const gross = item.quantity * item.unitPrice;
@@ -593,7 +609,12 @@ export class AccountingError extends Error {
 
 /** Mevcut stok miktarlarını hareketlerden envanter olarak çıkar (ürün@depo bazında). */
 export function buildInventorySnapshot(
-  movements: Array<{ productId: string; warehouseId: string; type: StockMovementType; quantity: number }>,
+  movements: Array<{
+    productId: string;
+    warehouseId: string;
+    type: StockMovementType;
+    quantity: number;
+  }>,
   options: { precision?: number } = {},
 ): Record<string, number> {
   const inventory: Record<string, number> = {};

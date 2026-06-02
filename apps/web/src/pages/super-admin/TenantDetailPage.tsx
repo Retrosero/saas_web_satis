@@ -18,7 +18,10 @@ export function TenantDetailPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <Link to="/super-admin/tenants" className="text-sm text-primary hover:underline flex items-center gap-1 w-fit">
+      <Link
+        to="/super-admin/tenants"
+        className="flex w-fit items-center gap-1 text-sm text-primary hover:underline"
+      >
         <ArrowLeft className="h-4 w-4" />
         Firmalar
       </Link>
@@ -28,12 +31,12 @@ export function TenantDetailPage() {
         description={`Kod: ${data.code} • ${data.workingMode === 'SAAS_MASTER' ? 'SaaS Master' : 'ERP Master'}`}
         actions={
           <span
-            className={`text-xs font-semibold px-3 py-1 rounded-full ${
+            className={`rounded-full px-3 py-1 text-xs font-semibold ${
               data.status === 'ACTIVE'
                 ? 'bg-secondary-container text-secondary'
                 : data.status === 'TRIAL'
-                ? 'bg-primary-container text-primary'
-                : 'bg-surface-variant text-on-surface-variant'
+                  ? 'bg-primary-container text-primary'
+                  : 'bg-surface-variant text-on-surface-variant'
             }`}
           >
             {data.status}
@@ -41,7 +44,7 @@ export function TenantDetailPage() {
         }
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           label="Kullanıcı"
           value={formatNumber(data.stats.userCount)}
@@ -68,28 +71,28 @@ export function TenantDetailPage() {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <div className="card p-5">
-          <h2 className="text-base font-semibold text-foreground mb-3 flex items-center gap-2">
+          <h2 className="mb-3 flex items-center gap-2 text-base font-semibold text-foreground">
             <Settings className="h-4 w-4 text-primary" />
             Firma Ayarları
           </h2>
           {data.settings ? (
             <dl className="grid grid-cols-2 gap-3 text-sm">
               <div>
-                <dt className="text-on-surface-variant text-xs">Para Birimi</dt>
+                <dt className="text-xs text-on-surface-variant">Para Birimi</dt>
                 <dd className="font-mono">{data.settings.currency}</dd>
               </div>
               <div>
-                <dt className="text-on-surface-variant text-xs">Dil</dt>
+                <dt className="text-xs text-on-surface-variant">Dil</dt>
                 <dd className="font-mono">{data.settings.locale}</dd>
               </div>
               <div>
-                <dt className="text-on-surface-variant text-xs">Vergi Dairesi</dt>
+                <dt className="text-xs text-on-surface-variant">Vergi Dairesi</dt>
                 <dd>{data.settings.taxOffice ?? '—'}</dd>
               </div>
               <div>
-                <dt className="text-on-surface-variant text-xs">Vergi No</dt>
+                <dt className="text-xs text-on-surface-variant">Vergi No</dt>
                 <dd className="font-mono">{data.settings.taxNumber ?? '—'}</dd>
               </div>
             </dl>
@@ -99,17 +102,17 @@ export function TenantDetailPage() {
         </div>
 
         <div className="card p-5">
-          <h2 className="text-base font-semibold text-foreground mb-3 flex items-center gap-2">
+          <h2 className="mb-3 flex items-center gap-2 text-base font-semibold text-foreground">
             <CreditCard className="h-4 w-4 text-primary" />
             Abonelik
           </h2>
           {data.subscription ? (
             <dl className="grid grid-cols-2 gap-3 text-sm">
               <div>
-                <dt className="text-on-surface-variant text-xs">Durum</dt>
+                <dt className="text-xs text-on-surface-variant">Durum</dt>
                 <dd>
                   <span
-                    className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                    className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
                       data.subscription.status === 'ACTIVE'
                         ? 'bg-secondary-container text-secondary'
                         : 'bg-surface-variant text-on-surface-variant'
@@ -120,32 +123,37 @@ export function TenantDetailPage() {
                 </dd>
               </div>
               <div>
-                <dt className="text-on-surface-variant text-xs">Başlangıç</dt>
+                <dt className="text-xs text-on-surface-variant">Başlangıç</dt>
                 <dd>{formatDate(data.subscription.startAt)}</dd>
               </div>
               <div>
-                <dt className="text-on-surface-variant text-xs">Bitiş</dt>
+                <dt className="text-xs text-on-surface-variant">Bitiş</dt>
                 <dd>{data.subscription.endAt ? formatDate(data.subscription.endAt) : '—'}</dd>
               </div>
               <div>
-                <dt className="text-on-surface-variant text-xs">Deneme Bitiş</dt>
-                <dd>{data.subscription.trialEndAt ? formatDate(data.subscription.trialEndAt) : '—'}</dd>
+                <dt className="text-xs text-on-surface-variant">Deneme Bitiş</dt>
+                <dd>
+                  {data.subscription.trialEndAt ? formatDate(data.subscription.trialEndAt) : '—'}
+                </dd>
               </div>
             </dl>
           ) : (
             <p className="text-sm text-on-surface-variant">Abonelik atanmamış</p>
           )}
-          <button onClick={() => navigate(`/super-admin/tenants/${id}/plans`)} className="btn-secondary w-full mt-4">
+          <button
+            onClick={() => navigate(`/super-admin/tenants/${id}/plans`)}
+            className="btn-secondary mt-4 w-full"
+          >
             Plan Yönet
           </button>
         </div>
       </div>
 
       <div className="card p-5">
-        <h2 className="text-base font-semibold text-foreground mb-3">Firma Yöneticisi</h2>
+        <h2 className="mb-3 text-base font-semibold text-foreground">Firma Yöneticisi</h2>
         {data.adminUser ? (
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-primary-container text-primary flex items-center justify-center text-base font-semibold">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-container text-base font-semibold text-primary">
               {data.adminUser.fullName[0]?.toUpperCase()}
             </div>
             <div>

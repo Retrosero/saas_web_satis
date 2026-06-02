@@ -12,9 +12,7 @@ export class TenantGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context
-      .switchToHttp()
-      .getRequest<{ user?: { tid?: string; sub?: string } }>();
+    const request = context.switchToHttp().getRequest<{ user?: { tid?: string; sub?: string } }>();
     const tenantId = request.user?.tid;
     if (!tenantId || tenantId === 'SYSTEM') return true; // süper admin bypass
 
@@ -25,7 +23,11 @@ export class TenantGuard implements CanActivate {
     if (!tenant || tenant.isDeleted) {
       throw new ForbiddenException('Firma bulunamadı');
     }
-    if (!tenant.isActive || tenant.status === TenantStatus.SUSPENDED || tenant.status === TenantStatus.CANCELLED) {
+    if (
+      !tenant.isActive ||
+      tenant.status === TenantStatus.SUSPENDED ||
+      tenant.status === TenantStatus.CANCELLED
+    ) {
       throw new ForbiddenException('Firma hesabı askıya alınmış');
     }
     return true;

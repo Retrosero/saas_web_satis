@@ -7,8 +7,8 @@ Tüm menüler, butonlar, formlar, uyarılar, hata mesajları, validasyon mesajla
 Kod tarafında değişken/fonksiyon isimleri İngilizce olabilir; fakat kullanıcıya görünen her metin Türkçe olmalıdır.
 
 ==================================================
-1. TASARIM KAYNAĞI VE FRONTEND KURALI
-==================================================
+
+1. # TASARIM KAYNAĞI VE FRONTEND KURALI
 
 Projede frontend tasarımları ayrıca verilecektir.
 
@@ -21,6 +21,7 @@ klasöründen alacak ve sistemde bu tasarımları referans alarak uygulayacaktı
 Bu klasördeki tasarımlar frontend için ana görsel referans kabul edilecektir.
 
 Kurallar:
+
 - sayfatasarimlari klasöründeki tasarımları incele.
 - Layout, renk, boşluk, buton, tablo, kart, form, modal ve genel kullanıcı deneyimini bu tasarımlara göre uygula.
 - Tasarımları birebir bozma.
@@ -30,6 +31,7 @@ Kurallar:
 - Tüm ekranlar ortak layout ve ortak component sistemiyle geliştirilmelidir.
 
 Frontend tasarım ilkeleri:
+
 - Modern
 - Sade
 - Kurumsal
@@ -39,9 +41,7 @@ Frontend tasarım ilkeleri:
 - Hızlı kullanılabilir
 - Saha satış personelinin kolay anlayacağı şekilde sade
 
-==================================================
-2. COMPONENT MİMARİSİ
-==================================================
+# ================================================== 2. COMPONENT MİMARİSİ
 
 Projede mutlaka güçlü bir component yapısı kurulacak.
 
@@ -51,6 +51,7 @@ Tekrarlayan alanlar reusable component olarak hazırlanacak.
 Zorunlu component grupları:
 
 1. Layout componentleri
+
 - AppLayout
 - AuthLayout
 - DashboardLayout
@@ -63,6 +64,7 @@ Zorunlu component grupları:
 - PermissionGuard
 
 2. Form componentleri
+
 - TextInput
 - NumberInput
 - SelectInput
@@ -76,6 +78,7 @@ Zorunlu component grupları:
 - ValidationMessage
 
 3. Liste / tablo componentleri
+
 - DataTable
 - DataTableHeader
 - DataTableFilter
@@ -87,6 +90,7 @@ Zorunlu component grupları:
 - MobileCardList
 
 4. Kart componentleri
+
 - StatCard
 - ModuleCard
 - InfoCard
@@ -96,6 +100,7 @@ Zorunlu component grupları:
 - ReportCard
 
 5. Modal / drawer componentleri
+
 - ConfirmModal
 - FormModal
 - DetailDrawer
@@ -103,6 +108,7 @@ Zorunlu component grupları:
 - ActionSheet
 
 6. İşlem componentleri
+
 - SaveButton
 - DeleteButton
 - CancelButton
@@ -115,23 +121,27 @@ Zorunlu component grupları:
 - ModuleStatusBadge
 
 7. Bildirim componentleri
+
 - Toast
 - AlertBox
 - NotificationItem
 - SystemWarningBanner
 
 8. Dosya componentleri
+
 - FileUploader
 - ImageUploader
 - FilePreview
 - StorageUsageBar
 
 9. Yetki componentleri
+
 - RoleSelector
 - PermissionMatrix
 - UserAccessScopeSelector
 
 10. SaaS componentleri
+
 - PlanCard
 - ModuleToggle
 - TenantStatusBadge
@@ -139,6 +149,7 @@ Zorunlu component grupları:
 - StorageLimitCard
 
 Component kuralları:
+
 - Componentler modüler olmalı.
 - Tekrarlayan kod yazılmamalı.
 - Her component TypeScript ile tip güvenli hazırlanmalı.
@@ -147,11 +158,10 @@ Component kuralları:
 - Ortak tablo, form, modal ve filtre yapıları tekrar kullanılmalı.
 - İleride yeni modül eklenince aynı component sistemiyle hızlıca geliştirilebilmeli.
 
-==================================================
-3. TEKNOLOJİ ÖNERİSİ
-==================================================
+# ================================================== 3. TEKNOLOJİ ÖNERİSİ
 
 Frontend:
+
 - React
 - TypeScript
 - Tailwind CSS
@@ -163,24 +173,25 @@ Frontend:
 - PWA uyumu
 
 Backend:
+
 - Node.js / NestJS tercih edilir
 - Alternatif olarak Laravel kullanılabilir
 - REST API mimarisi
 - Modüler service/repository yapısı
 
 Database:
+
 - PostgreSQL veya MySQL
 - Migration zorunlu
 - Tenant kontrollü veri yapısı
 
 Storage:
+
 - Cloudflare R2
 - Dosyalar/görseller R2 üzerinde tutulacak
 - Veritabanında sadece dosya yolu ve metadata tutulacak
 
-==================================================
-4. TEMEL ÜRÜN MANTIĞI
-==================================================
+# ================================================== 4. TEMEL ÜRÜN MANTIĞI
 
 Sistem çok firmalı SaaS mimarisinde olacak.
 
@@ -193,6 +204,7 @@ Tüm modüller tenant kontrollü olacak.
 Modüller ayrı ayrı satılabilir olacak.
 
 Paket sistemi olacak:
+
 - Başlangıç Paketi
 - Standart Paket
 - Profesyonel Paket
@@ -204,9 +216,7 @@ Her pakete farklı modüller, kullanıcı limitleri, şube limitleri, depo limit
 Veritabanı GB limiti ilk aşamada uygulanmayacak.
 Sadece dosya, belge ve görsel kullanımı için Cloudflare R2 storage tarafında tenant/paket bazlı limit uygulanacak.
 
-==================================================
-5. ÇALIŞMA MODLARI
-==================================================
+# ================================================== 5. ÇALIŞMA MODLARI
 
 Sistemde iki farklı çalışma modu desteklenecek:
 
@@ -227,14 +237,13 @@ SaaS operasyon paneli gibi çalışır.
 İleride adaptör aracılığıyla ERP ile senkron çalışır.
 
 ERP_MASTER modunda:
+
 - ERP’de aktif olmayan cari/stok web operasyon ekranlarında görünmez.
 - Web tarafında fiziksel silme yapılmaz.
 - Kayıt pasif/arşiv referansı olarak korunur.
 - Geçmiş satış/sipariş/tahsilat/log kayıtlarının bağlantısı bozulmaz.
 
-==================================================
-6. ANA MODÜLLER
-==================================================
+# ================================================== 6. ANA MODÜLLER
 
 Sistem ileride şu modülleri destekleyebilecek mimaride olacak:
 
@@ -265,13 +274,12 @@ Sistem ileride şu modülleri destekleyebilecek mimaride olacak:
 İlk MVP’de tüm modüller kodlanmayacak.
 Ancak sistem mimarisi bu modüller sonradan eklenebilecek şekilde hazırlanacak.
 
-==================================================
-7. İLK MVP KAPSAMI
-==================================================
+# ================================================== 7. İLK MVP KAPSAMI
 
 İlk fazda geliştirilecek temel yapı:
 
 1. Auth sistemi
+
 - Giriş
 - Çıkış
 - Kullanıcı oturumu
@@ -279,12 +287,14 @@ Ancak sistem mimarisi bu modüller sonradan eklenebilecek şekilde hazırlanacak
 - Şifre güvenliği
 
 2. Tenant sistemi
+
 - Firma oluşturma
 - Firma ayarları
 - Tenant izolasyonu
 - Tenant aktif/pasif durumu
 
 3. Süper admin paneli
+
 - Firmaları görme
 - Firma ekleme/düzenleme
 - Firma aktif/pasif yapma
@@ -295,12 +305,14 @@ Ancak sistem mimarisi bu modüller sonradan eklenebilecek şekilde hazırlanacak
 - Sistem loglarını görme
 
 4. Paket ve modül sistemi
+
 - Modül tanımları
 - Paket tanımları
 - Paket-modül eşleştirme
 - Firma bazlı özel modül açma/kapatma
 
 5. Kullanıcı / rol / yetki sistemi
+
 - Kullanıcı oluşturma
 - Rol oluşturma
 - Yetki atama
@@ -310,6 +322,7 @@ Ancak sistem mimarisi bu modüller sonradan eklenebilecek şekilde hazırlanacak
 - Veri erişim yetkisi
 
 6. Cari modülü
+
 - Cari liste
 - Cari ekleme
 - Cari düzenleme
@@ -318,6 +331,7 @@ Ancak sistem mimarisi bu modüller sonradan eklenebilecek şekilde hazırlanacak
 - Cari hareket altyapısı
 
 7. Stok modülü
+
 - Ürün liste
 - Ürün ekleme
 - Ürün düzenleme
@@ -330,6 +344,7 @@ Ancak sistem mimarisi bu modüller sonradan eklenebilecek şekilde hazırlanacak
 - Cloudflare R2 dosya/görsel altyapısı
 
 8. Satış modülü
+
 - Müşteri seçimi
 - Ürün seçimi
 - Sepet mantığı
@@ -339,12 +354,14 @@ Ancak sistem mimarisi bu modüller sonradan eklenebilecek şekilde hazırlanacak
 - Stok ve cari hareket altyapısı
 
 9. Sipariş modülü
+
 - Sipariş oluşturma
 - Sipariş listesi
 - Sipariş durumları
 - Sipariş kalemleri
 
 10. Tahsilat modülü
+
 - Cari seçimi
 - Tutar
 - Ödeme tipi
@@ -353,17 +370,20 @@ Ancak sistem mimarisi bu modüller sonradan eklenebilecek şekilde hazırlanacak
 - Cari hareket etkisi
 
 11. Kasa modülü
+
 - Kasa tanımları
 - Kasa hareketleri
 - Tahsilat bağlantısı
 
 12. Temel raporlar
+
 - Günlük satış
 - Cari bakiye listesi
 - Stok listesi
 - Tahsilat listesi
 
 13. Excel aktarım
+
 - Cari import
 - Stok import
 - Fiyat import
@@ -371,6 +391,7 @@ Ancak sistem mimarisi bu modüller sonradan eklenebilecek şekilde hazırlanacak
 - Hata kontrolü
 
 14. Log & Audit sistemi
+
 - Kullanıcı işlemleri
 - Kritik veri değişiklikleri
 - Hata logları
@@ -379,13 +400,12 @@ Ancak sistem mimarisi bu modüller sonradan eklenebilecek şekilde hazırlanacak
 - Süper admin log merkezi
 
 15. PWA uyumlu responsive arayüz
+
 - Mobil/tablet uyumlu
 - Web panel
 - Saha satışa uygun temel ekranlar
 
-==================================================
-8. GELİŞTİRME SIRASI
-==================================================
+# ================================================== 8. GELİŞTİRME SIRASI
 
 Projeyi şu sırayla geliştir:
 
@@ -421,6 +441,7 @@ Kod yazarken her fazı küçük parçalara böl.
 Bir faz bitmeden diğerine geçme.
 
 Her faz sonunda:
+
 - Ne yapıldı?
 - Hangi dosyalar değişti?
 - Hangi componentler oluşturuldu?
@@ -428,23 +449,23 @@ Her faz sonunda:
 - Hangi API endpointleri eklendi?
 - Hangi testler yapılmalı?
 - Hangi ajanların kontrolünden geçti?
-raporla.
+  raporla.
 
-==================================================
-9. AJAN TAKIMI
-==================================================
+# ================================================== 9. AJAN TAKIMI
 
 Projede aşağıdaki ajan takımı kullanılacak.
 
 Her ajan kendi alanını kontrol edecek.
 
 1. Proje Mimarı / Orkestratör Ajan
+
 - Genel mimariyi yönetir.
 - Fazları sıralar.
 - Modüller arası bağımlılıkları kontrol eder.
 - MVP kapsamının şişmesini önler.
 
 2. Frontend Mimari & Component Ajanı
+
 - sayfatasarimlari klasöründeki tasarımları analiz eder.
 - Ortak component sistemini kurar.
 - Tüm sayfaların aynı tasarım diliyle ilerlemesini sağlar.
@@ -452,40 +473,47 @@ Her ajan kendi alanını kontrol edecek.
 - Responsive ve PWA uyumluluğunu kontrol eder.
 
 3. Veritabanı & Migration Ajanı
+
 - Tüm tablo yapısını kontrol eder.
 - tenant_id zorunluluğunu denetler.
 - Migration olmadan tablo değişikliğine izin vermez.
 - Foreign key, index, unique constraint ve soft delete yapısını kontrol eder.
 
 4. Muhasebe Mantığı Ajanı
+
 - Cari, stok, satış, tahsilat, kasa, iade ve siparişlerin hesap mantığını kontrol eder.
 - Borç/alacak yönü doğru mu denetler.
 - Stok giriş/çıkış yönü doğru mu denetler.
 - Silme yerine iptal/ters kayıt mantığını kontrol eder.
 
 5. API / Backend Ajanı
+
 - Backend servis mimarisini kurar.
 - Controller, service, repository katmanlarını düzenler.
 - API response standardını belirler.
 - Validation, error handling, transaction ve pagination yapısını kontrol eder.
 
 6. Güvenlik & Yetki Ajanı
+
 - RBAC/permission sistemini kontrol eder.
 - Kullanıcının başka tenant verisine erişmesini engeller.
 - Şifre, token, API key ve dosya erişim güvenliğini kontrol eder.
 
 7. Modül & Paket Ajanı
+
 - Modüllerin tenant bazlı açılıp kapatılmasını kontrol eder.
 - Paket sistemini denetler.
 - Modül kapalıyken menü, sayfa ve API erişiminin engellendiğini kontrol eder.
 
 8. Log & Audit Ajanı
+
 - Her kritik işlemin loglanmasını sağlar.
 - Eski değer/yeni değer kaydı var mı kontrol eder.
 - Hata logları yeterli mi denetler.
 - Süper admin panelinden hatalar izlenebilir mi kontrol eder.
 
 9. Test & QA Ajanı
+
 - Her fazdan sonra test senaryosu üretir.
 - Yetkisiz erişim testleri yapar.
 - Tenant veri karışımı testi yapar.
@@ -493,34 +521,37 @@ Her ajan kendi alanını kontrol edecek.
 - Muhasebesel işlem testleri yapar.
 
 10. Raporlama & Performans Ajanı
+
 - Raporlar için veri modeli yeterli mi kontrol eder.
 - Sorguların performansını izler.
 - Gerekli indexleri önerir.
 - Dashboard ve raporların yavaşlamasını engeller.
 
 11. Entegrasyon Ajanı
+
 - ERP adaptörlerine uygun altyapıyı kontrol eder.
 - Mikro, Logo, Netsis, Paraşüt gibi sistemlerle ileride senkron çalışmaya uygun alanların bırakıldığını denetler.
 - external_id, source_system, sync_status gibi alanların doğru kullanıldığını kontrol eder.
 
 12. Veri Taşıma / Geçiş Ajanı
+
 - Excel/Mikro/Logo/Netsis/Paraşüt şablonları için mapping mantığını tasarlar.
 - Cari/stok/fiyat/bakiye aktarımını denetler.
 - Satış geçmişlerinin sadece arşiv amaçlı alınmasını kontrol eder.
 
 13. Akıllı Asistan & Bilgi Tabanı Ajanı
+
 - Akıllı asistan ilk fazda kodlanmayacak.
 - Ancak her modül, sayfa ve buton için yardım açıklaması altyapısını hazırlar.
 - İleride asistanın kullanacağı bilgi tabanı yapısını planlar.
 
 14. Storage / Dosya Yönetimi Ajanı
+
 - Cloudflare R2 dosya yönetimini kontrol eder.
 - Tenant bazlı dosya yolu ve kullanım kotasını denetler.
 - Dosya erişiminde tenant kontrolü yapar.
 
-==================================================
-10. VERİTABANI TEMEL KURALLARI
-==================================================
+# ================================================== 10. VERİTABANI TEMEL KURALLARI
 
 Tüm ana tablolarda mümkünse şu alanlar olacak:
 
@@ -550,11 +581,10 @@ Import/veri taşıma için:
 - import_status
 - import_error
 
-==================================================
-11. TEMEL TABLO GRUPLARI
-==================================================
+# ================================================== 11. TEMEL TABLO GRUPLARI
 
 SaaS çekirdek:
+
 - tenants
 - tenant_settings
 - users
@@ -569,6 +599,7 @@ SaaS çekirdek:
 - subscriptions
 
 Cari/stok/satış:
+
 - customers
 - customer_movements
 - products
@@ -586,6 +617,7 @@ Cari/stok/satış:
 - cash_movements
 
 Log:
+
 - audit_logs
 - error_logs
 - security_logs
@@ -593,44 +625,47 @@ Log:
 - system_alerts
 
 Import:
+
 - import_batches
 - import_errors
 - archived_sales
 - archived_sale_items
 
 Storage:
+
 - files
 - tenant_storage_limits
 - tenant_storage_usage
 
 Assistant altyapısı:
+
 - assistant_knowledge_base
 - assistant_tools
 - assistant_question_logs
 
 API/Webhook:
+
 - api_keys
 - api_key_permissions
 - webhook_endpoints
 - webhook_events
 - webhook_delivery_logs
 
-==================================================
-12. API MİMARİSİ
-==================================================
+# ================================================== 12. API MİMARİSİ
 
 API ikiye ayrılacak:
 
 1. Internal API
-Web panel, PWA ve ileride Windows/mobil istemciler kullanır.
+   Web panel, PWA ve ileride Windows/mobil istemciler kullanır.
 
 2. Public API
-Müşterinin dış sistemleri, bayi portalları, entegrasyonlar ve webhooklar için kullanılır.
+   Müşterinin dış sistemleri, bayi portalları, entegrasyonlar ve webhooklar için kullanılır.
 
 İlk MVP’de public API tamamen açılmayabilir.
 Ama mimari buna hazır olmalı.
 
 Her API isteğinde şu kontroller zorunludur:
+
 - Auth kontrolü
 - Tenant kontrolü
 - Abonelik kontrolü
@@ -639,13 +674,12 @@ Her API isteğinde şu kontroller zorunludur:
 - Veri erişim kontrolü
 - Loglama
 
-==================================================
-13. STORAGE MİMARİSİ
-==================================================
+# ================================================== 13. STORAGE MİMARİSİ
 
 Dosya ve görseller Cloudflare R2 üzerinde saklanacak.
 
 Kullanım alanları:
+
 - Ürün görselleri
 - Fatura/sipariş PDF
 - Excel import dosyaları
@@ -666,13 +700,12 @@ Storage kullanım limiti paket bazlı olacak.
 
 Veritabanı için GB limiti uygulanmayacak.
 
-==================================================
-14. LOG VE AUDIT MİMARİSİ
-==================================================
+# ================================================== 14. LOG VE AUDIT MİMARİSİ
 
 Her kritik işlem audit log oluşturacak.
 
 Audit log içinde:
+
 - tenant_id
 - user_id
 - module
@@ -687,6 +720,7 @@ Audit log içinde:
 - created_at
 
 Hassas veriler maskelenecek:
+
 - Şifre
 - Token
 - API secret
@@ -697,14 +731,13 @@ Süper admin log merkezi olacak.
 
 Firma admin sadece kendi tenant loglarını görebilecek.
 
-==================================================
-15. MUHASEBESEL İŞLEM KURALLARI
-==================================================
+# ================================================== 15. MUHASEBESEL İŞLEM KURALLARI
 
 Para ve stok işlemlerinde direkt değer değiştirme yapılmayacak.
 Hareket mantığı kullanılacak.
 
 Satış:
+
 - Satış kaydı
 - Satış kalemleri
 - Cari hareket
@@ -712,25 +745,27 @@ Satış:
 - Kasa/tahsilat varsa kasa hareketi
 
 Tahsilat:
+
 - Cari alacağını azaltır
 - Kasa/banka/POS hareketi oluşturur
 
 İade:
+
 - Satışın ters etkisini oluşturur
 - Stok geri girişi yapabilir
 - Cari hareketini ters yönde etkiler
 
 İptal:
+
 - Fiziksel silme değil
 - İptal durumu + ters hareket + audit log
 
-==================================================
-16. UI / UX KURALLARI
-==================================================
+# ================================================== 16. UI / UX KURALLARI
 
 Arayüz %100 Türkçe olacak.
 
 Her liste ekranında:
+
 - Arama
 - Filtre
 - Sıralama
@@ -741,6 +776,7 @@ Her liste ekranında:
 - Yetkiye göre buton göster/gizle
 
 Mobilde:
+
 - Kart görünümü
 - Büyük butonlar
 - Alt menü veya sade yan menü
@@ -749,9 +785,7 @@ Mobilde:
 
 Sayfalar sayfatasarimlari klasöründeki tasarımlarla uyumlu olmalı.
 
-==================================================
-17. KESİN KURALLAR
-==================================================
+# ================================================== 17. KESİN KURALLAR
 
 - Sistem %100 Türkçe arayüzle geliştirilecek.
 - sayfatasarimlari klasöründeki tasarımlar ana frontend referansı olacak.
@@ -770,9 +804,7 @@ Sayfalar sayfatasarimlari klasöründeki tasarımlarla uyumlu olmalı.
 - ERP entegrasyonu şimdilik kodlanmayacak ama external_id/source_system/sync_status alanları unutulmayacak.
 - Satış geçmişleri içeri alınırsa arşiv amaçlı alınacak, cari ve stok hesaplarını etkilemeyecek.
 
-==================================================
-18. İLK BEKLENEN ÇIKTI
-==================================================
+# ================================================== 18. İLK BEKLENEN ÇIKTI
 
 Kod yazmaya başlamadan önce bana şu çıktıları ver:
 

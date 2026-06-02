@@ -16,8 +16,8 @@ export function MobileBottomNav() {
   const visible = ITEMS.filter((i) => !i.module || user?.activeModules.includes(i.module));
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-surface-container-lowest border-t border-outline-variant">
-      <div className="grid grid-cols-5 h-16">
+    <nav className="fixed bottom-0 left-0 right-0 z-30 border-t border-outline-variant bg-surface-container-lowest md:hidden">
+      <div className="grid h-16 grid-cols-5">
         {visible.map((item) => {
           const Icon = item.icon;
           return (

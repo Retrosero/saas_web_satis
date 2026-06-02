@@ -50,7 +50,9 @@ export function SettingsModulesPage() {
       const result = await toggle.mutateAsync({ code, isActive: !currentState });
       toast.success(result.isActive ? 'Modül aktif edildi' : 'Modül devre dışı bırakıldı');
     } catch (err: unknown) {
-      const message = (err as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'İşlem başarısız';
+      const message =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+        'İşlem başarısız';
       toast.error(message);
     } finally {
       setPendingCode(null);
@@ -63,7 +65,7 @@ export function SettingsModulesPage() {
         title="Modüller"
         description="Aktif ve kullanılabilir modüller. Manuel açma/kapatma yaparak tenant'ınızı özelleştirin."
         actions={
-          <span className="text-xs text-on-surface-variant flex items-center gap-1">
+          <span className="flex items-center gap-1 text-xs text-on-surface-variant">
             <Sparkles className="h-3 w-3" />
             {data?.active.length ?? 0} aktif
           </span>
@@ -72,13 +74,13 @@ export function SettingsModulesPage() {
 
       <div className="card p-3">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-on-surface-variant" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant" />
           <input
             type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Modül ara…"
-            className="w-full h-10 pl-10 pr-4 rounded-md bg-surface-container text-sm border border-outline-variant focus:border-primary focus:outline-none"
+            className="h-10 w-full rounded-md border border-outline-variant bg-surface-container pl-10 pr-4 text-sm focus:border-primary focus:outline-none"
           />
         </div>
       </div>
@@ -97,8 +99,8 @@ export function SettingsModulesPage() {
 
       {data && data.active.length > 0 && (
         <>
-          <h2 className="text-base font-semibold text-foreground mt-2">Aktif Modüller</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <h2 className="mt-2 text-base font-semibold text-foreground">Aktif Modüller</h2>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {data.active
               .filter((m) => !search || m.name.toLowerCase().includes(search.toLowerCase()))
               .map((m) => (
@@ -121,11 +123,11 @@ export function SettingsModulesPage() {
 
       {data && data.available.length > 0 && (
         <>
-          <h2 className="text-base font-semibold text-foreground mt-4 flex items-center gap-2">
+          <h2 className="mt-4 flex items-center gap-2 text-base font-semibold text-foreground">
             <Package className="h-4 w-4" />
             Kullanılabilir Modüller ({data.available.length})
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {data.available
               .filter((m) => !search || m.name.toLowerCase().includes(search.toLowerCase()))
               .map((m) => (
@@ -161,35 +163,49 @@ interface ModuleCardProps {
   onToggle: () => void;
 }
 
-function ModuleCard({ code, name, category, icon, isActive, source, validUntil, isLoading, onToggle }: ModuleCardProps) {
+function ModuleCard({
+  code,
+  name,
+  category,
+  icon,
+  isActive,
+  source,
+  validUntil,
+  isLoading,
+  onToggle,
+}: ModuleCardProps) {
   return (
     <div
       className={cn(
-        'card p-4 flex flex-col gap-3 transition-all',
-        isActive && 'border-primary bg-primary-container/20',
+        'card flex flex-col gap-3 p-4 transition-all',
+        isActive && 'bg-primary-container/20 border-primary',
       )}
     >
       <div className="flex items-start justify-between gap-2">
-        <div className="flex items-center gap-2 min-w-0 flex-1">
+        <div className="flex min-w-0 flex-1 items-center gap-2">
           <div
             className={cn(
-              'h-10 w-10 rounded-md flex items-center justify-center flex-shrink-0',
-              isActive ? 'bg-primary text-primary-foreground' : 'bg-surface-container text-on-surface-variant',
+              'flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md',
+              isActive
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-surface-container text-on-surface-variant',
             )}
           >
             <Package className="h-5 w-5" />
           </div>
           <div className="min-w-0 flex-1">
-            <h3 className="text-sm font-semibold text-foreground truncate">{name}</h3>
-            <p className="text-[10px] font-mono text-on-surface-variant truncate">{code}</p>
+            <h3 className="truncate text-sm font-semibold text-foreground">{name}</h3>
+            <p className="truncate font-mono text-[10px] text-on-surface-variant">{code}</p>
           </div>
         </div>
         <button
           onClick={onToggle}
           disabled={isLoading}
           className={cn(
-            'p-1 rounded-md transition-colors',
-            isActive ? 'text-primary hover:bg-primary/10' : 'text-on-surface-variant hover:bg-surface-container',
+            'rounded-md p-1 transition-colors',
+            isActive
+              ? 'hover:bg-primary/10 text-primary'
+              : 'text-on-surface-variant hover:bg-surface-container',
           )}
           title={isActive ? 'Devre dışı bırak' : 'Aktif et'}
         >
@@ -197,25 +213,29 @@ function ModuleCard({ code, name, category, icon, isActive, source, validUntil, 
         </button>
       </div>
 
-      <div className="flex items-center gap-2 flex-wrap">
+      <div className="flex flex-wrap items-center gap-2">
         <span
           className={cn(
-            'text-[10px] font-semibold px-1.5 py-0.5 rounded-full',
+            'rounded-full px-1.5 py-0.5 text-[10px] font-semibold',
             CATEGORY_COLOR[category] ?? 'bg-surface-variant text-on-surface-variant',
           )}
         >
           {CATEGORY_LABEL[category] ?? category}
         </span>
         {isActive && source === 'plan' && (
-          <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-secondary-container text-secondary">PLAN</span>
+          <span className="rounded-full bg-secondary-container px-1.5 py-0.5 text-[10px] font-semibold text-secondary">
+            PLAN
+          </span>
         )}
         {isActive && source === 'manual_override' && (
-          <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-primary-container text-primary">MANUEL</span>
+          <span className="rounded-full bg-primary-container px-1.5 py-0.5 text-[10px] font-semibold text-primary">
+            MANUEL
+          </span>
         )}
         {isActive && icon}
         {validUntil && (
           <span className="text-[10px] text-on-surface-variant">
-            <X className="h-3 w-3 inline" /> {new Date(validUntil).toLocaleDateString('tr-TR')}
+            <X className="inline h-3 w-3" /> {new Date(validUntil).toLocaleDateString('tr-TR')}
           </span>
         )}
       </div>

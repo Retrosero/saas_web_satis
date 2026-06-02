@@ -20,9 +20,9 @@ export function LoginPage() {
   const onSubmit = (data: LoginInput) => login.mutate(data);
 
   return (
-    <div className="card p-6 sm:p-8 animate-fade-in">
-      <div className="flex flex-col items-center gap-2 mb-6">
-        <div className="h-12 w-12 rounded-md bg-primary text-primary-foreground flex items-center justify-center">
+    <div className="card animate-fade-in p-6 sm:p-8">
+      <div className="mb-6 flex flex-col items-center gap-2">
+        <div className="flex h-12 w-12 items-center justify-center rounded-md bg-primary text-primary-foreground">
           <Building2 className="h-6 w-6" />
         </div>
         <h1 className="text-2xl font-bold text-foreground">SaaS Panel</h1>
@@ -32,8 +32,11 @@ export function LoginPage() {
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
         {login.isError && (
           <div className="flex items-start gap-2 rounded-md bg-error-container p-3 text-sm text-error">
-            <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
-            <span>{(login.error as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Giriş başarısız'}</span>
+            <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0" />
+            <span>
+              {(login.error as { response?: { data?: { message?: string } } })?.response?.data
+                ?.message ?? 'Giriş başarısız'}
+            </span>
           </div>
         )}
 
@@ -64,8 +67,12 @@ export function LoginPage() {
           error={errors.tenantCode?.message}
         />
 
-        <label className="flex items-center gap-2 text-sm text-foreground cursor-pointer">
-          <input type="checkbox" className="rounded border-outline-variant" {...register('remember')} />
+        <label className="flex cursor-pointer items-center gap-2 text-sm text-foreground">
+          <input
+            type="checkbox"
+            className="rounded border-outline-variant"
+            {...register('remember')}
+          />
           Beni hatırla
         </label>
 
@@ -85,9 +92,10 @@ export function LoginPage() {
         </div>
       </form>
 
-      <div className="mt-6 pt-6 border-t border-outline-variant">
-        <p className="text-xs text-on-surface-variant text-center">
-          Demo: <span className="font-mono">admin@sistem.local</span> / <span className="font-mono">ChangeMe123!</span>
+      <div className="mt-6 border-t border-outline-variant pt-6">
+        <p className="text-center text-xs text-on-surface-variant">
+          Demo: <span className="font-mono">admin@sistem.local</span> /{' '}
+          <span className="font-mono">ChangeMe123!</span>
         </p>
       </div>
     </div>

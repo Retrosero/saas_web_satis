@@ -1,4 +1,11 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+  HttpStatus,
+  Logger,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ApiError } from '@saas/shared';
 
@@ -36,7 +43,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
     }
 
     if (status >= 500) {
-      this.logger.error(`${request.method} ${request.url} → ${status}: ${message}`, exception instanceof Error ? exception.stack : undefined);
+      this.logger.error(
+        `${request.method} ${request.url} → ${status}: ${message}`,
+        exception instanceof Error ? exception.stack : undefined,
+      );
     }
 
     const body: ApiError = {

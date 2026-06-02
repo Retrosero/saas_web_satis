@@ -34,7 +34,7 @@ export function DashboardPage() {
         }
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           label="Günlük Satış"
           value={formatCurrency(0)}
@@ -63,23 +63,26 @@ export function DashboardPage() {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <div className="card p-5">
-          <h2 className="text-lg font-semibold text-foreground mb-3">Aktif Modüller</h2>
+          <h2 className="mb-3 text-lg font-semibold text-foreground">Aktif Modüller</h2>
           <div className="flex flex-wrap gap-2">
             {user?.activeModules?.map((m) => (
-              <span key={m} className="rounded-full bg-primary-container text-primary px-3 py-1 text-xs font-semibold">
+              <span
+                key={m}
+                className="rounded-full bg-primary-container px-3 py-1 text-xs font-semibold text-primary"
+              >
                 {m}
               </span>
             )) ?? <span className="text-sm text-on-surface-variant">Henüz modül atanmamış</span>}
           </div>
         </div>
         <div className="card p-5">
-          <h2 className="text-lg font-semibold text-foreground mb-3">Hoş Geldiniz</h2>
-          <p className="text-sm text-on-surface-variant leading-relaxed">
-            SaaS İşletme Yönetim Platformu'na giriş yaptınız. Sol menüden modüllere erişebilir,
-            üst bardan cari veya ürün araması yapabilirsiniz. Henüz demo aşamasındayız — veriler
-            bir sonraki fazda (FAZ 6 — Cari) yüklenecek.
+          <h2 className="mb-3 text-lg font-semibold text-foreground">Hoş Geldiniz</h2>
+          <p className="text-sm leading-relaxed text-on-surface-variant">
+            SaaS İşletme Yönetim Platformu'na giriş yaptınız. Sol menüden modüllere erişebilir, üst
+            bardan cari veya ürün araması yapabilirsiniz. Henüz demo aşamasındayız — veriler bir
+            sonraki fazda (FAZ 6 — Cari) yüklenecek.
           </p>
         </div>
       </div>

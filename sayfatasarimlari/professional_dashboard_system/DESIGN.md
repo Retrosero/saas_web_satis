@@ -110,58 +110,63 @@ The visual style follows a **Corporate Modern** approach with subtle hints of **
 
 The color strategy uses a **Deep Navy (#121E5C)** as the primary brand anchor, primarily utilized for structural navigation elements (sidebars, headers) to provide a sense of stability and depth. The **Vibrant Turquoise (#00D7C4)** serves as the high-contrast accent color, reserved strictly for primary actions, active states, and critical selection markers.
 
-*   **Primary Surface:** In light mode, use a very light cool gray (#F4F7FE) for backgrounds to differentiate from pure white containers.
-*   **Sidebar Context:** The sidebar operates on a dark-theme logic regardless of the main content mode, using the deep navy background with white or low-opacity white text for secondary items.
-*   **Functional Colors:** Use the vibrant turquoise for "Success" and "Active" states. A muted red is reserved for errors and destructive actions to maintain professional restraint.
+- **Primary Surface:** In light mode, use a very light cool gray (#F4F7FE) for backgrounds to differentiate from pure white containers.
+- **Sidebar Context:** The sidebar operates on a dark-theme logic regardless of the main content mode, using the deep navy background with white or low-opacity white text for secondary items.
+- **Functional Colors:** Use the vibrant turquoise for "Success" and "Active" states. A muted red is reserved for errors and destructive actions to maintain professional restraint.
 
 ## Typography
 
-The typography system relies on **Hanken Grotesk** to deliver a sharp, contemporary, and highly legible experience. 
+The typography system relies on **Hanken Grotesk** to deliver a sharp, contemporary, and highly legible experience.
 
-*   **Hierarchy:** Headings use a semi-bold weight with tight letter-spacing to create a strong visual impact.
-*   **Captions & Labels:** Section headers in the sidebar and data labels use the `label-sm` style—all-caps with increased letter-spacing to ensure distinct categorization.
-*   **Readability:** Body text is set with a comfortable 1.5x line height to ensure long-form data or descriptions remain approachable.
+- **Hierarchy:** Headings use a semi-bold weight with tight letter-spacing to create a strong visual impact.
+- **Captions & Labels:** Section headers in the sidebar and data labels use the `label-sm` style—all-caps with increased letter-spacing to ensure distinct categorization.
+- **Readability:** Body text is set with a comfortable 1.5x line height to ensure long-form data or descriptions remain approachable.
 
 ## Layout & Spacing
 
 The layout utilizes a **Fixed-Fluid Hybrid** model. The sidebar is fixed at 280px to provide a consistent navigation anchor, while the main content area uses a fluid 12-column grid with 24px gutters.
 
-*   **Margins:** Main page containers should maintain a 32px (xl) margin on desktop to provide breathing room.
-*   **Density:** Interactive components (buttons, inputs) utilize a comfortable 12px vertical and 24px horizontal padding to support the 15px roundedness.
-*   **Breakpoints:** At 1024px, the sidebar collapses into a hamburger menu or a slim icon-only bar to maximize content space on tablets.
+- **Margins:** Main page containers should maintain a 32px (xl) margin on desktop to provide breathing room.
+- **Density:** Interactive components (buttons, inputs) utilize a comfortable 12px vertical and 24px horizontal padding to support the 15px roundedness.
+- **Breakpoints:** At 1024px, the sidebar collapses into a hamburger menu or a slim icon-only bar to maximize content space on tablets.
 
 ## Elevation & Depth
 
-Hierarchy is established through **Tonal Layering** and **Soft Ambient Shadows**. 
+Hierarchy is established through **Tonal Layering** and **Soft Ambient Shadows**.
 
-*   **Base Layer:** The primary background uses a cool, off-white tint.
-*   **Card Layer:** Content containers are pure white with a very soft, diffused shadow (0px 4px 20px rgba(18, 30, 92, 0.05)) to separate them from the background.
-*   **Sidebar Depth:** The sidebar uses a flat, deep navy color but utilizes a subtle inner border (1px white at 10% opacity) on active items to create a sense of inset depth.
-*   **Interactions:** Hover states on cards should slightly lift the element using a more pronounced shadow rather than a border change.
+- **Base Layer:** The primary background uses a cool, off-white tint.
+- **Card Layer:** Content containers are pure white with a very soft, diffused shadow (0px 4px 20px rgba(18, 30, 92, 0.05)) to separate them from the background.
+- **Sidebar Depth:** The sidebar uses a flat, deep navy color but utilizes a subtle inner border (1px white at 10% opacity) on active items to create a sense of inset depth.
+- **Interactions:** Hover states on cards should slightly lift the element using a more pronounced shadow rather than a border change.
 
 ## Shapes
 
 The signature of this design system is a **15px border radius** applied across all primary UI components. This specific radius (falling under the `Rounded` category) creates a modern, friendly, yet professional silhouette.
 
-*   **Consistency:** Buttons, input fields, cards, and selection overlays (like the active menu item in the sidebar) must all adhere to the 15px radius.
-*   **Exceptions:** Smaller nested elements (like tags or chips) may use a "Pill" shape (full radius) to distinguish them from structural containers.
+- **Consistency:** Buttons, input fields, cards, and selection overlays (like the active menu item in the sidebar) must all adhere to the 15px radius.
+- **Exceptions:** Smaller nested elements (like tags or chips) may use a "Pill" shape (full radius) to distinguish them from structural containers.
 
 ## Components
 
 ### Buttons
-*   **Primary:** Solid Turquoise (#00D7C4) with Dark Navy text (#121E5C). This ensures maximum visibility and follows the provided reference for active items.
-*   **Secondary/Ghost:** Transparent background with a 1.5px Navy border or Navy text.
-*   **Radius:** 15px strictly enforced.
+
+- **Primary:** Solid Turquoise (#00D7C4) with Dark Navy text (#121E5C). This ensures maximum visibility and follows the provided reference for active items.
+- **Secondary/Ghost:** Transparent background with a 1.5px Navy border or Navy text.
+- **Radius:** 15px strictly enforced.
 
 ### Sidebar Items
-*   **Active State:** Background set to Turquoise (#00D7C4) with the radius applied. Text/Icons within active items should switch to the primary Navy for contrast.
-*   **Inactive State:** White text at 70-80% opacity. Icons should be line-art style with a 2px stroke width.
+
+- **Active State:** Background set to Turquoise (#00D7C4) with the radius applied. Text/Icons within active items should switch to the primary Navy for contrast.
+- **Inactive State:** White text at 70-80% opacity. Icons should be line-art style with a 2px stroke width.
 
 ### Input Fields
-*   Backgrounds should be a very light gray with a 1px border that turns Turquoise on focus. The 15px radius applies here to maintain harmony with the buttons.
+
+- Backgrounds should be a very light gray with a 1px border that turns Turquoise on focus. The 15px radius applies here to maintain harmony with the buttons.
 
 ### Logo & Branding
-*   The logo should utilize the Primary Navy and Turquoise palette. For dark backgrounds (sidebar), use the Turquoise mark with White typography. For light backgrounds, use the Navy typography.
+
+- The logo should utilize the Primary Navy and Turquoise palette. For dark backgrounds (sidebar), use the Turquoise mark with White typography. For light backgrounds, use the Navy typography.
 
 ### Chips & Badges
-*   Used for status (e.g., "Pending", "2" notifications). Notifications should use a deep crimson (#E11D48) as seen in the reference image to stand out against the navy sidebar.
+
+- Used for status (e.g., "Pending", "2" notifications). Notifications should use a deep crimson (#E11D48) as seen in the reference image to stand out against the navy sidebar.

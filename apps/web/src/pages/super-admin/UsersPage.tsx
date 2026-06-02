@@ -17,7 +17,11 @@ const STATUS_LABEL: Record<string, { text: string; color: string }> = {
 export function UsersPage() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
-  const { data, isLoading, isError, error, refetch } = useAdminUsers({ search, page, pageSize: 20 });
+  const { data, isLoading, isError, error, refetch } = useAdminUsers({
+    search,
+    page,
+    pageSize: 20,
+  });
 
   return (
     <div className="flex flex-col gap-4">
@@ -28,7 +32,7 @@ export function UsersPage() {
 
       <div className="card p-3">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-on-surface-variant" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant" />
           <input
             type="search"
             value={search}
@@ -37,7 +41,7 @@ export function UsersPage() {
               setPage(1);
             }}
             placeholder="E-posta veya ad ile ara…"
-            className="w-full h-10 pl-10 pr-4 rounded-md bg-surface-container text-sm border border-outline-variant focus:border-primary focus:outline-none"
+            className="h-10 w-full rounded-md border border-outline-variant bg-surface-container pl-10 pr-4 text-sm focus:border-primary focus:outline-none"
           />
         </div>
       </div>
@@ -46,7 +50,11 @@ export function UsersPage() {
       {isError && <ErrorState message={(error as Error).message} onRetry={() => refetch()} />}
       {data && data.data.length === 0 && (
         <div className="card">
-          <EmptyState icon={<Users className="h-8 w-8" />} title="Kullanıcı bulunamadı" description="Arama kriterlerinizi değiştirin veya yeni kullanıcı oluşturun." />
+          <EmptyState
+            icon={<Users className="h-8 w-8" />}
+            title="Kullanıcı bulunamadı"
+            description="Arama kriterlerinizi değiştirin veya yeni kullanıcı oluşturun."
+          />
         </div>
       )}
 
@@ -54,28 +62,33 @@ export function UsersPage() {
         <div className="card overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-surface-container border-b border-outline-variant">
+              <thead className="border-b border-outline-variant bg-surface-container">
                 <tr>
-                  <th className="text-left font-semibold text-foreground px-4 py-3">Kullanıcı</th>
-                  <th className="text-left font-semibold text-foreground px-4 py-3">Firma</th>
-                  <th className="text-left font-semibold text-foreground px-4 py-3">Roller</th>
-                  <th className="text-left font-semibold text-foreground px-4 py-3">Durum</th>
-                  <th className="text-left font-semibold text-foreground px-4 py-3">Son Giriş</th>
+                  <th className="px-4 py-3 text-left font-semibold text-foreground">Kullanıcı</th>
+                  <th className="px-4 py-3 text-left font-semibold text-foreground">Firma</th>
+                  <th className="px-4 py-3 text-left font-semibold text-foreground">Roller</th>
+                  <th className="px-4 py-3 text-left font-semibold text-foreground">Durum</th>
+                  <th className="px-4 py-3 text-left font-semibold text-foreground">Son Giriş</th>
                 </tr>
               </thead>
               <tbody>
                 {data.data.map((u) => {
                   const s = STATUS_LABEL[u.status] ?? STATUS_LABEL.ACTIVE;
                   return (
-                    <tr key={u.id} className="border-b border-outline-variant last:border-0 hover:bg-surface-container">
+                    <tr
+                      key={u.id}
+                      className="border-b border-outline-variant last:border-0 hover:bg-surface-container"
+                    >
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-3">
-                          <div className="h-9 w-9 rounded-full bg-primary-container text-primary flex items-center justify-center text-sm font-semibold flex-shrink-0">
+                          <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-primary-container text-sm font-semibold text-primary">
                             {u.fullName?.[0]?.toUpperCase() ?? '?'}
                           </div>
                           <div className="min-w-0">
-                            <div className="font-medium text-foreground truncate">{u.fullName}</div>
-                            <div className="text-xs text-on-surface-variant truncate">{u.email}</div>
+                            <div className="truncate font-medium text-foreground">{u.fullName}</div>
+                            <div className="truncate text-xs text-on-surface-variant">
+                              {u.email}
+                            </div>
                           </div>
                         </div>
                       </td>
@@ -86,7 +99,7 @@ export function UsersPage() {
                             <span className="truncate">{u.tenant.name}</span>
                           </div>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full bg-primary-container text-primary">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-primary-container px-2 py-0.5 text-xs font-semibold text-primary">
                             <Shield className="h-3 w-3" />
                             Süper Admin
                           </span>
@@ -100,7 +113,7 @@ export function UsersPage() {
                             u.roles.map((r) => (
                               <span
                                 key={r.code}
-                                className="text-xs font-mono px-2 py-0.5 rounded bg-surface-container text-foreground"
+                                className="rounded bg-surface-container px-2 py-0.5 font-mono text-xs text-foreground"
                               >
                                 {r.code}
                               </span>
@@ -109,11 +122,13 @@ export function UsersPage() {
                         </div>
                       </td>
                       <td className="px-4 py-3">
-                        <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${s.color}`}>
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-xs font-semibold ${s.color}`}
+                        >
                           {s.text}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-on-surface-variant text-xs">
+                      <td className="px-4 py-3 text-xs text-on-surface-variant">
                         {u.lastLoginAt ? formatDateTime(u.lastLoginAt) : 'Hiç giriş yok'}
                       </td>
                     </tr>
@@ -122,7 +137,7 @@ export function UsersPage() {
               </tbody>
             </table>
           </div>
-          <div className="px-4 py-3 border-t border-outline-variant bg-surface-container flex items-center justify-between text-xs text-on-surface-variant">
+          <div className="flex items-center justify-between border-t border-outline-variant bg-surface-container px-4 py-3 text-xs text-on-surface-variant">
             <span>Toplam {formatNumber(data.pagination.total)} kullanıcı</span>
             <div className="flex items-center gap-2">
               <button

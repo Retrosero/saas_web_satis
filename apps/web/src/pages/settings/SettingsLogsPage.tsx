@@ -23,14 +23,21 @@ export function SettingsLogsPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <PageHeader
-        title="Firma Logları"
-        description="Firmanıza ait audit ve güvenlik logları"
-      />
+      <PageHeader title="Firma Logları" description="Firmanıza ait audit ve güvenlik logları" />
 
-      <div className="card p-1 flex gap-1 w-fit">
-        <TabButton active={tab === 'audit'} onClick={() => setTab('audit')} icon={<History className="h-4 w-4" />} label="Audit" />
-        <TabButton active={tab === 'security'} onClick={() => setTab('security')} icon={<Shield className="h-4 w-4" />} label="Güvenlik" />
+      <div className="card flex w-fit gap-1 p-1">
+        <TabButton
+          active={tab === 'audit'}
+          onClick={() => setTab('audit')}
+          icon={<History className="h-4 w-4" />}
+          label="Audit"
+        />
+        <TabButton
+          active={tab === 'security'}
+          onClick={() => setTab('security')}
+          icon={<Shield className="h-4 w-4" />}
+          label="Güvenlik"
+        />
       </div>
 
       {tab === 'audit' && <AuditTab />}
@@ -39,13 +46,25 @@ export function SettingsLogsPage() {
   );
 }
 
-function TabButton({ active, onClick, icon, label }: { active: boolean; onClick: () => void; icon: React.ReactNode; label: string }) {
+function TabButton({
+  active,
+  onClick,
+  icon,
+  label,
+}: {
+  active: boolean;
+  onClick: () => void;
+  icon: React.ReactNode;
+  label: string;
+}) {
   return (
     <button
       onClick={onClick}
       className={cn(
-        'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors',
-        active ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-surface-container',
+        'flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors',
+        active
+          ? 'bg-primary text-primary-foreground'
+          : 'text-foreground hover:bg-surface-container',
       )}
     >
       {icon}
@@ -58,22 +77,31 @@ function AuditTab() {
   const [page, setPage] = useState(1);
   const [module, setModule] = useState('');
   const [riskLevel, setRiskLevel] = useState<RiskLevel | ''>('');
-  const params = { page, pageSize: 50, module: module || undefined, riskLevel: (riskLevel || undefined) as RiskLevel | undefined };
+  const params = {
+    page,
+    pageSize: 50,
+    module: module || undefined,
+    riskLevel: (riskLevel || undefined) as RiskLevel | undefined,
+  };
   const { data, isLoading, isError, error, refetch } = useTenantAuditLogs(params);
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="card p-3 flex flex-col sm:flex-row gap-2">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-on-surface-variant" />
+      <div className="card flex flex-col gap-2 p-3 sm:flex-row">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant" />
           <input
             value={module}
             onChange={(e) => setModule(e.target.value)}
             placeholder="Modül filtresi (cari, satis, ...)..."
-            className="w-full h-10 pl-10 pr-4 rounded-md bg-surface-container text-sm border border-outline-variant focus:border-primary focus:outline-none font-mono"
+            className="h-10 w-full rounded-md border border-outline-variant bg-surface-container pl-10 pr-4 font-mono text-sm focus:border-primary focus:outline-none"
           />
         </div>
-        <select value={riskLevel} onChange={(e) => setRiskLevel(e.target.value as RiskLevel | '')} className="h-10 px-3 rounded-md bg-surface-container text-sm border border-outline-variant sm:w-40">
+        <select
+          value={riskLevel}
+          onChange={(e) => setRiskLevel(e.target.value as RiskLevel | '')}
+          className="h-10 rounded-md border border-outline-variant bg-surface-container px-3 text-sm sm:w-40"
+        >
           <option value="">Risk tümü</option>
           <option value="LOW">LOW</option>
           <option value="MEDIUM">MEDIUM</option>
@@ -81,15 +109,18 @@ function AuditTab() {
           <option value="CRITICAL">CRITICAL</option>
         </select>
         <button
-          onClick={() => data && exportToCsv(data.data as unknown as Record<string, unknown>[], 'firma-audit-loglari', [
-            { key: 'createdAt', label: 'Tarih' },
-            { key: 'user', label: 'Kullanıcı' },
-            { key: 'module', label: 'Modül' },
-            { key: 'action', label: 'Aksiyon' },
-            { key: 'entityType', label: 'Varlık' },
-            { key: 'riskLevel', label: 'Risk' },
-            { key: 'ipAddress', label: 'IP' },
-          ])}
+          onClick={() =>
+            data &&
+            exportToCsv(data.data as unknown as Record<string, unknown>[], 'firma-audit-loglari', [
+              { key: 'createdAt', label: 'Tarih' },
+              { key: 'user', label: 'Kullanıcı' },
+              { key: 'module', label: 'Modül' },
+              { key: 'action', label: 'Aksiyon' },
+              { key: 'entityType', label: 'Varlık' },
+              { key: 'riskLevel', label: 'Risk' },
+              { key: 'ipAddress', label: 'IP' },
+            ])
+          }
           className="btn-secondary"
         >
           <Download className="h-4 w-4" />
@@ -113,19 +144,24 @@ function AuditTab() {
           <div className="card overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-surface-container border-b border-outline-variant">
+                <thead className="border-b border-outline-variant bg-surface-container">
                   <tr>
-                    <th className="text-left font-semibold text-foreground px-4 py-2.5">Tarih</th>
-                    <th className="text-left font-semibold text-foreground px-4 py-2.5">Kullanıcı</th>
-                    <th className="text-left font-semibold text-foreground px-4 py-2.5">Modül</th>
-                    <th className="text-left font-semibold text-foreground px-4 py-2.5">Aksiyon</th>
-                    <th className="text-left font-semibold text-foreground px-4 py-2.5">Varlık</th>
-                    <th className="text-left font-semibold text-foreground px-4 py-2.5">Risk</th>
+                    <th className="px-4 py-2.5 text-left font-semibold text-foreground">Tarih</th>
+                    <th className="px-4 py-2.5 text-left font-semibold text-foreground">
+                      Kullanıcı
+                    </th>
+                    <th className="px-4 py-2.5 text-left font-semibold text-foreground">Modül</th>
+                    <th className="px-4 py-2.5 text-left font-semibold text-foreground">Aksiyon</th>
+                    <th className="px-4 py-2.5 text-left font-semibold text-foreground">Varlık</th>
+                    <th className="px-4 py-2.5 text-left font-semibold text-foreground">Risk</th>
                   </tr>
                 </thead>
                 <tbody>
                   {data.data.map((l) => (
-                    <tr key={l.id} className="border-b border-outline-variant last:border-0 hover:bg-surface-container">
+                    <tr
+                      key={l.id}
+                      className="border-b border-outline-variant last:border-0 hover:bg-surface-container"
+                    >
                       <td className="px-4 py-2.5 text-xs">
                         <div className="flex items-center gap-1 text-foreground">
                           <Clock className="h-3 w-3 text-on-surface-variant" />
@@ -135,23 +171,35 @@ function AuditTab() {
                       <td className="px-4 py-2.5">
                         {l.user ? (
                           <>
-                            <div className="text-foreground truncate">{l.user.fullName}</div>
-                            <div className="text-xs text-on-surface-variant truncate">{l.user.email}</div>
+                            <div className="truncate text-foreground">{l.user.fullName}</div>
+                            <div className="truncate text-xs text-on-surface-variant">
+                              {l.user.email}
+                            </div>
                           </>
                         ) : (
-                          <span className="text-on-surface-variant text-xs">Sistem</span>
+                          <span className="text-xs text-on-surface-variant">Sistem</span>
                         )}
                       </td>
                       <td className="px-4 py-2.5">
-                        <span className="text-xs font-mono px-2 py-0.5 rounded bg-surface-container text-foreground">{l.module}</span>
+                        <span className="rounded bg-surface-container px-2 py-0.5 font-mono text-xs text-foreground">
+                          {l.module}
+                        </span>
                       </td>
                       <td className="px-4 py-2.5 font-mono text-xs">{l.action}</td>
                       <td className="px-4 py-2.5">
                         <div className="text-foreground">{l.entityType}</div>
-                        {l.entityId && <div className="text-[10px] font-mono text-on-surface-variant truncate">{l.entityId}</div>}
+                        {l.entityId && (
+                          <div className="truncate font-mono text-[10px] text-on-surface-variant">
+                            {l.entityId}
+                          </div>
+                        )}
                       </td>
                       <td className="px-4 py-2.5">
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${RISK_COLOR[l.riskLevel]}`}>{l.riskLevel}</span>
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${RISK_COLOR[l.riskLevel]}`}
+                        >
+                          {l.riskLevel}
+                        </span>
                       </td>
                     </tr>
                   ))}
@@ -162,9 +210,23 @@ function AuditTab() {
           <div className="flex items-center justify-between text-xs text-on-surface-variant">
             <span>Toplam {formatNumber(data.pagination.total)} kayıt</span>
             <div className="flex items-center gap-2">
-              <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={!data.pagination.hasPrev} className="btn-ghost text-xs">Önceki</button>
-              <span>Sayfa {data.pagination.page} / {data.pagination.totalPages}</span>
-              <button onClick={() => setPage((p) => p + 1)} disabled={!data.pagination.hasNext} className="btn-ghost text-xs">Sonraki</button>
+              <button
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={!data.pagination.hasPrev}
+                className="btn-ghost text-xs"
+              >
+                Önceki
+              </button>
+              <span>
+                Sayfa {data.pagination.page} / {data.pagination.totalPages}
+              </span>
+              <button
+                onClick={() => setPage((p) => p + 1)}
+                disabled={!data.pagination.hasNext}
+                className="btn-ghost text-xs"
+              >
+                Sonraki
+              </button>
             </div>
           </div>
         </>
@@ -176,18 +238,22 @@ function AuditTab() {
 function SecurityTab() {
   const [page, setPage] = useState(1);
   const [event, setEvent] = useState('');
-  const { data, isLoading, isError, error, refetch } = useTenantSecurityLogs({ page, pageSize: 50, event: event || undefined });
+  const { data, isLoading, isError, error, refetch } = useTenantSecurityLogs({
+    page,
+    pageSize: 50,
+    event: event || undefined,
+  });
 
   return (
     <div className="flex flex-col gap-4">
       <div className="card p-3">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-on-surface-variant" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-on-surface-variant" />
           <input
             value={event}
             onChange={(e) => setEvent(e.target.value)}
             placeholder="Event (LOGIN_SUCCESS, vb.)..."
-            className="w-full h-10 pl-10 pr-4 rounded-md bg-surface-container text-sm border border-outline-variant focus:border-primary focus:outline-none"
+            className="h-10 w-full rounded-md border border-outline-variant bg-surface-container pl-10 pr-4 text-sm focus:border-primary focus:outline-none"
           />
         </div>
       </div>
@@ -209,27 +275,37 @@ function SecurityTab() {
             {data.data.map((s) => (
               <div key={s.id} className="p-4 hover:bg-surface-container">
                 <div className="flex items-start gap-3">
-                  <div className={cn(
-                    'h-10 w-10 rounded-full flex items-center justify-center flex-shrink-0',
-                    s.riskLevel === 'CRITICAL' || s.riskLevel === 'HIGH' ? 'bg-error-container text-error' : 'bg-surface-container text-on-surface-variant',
-                  )}>
+                  <div
+                    className={cn(
+                      'flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full',
+                      s.riskLevel === 'CRITICAL' || s.riskLevel === 'HIGH'
+                        ? 'bg-error-container text-error'
+                        : 'bg-surface-container text-on-surface-variant',
+                    )}
+                  >
                     <Shield className="h-5 w-5" />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="text-sm font-mono font-semibold text-foreground">{s.event}</span>
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${RISK_COLOR[s.riskLevel]}`}>{s.riskLevel}</span>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-mono text-sm font-semibold text-foreground">
+                        {s.event}
+                      </span>
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${RISK_COLOR[s.riskLevel]}`}
+                      >
+                        {s.riskLevel}
+                      </span>
                       <span className="text-xs text-on-surface-variant">
-                        <Clock className="h-3 w-3 inline" /> {formatDateTime(s.createdAt)}
+                        <Clock className="inline h-3 w-3" /> {formatDateTime(s.createdAt)}
                       </span>
                     </div>
                     {s.user && (
-                      <div className="text-xs text-on-surface-variant mt-1">
+                      <div className="mt-1 text-xs text-on-surface-variant">
                         {s.user.fullName} &lt;{s.user.email}&gt;
                       </div>
                     )}
                     {s.ipAddress && (
-                      <div className="text-xs text-on-surface-variant font-mono mt-1 flex items-center gap-1">
+                      <div className="mt-1 flex items-center gap-1 font-mono text-xs text-on-surface-variant">
                         <Globe className="h-3 w-3" /> {s.ipAddress}
                       </div>
                     )}
@@ -241,9 +317,23 @@ function SecurityTab() {
           <div className="flex items-center justify-between text-xs text-on-surface-variant">
             <span>Toplam {formatNumber(data.pagination.total)} kayıt</span>
             <div className="flex items-center gap-2">
-              <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={!data.pagination.hasPrev} className="btn-ghost text-xs">Önceki</button>
-              <span>Sayfa {data.pagination.page} / {data.pagination.totalPages}</span>
-              <button onClick={() => setPage((p) => p + 1)} disabled={!data.pagination.hasNext} className="btn-ghost text-xs">Sonraki</button>
+              <button
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={!data.pagination.hasPrev}
+                className="btn-ghost text-xs"
+              >
+                Önceki
+              </button>
+              <span>
+                Sayfa {data.pagination.page} / {data.pagination.totalPages}
+              </span>
+              <button
+                onClick={() => setPage((p) => p + 1)}
+                disabled={!data.pagination.hasNext}
+                className="btn-ghost text-xs"
+              >
+                Sonraki
+              </button>
             </div>
           </div>
         </>

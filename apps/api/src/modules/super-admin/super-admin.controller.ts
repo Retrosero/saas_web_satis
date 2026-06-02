@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards, BadRequestException } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+  BadRequestException,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { Public } from '../../common/decorators/public.decorator';
@@ -42,7 +52,18 @@ export class SuperAdminController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Süper admin paneli özet verileri' })
   async overview() {
-    const [tenantTotal, activeTenants, trialTenants, suspendedTenants, userTotal, moduleTotal, planTotal, recentTenants, recentUsers, recentErrors] = await Promise.all([
+    const [
+      tenantTotal,
+      activeTenants,
+      trialTenants,
+      suspendedTenants,
+      userTotal,
+      moduleTotal,
+      planTotal,
+      recentTenants,
+      recentUsers,
+      recentErrors,
+    ] = await Promise.all([
       this.prisma.client.tenant.count({ where: { isDeleted: false } }),
       this.prisma.client.tenant.count({ where: { status: 'ACTIVE', isDeleted: false } }),
       this.prisma.client.tenant.count({ where: { status: 'TRIAL', isDeleted: false } }),
@@ -60,7 +81,14 @@ export class SuperAdminController {
         where: { isDeleted: false },
         orderBy: { createdAt: 'desc' },
         take: 5,
-        select: { id: true, email: true, fullName: true, status: true, createdAt: true, tenantId: true },
+        select: {
+          id: true,
+          email: true,
+          fullName: true,
+          status: true,
+          createdAt: true,
+          tenantId: true,
+        },
       }),
       this.prisma.client.errorLog.findMany({
         orderBy: { createdAt: 'desc' },
@@ -70,7 +98,12 @@ export class SuperAdminController {
     ]);
     return {
       counts: {
-        tenants: { total: tenantTotal, active: activeTenants, trial: trialTenants, suspended: suspendedTenants },
+        tenants: {
+          total: tenantTotal,
+          active: activeTenants,
+          trial: trialTenants,
+          suspended: suspendedTenants,
+        },
         users: { total: userTotal },
         modules: { total: moduleTotal },
         plans: { total: planTotal },
@@ -112,17 +145,29 @@ export class SuperAdminController {
     if (!t || t.isDeleted) throw new NotFoundException('Firma bulunamadı');
     const [settings, subscription, userCount, moduleCount, adminUser] = await Promise.all([
       this.prisma.client.tenantSettings.findUnique({ where: { tenantId: id } }),
-      this.prisma.client.subscription.findFirst({ where: { tenantId: id }, orderBy: { createdAt: 'desc' }, include: { plan: true } }),
+      this.prisma.client.subscription.findFirst({
+        where: { tenantId: id },
+        orderBy: { createdAt: 'desc' },
+        include: { plan: true },
+      }),
       this.prisma.client.user.count({ where: { tenantId: id, isDeleted: false } }),
       this.prisma.client.tenantModule.count({ where: { tenantId: id, isActive: true } }),
-      this.prisma.client.user.findFirst({ where: { tenantId: id, userRoles: { some: { role: { code: 'tenant_admin' } } } }, select: { id: true, email: true, fullName: true } }),
+      this.prisma.client.user.findFirst({
+        where: { tenantId: id, userRoles: { some: { role: { code: 'tenant_admin' } } } },
+        select: { id: true, email: true, fullName: true },
+      }),
     ]);
     return {
       ...t,
       createdAt: t.createdAt.toISOString(),
       updatedAt: t.updatedAt.toISOString(),
       settings: settings
-        ? { ...settings, companyInfo: settings.companyInfo, createdAt: settings.createdAt.toISOString(), updatedAt: settings.updatedAt.toISOString() }
+        ? {
+            ...settings,
+            companyInfo: settings.companyInfo,
+            createdAt: settings.createdAt.toISOString(),
+            updatedAt: settings.updatedAt.toISOString(),
+          }
         : null,
       subscription: subscription
         ? {
@@ -143,7 +188,9 @@ export class SuperAdminController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Yeni firma oluştur' })
   async createTenant(@Body() dto: CreateTenantDto) {
-    const exists = await this.prisma.client.tenant.findUnique({ where: { code: dto.code.toUpperCase() } });
+    const exists = await this.prisma.client.tenant.findUnique({
+      where: { code: dto.code.toUpperCase() },
+    });
     if (exists) throw new ConflictException('Bu kod ile firma zaten mevcut');
     const t = await this.tenants.create({
       code: dto.code,
@@ -344,7 +391,11 @@ export class SuperAdminController {
     @Query('tenantId') tenantId?: string,
     @Query('search') search?: string,
   ) {
-    const where: { isDeleted: boolean; tenantId?: string | null; OR?: Array<Record<string, unknown>> } = { isDeleted: false };
+    const where: {
+      isDeleted: boolean;
+      tenantId?: string | null;
+      OR?: Array<Record<string, unknown>>;
+    } = { isDeleted: false };
     if (tenantId !== undefined) where.tenantId = tenantId === 'super' ? null : tenantId;
     if (search) {
       where.OR = [

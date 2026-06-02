@@ -3,7 +3,7 @@ import { RefreshTokenSchema, type RefreshTokenInput } from '@saas/shared';
 import { IsString, MinLength } from 'class-validator';
 
 export class RefreshTokenDto implements RefreshTokenInput {
-  @ApiProperty({ description: 'Yenileme anahtarý' })
+  @ApiProperty({ description: 'Yenileme anahtarï¿½' })
   @IsString()
   @MinLength(10)
   refreshToken!: string;

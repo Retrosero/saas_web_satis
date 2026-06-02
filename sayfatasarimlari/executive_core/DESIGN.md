@@ -143,11 +143,11 @@ This design system uses **Inter** for its neutral, systematic character. It is o
 
 ## Layout & Spacing
 
-The layout employs a **12-column fluid grid** for the main content area, with a fixed-width sidebar (240px or 280px). 
+The layout employs a **12-column fluid grid** for the main content area, with a fixed-width sidebar (240px or 280px).
 
 - **Density:** High. Margins and gutters are kept tight (16px–24px) to maximize the "above-the-fold" visibility of data tables and charts.
 - **Rhythm:** A 4px baseline grid governs all spatial decisions. Padding inside components like inputs and table cells should adhere strictly to these increments.
-- **Adaptivity:** 
+- **Adaptivity:**
   - **Desktop (1280px+):** Full 12-column display.
   - **Tablet (768px - 1279px):** Sidebar collapses to icons; 8-column grid for content.
   - **Mobile (<767px):** Single column. Navigation moves to a bottom bar or hamburger menu.
@@ -172,24 +172,31 @@ The design system utilizes **Soft** roundedness (`0.25rem` or 4px) for most comp
 ## Components
 
 ### Data Tables
+
 Tables are the heart of this system. They must feature:
+
 - Fixed headers on scroll.
 - Zebra striping (very subtle) or row-hover highlights.
 - Condensed vertical padding (8px–12px) for high density.
 - Inline status chips (e.g., "Paid" in Success Green).
 
 ### Inputs & Forms
+
 Forms use a top-aligned label pattern for clarity.
+
 - **Validation:** Errors must include both a red border and a helper icon/text below the field.
 - **Active State:** A 2px focus ring using the Primary Blue with 20% opacity.
 
 ### Sidebars
+
 A dark-themed or high-contrast sidebar (`#091E42`) helps distinguish navigation from the work area. Active states should be indicated with a left-edge accent bar in Primary Blue.
 
 ### Toast Notifications
+
 Positioned at the top-right. They should be slim, with a color-coded icon on the left (Success, Info, Warning, Error) and a clear "Dismiss" action.
 
 ### System States
+
 - **Loading:** Use skeleton screens that mimic the layout of the table or card rather than a generic spinner.
 - **Empty:** Centered illustration (line-art) with a clear "Primary CTA" to help the user get started.
 - **Error State:** A full-page or container-specific message with a "Retry" button and a technical log code if applicable.

@@ -8,9 +8,9 @@ export function AppLayout({ children }: { children?: ReactNode }) {
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar />
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex min-w-0 flex-1 flex-col">
         <Topbar />
-        <main className="flex-1 p-4 md:p-6 pb-20 md:pb-6 overflow-x-hidden">
+        <main className="flex-1 overflow-x-hidden p-4 pb-20 md:p-6 md:pb-6">
           {children ?? <Outlet />}
         </main>
         <MobileBottomNav />

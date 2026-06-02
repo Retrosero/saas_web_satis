@@ -55,81 +55,107 @@ export interface AuditStats {
 
 export const logsApi = {
   // Süper admin
-  async listSuperAudit(params: {
-    page?: number;
-    pageSize?: number;
-    module?: string;
-    action?: string;
-    riskLevel?: RiskLevel;
-    userId?: string;
-    entityType?: string;
-    tenantId?: string;
-    startDate?: string;
-    endDate?: string;
-  } = {}): Promise<PaginatedResponse<AuditLog>> {
-    const res = await apiClient.get<{ data: PaginatedResponse<AuditLog> }>('/super-admin/logs/audit', { params });
+  async listSuperAudit(
+    params: {
+      page?: number;
+      pageSize?: number;
+      module?: string;
+      action?: string;
+      riskLevel?: RiskLevel;
+      userId?: string;
+      entityType?: string;
+      tenantId?: string;
+      startDate?: string;
+      endDate?: string;
+    } = {},
+  ): Promise<PaginatedResponse<AuditLog>> {
+    const res = await apiClient.get<{ data: PaginatedResponse<AuditLog> }>(
+      '/super-admin/logs/audit',
+      { params },
+    );
     return res.data.data;
   },
 
   async superAuditStats(tenantId?: string): Promise<AuditStats> {
-    const res = await apiClient.get<{ data: AuditStats }>('/super-admin/logs/audit/stats', { params: { tenantId } });
+    const res = await apiClient.get<{ data: AuditStats }>('/super-admin/logs/audit/stats', {
+      params: { tenantId },
+    });
     return res.data.data;
   },
 
-  async listSuperError(params: {
-    page?: number;
-    pageSize?: number;
-    level?: string;
-    path?: string;
-    statusCode?: number;
-    tenantId?: string;
-    startDate?: string;
-    endDate?: string;
-  } = {}): Promise<PaginatedResponse<ErrorLog>> {
-    const res = await apiClient.get<{ data: PaginatedResponse<ErrorLog> }>('/super-admin/logs/error', { params });
+  async listSuperError(
+    params: {
+      page?: number;
+      pageSize?: number;
+      level?: string;
+      path?: string;
+      statusCode?: number;
+      tenantId?: string;
+      startDate?: string;
+      endDate?: string;
+    } = {},
+  ): Promise<PaginatedResponse<ErrorLog>> {
+    const res = await apiClient.get<{ data: PaginatedResponse<ErrorLog> }>(
+      '/super-admin/logs/error',
+      { params },
+    );
     return res.data.data;
   },
 
-  async listSuperSecurity(params: {
-    page?: number;
-    pageSize?: number;
-    event?: string;
-    riskLevel?: RiskLevel;
-    userId?: string;
-    ipAddress?: string;
-    startDate?: string;
-    endDate?: string;
-  } = {}): Promise<PaginatedResponse<SecurityLog>> {
-    const res = await apiClient.get<{ data: PaginatedResponse<SecurityLog> }>('/super-admin/logs/security', { params });
+  async listSuperSecurity(
+    params: {
+      page?: number;
+      pageSize?: number;
+      event?: string;
+      riskLevel?: RiskLevel;
+      userId?: string;
+      ipAddress?: string;
+      startDate?: string;
+      endDate?: string;
+    } = {},
+  ): Promise<PaginatedResponse<SecurityLog>> {
+    const res = await apiClient.get<{ data: PaginatedResponse<SecurityLog> }>(
+      '/super-admin/logs/security',
+      { params },
+    );
     return res.data.data;
   },
 
   // Tenant
-  async listTenantAudit(params: {
-    page?: number;
-    pageSize?: number;
-    module?: string;
-    action?: string;
-    riskLevel?: RiskLevel;
-    userId?: string;
-    entityType?: string;
-    startDate?: string;
-    endDate?: string;
-  } = {}): Promise<PaginatedResponse<AuditLog>> {
-    const res = await apiClient.get<{ data: PaginatedResponse<AuditLog> }>('/settings/logs/audit', { params });
+  async listTenantAudit(
+    params: {
+      page?: number;
+      pageSize?: number;
+      module?: string;
+      action?: string;
+      riskLevel?: RiskLevel;
+      userId?: string;
+      entityType?: string;
+      startDate?: string;
+      endDate?: string;
+    } = {},
+  ): Promise<PaginatedResponse<AuditLog>> {
+    const res = await apiClient.get<{ data: PaginatedResponse<AuditLog> }>('/settings/logs/audit', {
+      params,
+    });
     return res.data.data;
   },
 
-  async listTenantSecurity(params: {
-    page?: number;
-    pageSize?: number;
-    event?: string;
-    userId?: string;
-    ipAddress?: string;
-    startDate?: string;
-    endDate?: string;
-  } = {}): Promise<PaginatedResponse<SecurityLog>> {
-    const res = await apiClient.get<{ data: PaginatedResponse<SecurityLog> }>('/settings/logs/security', { params });
+  async listTenantSecurity(
+    params: {
+      page?: number;
+      pageSize?: number;
+      event?: string;
+      userId?: string;
+      ipAddress?: string;
+      startDate?: string;
+      endDate?: string;
+    } = {},
+  ): Promise<PaginatedResponse<SecurityLog>> {
+    const res = await apiClient.get<{ data: PaginatedResponse<SecurityLog> }>(
+      '/settings/logs/security',
+      { params },
+    );
     return res.data.data;
   },
 };

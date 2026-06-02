@@ -117,29 +117,29 @@ enum SourceSystem {
 // =====================================================================
 
 model Tenant {
-  id              String        @id @default(cuid())
-  code            String        @unique
-  name            String
-  workingMode     WorkingMode   @default(SAAS_MASTER)
-  status          TenantStatus  @default(TRIAL)
-  isActive        Boolean       @default(true)
-  isDeleted       Boolean       @default(false)
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  createdBy       String?
-  updatedBy       String?
-  deletedAt       DateTime?
-  deletedBy       String?
+  id          String       @id @default(cuid())
+  code        String       @unique
+  name        String
+  workingMode WorkingMode  @default(SAAS_MASTER)
+  status      TenantStatus @default(TRIAL)
+  isActive    Boolean      @default(true)
+  isDeleted   Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  createdBy   String?
+  updatedBy   String?
+  deletedAt   DateTime?
+  deletedBy   String?
 
-  settings        TenantSettings?
-  users           User[]
-  roles           Role[]
-  subscriptions   Subscription[]
-  tenantModules   TenantModule[]
-  auditLogs       AuditLog[]
-  errorLogs       ErrorLog[]
-  securityLogs    SecurityLog[]
-  notifications   Notification[]
+  settings      TenantSettings?
+  users         User[]
+  roles         Role[]
+  subscriptions Subscription[]
+  tenantModules TenantModule[]
+  auditLogs     AuditLog[]
+  errorLogs     ErrorLog[]
+  securityLogs  SecurityLog[]
+  notifications Notification[]
 
   // FAZ 6 — Cari modülü ilişkileri
   customers         Customer[]
@@ -167,44 +167,44 @@ model Tenant {
 }
 
 model TenantSettings {
-  id                  String   @id @default(cuid())
-  tenantId            String   @unique
-  companyInfo         Json     @default("{}")
-  currency            String   @default("TRY")
-  locale              String   @default("tr-TR")
-  taxOffice           String?
-  taxNumber           String?
-  defaultWarehouseId  String?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-  tenant              Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  id                 String   @id @default(cuid())
+  tenantId           String   @unique
+  companyInfo        Json     @default("{}")
+  currency           String   @default("TRY")
+  locale             String   @default("tr-TR")
+  taxOffice          String?
+  taxNumber          String?
+  defaultWarehouseId String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  tenant             Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 }
 
 model User {
-  id            String        @id @default(cuid())
-  tenantId      String?
-  email         String
-  phone         String?
-  passwordHash  String
-  fullName      String
-  avatarUrl     String?
-  status        UserStatus    @default(ACTIVE)
-  mfaEnabled    Boolean       @default(false)
-  lastLoginAt   DateTime?
-  isActive      Boolean       @default(true)
-  isDeleted     Boolean       @default(false)
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  createdBy     String?
-  updatedBy     String?
-  deletedAt     DateTime?
-  deletedBy     String?
+  id           String     @id @default(cuid())
+  tenantId     String?
+  email        String
+  phone        String?
+  passwordHash String
+  fullName     String
+  avatarUrl    String?
+  status       UserStatus @default(ACTIVE)
+  mfaEnabled   Boolean    @default(false)
+  lastLoginAt  DateTime?
+  isActive     Boolean    @default(true)
+  isDeleted    Boolean    @default(false)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  createdBy    String?
+  updatedBy    String?
+  deletedAt    DateTime?
+  deletedBy    String?
 
-  tenant        Tenant?       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenant        Tenant?        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   userRoles     UserRole[]
   refreshTokens RefreshToken[]
-  auditLogs     AuditLog[]    @relation("AuditLogUser")
-  securityLogs  SecurityLog[] @relation("SecurityLogUser")
+  auditLogs     AuditLog[]     @relation("AuditLogUser")
+  securityLogs  SecurityLog[]  @relation("SecurityLogUser")
   notifications Notification[] @relation("NotificationUser")
 
   @@unique([tenantId, email])
@@ -213,20 +213,20 @@ model User {
 }
 
 model Role {
-  id            String           @id @default(cuid())
-  tenantId      String?
-  code          String
-  name          String
-  description   String?
-  isSystem      Boolean          @default(false)
-  isActive      Boolean          @default(true)
-  isDeleted     Boolean          @default(false)
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
+  id          String   @id @default(cuid())
+  tenantId    String?
+  code        String
+  name        String
+  description String?
+  isSystem    Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  isDeleted   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  tenant        Tenant?          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  permissions   RolePermission[]
-  userRoles     UserRole[]
+  tenant      Tenant?          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  permissions RolePermission[]
+  userRoles   UserRole[]
 
   @@unique([tenantId, code])
   @@index([tenantId, isDeleted])
@@ -257,104 +257,104 @@ model RolePermission {
 }
 
 model UserRole {
-  id         String    @id @default(cuid())
-  userId     String
-  roleId     String
-  tenantId   String
-  dataScope  DataScope @default(TENANT)
-  branchIds  String[]  @default([])
-  createdAt  DateTime  @default(now())
+  id        String    @id @default(cuid())
+  userId    String
+  roleId    String
+  tenantId  String
+  dataScope DataScope @default(TENANT)
+  branchIds String[]  @default([])
+  createdAt DateTime  @default(now())
 
-  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  role       Role      @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
 
   @@unique([userId, roleId, tenantId])
   @@index([tenantId])
 }
 
 model Module {
-  id            String        @id @default(cuid())
-  code          String        @unique
-  name          String
-  category      ModuleCategory
-  defaultRoute  String
-  icon          String
-  sortOrder     Int           @default(100)
-  description   String?
-  isActive      Boolean       @default(true)
-  createdAt     DateTime      @default(now())
+  id           String         @id @default(cuid())
+  code         String         @unique
+  name         String
+  category     ModuleCategory
+  defaultRoute String
+  icon         String
+  sortOrder    Int            @default(100)
+  description  String?
+  isActive     Boolean        @default(true)
+  createdAt    DateTime       @default(now())
 
   planModules   PlanModule[]
   tenantModules TenantModule[]
 }
 
 model Plan {
-  id              String       @id @default(cuid())
-  code            PlanCode     @unique
-  name            String
-  description     String?
-  monthlyPrice    Decimal      @default(0) @db.Decimal(10, 2)
-  yearlyPrice     Decimal      @default(0) @db.Decimal(10, 2)
-  currency        String       @default("TRY")
-  userLimit       Int          @default(0)
-  branchLimit     Int          @default(0)
-  warehouseLimit  Int          @default(0)
-  apiKeyLimit     Int          @default(0)
-  webhookLimit    Int          @default(0)
-  storageMbLimit  Int          @default(0)
-  isActive        Boolean      @default(true)
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  id             String   @id @default(cuid())
+  code           PlanCode @unique
+  name           String
+  description    String?
+  monthlyPrice   Decimal  @default(0) @db.Decimal(10, 2)
+  yearlyPrice    Decimal  @default(0) @db.Decimal(10, 2)
+  currency       String   @default("TRY")
+  userLimit      Int      @default(0)
+  branchLimit    Int      @default(0)
+  warehouseLimit Int      @default(0)
+  apiKeyLimit    Int      @default(0)
+  webhookLimit   Int      @default(0)
+  storageMbLimit Int      @default(0)
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  planModules     PlanModule[]
-  subscriptions   Subscription[]
+  planModules   PlanModule[]
+  subscriptions Subscription[]
 }
 
 model PlanModule {
-  id           String  @id @default(cuid())
-  planId       String
-  moduleId     String
-  isIncluded   Boolean @default(true)
-  customLimit  Json?
-  plan         Plan    @relation(fields: [planId], references: [id], onDelete: Cascade)
-  module       Module  @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  id          String  @id @default(cuid())
+  planId      String
+  moduleId    String
+  isIncluded  Boolean @default(true)
+  customLimit Json?
+  plan        Plan    @relation(fields: [planId], references: [id], onDelete: Cascade)
+  module      Module  @relation(fields: [moduleId], references: [id], onDelete: Cascade)
 
   @@unique([planId, moduleId])
 }
 
 model TenantModule {
-  id            String              @id @default(cuid())
+  id            String             @id @default(cuid())
   tenantId      String
   moduleId      String
-  isActive      Boolean             @default(true)
-  source        TenantModuleSource  @default(plan)
+  isActive      Boolean            @default(true)
+  source        TenantModuleSource @default(plan)
   limitOverride Json?
   validUntil    DateTime?
   note          String?
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
 
-  tenant        Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  module        Module              @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
 
   @@unique([tenantId, moduleId])
   @@index([tenantId, isActive])
 }
 
 model Subscription {
-  id          String             @id @default(cuid())
-  tenantId    String
-  planId      String
-  status      SubscriptionStatus @default(TRIAL)
-  startAt     DateTime           @default(now())
-  endAt       DateTime?
-  trialEndAt  DateTime?
-  autoRenew   Boolean            @default(false)
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
+  id         String             @id @default(cuid())
+  tenantId   String
+  planId     String
+  status     SubscriptionStatus @default(TRIAL)
+  startAt    DateTime           @default(now())
+  endAt      DateTime?
+  trialEndAt DateTime?
+  autoRenew  Boolean            @default(false)
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
 
-  tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  plan        Plan               @relation(fields: [planId], references: [id])
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  plan   Plan   @relation(fields: [planId], references: [id])
 
   @@index([tenantId, status])
   @@index([endAt])
@@ -365,16 +365,16 @@ model Subscription {
 // =====================================================================
 
 model RefreshToken {
-  id            String   @id @default(cuid())
-  userId        String
-  tokenHash     String   @unique
-  tenantId      String
-  expiresAt     DateTime
-  revokedAt     DateTime?
-  createdAt     DateTime @default(now())
-  userAgent     String?
-  ipAddress     String?
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  tenantId  String
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  userAgent String?
+  ipAddress String?
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([expiresAt])
@@ -385,24 +385,24 @@ model RefreshToken {
 // =====================================================================
 
 model AuditLog {
-  id           String     @id @default(cuid())
-  tenantId     String?
-  userId       String?
-  module       String
-  action       String
-  entityType   String
-  entityId     String?
-  oldValues    Json?
-  newValues    Json?
+  id            String    @id @default(cuid())
+  tenantId      String?
+  userId        String?
+  module        String
+  action        String
+  entityType    String
+  entityId      String?
+  oldValues     Json?
+  newValues     Json?
   changedFields String[]  @default([])
-  ipAddress    String?
-  userAgent    String?
-  requestId    String?
-  riskLevel    RiskLevel  @default(LOW)
-  createdAt    DateTime   @default(now())
+  ipAddress     String?
+  userAgent     String?
+  requestId     String?
+  riskLevel     RiskLevel @default(LOW)
+  createdAt     DateTime  @default(now())
 
-  tenant       Tenant?    @relation(fields: [tenantId], references: [id], onDelete: SetNull)
-  user         User?      @relation("AuditLogUser", fields: [userId], references: [id], onDelete: SetNull)
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  user   User?   @relation("AuditLogUser", fields: [userId], references: [id], onDelete: SetNull)
 
   @@index([tenantId, createdAt])
   @@index([userId, createdAt])
@@ -411,37 +411,37 @@ model AuditLog {
 }
 
 model ErrorLog {
-  id          String   @id @default(cuid())
-  tenantId    String?
-  userId      String?
-  level       String   @default("ERROR")
-  message     String
-  stackTrace  String?
-  path        String?
-  method      String?
-  statusCode  Int?
-  requestId   String?
-  createdAt   DateTime @default(now())
+  id         String   @id @default(cuid())
+  tenantId   String?
+  userId     String?
+  level      String   @default("ERROR")
+  message    String
+  stackTrace String?
+  path       String?
+  method     String?
+  statusCode Int?
+  requestId  String?
+  createdAt  DateTime @default(now())
 
-  tenant      Tenant?  @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
 
   @@index([tenantId, createdAt])
   @@index([level])
 }
 
 model SecurityLog {
-  id          String   @id @default(cuid())
-  tenantId    String?
-  userId      String?
-  event       String
-  ipAddress   String?
-  userAgent   String?
-  riskLevel   RiskLevel @default(LOW)
-  metadata    Json?
-  createdAt   DateTime @default(now())
+  id        String    @id @default(cuid())
+  tenantId  String?
+  userId    String?
+  event     String
+  ipAddress String?
+  userAgent String?
+  riskLevel RiskLevel @default(LOW)
+  metadata  Json?
+  createdAt DateTime  @default(now())
 
-  tenant      Tenant?  @relation(fields: [tenantId], references: [id], onDelete: SetNull)
-  user        User?    @relation("SecurityLogUser", fields: [userId], references: [id], onDelete: SetNull)
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  user   User?   @relation("SecurityLogUser", fields: [userId], references: [id], onDelete: SetNull)
 
   @@index([tenantId, createdAt])
   @@index([event])
@@ -650,22 +650,22 @@ enum SaleItemStatus {
 }
 
 model Notification {
-  id          String              @id @default(cuid())
-  tenantId    String?
-  userId      String?              // null = tenant'taki tüm kullanıcılara
-  type        NotificationType    @default(INFO)
-  category    NotificationCategory @default(SYSTEM)
-  title       String
-  message     String
-  link        String?              // frontend'de gidilecek sayfa
-  metadata    Json?
-  isRead      Boolean             @default(false)
-  readAt      DateTime?
-  expiresAt   DateTime?
-  createdAt   DateTime            @default(now())
+  id        String               @id @default(cuid())
+  tenantId  String?
+  userId    String? // null = tenant'taki tüm kullanıcılara
+  type      NotificationType     @default(INFO)
+  category  NotificationCategory @default(SYSTEM)
+  title     String
+  message   String
+  link      String? // frontend'de gidilecek sayfa
+  metadata  Json?
+  isRead    Boolean              @default(false)
+  readAt    DateTime?
+  expiresAt DateTime?
+  createdAt DateTime             @default(now())
 
-  tenant      Tenant?             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  user        User?               @relation("NotificationUser", fields: [userId], references: [id], onDelete: Cascade)
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User?   @relation("NotificationUser", fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([tenantId, createdAt])
   @@index([userId, isRead])

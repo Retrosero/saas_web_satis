@@ -17,7 +17,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
         {label && (
           <label htmlFor={inputId} className="text-sm font-semibold text-foreground">
             {label}
-            {props.required && <span className="text-error ml-0.5">*</span>}
+            {props.required && <span className="ml-0.5 text-error">*</span>}
           </label>
         )}
         <div className="relative">
@@ -33,7 +33,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
               'input-base',
               leftIcon && 'pl-10',
               rightIcon && 'pr-10',
-              error && 'border-error focus:border-error focus:ring-error/20',
+              error && 'focus:ring-error/20 border-error focus:border-error',
               className,
             )}
             aria-invalid={!!error}

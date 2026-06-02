@@ -13,7 +13,11 @@ export interface PermissionDefinition {
   description: string;
 }
 
-const PERMS = (mod: ModuleCode, resource: string, action: PermissionAction): PermissionDefinition => ({
+const PERMS = (
+  mod: ModuleCode,
+  resource: string,
+  action: PermissionAction,
+): PermissionDefinition => ({
   code: `${mod}:${resource}:${action}`,
   module: mod,
   resource,

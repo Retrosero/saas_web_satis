@@ -15,12 +15,10 @@ export function StatCard({ label, value, hint, trend, icon, className }: StatCar
   return (
     <div className={cn('card flex flex-col gap-3 p-4', className)}>
       <div className="flex items-start justify-between gap-2">
-        <div className="flex-1 min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="text-sm text-on-surface-variant">{label}</p>
         </div>
-        {icon && (
-          <div className="rounded-md bg-primary-container/40 p-2 text-primary">{icon}</div>
-        )}
+        {icon && <div className="bg-primary-container/40 rounded-md p-2 text-primary">{icon}</div>}
       </div>
       <div className="font-numeric text-2xl font-bold text-foreground">{value}</div>
       <div className="flex items-center gap-2 text-xs">

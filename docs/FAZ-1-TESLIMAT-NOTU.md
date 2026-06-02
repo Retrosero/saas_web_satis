@@ -11,6 +11,7 @@
 Bundle'ı aldıktan sonra kendi GitHub repona (`Retrosero/saas_web_satis`) şu şekilde uygulayabilirsin:
 
 ### Seçenek A — Yeni repoya uygula
+
 ```bash
 # 1. Boş klasör oluştur
 mkdir saas_web_satis && cd saas_web_satis
@@ -26,6 +27,7 @@ git push -u origin main
 ```
 
 ### Seçenek B — Mevcut reponun üzerine uygula (tasarım dosyaları korunur)
+
 ```bash
 # 1. Mevcut repoya git
 cd saas_web_satis
@@ -45,6 +47,7 @@ git merge --allow-unrelated-histories monorepo-main
 ```
 
 ### Seçenek C — Yeni branch'te başla, PR ile birleştir
+
 ```bash
 git fetch /path/to/saas-faz-1.bundle main:feat/faz-1-monorepo
 git checkout feat/faz-1-monorepo
@@ -78,10 +81,12 @@ pnpm dev
 ```
 
 **Süper admin demo hesabı** (seed ile oluşturulur):
+
 - E-posta: `admin@sistem.local`
 - Şifre: `ChangeMe123!`
 
 **Erişim:**
+
 - Web: http://localhost:5173
 - API: http://localhost:3000/api/v1
 - Swagger: http://localhost:3000/api/v1/docs
@@ -92,6 +97,7 @@ pnpm dev
 ## 📊 Bu Fazda Ne Yapıldı?
 
 ### Dosya sayıları
+
 - **Root konfigürasyon:** 9 dosya (package.json, pnpm-workspace, tsconfig.base, .gitignore, .editorconfig, .nvmrc, .prettierrc, .env.example, docker-compose.yml)
 - **CI:** 1 dosya (.github/workflows/ci.yml)
 - **Dokümanlar:** 4 dosya (FAZ 0, DB şema özet/diyagram, FAZ 1 notu)
@@ -103,6 +109,7 @@ pnpm dev
 **Toplam:** ~80 dosya, ~3500 satır kod
 
 ### Doğrulamalar
+
 - ✅ `pnpm install` — 1313 paket kuruldu
 - ✅ `pnpm --filter @saas/shared build` — geçti
 - ✅ `pnpm --filter @saas/api typecheck` — geçti
@@ -111,6 +118,7 @@ pnpm dev
 - ✅ `pnpm --filter @saas/web build` — geçti (Vite dist/, PWA 13 entry)
 
 ### Yapılan Commit'ler
+
 1. `başlangıç: monorepo iskeleti (kök yapılandırma, docker, CI, dokümanlar)`
 2. `feat(iskelet): monorepo iskeleti — backend, frontend ve shared paketleri`
 
@@ -131,6 +139,7 @@ pnpm dev
 ## 🎯 Sıradaki Faz (FAZ 2 — Veritabanı & Migration)
 
 Migration sistemi zaten Prisma ile kurulu. FAZ 2'de:
+
 1. Prisma migration'lar üretilir ve uygulanır
 2. Seed verileri (süper admin, planlar, modüller, permission katalogu) çalıştırılır
 3. Index'ler kontrol edilir

@@ -1,4 +1,10 @@
-import { Injectable, NotFoundException, ConflictException, BadRequestException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+  BadRequestException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.module';
 import { hashPassword } from '../../common/utils/hash';
 import { NotificationsService } from '../notifications/notifications.service';
@@ -43,9 +49,18 @@ export class TenantAdminService {
 
   async updateTenantInfo(
     tenantId: string,
-    input: { name?: string; currency?: string; taxOffice?: string; taxNumber?: string; companyInfo?: Record<string, unknown> },
+    input: {
+      name?: string;
+      currency?: string;
+      taxOffice?: string;
+      taxNumber?: string;
+      companyInfo?: Record<string, unknown>;
+    },
   ) {
-    const t = await this.prisma.client.tenant.findUnique({ where: { id: tenantId }, include: { settings: true } });
+    const t = await this.prisma.client.tenant.findUnique({
+      where: { id: tenantId },
+      include: { settings: true },
+    });
     if (!t || t.isDeleted) throw new NotFoundException('Firma bulunamadı');
 
     if (input.name !== undefined) {
@@ -54,7 +69,12 @@ export class TenantAdminService {
         data: { name: input.name },
       });
     }
-    if (input.currency !== undefined || input.taxOffice !== undefined || input.taxNumber !== undefined || input.companyInfo !== undefined) {
+    if (
+      input.currency !== undefined ||
+      input.taxOffice !== undefined ||
+      input.taxNumber !== undefined ||
+      input.companyInfo !== undefined
+    ) {
       const data: Record<string, unknown> = {};
       if (input.currency) data.currency = input.currency;
       if (input.taxOffice !== undefined) data.taxOffice = input.taxOffice;
@@ -242,7 +262,11 @@ export class TenantAdminService {
         phone: u.phone,
         lastLoginAt: u.lastLoginAt?.toISOString() ?? null,
         createdAt: u.createdAt.toISOString(),
-        roles: u.userRoles.map((ur) => ({ code: ur.role.code, name: ur.role.name, roleId: ur.roleId })),
+        roles: u.userRoles.map((ur) => ({
+          code: ur.role.code,
+          name: ur.role.name,
+          roleId: ur.roleId,
+        })),
       })),
       pagination: {
         page: params.page,
@@ -262,7 +286,9 @@ export class TenantAdminService {
     // Kullanıcı limiti kontrolü
     const sub = await this.getSubscription(tenantId);
     if (sub) {
-      const currentCount = await this.prisma.client.user.count({ where: { tenantId, isDeleted: false } });
+      const currentCount = await this.prisma.client.user.count({
+        where: { tenantId, isDeleted: false },
+      });
       if (currentCount >= sub.plan.userLimit) {
         throw new BadRequestException(
           `Kullanıcı limiti doldu (${sub.plan.userLimit}). Daha fazla kullanıcı için planı yükseltin.`,
@@ -385,7 +411,9 @@ export class TenantAdminService {
     tenantId: string,
     input: { code: string; name: string; description?: string; permissionCodes: string[] },
   ) {
-    const exists = await this.prisma.client.role.findFirst({ where: { tenantId, code: input.code } });
+    const exists = await this.prisma.client.role.findFirst({
+      where: { tenantId, code: input.code },
+    });
     if (exists) throw new ConflictException('Bu kod ile rol zaten mevcut');
     // Yetki kontrolü
     const perms = await this.prisma.client.permission.findMany({

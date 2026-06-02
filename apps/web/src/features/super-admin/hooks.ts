@@ -10,7 +10,9 @@ export function useSuperAdminOverview() {
   });
 }
 
-export function useAdminTenants(params: { page?: number; pageSize?: number; search?: string; status?: TenantStatus } = {}) {
+export function useAdminTenants(
+  params: { page?: number; pageSize?: number; search?: string; status?: TenantStatus } = {},
+) {
   return useQuery({
     queryKey: ['super-admin', 'tenants', params],
     queryFn: () => superAdminApi.listTenants(params),
@@ -78,7 +80,9 @@ export function useAdminModules() {
   });
 }
 
-export function useAdminUsers(params: { page?: number; pageSize?: number; search?: string; tenantId?: string } = {}) {
+export function useAdminUsers(
+  params: { page?: number; pageSize?: number; search?: string; tenantId?: string } = {},
+) {
   return useQuery({
     queryKey: ['super-admin', 'users', params],
     queryFn: () => superAdminApi.listUsers(params),

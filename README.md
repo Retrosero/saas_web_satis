@@ -23,15 +23,15 @@ Bu proje küçük firmadan kurumsal ölçeğe kadar her ölçekte satılabilir; 
 
 ## 🛠 Teknoloji Stack
 
-| Katman | Teknoloji |
-|--------|-----------|
+| Katman   | Teknoloji                                                                                      |
+| -------- | ---------------------------------------------------------------------------------------------- |
 | Frontend | React 18 + Vite + TypeScript + Tailwind CSS + shadcn/ui + Zustand + TanStack Query + RHF + Zod |
-| Backend | NestJS 10 + Prisma 5 + PostgreSQL 16 |
-| Storage | Cloudflare R2 (lokal: MinIO) |
-| Monorepo | pnpm workspaces |
-| Auth | JWT + Refresh Token (argon2) |
-| Test | Vitest + React Testing Library + Playwright (E2E) + Jest (BE) |
-| CI/CD | GitHub Actions |
+| Backend  | NestJS 10 + Prisma 5 + PostgreSQL 16                                                           |
+| Storage  | Cloudflare R2 (lokal: MinIO)                                                                   |
+| Monorepo | pnpm workspaces                                                                                |
+| Auth     | JWT + Refresh Token (argon2)                                                                   |
+| Test     | Vitest + React Testing Library + Playwright (E2E) + Jest (BE)                                  |
+| CI/CD    | GitHub Actions                                                                                 |
 
 ---
 
@@ -93,14 +93,14 @@ pnpm dev
 
 ## 🧪 Komutlar
 
-| Komut | Açıklama |
-|-------|----------|
-| `pnpm dev` | Tüm uygulamaları geliştirme modunda başlatır |
-| `pnpm build` | Tüm uygulamaları üretim için derler |
-| `pnpm lint` | Tüm paketlerde lint çalıştırır |
+| Komut            | Açıklama                                     |
+| ---------------- | -------------------------------------------- |
+| `pnpm dev`       | Tüm uygulamaları geliştirme modunda başlatır |
+| `pnpm build`     | Tüm uygulamaları üretim için derler          |
+| `pnpm lint`      | Tüm paketlerde lint çalıştırır               |
 | `pnpm typecheck` | Tüm paketlerde TypeScript tip kontrolü yapar |
-| `pnpm test` | Tüm paketlerde testleri çalıştırır |
-| `pnpm format` | Tüm kodu Prettier ile formatlar |
+| `pnpm test`      | Tüm paketlerde testleri çalıştırır           |
+| `pnpm format`    | Tüm kodu Prettier ile formatlar              |
 
 ---
 

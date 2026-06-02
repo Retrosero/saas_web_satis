@@ -105,7 +105,15 @@ export const tenantAdminApi = {
     return res.data.data;
   },
 
-  async updateMe(input: Partial<{ name: string; currency: string; taxOffice: string; taxNumber: string; companyInfo: Record<string, unknown> }>): Promise<TenantInfo> {
+  async updateMe(
+    input: Partial<{
+      name: string;
+      currency: string;
+      taxOffice: string;
+      taxNumber: string;
+      companyInfo: Record<string, unknown>;
+    }>,
+  ): Promise<TenantInfo> {
     const res = await apiClient.patch<{ data: TenantInfo }>('/tenant-admin/me', input);
     return res.data.data;
   },
@@ -120,26 +128,60 @@ export const tenantAdminApi = {
     available: AvailableModule[];
     byCategory: Record<string, AvailableModule[]>;
   }> {
-    const res = await apiClient.get<{ data: { active: ActiveModule[]; available: AvailableModule[]; byCategory: Record<string, AvailableModule[]> } }>('/tenant-admin/modules');
+    const res = await apiClient.get<{
+      data: {
+        active: ActiveModule[];
+        available: AvailableModule[];
+        byCategory: Record<string, AvailableModule[]>;
+      };
+    }>('/tenant-admin/modules');
     return res.data.data;
   },
 
-  async toggleModule(code: string, isActive: boolean): Promise<{ code: string; isActive: boolean; source: string }> {
-    const res = await apiClient.post<{ data: { code: string; isActive: boolean; source: string } }>(`/tenant-admin/modules/${code}/toggle`, { isActive });
+  async toggleModule(
+    code: string,
+    isActive: boolean,
+  ): Promise<{ code: string; isActive: boolean; source: string }> {
+    const res = await apiClient.post<{ data: { code: string; isActive: boolean; source: string } }>(
+      `/tenant-admin/modules/${code}/toggle`,
+      { isActive },
+    );
     return res.data.data;
   },
 
-  async listUsers(params: { page?: number; pageSize?: number; search?: string } = {}): Promise<PaginatedResponse<TenantUser>> {
-    const res = await apiClient.get<{ data: PaginatedResponse<TenantUser> }>('/tenant-admin/users', { params });
+  async listUsers(
+    params: { page?: number; pageSize?: number; search?: string } = {},
+  ): Promise<PaginatedResponse<TenantUser>> {
+    const res = await apiClient.get<{ data: PaginatedResponse<TenantUser> }>(
+      '/tenant-admin/users',
+      { params },
+    );
     return res.data.data;
   },
 
-  async createUser(input: { email: string; fullName: string; phone?: string; password: string; roleCode: string }): Promise<{ id: string; email: string; fullName: string; roleCode: string; createdAt: string }> {
-    const res = await apiClient.post<{ data: { id: string; email: string; fullName: string; roleCode: string; createdAt: string } }>('/tenant-admin/users', input);
+  async createUser(input: {
+    email: string;
+    fullName: string;
+    phone?: string;
+    password: string;
+    roleCode: string;
+  }): Promise<{
+    id: string;
+    email: string;
+    fullName: string;
+    roleCode: string;
+    createdAt: string;
+  }> {
+    const res = await apiClient.post<{
+      data: { id: string; email: string; fullName: string; roleCode: string; createdAt: string };
+    }>('/tenant-admin/users', input);
     return res.data.data;
   },
 
-  async updateUser(id: string, input: { fullName?: string; phone?: string; status?: 'ACTIVE' | 'INACTIVE' | 'LOCKED' }): Promise<TenantUser> {
+  async updateUser(
+    id: string,
+    input: { fullName?: string; phone?: string; status?: 'ACTIVE' | 'INACTIVE' | 'LOCKED' },
+  ): Promise<TenantUser> {
     const res = await apiClient.patch<{ data: TenantUser }>(`/tenant-admin/users/${id}`, input);
     return res.data.data;
   },
@@ -149,8 +191,14 @@ export const tenantAdminApi = {
     return res.data.data;
   },
 
-  async assignRole(userId: string, roleCode: string): Promise<{ userId: string; roleCode: string }> {
-    const res = await apiClient.post<{ data: { userId: string; roleCode: string } }>(`/tenant-admin/users/${userId}/role`, { roleCode });
+  async assignRole(
+    userId: string,
+    roleCode: string,
+  ): Promise<{ userId: string; roleCode: string }> {
+    const res = await apiClient.post<{ data: { userId: string; roleCode: string } }>(
+      `/tenant-admin/users/${userId}/role`,
+      { roleCode },
+    );
     return res.data.data;
   },
 

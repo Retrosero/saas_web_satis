@@ -70,7 +70,10 @@ export class TenantsService {
     return this.toDto(t);
   }
 
-  async update(id: string, input: Partial<{ name: string; status: TenantStatus; workingMode: WorkingMode }>): Promise<Tenant> {
+  async update(
+    id: string,
+    input: Partial<{ name: string; status: TenantStatus; workingMode: WorkingMode }>,
+  ): Promise<Tenant> {
     const exists = await this.prisma.client.tenant.findUnique({ where: { id } });
     if (!exists || exists.isDeleted) throw new NotFoundException('Firma bulunamadı');
     const t = await this.prisma.client.tenant.update({

@@ -76,8 +76,7 @@ apiClient.interceptors.response.use(
     }
 
     // Diğer hatalar — Türkçe mesaj
-    const message =
-      error.response?.data?.message ?? error.message ?? 'Beklenmeyen bir hata oluştu';
+    const message = error.response?.data?.message ?? error.message ?? 'Beklenmeyen bir hata oluştu';
     if (error.response?.status !== 401 && error.response?.status !== 422) {
       toast.error(message);
     }

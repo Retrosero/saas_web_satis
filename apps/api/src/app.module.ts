@@ -40,7 +40,15 @@ import { r2Config } from './config/r2.config';
             process.env.NODE_ENV !== 'production'
               ? { target: 'pino-pretty', options: { singleLine: true, colorize: true } }
               : undefined,
-          redact: ['req.headers.authorization', 'req.headers.cookie', '*.password', '*.passwordHash', '*.token', '*.apiKey', '*.secret'],
+          redact: [
+            'req.headers.authorization',
+            'req.headers.cookie',
+            '*.password',
+            '*.passwordHash',
+            '*.token',
+            '*.apiKey',
+            '*.secret',
+          ],
         },
       }),
     }),

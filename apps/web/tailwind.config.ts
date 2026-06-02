@@ -66,8 +66,14 @@ const config: Config = {
         'm3-3': '0 4px 8px rgba(0,0,0,.10), 0 2px 4px rgba(0,0,0,.06)',
       },
       keyframes: {
-        'accordion-down': { from: { height: '0' }, to: { height: 'var(--radix-accordion-content-height)' } },
-        'accordion-up': { from: { height: 'var(--radix-accordion-content-height)' }, to: { height: '0' } },
+        'accordion-down': {
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' },
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' },
+        },
         'fade-in': { from: { opacity: '0' }, to: { opacity: '1' } },
       },
       animation: {

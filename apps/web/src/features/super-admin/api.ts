@@ -12,8 +12,21 @@ export interface SuperAdminOverview {
   };
   recent: {
     tenants: Array<{ id: string; code: string; name: string; status: string; createdAt: string }>;
-    users: Array<{ id: string; email: string; fullName: string; status: string; createdAt: string; tenantId: string | null }>;
-    errors: Array<{ id: string; level: string; message: string; path: string | null; createdAt: string }>;
+    users: Array<{
+      id: string;
+      email: string;
+      fullName: string;
+      status: string;
+      createdAt: string;
+      tenantId: string | null;
+    }>;
+    errors: Array<{
+      id: string;
+      level: string;
+      message: string;
+      path: string | null;
+      createdAt: string;
+    }>;
   };
 }
 
@@ -101,13 +114,18 @@ export const superAdminApi = {
     return res.data.data;
   },
 
-  async listTenants(params: {
-    page?: number;
-    pageSize?: number;
-    search?: string;
-    status?: TenantStatus;
-  } = {}): Promise<PaginatedResponse<AdminTenant>> {
-    const res = await apiClient.get<{ data: PaginatedResponse<AdminTenant> }>('/super-admin/tenants', { params });
+  async listTenants(
+    params: {
+      page?: number;
+      pageSize?: number;
+      search?: string;
+      status?: TenantStatus;
+    } = {},
+  ): Promise<PaginatedResponse<AdminTenant>> {
+    const res = await apiClient.get<{ data: PaginatedResponse<AdminTenant> }>(
+      '/super-admin/tenants',
+      { params },
+    );
     return res.data.data;
   },
 
@@ -127,12 +145,17 @@ export const superAdminApi = {
   },
 
   async updateTenantStatus(id: string, status: TenantStatus): Promise<AdminTenant> {
-    const res = await apiClient.patch<{ data: AdminTenant }>(`/super-admin/tenants/${id}/status`, { status });
+    const res = await apiClient.patch<{ data: AdminTenant }>(`/super-admin/tenants/${id}/status`, {
+      status,
+    });
     return res.data.data;
   },
 
   async assignPlan(id: string, planCode: string): Promise<{ activatedModules: number }> {
-    const res = await apiClient.post<{ data: { activatedModules: number } }>(`/super-admin/tenants/${id}/assign-plan`, { planCode });
+    const res = await apiClient.post<{ data: { activatedModules: number } }>(
+      `/super-admin/tenants/${id}/assign-plan`,
+      { planCode },
+    );
     return res.data.data;
   },
 
@@ -146,13 +169,17 @@ export const superAdminApi = {
     return res.data.data;
   },
 
-  async listUsers(params: {
-    page?: number;
-    pageSize?: number;
-    search?: string;
-    tenantId?: string;
-  } = {}): Promise<PaginatedResponse<AdminUser>> {
-    const res = await apiClient.get<{ data: PaginatedResponse<AdminUser> }>('/super-admin/users', { params });
+  async listUsers(
+    params: {
+      page?: number;
+      pageSize?: number;
+      search?: string;
+      tenantId?: string;
+    } = {},
+  ): Promise<PaginatedResponse<AdminUser>> {
+    const res = await apiClient.get<{ data: PaginatedResponse<AdminUser> }>('/super-admin/users', {
+      params,
+    });
     return res.data.data;
   },
 };

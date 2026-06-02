@@ -1,5 +1,13 @@
 import { Link } from 'react-router-dom';
-import { CreditCard, Users, Warehouse, Webhook, Database, AlertCircle, Sparkles } from 'lucide-react';
+import {
+  CreditCard,
+  Users,
+  Warehouse,
+  Webhook,
+  Database,
+  AlertCircle,
+  Sparkles,
+} from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { LoadingState } from '@/components/data/LoadingState';
 import { ErrorState } from '@/components/data/ErrorState';
@@ -44,15 +52,21 @@ export function SettingsSubscriptionPage() {
           <AlertCircle className="h-5 w-5" />
           <div>
             <h2 className="text-base font-semibold">Aktif abonelik yok</h2>
-            <p className="text-sm text-on-surface-variant">Paket atanmamış. Süper admin ile iletişime geçin.</p>
+            <p className="text-sm text-on-surface-variant">
+              Paket atanmamış. Süper admin ile iletişime geçin.
+            </p>
           </div>
         </div>
       </div>
     );
   }
 
-  const userPercent = limits ? Math.min(100, Math.round((usage.userCount / limits.userLimit) * 100)) : 0;
-  const modulePercent = limits ? Math.min(100, Math.round((usage.activeModuleCount / 25) * 100)) : 0;
+  const userPercent = limits
+    ? Math.min(100, Math.round((usage.userCount / limits.userLimit) * 100))
+    : 0;
+  const modulePercent = limits
+    ? Math.min(100, Math.round((usage.activeModuleCount / 25) * 100))
+    : 0;
 
   return (
     <div className="flex flex-col gap-6">
@@ -62,35 +76,45 @@ export function SettingsSubscriptionPage() {
       />
 
       {/* Plan kartı */}
-      <div className={`card p-6 bg-gradient-to-br ${PLAN_COLOR[plan.plan.code] ?? PLAN_COLOR.standard} relative overflow-hidden`}>
+      <div
+        className={`card bg-gradient-to-br p-6 ${PLAN_COLOR[plan.plan.code] ?? PLAN_COLOR.standard} relative overflow-hidden`}
+      >
         <div className="absolute -right-12 -top-12 opacity-10">
           <Sparkles className="h-48 w-48" />
         </div>
-        <div className="relative flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div className="relative flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${PLAN_BADGE[plan.plan.code]}`}>
+            <div className="mb-2 flex items-center gap-2">
+              <span
+                className={`rounded-full px-2.5 py-1 text-xs font-bold ${PLAN_BADGE[plan.plan.code]}`}
+              >
                 {PLAN_LABEL[plan.plan.code]?.toUpperCase() ?? plan.plan.code.toUpperCase()}
               </span>
-              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-surface-container text-foreground">
-                {plan.status === 'TRIAL' ? 'DENEME' : plan.status === 'ACTIVE' ? 'AKTİF' : plan.status}
+              <span className="rounded-full bg-surface-container px-2.5 py-1 text-xs font-semibold text-foreground">
+                {plan.status === 'TRIAL'
+                  ? 'DENEME'
+                  : plan.status === 'ACTIVE'
+                    ? 'AKTİF'
+                    : plan.status}
               </span>
             </div>
-            <h2 className="text-2xl font-bold text-foreground mb-1">{plan.plan.name}</h2>
-            {plan.plan.description && <p className="text-sm text-on-surface-variant max-w-xl">{plan.plan.description}</p>}
+            <h2 className="mb-1 text-2xl font-bold text-foreground">{plan.plan.name}</h2>
+            {plan.plan.description && (
+              <p className="max-w-xl text-sm text-on-surface-variant">{plan.plan.description}</p>
+            )}
           </div>
           <div className="text-right">
             <p className="text-xs text-on-surface-variant">Başlangıç</p>
             <p className="text-sm font-semibold text-foreground">{formatDate(plan.startAt)}</p>
             {plan.trialEndAt && (
               <>
-                <p className="text-xs text-on-surface-variant mt-2">Deneme Bitiş</p>
+                <p className="mt-2 text-xs text-on-surface-variant">Deneme Bitiş</p>
                 <p className="text-sm font-semibold text-tertiary">{formatDate(plan.trialEndAt)}</p>
               </>
             )}
             {plan.endAt && !plan.trialEndAt && (
               <>
-                <p className="text-xs text-on-surface-variant mt-2">Bitiş</p>
+                <p className="mt-2 text-xs text-on-surface-variant">Bitiş</p>
                 <p className="text-sm font-semibold text-foreground">{formatDate(plan.endAt)}</p>
               </>
             )}
@@ -99,17 +123,21 @@ export function SettingsSubscriptionPage() {
       </div>
 
       {/* Kullanım istatistikleri */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="card p-4">
-          <div className="flex items-start justify-between gap-2 mb-3">
+          <div className="mb-3 flex items-start justify-between gap-2">
             <div className="text-sm text-on-surface-variant">Kullanıcı</div>
             <Users className="h-4 w-4 text-on-surface-variant" />
           </div>
-          <div className="flex items-baseline gap-1 mb-2">
-            <span className="font-numeric text-2xl font-bold text-foreground">{usage.userCount}</span>
-            <span className="text-sm text-on-surface-variant">/ {formatNumber(limits?.userLimit ?? 0)}</span>
+          <div className="mb-2 flex items-baseline gap-1">
+            <span className="font-numeric text-2xl font-bold text-foreground">
+              {usage.userCount}
+            </span>
+            <span className="text-sm text-on-surface-variant">
+              / {formatNumber(limits?.userLimit ?? 0)}
+            </span>
           </div>
-          <div className="h-1.5 bg-surface-container rounded-full overflow-hidden">
+          <div className="h-1.5 overflow-hidden rounded-full bg-surface-container">
             <div
               className={`h-full ${userPercent > 80 ? 'bg-error' : userPercent > 50 ? 'bg-tertiary' : 'bg-primary'}`}
               style={{ width: `${userPercent}%` }}
@@ -118,15 +146,17 @@ export function SettingsSubscriptionPage() {
         </div>
 
         <div className="card p-4">
-          <div className="flex items-start justify-between gap-2 mb-3">
+          <div className="mb-3 flex items-start justify-between gap-2">
             <div className="text-sm text-on-surface-variant">Aktif Modül</div>
             <Database className="h-4 w-4 text-on-surface-variant" />
           </div>
-          <div className="flex items-baseline gap-1 mb-2">
-            <span className="font-numeric text-2xl font-bold text-foreground">{usage.activeModuleCount}</span>
+          <div className="mb-2 flex items-baseline gap-1">
+            <span className="font-numeric text-2xl font-bold text-foreground">
+              {usage.activeModuleCount}
+            </span>
             <span className="text-sm text-on-surface-variant">/ 25</span>
           </div>
-          <div className="h-1.5 bg-surface-container rounded-full overflow-hidden">
+          <div className="h-1.5 overflow-hidden rounded-full bg-surface-container">
             <div
               className={`h-full ${modulePercent > 80 ? 'bg-error' : 'bg-secondary'}`}
               style={{ width: `${modulePercent}%` }}
@@ -151,21 +181,37 @@ export function SettingsSubscriptionPage() {
 
       {/* Plan detayları */}
       <div className="card p-5">
-        <h2 className="text-base font-semibold text-foreground mb-3 flex items-center gap-2">
+        <h2 className="mb-3 flex items-center gap-2 text-base font-semibold text-foreground">
           <CreditCard className="h-4 w-4 text-primary" />
           Plan Limitleri
         </h2>
-        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-          <LimitRow icon={<Users className="h-4 w-4" />} label="Kullanıcı" value={formatNumber(limits?.userLimit ?? 0)} />
-          <LimitRow icon={<Warehouse className="h-4 w-4" />} label="Şube" value={formatNumber(limits?.branchLimit ?? 0)} />
-          <LimitRow icon={<Database className="h-4 w-4" />} label="Depo" value={formatNumber(limits?.warehouseLimit ?? 0)} />
-          <LimitRow icon={<Webhook className="h-4 w-4" />} label="Webhook" value={formatNumber(limits?.webhookLimit ?? 0)} />
+        <dl className="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
+          <LimitRow
+            icon={<Users className="h-4 w-4" />}
+            label="Kullanıcı"
+            value={formatNumber(limits?.userLimit ?? 0)}
+          />
+          <LimitRow
+            icon={<Warehouse className="h-4 w-4" />}
+            label="Şube"
+            value={formatNumber(limits?.branchLimit ?? 0)}
+          />
+          <LimitRow
+            icon={<Database className="h-4 w-4" />}
+            label="Depo"
+            value={formatNumber(limits?.warehouseLimit ?? 0)}
+          />
+          <LimitRow
+            icon={<Webhook className="h-4 w-4" />}
+            label="Webhook"
+            value={formatNumber(limits?.webhookLimit ?? 0)}
+          />
         </dl>
       </div>
 
-      <div className="card p-4 text-sm text-on-surface-variant text-center">
+      <div className="card p-4 text-center text-sm text-on-surface-variant">
         Paketinizi değiştirmek veya yükseltmek için{' '}
-        <Link to="/super-admin/plans" className="text-primary hover:underline font-medium">
+        <Link to="/super-admin/plans" className="font-medium text-primary hover:underline">
           paketler sayfasını
         </Link>{' '}
         ziyaret edin.
@@ -174,9 +220,17 @@ export function SettingsSubscriptionPage() {
   );
 }
 
-function LimitRow({ icon, label, value }: { icon: React.ReactNode; label: string; value: string | number }) {
+function LimitRow({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string | number;
+}) {
   return (
-    <div className="flex items-center justify-between p-2.5 rounded-md bg-surface-container">
+    <div className="flex items-center justify-between rounded-md bg-surface-container p-2.5">
       <div className="flex items-center gap-2 text-foreground">
         <span className="text-on-surface-variant">{icon}</span>
         <span>{label}</span>

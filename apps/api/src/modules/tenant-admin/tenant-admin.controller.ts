@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UseGuards, BadRequestException } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+  BadRequestException,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { TenantGuard } from '../../common/guards/tenant.guard';
@@ -25,7 +37,14 @@ export class TenantAdminController {
   @ApiOperation({ summary: 'Tenant bilgisi güncelle' })
   async updateMe(
     @CurrentUser() user: JwtPayload,
-    @Body() body: { name?: string; currency?: string; taxOffice?: string; taxNumber?: string; companyInfo?: Record<string, unknown> },
+    @Body()
+    body: {
+      name?: string;
+      currency?: string;
+      taxOffice?: string;
+      taxNumber?: string;
+      companyInfo?: Record<string, unknown>;
+    },
   ) {
     return this.service.updateTenantInfo(user.tid, body);
   }
@@ -80,7 +99,8 @@ export class TenantAdminController {
   @ApiOperation({ summary: 'Yeni kullanıcı davet et' })
   async createUser(
     @CurrentUser() user: JwtPayload,
-    @Body() body: { email: string; fullName: string; phone?: string; password: string; roleCode: string },
+    @Body()
+    body: { email: string; fullName: string; phone?: string; password: string; roleCode: string },
   ) {
     return this.service.createUser(user.tid, body);
   }
