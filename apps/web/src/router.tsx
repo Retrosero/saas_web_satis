@@ -24,6 +24,23 @@ const SettingsLayout = lazy(() => import('@/layouts/SettingsLayout').then((m) =>
 const NotFoundPage = lazy(() => import('@/pages/errors/NotFoundPage').then((m) => ({ default: m.NotFoundPage })));
 const ForbiddenPage = lazy(() => import('@/pages/errors/ForbiddenPage').then((m) => ({ default: m.ForbiddenPage })));
 
+// FAZ 6 — Cari Modülü
+const CustomerListPage = lazy(() => import('@/pages/customers/CustomerListPage').then((m) => ({ default: m.CustomerListPage })));
+const CustomerNewPage = lazy(() => import('@/pages/customers/CustomerNewPage').then((m) => ({ default: m.CustomerNewPage })));
+const CustomerDetailPage = lazy(() => import('@/pages/customers/CustomerDetailPage').then((m) => ({ default: m.CustomerDetailPage })));
+
+// FAZ 7 — Stok Modülü
+const ProductListPage = lazy(() => import('@/pages/products/ProductListPage').then((m) => ({ default: m.ProductListPage })));
+const ProductNewPage = lazy(() => import('@/pages/products/ProductNewPage').then((m) => ({ default: m.ProductNewPage })));
+const ProductDetailPage = lazy(() => import('@/pages/products/ProductDetailPage').then((m) => ({ default: m.ProductDetailPage })));
+const WarehouseListPage = lazy(() => import('@/pages/warehouses/WarehouseListPage').then((m) => ({ default: m.WarehouseListPage })));
+const StockMovementsPage = lazy(() => import('@/pages/stock/StockMovementsPage').then((m) => ({ default: m.StockMovementsPage })));
+
+// FAZ 8 — Satış Modülü
+const SaleListPage = lazy(() => import('@/pages/sales/SaleListPage').then((m) => ({ default: m.SaleListPage })));
+const SaleNewPage = lazy(() => import('@/pages/sales/saleNewPage').then((m) => ({ default: m.SaleNewPage })));
+const SaleDetailPage = lazy(() => import('@/pages/sales/SaleDetailPage').then((m) => ({ default: m.SaleDetailPage })));
+
 function withSuspense(node: ReactNode) {
   return <Suspense fallback={<LoadingState size="lg" />}>{node}</Suspense>;
 }
@@ -61,9 +78,18 @@ const routes: RouteObject[] = [
       { path: 'super-admin/modules', element: withSuspense(<ModulesPage />) },
       { path: 'super-admin/logs', element: withSuspense(<SuperAdminLogsPage />) },
       // Operasyonel modüller (FAZ 6+)
-      { path: 'customers', element: <ComingSoon title="Cari Hesaplar" /> },
-      { path: 'products', element: <ComingSoon title="Stok Yönetimi" /> },
-      { path: 'sales', element: <ComingSoon title="Satış" /> },
+      { path: 'customers', element: withSuspense(<CustomerListPage />) },
+      { path: 'customers/new', element: withSuspense(<CustomerNewPage />) },
+      { path: 'customers/:id', element: withSuspense(<CustomerDetailPage />) },
+      { path: 'products', element: withSuspense(<ProductListPage />) },
+      { path: 'products/new', element: withSuspense(<ProductNewPage />) },
+      { path: 'products/:id', element: withSuspense(<ProductDetailPage />) },
+      { path: 'warehouses', element: withSuspense(<WarehouseListPage />) },
+      { path: 'stock/movements', element: withSuspense(<StockMovementsPage />) },
+      // FAZ 8 — Satış Modülü
+      { path: 'sales', element: withSuspense(<SaleListPage />) },
+      { path: 'sales/new', element: withSuspense(<SaleNewPage />) },
+      { path: 'sales/:id', element: withSuspense(<SaleDetailPage />) },
       { path: 'orders', element: <ComingSoon title="Siparişler" /> },
       { path: 'collections', element: <ComingSoon title="Tahsilat" /> },
       { path: 'cash', element: <ComingSoon title="Kasa" /> },

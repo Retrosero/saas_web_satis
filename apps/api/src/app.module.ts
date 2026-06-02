@@ -10,6 +10,11 @@ import { HealthModule } from './modules/health/health.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { TenantAdminModule } from './modules/tenant-admin/tenant-admin.module';
 import { LogsModule } from './modules/logs/logs.module';
+import { CustomersModule } from './modules/customers/customers.module';
+import { ProductsModule } from './modules/products/products.module';
+import { WarehousesModule } from './modules/warehouses/warehouses.module';
+import { StockModule } from './modules/stock/stock.module';
+import { SalesModule } from './modules/sales/sales.module';
 import { appConfig } from './config/app.config';
 import { databaseConfig } from './config/database.config';
 import { jwtConfig } from './config/jwt.config';
@@ -58,6 +63,11 @@ import { r2Config } from './config/r2.config';
     NotificationsModule,
     TenantAdminModule,
     LogsModule,
+    CustomersModule,
+    ProductsModule,
+    WarehousesModule,
+    StockModule,
+    SalesModule,
   ],
 })
 export class AppModule {}

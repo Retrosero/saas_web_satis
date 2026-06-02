@@ -141,6 +141,27 @@ model Tenant {
   securityLogs    SecurityLog[]
   notifications   Notification[]
 
+  // FAZ 6 — Cari modülü ilişkileri
+  customers         Customer[]
+  customerMovements CustomerMovement[]
+  cashAccounts      CashAccount[]
+  cashMovements     CashMovement[]
+  paymentMethods    PaymentMethod[]
+
+  // FAZ 7 — Stok modülü ilişkileri
+  units             Unit[]
+  brands            Brand[]
+  productCategories ProductCategory[]
+  warehouses        Warehouse[]
+  products          Product[]
+  productBarcodes   ProductBarcode[]
+  productPrices     ProductPrice[]
+  stockMovements    StockMovement[]
+
+  // FAZ 8 — Satış modülü ilişkileri
+  sales             Sale[]
+  saleItems         SaleItem[]
+
   @@index([status])
   @@index([isDeleted])
 }
@@ -453,6 +474,181 @@ enum NotificationCategory {
   REPORT
 }
 
+// =====================================================================
+// ENUMLAR — CARİ MODÜLÜ (FAZ 6)
+// =====================================================================
+
+enum CustomerType {
+  CUSTOMER    // Müşteri (bizden alan)
+  SUPPLIER    // Tedarikçi (bize satan)
+  BOTH        // İkisi birden
+}
+
+enum CustomerStatus {
+  ACTIVE
+  PASSIVE
+  BLOCKED    // Bloke (yeni satış yok)
+}
+
+enum CustomerMovementType {
+  DEBIT      // Bizim alacağımız (müşteri bize borçlandı)
+  CREDIT     // Bizim borcumuz (müşteriye ödedik veya alacak)
+}
+
+enum CustomerMovementRefType {
+  SALE
+  SALE_CANCEL
+  COLLECTION
+  COLLECTION_CANCEL
+  RETURN
+  ADJUST
+  OPENING_BALANCE
+  TRANSFER
+}
+
+enum CashAccountType {
+  CASH
+  BANK
+  POS
+}
+
+enum CashAccountStatus {
+  ACTIVE
+  PASSIVE
+}
+
+enum CashMovementType {
+  IN
+  OUT
+  TRANSFER
+}
+
+enum CashMovementRefType {
+  COLLECTION
+  COLLECTION_CANCEL
+  PAYMENT
+  PAYMENT_CANCEL
+  SALE_REFUND
+  TRANSFER
+  ADJUST
+  OPENING_BALANCE
+}
+
+enum PaymentMethodType {
+  CASH
+  CARD
+  BANK
+  EFT
+  CHECK
+  OTHER
+}
+
+enum MovementStatus {
+  DRAFT      // Henüz muhasebeleşmedi
+  POSTED     // Kesin kayıt
+  PENDING    // Onay bekliyor
+  CANCELLED  // İptal edildi
+}
+
+// =====================================================================
+// ENUMLAR — STOK MODÜLÜ (FAZ 7)
+// =====================================================================
+
+enum UnitType {
+  PIECE       // Adet (adet, koli, paket)
+  WEIGHT      // Ağırlık (kg, gr, ton)
+  LENGTH      // Uzunluk (mt, cm, mm)
+  VOLUME      // Hacim (lt, m3)
+  TIME        // Zaman (saat, gün)
+  AREA        // Alan (m2)
+}
+
+enum ProductType {
+  GOODS           // Ticari mal
+  SERVICE         // Hizmet (stok takibi yok)
+  RAW_MATERIAL    // Hammadde
+  FINISHED_GOOD   // Mamul
+  CONSUMABLE      // Sarf malzeme
+}
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  PASSIVE
+  DISCONTINUED  // Üretimi durdurulmuş
+}
+
+enum StockMovementRefType {
+  SALE
+  SALE_CANCEL
+  PURCHASE
+  PURCHASE_CANCEL
+  TRANSFER
+  TRANSFER_CANCEL
+  ADJUST
+  COUNT          // Sayım düzeltmesi
+  OPENING_BALANCE
+  RETURN
+  PRODUCTION     // Üretim girişi
+  WASTE          // Fire / zayiat
+}
+
+enum WarehouseStatus {
+  ACTIVE
+  PASSIVE
+}
+
+enum PriceType {
+  PURCHASE      // Alış fiyatı
+  SALE          // Satış fiyatı
+  WHOLESALE     // Toptan
+  MIN_SALE      // Alt sınır (müşteriye altında satılmaz)
+  LIST_PRICE    // Liste / katalog fiyatı
+}
+
+enum StockMovementType {
+  IN
+  OUT
+  TRANSFER
+  ADJUST
+}
+
+// =====================================================================
+// ENUMLAR — SATIŞ MODÜLÜ (FAZ 8)
+// =====================================================================
+
+enum SaleType {
+  SALE       // Normal satış
+  RETURN     // İade
+  PROFORMA   // Proforma (henüz kesin değil)
+  CONSIGNMENT_OUT  // Konsinyasyon çıkışı
+  CONSIGNMENT_IN   // Konsinyasyon iadesi
+}
+
+enum SaleStatus {
+  DRAFT
+  CONFIRMED
+  PARTIALLY_SHIPPED
+  SHIPPED
+  DELIVERED
+  PARTIALLY_PAID
+  PAID
+  OVERDUE
+  CANCELLED
+  CLOSED
+}
+
+enum PaymentStatus {
+  UNPAID          // Hiç ödenmedi
+  PARTIALLY_PAID  // Kısmen ödendi
+  PAID            // Tamamı ödendi
+}
+
+enum SaleItemStatus {
+  ACTIVE
+  CANCELLED
+}
+
 model Notification {
   id          String              @id @default(cuid())
   tenantId    String?
@@ -476,4 +672,570 @@ model Notification {
   @@index([tenantId, isRead])
   @@index([category])
   @@index([expiresAt])
+}
+
+// =====================================================================
+// CARİ MODÜLÜ MODELLERİ (FAZ 6)
+// =====================================================================
+//
+// Event sourcing: bakiye/stok/kasa SAKLANMAZ, hareketlerden hesaplanır.
+// Bu yüzden modellerde balance/quantity/cashBalance gibi alanlar YOK.
+// Sadece hareket (movement) tabloları gerçek kaynaktır.
+//
+// Müşteri ve tedarikçi tek tabloda (Customer), type alanı ile ayrılır.
+// Bu hem sorgu performansı hem ERP entegrasyonu için daha sağlıklıdır.
+// =====================================================================
+
+// ÖDEME YÖNTEMİ TANIMLARI (Cari / Stok / Satış'ta kullanılır)
+model PaymentMethod {
+  id          String            @id @default(cuid())
+  tenantId    String?            // null = sistem tanımı
+  code        String             // "CASH", "CARD", "EFT"...
+  name        String             // "Nakit", "Kredi Kartı", "Havale/EFT"
+  type        PaymentMethodType
+  isActive    Boolean            @default(true)
+  isDefault   Boolean            @default(false)
+  sortOrder   Int                @default(0)
+  notes       String?
+
+  isDeleted   Boolean            @default(false)
+  deletedAt   DateTime?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  tenant      Tenant?            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  cashMovements CashMovement[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, isActive])
+  @@index([tenantId, type])
+}
+
+// CARİ HESAP (MÜŞTERİ + TEDARİKÇİ)
+model Customer {
+  id              String            @id @default(cuid())
+  tenantId        String
+  code            String            // "M-0001", "T-0001", "H-0001" (tenant-scoped unique)
+  type            CustomerType
+  name            String            // Firma/şahıs adı
+  contactName     String?           // Yetkili kişi
+  taxNumber       String?           // VKN
+  taxOffice       String?           // VD
+  identityNumber  String?           // TCKN (şahıslar için)
+  address         String?
+  city            String?
+  district        String?
+  postalCode      String?
+  country         String?           @default("Türkiye")
+  phone           String?
+  phone2          String?
+  email           String?
+  website         String?
+  iban            String?
+  openingBalance  Decimal           @default(0) // Açılış fişi (pozitif: alacak, negatif: borç — yön için)
+  creditLimit     Decimal           @default(0) // Açık hesap limiti
+  paymentTermDays Int               @default(0) // Vade (gün)
+  status          CustomerStatus    @default(ACTIVE)
+  notes           String?
+
+  isActive        Boolean           @default(true)
+  isDeleted       Boolean           @default(false)
+  deletedAt       DateTime?
+  deletedById     String?
+
+  createdById     String?
+  updatedById     String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  tenant          Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  movements       CustomerMovement[]
+  sales           Sale[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, isDeleted])
+  @@index([tenantId, type])
+  @@index([tenantId, status])
+  @@index([tenantId, name])
+  @@index([tenantId, taxNumber])
+  @@index([tenantId, phone])
+}
+
+// CARİ HAREKET (event-sourced — bakiye buradan hesaplanır)
+model CustomerMovement {
+  id              String                    @id @default(cuid())
+  tenantId        String
+  customerId      String
+  type            CustomerMovementType      // DEBIT (bizim alacağımız) | CREDIT (bizim borcumuz)
+  amount          Decimal                   // Dövizli tutar (currency cinsinden)
+  currency        String                    @default("TRY")
+  exchangeRate    Decimal                   @default(1) // TRY karşılığı için çevrim
+  amountTry       Decimal                   // TL bazında muhasebe tutarı (amount * exchangeRate)
+  movementDate    DateTime                  // Hareket tarihi
+  dueDate         DateTime?                 // Vade (tahsilat planı için)
+  refType         CustomerMovementRefType   // SALE | COLLECTION | ...
+  refId           String?                   // İlgili döküman ID (Sale.id, vb.)
+  refNumber       String?                   // İnsan-okunabilir referans
+  description     String?
+  status          MovementStatus            @default(POSTED)
+
+  // Ters kayıt alanları (soft delete yerine)
+  // Tek bir relation çifti: bu kayıt → iptal ettiği kayıt (ve back-relation: beni iptal eden)
+  reversesId      String?                   @unique
+
+  paymentMethodId String?                   // Tahsilat/ödeme ise hangi yöntemle
+  cashAccountId   String?                   // Tahsilat/ödeme ise hangi kasa/banka
+
+  isDeleted       Boolean                   @default(false)
+  deletedAt       DateTime?
+  createdById     String?
+  createdAt       DateTime                  @default(now())
+  updatedAt       DateTime                  @updatedAt
+
+  tenant          Tenant                    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customer        Customer                  @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  reverses        CustomerMovement?         @relation("CustomerMovementReversal", fields: [reversesId], references: [id], onDelete: SetNull)
+  reversedBy      CustomerMovement?         @relation("CustomerMovementReversal")
+
+  @@index([tenantId, customerId, movementDate])
+  @@index([tenantId, movementDate])
+  @@index([tenantId, refType, refId])
+  @@index([tenantId, status])
+  @@index([tenantId, dueDate])
+  @@index([customerId, status])
+  @@index([reversesId])
+}
+
+// KASA / BANKA HESABI
+model CashAccount {
+  id              String              @id @default(cuid())
+  tenantId        String
+  code            String              // "K-001", "B-001", "P-001"
+  name            String
+  type            CashAccountType
+  status          CashAccountStatus   @default(ACTIVE)
+  currency        String              @default("TRY")
+  iban            String?
+  bankName        String?
+  bankBranch      String?
+  accountHolder   String?
+  isDefault       Boolean             @default(false)
+  notes           String?
+
+  isActive        Boolean             @default(true)
+  isDeleted       Boolean             @default(false)
+  deletedAt       DateTime?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+
+  tenant          Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  movements       CashMovement[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, isDeleted])
+  @@index([tenantId, type])
+  @@index([tenantId, status])
+}
+
+// KASA / BANKA HAREKETİ (event-sourced)
+model CashMovement {
+  id              String                  @id @default(cuid())
+  tenantId        String
+  cashAccountId   String
+  type            CashMovementType        // IN | OUT | TRANSFER
+  amount          Decimal
+  currency        String                  @default("TRY")
+  exchangeRate    Decimal                 @default(1)
+  amountTry       Decimal
+  movementDate    DateTime
+  refType         CashMovementRefType
+  refId           String?
+  refNumber       String?
+  description     String?
+  status          MovementStatus          @default(POSTED)
+
+  // Transfer için: kaynak ve hedef hesap
+  transferToAccountId String?             // TRANSFER tipinde hedef hesap
+
+  // İlişkili carı (tahsilat ise) — opsiyonel
+  customerId      String?
+  customerMovementId String?              @unique // Bağlı cari hareket (tahsilat/ödeme)
+
+  paymentMethodId String?
+  reversesId      String?                 @unique
+
+  isDeleted       Boolean                 @default(false)
+  deletedAt       DateTime?
+  createdById     String?
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
+
+  tenant          Tenant                  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  cashAccount     CashAccount             @relation(fields: [cashAccountId], references: [id], onDelete: Restrict)
+  paymentMethod   PaymentMethod?          @relation(fields: [paymentMethodId], references: [id], onDelete: SetNull)
+  reverses        CashMovement?           @relation("CashMovementReversal", fields: [reversesId], references: [id], onDelete: SetNull)
+  reversedBy      CashMovement?           @relation("CashMovementReversal")
+
+  @@index([tenantId, cashAccountId, movementDate])
+  @@index([tenantId, movementDate])
+  @@index([tenantId, refType, refId])
+  @@index([tenantId, status])
+  @@index([customerId])
+  @@index([reversesId])
+}
+
+// =====================================================================
+// STOK MODÜLÜ MODELLERİ (FAZ 7)
+// =====================================================================
+//
+// Event sourcing: stok miktarı SAKLANMAZ, hareketlerden hesaplanır.
+// Bu yüzden Product tablosunda quantity YOK.
+// Stok miktarı: SUM(stock_movements WHERE type=IN) - SUM(stock_movements WHERE type=OUT)
+// Depo bazında: (productId, warehouseId) çifti üzerinden gruplanır.
+// =====================================================================
+
+// ÖLÇÜ BİRİMİ TANIMLARI (Sistem + tenant override)
+model Unit {
+  id          String     @id @default(cuid())
+  tenantId    String?     // null = sistem tanımı
+  code        String     // "ADET", "KG", "MT", "LT", "KOLI", "SAAT"
+  name        String     // "Adet", "Kilogram", "Metre"
+  type        UnitType
+  isActive    Boolean    @default(true)
+  isDefault   Boolean    @default(false)
+  sortOrder   Int        @default(0)
+
+  tenant      Tenant?    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  products    Product[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, isActive])
+  @@index([tenantId, type])
+}
+
+// MARKA
+model Brand {
+  id          String     @id @default(cuid())
+  tenantId    String
+  code        String
+  name        String
+  country     String?
+  isActive    Boolean    @default(true)
+  notes       String?
+
+  isDeleted   Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  tenant      Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  products    Product[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, isDeleted])
+}
+
+// ÜRÜN KATEGORİSİ (ağaç yapısı, parentId self-FK)
+model ProductCategory {
+  id          String     @id @default(cuid())
+  tenantId    String
+  code        String
+  name        String
+  parentId    String?
+  sortOrder   Int        @default(0)
+  isActive    Boolean    @default(true)
+  notes       String?
+
+  isDeleted   Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  tenant      Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  parent      ProductCategory?  @relation("CategoryTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children    ProductCategory[] @relation("CategoryTree")
+  products    Product[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, parentId])
+  @@index([tenantId, isDeleted])
+}
+
+// DEPO
+model Warehouse {
+  id          String          @id @default(cuid())
+  tenantId    String
+  code        String
+  name        String
+  status      WarehouseStatus @default(ACTIVE)
+  address     String?
+  city        String?
+  manager     String?
+  phone       String?
+  isDefault   Boolean         @default(false)
+  notes       String?
+
+  isActive    Boolean         @default(true)
+  isDeleted   Boolean         @default(false)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  tenant              Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  defaultForProducts  Product[]       @relation("DefaultWarehouse")
+  stockMovementsFrom  StockMovement[] @relation("WarehouseFrom")
+  stockMovementsTo    StockMovement[] @relation("WarehouseTo")
+  sales               Sale[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, isDeleted])
+  @@index([tenantId, status])
+}
+
+// ÜRÜN
+model Product {
+  id                  String         @id @default(cuid())
+  tenantId            String
+  code                String         // SKU (tenant-scoped unique)
+  name                String
+  shortName           String?
+  description         String?
+  type                ProductType    @default(GOODS)
+  status              ProductStatus  @default(ACTIVE)
+  brandId             String?
+  categoryId          String?
+  defaultWarehouseId  String?
+  unitId              String?
+  primaryBarcode      String?        // En sık kullanılan barkod (ProductBarcode'dan bağımsız)
+  trackStock          Boolean        @default(true) // Hizmetlerde false
+  vatRate             Decimal        @default(20)  // KDV oranı (%)
+  minStock            Decimal        @default(0)   // Alt uyarı sınırı
+  maxStock            Decimal        @default(0)   // Üst uyarı sınırı (0 = limitsiz)
+  weight              Decimal?       // Net ağırlık (kg)
+  volume              Decimal?       // Hacim (m3)
+
+  isActive            Boolean        @default(true)
+  isDeleted           Boolean        @default(false)
+  deletedAt           DateTime?
+  createdById         String?
+  updatedById         String?
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+
+  tenant              Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  brand               Brand?         @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  category            ProductCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  defaultWarehouse    Warehouse?     @relation("DefaultWarehouse", fields: [defaultWarehouseId], references: [id], onDelete: SetNull)
+  unit                Unit?          @relation(fields: [unitId], references: [id], onDelete: Restrict)
+  barcodes            ProductBarcode[]
+  prices              ProductPrice[]
+  stockMovements      StockMovement[]
+  saleItems           SaleItem[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, isDeleted])
+  @@index([tenantId, type])
+  @@index([tenantId, status])
+  @@index([tenantId, name])
+  @@index([tenantId, brandId])
+  @@index([tenantId, categoryId])
+  @@index([tenantId, primaryBarcode])
+}
+
+// ÜRÜN BARKODLARI (1 ürünün birden fazla barkodu olabilir, örn: koli barkodu)
+model ProductBarcode {
+  id          String   @id @default(cuid())
+  tenantId    String
+  productId   String
+  barcode     String
+  unitId      String?  // Barkodun temsil ettiği birim (örn: koli = 12 adet)
+  quantity    Decimal  @default(1) // Bu barkodun kaç adet temsil ettiği
+  isPrimary   Boolean  @default(false)
+  notes       String?
+
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, barcode])
+  @@index([tenantId, productId])
+  @@index([productId, isPrimary])
+}
+
+// ÜRÜN FİYATLARI (Alış / Satış / Toptan / Liste — dönemsel olabilir)
+model ProductPrice {
+  id          String     @id @default(cuid())
+  tenantId    String
+  productId   String
+  type        PriceType
+  amount      Decimal
+  currency    String     @default("TRY")
+  validFrom   DateTime   @default(now())
+  validTo     DateTime?
+  notes       String?
+
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  tenant      Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  product     Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, productId, type])
+  @@index([tenantId, type])
+  @@index([productId, validFrom])
+}
+
+// STOK HAREKETİ (event-sourced — miktar buradan hesaplanır)
+model StockMovement {
+  id                    String                  @id @default(cuid())
+  tenantId              String
+  productId             String
+  warehouseId           String                  // Birincil depo (TRANSFER'de kaynak)
+  type                  StockMovementType       // IN | OUT | TRANSFER | ADJUST
+  quantity              Decimal                 // Pozitif (yön type'ta)
+  unitCost              Decimal?                // Birim maliyet (opsiyonel, maliyet raporları için)
+  movementDate          DateTime
+  refType               StockMovementRefType    // SALE | PURCHASE | TRANSFER | ADJUST | COUNT | ...
+  refId                 String?
+  refNumber             String?
+  description           String?
+  status                MovementStatus          @default(POSTED)
+
+  // TRANSFER için hedef depo
+  transferToWarehouseId String?
+
+  // Ters kayıt (self-relation)
+  reversesId            String?                 @unique
+
+  isDeleted             Boolean                 @default(false)
+  deletedAt             DateTime?
+  createdById           String?
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+
+  tenant                Tenant                  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  product               Product                 @relation(fields: [productId], references: [id], onDelete: Restrict)
+  warehouse             Warehouse               @relation("WarehouseFrom", fields: [warehouseId], references: [id], onDelete: Restrict)
+  transferToWarehouse   Warehouse?              @relation("WarehouseTo", fields: [transferToWarehouseId], references: [id], onDelete: SetNull)
+  reverses              StockMovement?          @relation("StockMovementReversal", fields: [reversesId], references: [id], onDelete: SetNull)
+  reversedBy            StockMovement?          @relation("StockMovementReversal")
+
+  @@index([tenantId, productId, warehouseId, movementDate])
+  @@index([tenantId, productId, movementDate])
+  @@index([tenantId, warehouseId, movementDate])
+  @@index([tenantId, refType, refId])
+  @@index([tenantId, status])
+  @@index([reversesId])
+}
+
+// =====================================================================
+// SATIŞ MODÜLÜ MODELLERİ (FAZ 8)
+// =====================================================================
+//
+// Satış + satış kalemleri.
+// Onaylanan satış OTOMATİK olarak:
+//   - 1 CustomerMovement (DEBIT) — müşteri borçlandırılır
+//   - N StockMovement (OUT) — her kalem için stok çıkışı
+//   - Ürün KDV dahil/hariç hesabı
+//   - Grand total (subTotal + vatTotal - discountTotal)
+// İptal edilen satış ise TERS kayıtlar (iade/iptal).
+// =====================================================================
+
+// SATIŞ
+model Sale {
+  id                String          @id @default(cuid())
+  tenantId          String
+  customerId        String
+  saleNumber        String          // "S-2026-0001" (tenant-scoped unique)
+  saleDate          DateTime
+  dueDate           DateTime?       // Vade (açık hesap)
+  type              SaleType        @default(SALE)
+  status            SaleStatus      @default(DRAFT)
+  paymentStatus     PaymentStatus   @default(UNPAID)
+
+  // Depo (satış hangi depodan yapıldı — stok çıkışı buradan olur)
+  warehouseId       String?
+
+  // Fiyat bilgileri
+  currency          String          @default("TRY")
+  exchangeRate      Decimal         @default(1)
+  subTotal          Decimal         @default(0) // KDV hariç toplam
+  vatTotal          Decimal         @default(0) // KDV toplamı
+  discountTotal     Decimal         @default(0) // İskonto toplamı
+  grandTotal        Decimal         @default(0) // Genel toplam (KDV dahil)
+  paidAmount        Decimal         @default(0) // Ödenen tutar
+
+  // Müşteri bilgileri (anlık snapshot — cari sonradan güncellenirse etkilenmez)
+  customerName      String          // Fatura anında
+  customerTaxNumber String?
+  customerAddress   String?
+  customerPhone     String?
+  customerEmail     String?
+
+  notes             String?
+  internalNotes     String?         // Sadece personelin göreceği notlar
+
+  // Self-relation: iptal edilen satışın ID'si
+  cancelsSaleId     String?         @unique
+
+  isActive          Boolean         @default(true)
+  isDeleted         Boolean         @default(false)
+  deletedAt         DateTime?
+  createdById       String?
+  updatedById       String?
+  confirmedById     String?
+  confirmedAt       DateTime?
+  cancelledById     String?
+  cancelledAt       DateTime?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  tenant            Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customer          Customer        @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  warehouse         Warehouse?      @relation(fields: [warehouseId], references: [id], onDelete: SetNull)
+  items             SaleItem[]
+  cancelsSale       Sale?           @relation("SaleCancel", fields: [cancelsSaleId], references: [id], onDelete: SetNull)
+  cancelledBy       Sale?           @relation("SaleCancel")
+
+  @@unique([tenantId, saleNumber])
+  @@index([tenantId, customerId, saleDate])
+  @@index([tenantId, status])
+  @@index([tenantId, saleDate])
+  @@index([tenantId, paymentStatus])
+  @@index([tenantId, type])
+  @@index([cancelsSaleId])
+}
+
+// SATIŞ KALEMİ
+model SaleItem {
+  id              String          @id @default(cuid())
+  tenantId        String
+  saleId          String
+  productId       String
+  unitId          String?
+  quantity        Decimal
+  unitPrice       Decimal         // Birim fiyat (KDV hariç)
+  vatRate         Decimal         // KDV oranı (ürünün KDV'si, snapshot)
+  discountRate    Decimal         @default(0) // Satır iskonto oranı (%)
+  description     String?         // Serbest metin açıklama (kalem bazlı)
+  sortOrder       Int             @default(0)
+  status          SaleItemStatus  @default(ACTIVE)
+
+  // Hesaplanmış alanlar (snapshot — uygulama katmanında set edilir)
+  lineSubTotal    Decimal         // quantity * unitPrice (iskonto hariç, KDV hariç)
+  discountAmount  Decimal         @default(0) // İskonto tutarı
+  lineVatAmount   Decimal         @default(0) // KDV tutarı
+  lineGrandTotal  Decimal         // KDV dahil toplam
+
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  tenant          Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  sale            Sale            @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  product         Product         @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@index([tenantId, saleId])
+  @@index([tenantId, productId])
+  @@index([saleId, sortOrder])
 }

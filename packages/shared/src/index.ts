@@ -14,6 +14,9 @@ export * from './types/role.js';
 export * from './types/permission.js';
 export * from './types/plan.js';
 export * from './types/notification.js';
+export * from './types/customer.js';
+export * from './types/product.js';
+export * from './types/sale.js';
 
 // DTOs
 export * from './dto/pagination.dto.js';

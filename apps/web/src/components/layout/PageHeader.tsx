@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react';
 
+
 interface PageHeaderProps {
   title: string;
-  description?: string;
+  description?: React.ReactNode;
   actions?: ReactNode;
   breadcrumb?: ReactNode;
 }
