@@ -17,6 +17,7 @@ export * from './types/notification.js';
 export * from './types/customer.js';
 export * from './types/product.js';
 export * from './types/sale.js';
+export * from './types/order.js';
 
 // DTOs
 export * from './dto/pagination.dto.js';

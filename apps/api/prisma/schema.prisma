@@ -983,6 +983,7 @@ model Warehouse {
   stockMovementsFrom  StockMovement[] @relation("WarehouseFrom")
   stockMovementsTo    StockMovement[] @relation("WarehouseTo")
   sales               Sale[]
+  orders              Order[]
 
   @@unique([tenantId, code])
   @@index([tenantId, isDeleted])
@@ -1197,6 +1198,7 @@ model Sale {
   items             SaleItem[]
   cancelsSale       Sale?           @relation("SaleCancel", fields: [cancelsSaleId], references: [id], onDelete: SetNull)
   cancelledBy       Sale?           @relation("SaleCancel")
+  fromOrder         Order?          @relation("SaleFromOrder")
 
   @@unique([tenantId, saleNumber])
   @@index([tenantId, customerId, saleDate])
@@ -1237,5 +1239,145 @@ model SaleItem {
 
   @@index([tenantId, saleId])
   @@index([tenantId, productId])
-  @@index([saleId, sortOrder])
+// -----------------------------------------------------------------------
+// SİPARİŞ MODÜLÜ ENUMLARI (FAZ 9)
+// -----------------------------------------------------------------------
+
+enum OrderStatus {
+  PENDING       // Bekliyor (taslak)
+  CONFIRMED      // Onaylandı (satışa dönüştürülabilir)
+  PARTIALLY_SHIPPED // Kısmi sevk
+  SHIPPED       // Sevk edildi
+  DELIVERED     // Teslim edildi
+  COMPLETED     // Tamamlandı (tam ödeme + teslimat)
+  CANCELLED     // İptal edildi
 }
+
+
+enum OrderType {
+  SALES_ORDER         // Satış siparişi
+  PURCHASE_ORDER      // Satın alma siparişi (gelecek faz)
+  RETURN_ORDER        // İade siparişi
+  PROFORMA_ORDER      // Proforma / teklif
+  CONSIGNMENT_OUT     // Konsinyasyon çıkış siparişi
+}
+
+// -----------------------------------------------------------------------
+// SİPARİŞ MODÜLÜ MODELLERİ (FAZ 9)
+// -----------------------------------------------------------------------
+// Sipariş:
+//   - Satış'ın "DRAFT" haline benzer ama sipariş/takip odaklı
+//   - CONFIRMED → Sale'a dönüştürülebilir (fulfillment akışı)
+//   - Depo/stok hareketi sipariş seviyesinde değil, Sale'a dönüşünce olur
+// -----------------------------------------------------------------------
+
+
+// SİPARİŞ
+model Order {
+  id                  String          @id @default(cuid())
+  tenantId            String
+  orderNumber         String          // "OR-2026-000001" (tenant-scoped unique)
+  orderDate           DateTime
+  deliveryDate        DateTime?       // Teslimat tarihi (taahhüt)
+  type                OrderType       @default(SALES_ORDER)
+  status              OrderStatus     @default(PENDING)
+
+  // Müşteri / Cari
+  customerId          String
+  customerName        String          // Anlık kopya
+  customerTaxNumber   String?
+  customerAddress    String?
+  customerPhone       String?
+  customerEmail       String?
+
+  // Fiyat
+  currency            String          @default("TRY")
+  exchangeRate       Decimal         @default(1)
+  subTotal            Decimal         @default(0)
+  vatTotal            Decimal         @default(0)
+  discountTotal      Decimal         @default(0)
+  grandTotal          Decimal         @default(0)
+
+  // Depo önerisi (opsiyonel)
+  warehouseId         String?
+  warehouseName      String?
+
+  // Dönüştürme
+  linkedSaleId        String?         @unique // Bu siparişten oluşan satış
+
+  notes               String?
+  internalNotes       String?
+
+  // İlişkilendirme (iptal edilen sipariş)
+  cancelsOrderId      String?         @unique
+
+  isActive            Boolean         @default(true)
+  isDeleted           Boolean         @default(false)
+  deletedAt           DateTime?
+  createdById         String?
+  updatedById         String?
+  confirmedById       String?
+  confirmedAt         DateTime?
+  cancelledById       String?
+  cancelledAt        DateTime?
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+
+  tenant              Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customer            Customer        @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  warehouse           Warehouse?      @relation(fields: [warehouseId], references: [id], onDelete: SetNull)
+  items              OrderItem[]
+  linkedSale          Sale?           @relation("SaleFromOrder", fields: [linkedSaleId], references: [id], onDelete: SetNull)
+  cancelsOrder        Order?          @relation("OrderCancel", fields: [cancelsOrderId], references: [id], onDelete: SetNull)
+  cancelledBy         Order?          @relation("OrderCancel")
+
+  @@unique([tenantId, orderNumber])
+  @@index([tenantId, customerId, orderDate])
+  @@index([tenantId, status])
+  @@index([tenantId, orderDate])
+  @@index([tenantId, type])
+  @@index([tenantId, linkedSaleId])
+  @@index([cancelsOrderId])
+}
+
+// SİPARİŞ KALEMİ
+model OrderItem {
+  id                  String          @id @default(cuid())
+  tenantId            String
+  orderId             String
+  productId           String
+  unitId              String?
+
+  // Miktar ve fiyat
+  quantity            Decimal
+  quantityShipped     Decimal         @default(0) // Teslim edilen (kısmi sevk)
+  unitPrice           Decimal         @default(0) // KDV hariç birim fiyat
+  vatRate             Decimal         @default(0)
+  discountRate        Decimal         @default(0)
+  description         String?
+  sortOrder           Int             @default(0)
+  status              SaleItemStatus  @default(ACTIVE)
+
+
+  // Hesaplanmış
+  lineSubTotal        Decimal         @default(0)
+  discountAmount      Decimal         @default(0)
+  lineVatAmount       Decimal         @default(0)
+  lineGrandTotal      Decimal         @default(0)
+
+  // Kalem seviyesinde not
+  notes               String?
+
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+
+  tenant              Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  order               Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product             Product         @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@index([tenantId, orderId])
+  @@index([tenantId, productId])
+  @@index([orderId, sortOrder])
+}
+
+export {}

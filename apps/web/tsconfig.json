@@ -18,7 +18,9 @@
     "noUncheckedIndexedAccess": false,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@saas/shared": ["../../packages/shared/src/index.ts"],
+      "@saas/shared/*": ["../../packages/shared/src/*"]
     }
   },
   "include": ["src"]

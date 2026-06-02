@@ -41,6 +41,11 @@ const SaleListPage = lazy(() => import('@/pages/sales/SaleListPage').then((m) =>
 const SaleNewPage = lazy(() => import('@/pages/sales/saleNewPage').then((m) => ({ default: m.SaleNewPage })));
 const SaleDetailPage = lazy(() => import('@/pages/sales/SaleDetailPage').then((m) => ({ default: m.SaleDetailPage })));
 
+// FAZ 9 — Sipariş Modülü
+const OrderListPage = lazy(() => import('@/pages/orders/OrderListPage').then((m) => ({ default: m.OrderListPage })));
+const OrderNewPage = lazy(() => import('@/pages/orders/OrderNewPage').then((m) => ({ default: m.OrderNewPage })));
+const OrderDetailPage = lazy(() => import('@/pages/orders/OrderDetailPage').then((m) => ({ default: m.OrderDetailPage })));
+
 function withSuspense(node: ReactNode) {
   return <Suspense fallback={<LoadingState size="lg" />}>{node}</Suspense>;
 }
@@ -90,7 +95,10 @@ const routes: RouteObject[] = [
       { path: 'sales', element: withSuspense(<SaleListPage />) },
       { path: 'sales/new', element: withSuspense(<SaleNewPage />) },
       { path: 'sales/:id', element: withSuspense(<SaleDetailPage />) },
-      { path: 'orders', element: <ComingSoon title="Siparişler" /> },
+      // FAZ 9 — Sipariş Modülü
+      { path: 'orders', element: withSuspense(<OrderListPage />) },
+      { path: 'orders/new', element: withSuspense(<OrderNewPage />) },
+      { path: 'orders/:id', element: withSuspense(<OrderDetailPage />) },
       { path: 'collections', element: <ComingSoon title="Tahsilat" /> },
       { path: 'cash', element: <ComingSoon title="Kasa" /> },
       { path: 'reports', element: <ComingSoon title="Raporlar" /> },

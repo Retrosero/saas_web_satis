@@ -17,15 +17,24 @@ export const CustomerStatus = {
 export type CustomerStatus = (typeof CustomerStatus)[keyof typeof CustomerStatus];
 
 export const OrderStatus = {
-  DRAFT: 'DRAFT',
+  PENDING: 'PENDING',
   CONFIRMED: 'CONFIRMED',
-  PREPARING: 'PREPARING',
+  PARTIALLY_SHIPPED: 'PARTIALLY_SHIPPED',
   SHIPPED: 'SHIPPED',
   DELIVERED: 'DELIVERED',
+  COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED',
-  CLOSED: 'CLOSED',
 } as const;
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus];
+
+export const OrderType = {
+  SALES_ORDER: 'SALES_ORDER',
+  PURCHASE_ORDER: 'PURCHASE_ORDER',
+  RETURN_ORDER: 'RETURN_ORDER',
+  PROFORMA_ORDER: 'PROFORMA_ORDER',
+  CONSIGNMENT_OUT: 'CONSIGNMENT_OUT',
+} as const;
+export type OrderType = (typeof OrderType)[keyof typeof OrderType];
 
 export const PaymentType = {
   CASH: 'CASH',
