@@ -1,0 +1,25 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "../..",
+    "module": "CommonJS",
+    "moduleResolution": "Node10",
+    "target": "ES2022",
+    "outDir": "./dist",
+    "baseUrl": "../..",
+    "paths": {
+      "node_modules/@saas/shared": ["./packages/shared/src/index.ts"],
+      "@saas/shared": ["./packages/shared/src/index.ts"],
+      "@saas/shared/*": ["./packages/shared/src/*"]
+    },
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "useDefineForClassFields": false,
+    "strictPropertyInitialization": false,
+    "noUncheckedIndexedAccess": false,
+    "skipLibCheck": true,
+    "ignoreDeprecations": "5.0"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "test"]
+}

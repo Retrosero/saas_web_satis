@@ -1,0 +1,5405 @@
+// Prisma schema — SaaS İşletme Yönetim Platformu
+// Veritabanı: PostgreSQL 16
+//
+// Bu şema FAZ 1 (proje iskeleti) kapsamındadır.
+// Tüm tenant'lı tablolarda ortak alanlar: id, tenant_id, is_active, is_deleted,
+// created_at, updated_at, created_by, updated_by, deleted_at, deleted_by.
+// ERP entegrasyonu açık tablolarda ek: source_system, external_id, sync_status vs.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =====================================================================
+// ENUMS
+// =====================================================================
+
+enum TenantStatus {
+  ACTIVE
+  SUSPENDED
+  TRIAL
+  PENDING
+  CANCELLED
+}
+
+enum WorkingMode {
+  SAAS_MASTER
+  ERP_MASTER
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  LOCKED
+  PENDING
+}
+
+enum DataScope {
+  OWN
+  BRANCH
+  TENANT
+}
+
+enum TenantModuleSource {
+  plan
+  manual_override
+}
+
+enum PlanCode {
+  starter
+  standard
+  professional
+  enterprise
+  custom
+}
+
+enum SubscriptionStatus {
+  TRIAL
+  ACTIVE
+  PAST_DUE
+  CANCELLED
+  EXPIRED
+}
+
+enum ModuleCategory {
+  core
+  operations
+  finance
+  hr
+  integration
+  addon
+}
+
+enum PermissionAction {
+  view
+  read
+  create
+  update
+  delete
+  export
+  import
+  print
+  approve
+  cancel
+  manage
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum SyncStatus {
+  SYNCED
+  PENDING
+  CONFLICT
+  IGNORED
+}
+
+enum SourceSystem {
+  SAAS
+  MICRO
+  LOGO
+  NETSIS
+  PARASUT
+  OTHER
+}
+
+// =====================================================================
+// SAAS ÇEKİRDEK TABLOLAR
+// =====================================================================
+
+model Tenant {
+  id          String       @id @default(cuid())
+  code        String       @unique
+  name        String
+  workingMode WorkingMode  @default(SAAS_MASTER)
+  status      TenantStatus @default(TRIAL)
+  isActive    Boolean      @default(true)
+  isDeleted   Boolean      @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  createdBy   String?
+  updatedBy   String?
+  deletedAt   DateTime?
+  deletedBy   String?
+
+  settings                TenantSettings?
+  users                   User[]
+  roles                   Role[]
+  subscriptions           Subscription[]
+  tenantModules           TenantModule[]
+  auditLogs               AuditLog[]
+  errorLogs               ErrorLog[]
+  securityLogs            SecurityLog[]
+  notifications           Notification[]
+  notificationChannels    NotificationChannel[]
+  notificationRules       NotificationRule[]
+  notificationLogs        NotificationLog[]
+  notificationPreferences NotificationPreferences[]
+  approvalRules           ApprovalRule[]
+  dataCheckRules          DataCheckRule[]
+  dataCheckRuns           DataCheckRun[]
+  dataCheckResults        DataCheckResult[]
+  dataCheckSchedules      DataCheckSchedule[]
+  dataCheckActionLogs     DataCheckActionLog[]
+  labelPrintJobs          LabelPrintJob[]
+  llmConfigs              TenantLLMConfig[]
+  assistantConversations  AssistantConversation[]
+  assistantUsageStats     AssistantUsageStats[]
+  approvalRequests        ApprovalRequest[]
+
+  // FAZ 6 — Cari modülü ilişkileri
+  customers         Customer[]
+  customerMovements CustomerMovement[]
+  cashAccounts      CashAccount[]
+  cashMovements     CashMovement[]
+  paymentMethods    PaymentMethod[]
+
+  // FAZ 7 — Stok modülü ilişkileri
+  units                  Unit[]
+  brands                 Brand[]
+  productCategories      ProductCategory[]
+  warehouses             Warehouse[]
+  products               Product[]
+  productBarcodes        ProductBarcode[]
+  productPrices          ProductPrice[]
+  warehouseTransfers     WarehouseTransfer[]
+  warehouseTransferItems WarehouseTransferItem[]
+  stockMovements         StockMovement[]
+
+  // FAZ 8 — Satış modülü ilişkileri
+  sales           Sale[]
+  saleItems       SaleItem[]
+  orders          Order[]
+  orderItems      OrderItem[]
+  collections     Collection[]
+  stockCounts     StockCount[]
+  stockCountItems StockCountItem[]
+
+  returns     Return[]
+  returnItems ReturnItem[]
+
+  bankAccounts     BankAccount[]
+  bankTransactions BankTransaction[]
+  posDevices       PosDevice[]
+  posCollections   PosCollection[]
+
+  importBatches ImportBatch[]
+  importRows    ImportRow[]
+
+  apiKeys           ApiKey[]
+  apiKeyUsageLogs   ApiKeyUsageLog[]
+  webhooks          Webhook[]
+  webhookDeliveries WebhookDelivery[]
+
+  helpArticles   HelpArticle[]
+  assistantTools AssistantTool[]
+
+  // FAZ 27 — White-Label / Marka Ayarları
+  whiteLabel Json? // { logo, primaryColor, slogan, supportEmail, supportPhone, customDomain, loginPageSettings, emailTemplates, pdfSettings }
+
+  priceLists          PriceList[]
+  customerPriceGroups CustomerPriceGroup[]
+  campaigns           Campaign[]
+
+  documentTemplates DocumentTemplate[]
+
+  reportTemplates          ReportTemplate[]
+  scheduledReports         ScheduledReport[]
+  OnboardingProgress       OnboardingProgress?
+  OnboardingStepLog        OnboardingStepLog[]
+  TenantAppliedTemplate    TenantAppliedTemplate[]
+  DemoCompany              DemoCompany?
+  VisitPlan                VisitPlan[]
+  PerformanceTarget        PerformanceTarget[]
+  PerformanceSnapshot      PerformanceSnapshot[]
+  CommissionRule           CommissionRule[]
+  CommissionCalculationLog CommissionCalculationLog[]
+  IdempotencyKey           IdempotencyKey[]
+  HrEmployee               HrEmployee[]
+  HrEmployeeEmploymentInfo HrEmployeeEmploymentInfo[]
+  HrEmployeeDocument       HrEmployeeDocument[]
+  HrOnboardingChecklist        HrOnboardingChecklist[]
+  HrOnboardingChecklistItem    HrOnboardingChecklistItem[]
+  HrOffboardingChecklist       HrOffboardingChecklist[]
+  HrOffboardingChecklistItem   HrOffboardingChecklistItem[]
+  HrLeaveType               HrLeaveType[]
+  HrLeaveBalance            HrLeaveBalance[]
+  HrLeaveRequest            HrLeaveRequest[]
+  HrLeaveAdjustment         HrLeaveAdjustment[]
+  HrPayrollPeriod           HrPayrollPeriod[]
+  HrPayrollRecord           HrPayrollRecord[]
+  HrPayrollSupplement       HrPayrollSupplement[]
+  HrAbsenceRecord           HrAbsenceRecord[]
+  HrDisciplinaryCase        HrDisciplinaryCase[]
+  HrCareerRecord            HrCareerRecord[]
+  HrTraining                HrTraining[]
+  HrPerformanceReview       HrPerformanceReview[]
+  HrPayrollParam            HrPayrollParam[]
+  HrPunchRecord             HrPunchRecord[]
+  HrAdvanceRequest          HrAdvanceRequest[]
+  HrAdvanceRepayment        HrAdvanceRepayment[]
+
+  @@index([status])
+  @@index([isDeleted])
+}
+
+model TenantSettings {
+  id                 String   @id @default(cuid())
+  tenantId           String   @unique
+  companyInfo        Json     @default("{}")
+  currency           String   @default("TRY")
+  locale             String   @default("tr-TR")
+  taxOffice          String?
+  taxNumber          String?
+  defaultWarehouseId String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  tenant             Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id           String     @id @default(cuid())
+  tenantId     String?
+  email        String
+  phone        String?
+  passwordHash String
+  fullName     String
+  avatarUrl    String?
+  status       UserStatus @default(ACTIVE)
+  mfaEnabled   Boolean    @default(false)
+  lastLoginAt  DateTime?
+  isActive     Boolean    @default(true)
+  isDeleted    Boolean    @default(false)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  createdBy    String?
+  updatedBy    String?
+  deletedAt    DateTime?
+  deletedBy    String?
+
+  tenant                  Tenant?                  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  userRoles               UserRole[]
+  refreshTokens           RefreshToken[]
+  auditLogs               AuditLog[]               @relation("AuditLogUser")
+  securityLogs            SecurityLog[]            @relation("SecurityLogUser")
+  notifications           Notification[]           @relation("NotificationUser")
+  notificationPreferences NotificationPreferences?
+  AssistantConversation   AssistantConversation[]
+  leaveRequests           HrLeaveRequest[]          @relation("LeaveRequestApprover")
+
+  performanceReviews HrPerformanceReview[]
+
+  @@unique([tenantId, email])
+  @@index([email])
+  @@index([tenantId, isDeleted])
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  tenantId    String?
+  code        String
+  name        String
+  description String?
+  isSystem    Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  isDeleted   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant      Tenant?          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  permissions RolePermission[]
+  userRoles   UserRole[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, isDeleted])
+}
+
+model Permission {
+  id          String           @id @default(cuid())
+  code        String           @unique
+  module      String
+  resource    String
+  action      PermissionAction
+  description String?
+  createdAt   DateTime         @default(now())
+
+  rolePermissions RolePermission[]
+
+  @@index([module])
+}
+
+model RolePermission {
+  id           String     @id @default(cuid())
+  roleId       String
+  permissionId String
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permissionId])
+}
+
+model UserRole {
+  id        String    @id @default(cuid())
+  userId    String
+  roleId    String
+  tenantId  String
+  dataScope DataScope @default(TENANT)
+  branchIds String[]  @default([])
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roleId, tenantId])
+  @@index([tenantId])
+}
+
+model Module {
+  id           String         @id @default(cuid())
+  code         String         @unique
+  name         String
+  category     ModuleCategory
+  defaultRoute String
+  icon         String
+  sortOrder    Int            @default(100)
+  description  String?
+  isActive     Boolean        @default(true)
+  createdAt    DateTime       @default(now())
+
+  planModules   PlanModule[]
+  tenantModules TenantModule[]
+}
+
+model Plan {
+  id             String   @id @default(cuid())
+  code           PlanCode @unique
+  name           String
+  description    String?
+  monthlyPrice   Decimal  @default(0) @db.Decimal(10, 2)
+  yearlyPrice    Decimal  @default(0) @db.Decimal(10, 2)
+  currency       String   @default("TRY")
+  userLimit      Int      @default(0)
+  branchLimit    Int      @default(0)
+  warehouseLimit Int      @default(0)
+  apiKeyLimit    Int      @default(0)
+  webhookLimit   Int      @default(0)
+  storageMbLimit Int      @default(0)
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  planModules   PlanModule[]
+  subscriptions Subscription[]
+}
+
+model PlanModule {
+  id          String  @id @default(cuid())
+  planId      String
+  moduleId    String
+  isIncluded  Boolean @default(true)
+  customLimit Json?
+  plan        Plan    @relation(fields: [planId], references: [id], onDelete: Cascade)
+  module      Module  @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([planId, moduleId])
+}
+
+model TenantModule {
+  id            String             @id @default(cuid())
+  tenantId      String
+  moduleId      String
+  isActive      Boolean            @default(true)
+  source        TenantModuleSource @default(plan)
+  limitOverride Json?
+  validUntil    DateTime?
+  note          String?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, moduleId])
+  @@index([tenantId, isActive])
+}
+
+model Subscription {
+  id         String             @id @default(cuid())
+  tenantId   String
+  planId     String
+  status     SubscriptionStatus @default(TRIAL)
+  startAt    DateTime           @default(now())
+  endAt      DateTime?
+  trialEndAt DateTime?
+  autoRenew  Boolean            @default(false)
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  plan   Plan   @relation(fields: [planId], references: [id])
+
+  @@index([endAt])
+}
+
+// =====================================================================
+// AUTH YARDIMCI
+// =====================================================================
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  tenantId  String
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  userAgent String?
+  ipAddress String?
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+// =====================================================================
+// LOG TABLOLARI
+// =====================================================================
+
+model AuditLog {
+  id            String    @id @default(cuid())
+  tenantId      String?
+  userId        String?
+  module        String
+  action        String
+  entityType    String
+  entityId      String?
+  oldValues     Json?
+  newValues     Json?
+  changedFields String[]  @default([])
+  ipAddress     String?
+  userAgent     String?
+  requestId     String?
+  riskLevel     RiskLevel @default(LOW)
+  createdAt     DateTime  @default(now())
+
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  user   User?   @relation("AuditLogUser", fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, createdAt])
+  @@index([userId, createdAt])
+  @@index([entityType, entityId])
+  @@index([riskLevel])
+}
+
+model ErrorLog {
+  id         String   @id @default(cuid())
+  tenantId   String?
+  userId     String?
+  level      String   @default("ERROR")
+  message    String
+  stackTrace String?
+  path       String?
+  method     String?
+  statusCode Int?
+  requestId  String?
+  createdAt  DateTime @default(now())
+
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, createdAt])
+  @@index([level])
+}
+
+model SecurityLog {
+  id        String    @id @default(cuid())
+  tenantId  String?
+  userId    String?
+  event     String
+  ipAddress String?
+  userAgent String?
+  riskLevel RiskLevel @default(LOW)
+  metadata  Json?
+  createdAt DateTime  @default(now())
+
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+  user   User?   @relation("SecurityLogUser", fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, createdAt])
+  @@index([event])
+}
+
+// =====================================================================
+// BİLDİRİM SİSTEMİ
+// =====================================================================
+
+enum NotificationType {
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
+  SYSTEM
+}
+
+enum NotificationCategory {
+  SYSTEM
+  SECURITY
+  TENANT
+  PLAN
+  MODULE
+  USER
+  SALE
+  COLLECTION
+  STOCK
+  ORDER
+  INVOICE
+  REPORT
+}
+
+// =====================================================================
+// ENUMLAR — CARİ MODÜLÜ (FAZ 6)
+// =====================================================================
+
+enum CustomerType {
+  CUSTOMER // Müşteri (bizden alan)
+  SUPPLIER // Tedarikçi (bize satan)
+  BOTH // İkisi birden
+}
+
+enum CustomerStatus {
+  ACTIVE
+  PASSIVE
+  BLOCKED // Bloke (yeni satış yok)
+}
+
+enum CustomerMovementType {
+  DEBIT // Bizim alacağımız (müşteri bize borçlandı)
+  CREDIT // Bizim borcumuz (müşteriye ödedik veya alacak)
+}
+
+enum CustomerMovementRefType {
+  SALE
+  SALE_CANCEL
+  COLLECTION
+  COLLECTION_CANCEL
+  RETURN
+  ADJUST
+  OPENING_BALANCE
+  TRANSFER
+}
+
+enum CashAccountType {
+  CASH
+  BANK
+  POS
+}
+
+enum CashAccountStatus {
+  ACTIVE
+  PASSIVE
+}
+
+enum CashMovementType {
+  IN
+  OUT
+  TRANSFER
+}
+
+enum CashMovementRefType {
+  COLLECTION
+  COLLECTION_CANCEL
+  PAYMENT
+  PAYMENT_CANCEL
+  SALE_REFUND
+  TRANSFER
+  ADJUST
+  OPENING_BALANCE
+}
+
+enum PaymentMethodType {
+  CASH
+  CARD
+  BANK
+  EFT
+  CHECK
+  OTHER
+}
+
+enum MovementStatus {
+  DRAFT // Henüz muhasebeleşmedi
+  POSTED // Kesin kayıt
+  PENDING // Onay bekliyor
+  CANCELLED // İptal edildi
+}
+
+// =====================================================================
+// ENUMLAR — STOK MODÜLÜ (FAZ 7)
+// =====================================================================
+
+enum UnitType {
+  PIECE // Adet (adet, koli, paket)
+  WEIGHT // Ağırlık (kg, gr, ton)
+  LENGTH // Uzunluk (mt, cm, mm)
+  VOLUME // Hacim (lt, m3)
+  TIME // Zaman (saat, gün)
+  AREA // Alan (m2)
+}
+
+enum ProductType {
+  GOODS // Ticari mal
+  SERVICE // Hizmet (stok takibi yok)
+  RAW_MATERIAL // Hammadde
+  FINISHED_GOOD // Mamul
+  CONSUMABLE // Sarf malzeme
+}
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  PASSIVE
+  DISCONTINUED // Üretimi durdurulmuş
+}
+
+enum StockMovementRefType {
+  SALE
+  SALE_CANCEL
+  PURCHASE
+  PURCHASE_CANCEL
+  TRANSFER
+  TRANSFER_CANCEL
+  ADJUST
+  COUNT // Sayım düzeltmesi
+  OPENING_BALANCE
+  RETURN
+  PRODUCTION // Üretim girişi
+  WASTE // Fire / zayiat
+}
+
+enum WarehouseStatus {
+  ACTIVE
+  PASSIVE
+}
+
+enum PriceType {
+  PURCHASE // Alış fiyatı
+  SALE // Satış fiyatı
+  WHOLESALE // Toptan
+  MIN_SALE // Alt sınır (müşteriye altında satılmaz)
+  LIST_PRICE // Liste / katalog fiyatı
+}
+
+enum StockMovementType {
+  IN
+  OUT
+  TRANSFER
+  ADJUST
+}
+
+// =====================================================================
+// ENUMLAR — SATIŞ MODÜLÜ (FAZ 8)
+// =====================================================================
+
+enum SaleType {
+  SALE // Normal satış
+  RETURN // İade
+  PROFORMA // Proforma (henüz kesin değil)
+  CONSIGNMENT_OUT // Konsinyasyon çıkışı
+  CONSIGNMENT_IN // Konsinyasyon iadesi
+}
+
+enum SaleStatus {
+  DRAFT
+  CONFIRMED
+  PARTIALLY_SHIPPED
+  SHIPPED
+  DELIVERED
+  PARTIALLY_PAID
+  PAID
+  OVERDUE
+  CANCELLED
+  CLOSED
+}
+
+enum PaymentStatus {
+  UNPAID // Hiç ödenmedi
+  PARTIALLY_PAID // Kısmen ödendi
+  PAID // Tamamı ödendi
+}
+
+enum SaleItemStatus {
+  ACTIVE
+  CANCELLED
+}
+
+model Notification {
+  id        String               @id @default(cuid())
+  tenantId  String?
+  userId    String? // null = tenant'taki tüm kullanıcılara
+  type      NotificationType     @default(INFO)
+  category  NotificationCategory @default(SYSTEM)
+  title     String
+  message   String
+  link      String? // frontend'de gidilecek sayfa
+  metadata  Json?
+  isRead    Boolean              @default(false)
+  readAt    DateTime?
+  expiresAt DateTime?
+  createdAt DateTime             @default(now())
+
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User?   @relation("NotificationUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, createdAt])
+  @@index([userId, isRead])
+  @@index([tenantId, isRead])
+  @@index([category])
+  @@index([expiresAt])
+}
+
+// =====================================================================
+// CARİ MODÜLÜ MODELLERİ (FAZ 6)
+// =====================================================================
+//
+// Event sourcing: bakiye/stok/kasa SAKLANMAZ, hareketlerden hesaplanır.
+// Bu yüzden modellerde balance/quantity/cashBalance gibi alanlar YOK.
+// Sadece hareket (movement) tabloları gerçek kaynaktır.
+//
+// Müşteri ve tedarikçi tek tabloda (Customer), type alanı ile ayrılır.
+// Bu hem sorgu performansı hem ERP entegrasyonu için daha sağlıklıdır.
+// =====================================================================
+
+// ÖDEME YÖNTEMİ TANIMLARI (Cari / Stok / Satış'ta kullanılır)
+model PaymentMethod {
+  id        String            @id @default(cuid())
+  tenantId  String? // null = sistem tanımı
+  code      String // "CASH", "CARD", "EFT"...
+  name      String // "Nakit", "Kredi Kartı", "Havale/EFT"
+  type      PaymentMethodType
+  isActive  Boolean           @default(true)
+  isDefault Boolean           @default(false)
+  sortOrder Int               @default(0)
+  notes     String?
+
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  tenant        Tenant?        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  cashMovements CashMovement[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, isActive])
+  @@index([tenantId, type])
+}
+
+// CARİ HESAP (MÜŞTERİ + TEDARİKÇİ)
+model Customer {
+  id              String         @id @default(cuid())
+  tenantId        String
+  code            String // "M-0001", "T-0001", "H-0001" (tenant-scoped unique)
+  type            CustomerType
+  name            String // Firma/şahıs adı
+  contactName     String? // Yetkili kişi
+  taxNumber       String? // VKN
+  taxOffice       String? // VD
+  identityNumber  String? // TCKN (şahıslar için)
+  address         String?
+  city            String?
+  district        String?
+  postalCode      String?
+  country         String?        @default("Türkiye")
+  phone           String?
+  phone2          String?
+  email           String?
+  website         String?
+  iban            String?
+  openingBalance  Decimal        @default(0) // Açılış fişi (pozitif: alacak, negatif: borç — yön için)
+  creditLimit     Decimal        @default(0) // Açık hesap limiti
+  paymentTermDays Int            @default(0) // Vade (gün)
+  status          CustomerStatus @default(ACTIVE)
+  notes           String?
+
+  isActive    Boolean   @default(true)
+  isDeleted   Boolean   @default(false)
+  deletedAt   DateTime?
+  deletedById String?
+
+  createdById String?
+  updatedById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  movements   CustomerMovement[]
+  sales       Sale[]
+  orders      Order[]
+  collections Collection[]
+
+  returns Return[]
+
+  priceGroupMembers CustomerPriceGroupMember[]
+  campaigns         Campaign[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, isDeleted])
+  @@index([tenantId, type])
+  @@index([tenantId, name])
+  @@index([tenantId, taxNumber])
+  @@index([tenantId, phone])
+}
+
+// CARİ HAREKET (event-sourced — bakiye buradan hesaplanır)
+model CustomerMovement {
+  id           String                  @id @default(cuid())
+  tenantId     String
+  customerId   String
+  type         CustomerMovementType // DEBIT (bizim alacağımız) | CREDIT (bizim borcumuz)
+  amount       Decimal // Dövizli tutar (currency cinsinden)
+  currency     String                  @default("TRY")
+  exchangeRate Decimal                 @default(1) // TRY karşılığı için çevrim
+  amountTry    Decimal // TL bazında muhasebe tutarı (amount * exchangeRate)
+  movementDate DateTime // Hareket tarihi
+  dueDate      DateTime? // Vade (tahsilat planı için)
+  refType      CustomerMovementRefType // SALE | COLLECTION | ...
+  refId        String? // İlgili döküman ID (Sale.id, vb.)
+  refNumber    String? // İnsan-okunabilir referans
+  description  String?
+  status       MovementStatus          @default(POSTED)
+
+  // Ters kayıt alanları (soft delete yerine)
+  // Tek bir relation çifti: bu kayıt → iptal ettiği kayıt (ve back-relation: beni iptal eden)
+  reversesId String? @unique
+
+  paymentMethodId String? // Tahsilat/ödeme ise hangi yöntemle
+  cashAccountId   String? // Tahsilat/ödeme ise hangi kasa/banka
+
+  isDeleted   Boolean   @default(false)
+  deletedAt   DateTime?
+  createdById String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tenant     Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customer   Customer          @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  reverses   CustomerMovement? @relation("CustomerMovementReversal", fields: [reversesId], references: [id], onDelete: SetNull)
+  reversedBy CustomerMovement? @relation("CustomerMovementReversal")
+
+  @@index([tenantId, customerId, movementDate])
+  @@index([tenantId, movementDate])
+  @@index([tenantId, refType, refId])
+  @@index([tenantId, dueDate])
+  @@index([customerId, status])
+  @@index([reversesId])
+}
+
+// KASA / BANKA HESABI
+model CashAccount {
+  id            String            @id @default(cuid())
+  tenantId      String
+  code          String // "K-001", "B-001", "P-001"
+  name          String
+  type          CashAccountType
+  status        CashAccountStatus @default(ACTIVE)
+  currency      String            @default("TRY")
+  iban          String?
+  bankName      String?
+  bankBranch    String?
+  accountHolder String?
+  isDefault     Boolean           @default(false)
+  notes         String?
+
+  isActive  Boolean   @default(true)
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  tenant              Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  movements           CashMovement[] @relation("CashAccountSource")
+  collections         Collection[]
+  transferToMovements CashMovement[] @relation("CashAccountTransfer")
+
+  @@unique([tenantId, code])
+  @@index([tenantId, isDeleted])
+  @@index([tenantId, type])
+}
+
+// KASA / BANKA HAREKETİ (event-sourced)
+model CashMovement {
+  id            String              @id @default(cuid())
+  tenantId      String
+  cashAccountId String
+  type          CashMovementType // IN | OUT | TRANSFER
+  amount        Decimal
+  currency      String              @default("TRY")
+  exchangeRate  Decimal             @default(1)
+  amountTry     Decimal
+  movementDate  DateTime
+  refType       CashMovementRefType
+  refId         String?
+  refNumber     String?
+  description   String?
+  status        MovementStatus      @default(POSTED)
+
+  // Transfer için: kaynak ve hedef hesap
+  transferToAccountId String? // TRANSFER tipinde hedef hesap
+
+  // İlişkili carı (tahsilat ise) — opsiyonel
+  customerId         String?
+  customerMovementId String? @unique // Bağlı cari hareket (tahsilat/ödeme)
+
+  paymentMethodId String?
+  reversesId      String? @unique
+
+  isDeleted   Boolean   @default(false)
+  deletedAt   DateTime?
+  createdById String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tenant            Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  cashAccount       CashAccount    @relation("CashAccountSource", fields: [cashAccountId], references: [id], onDelete: Restrict)
+  transferToAccount CashAccount?   @relation("CashAccountTransfer", fields: [transferToAccountId], references: [id], onDelete: SetNull)
+  paymentMethod     PaymentMethod? @relation(fields: [paymentMethodId], references: [id], onDelete: SetNull)
+  reverses          CashMovement?  @relation("CashMovementReversal", fields: [reversesId], references: [id], onDelete: SetNull)
+  reversedBy        CashMovement?  @relation("CashMovementReversal")
+  collections       Collection[]
+
+  @@index([tenantId, cashAccountId, movementDate])
+  @@index([tenantId, movementDate])
+  @@index([tenantId, refType, refId])
+  @@index([customerId])
+  @@index([reversesId])
+}
+
+// =====================================================================
+// STOK MODÜLÜ MODELLERİ (FAZ 7)
+// =====================================================================
+//
+// Event sourcing: stok miktarı SAKLANMAZ, hareketlerden hesaplanır.
+// Bu yüzden Product tablosunda quantity YOK.
+// Stok miktarı: SUM(stock_movements WHERE type=IN) - SUM(stock_movements WHERE type=OUT)
+// Depo bazında: (productId, warehouseId) çifti üzerinden gruplanır.
+// =====================================================================
+
+// ÖLÇÜ BİRİMİ TANIMLARI (Sistem + tenant override)
+model Unit {
+  id        String   @id @default(cuid())
+  tenantId  String? // null = sistem tanımı
+  code      String // "ADET", "KG", "MT", "LT", "KOLI", "SAAT"
+  name      String // "Adet", "Kilogram", "Metre"
+  type      UnitType
+  isActive  Boolean  @default(true)
+  isDefault Boolean  @default(false)
+  sortOrder Int      @default(0)
+
+  tenant   Tenant?   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  products Product[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, isActive])
+  @@index([tenantId, type])
+}
+
+// MARKA
+model Brand {
+  id       String  @id @default(cuid())
+  tenantId String
+  code     String
+  name     String
+  country  String?
+  isActive Boolean @default(true)
+  notes    String?
+
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  products Product[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, isDeleted])
+}
+
+// ÜRÜN KATEGORİSİ (ağaç yapısı, parentId self-FK)
+model ProductCategory {
+  id        String  @id @default(cuid())
+  tenantId  String
+  code      String
+  name      String
+  parentId  String?
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+  notes     String?
+
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant   Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  parent   ProductCategory?  @relation("CategoryTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children ProductCategory[] @relation("CategoryTree")
+  products Product[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, parentId])
+  @@index([tenantId, isDeleted])
+}
+
+// DEPO
+model Warehouse {
+  id                String          @id @default(cuid())
+  tenantId          String
+  code              String
+  name              String
+  status            WarehouseStatus @default(ACTIVE)
+  branch            String? // Şube adı
+  manager           String? // Sorumlu personel adı
+  managerUserId     String? // Sorumlu kullanıcı (User.id) — opsiyonel
+  authorizedUserIds String[] // Yetkili kullanıcılar
+  address           String?
+  city              String?
+  phone             String?
+  isDefault         Boolean         @default(false)
+  notes             String?
+
+  isActive  Boolean  @default(true)
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant             Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  defaultForProducts Product[]           @relation("DefaultWarehouse")
+  stockMovementsFrom StockMovement[]     @relation("WarehouseFrom")
+  stockMovementsTo   StockMovement[]     @relation("WarehouseTo")
+  sales              Sale[]
+  orders             Order[]
+  transfers          WarehouseTransfer[]
+  transferTo         WarehouseTransfer[] @relation("WarehouseTransferTo")
+  stockCounts        StockCount[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, isDeleted])
+}
+
+// ÜRÜN
+model Product {
+  id                 String        @id @default(cuid())
+  tenantId           String
+  code               String // SKU (tenant-scoped unique)
+  name               String
+  shortName          String?
+  description        String?
+  type               ProductType   @default(GOODS)
+  status             ProductStatus @default(ACTIVE)
+  brandId            String?
+  categoryId         String?
+  defaultWarehouseId String?
+  unitId             String?
+  primaryBarcode     String? // En sık kullanılan barkod (ProductBarcode'dan bağımsız)
+  trackStock         Boolean       @default(true) // Hizmetlerde false
+  vatRate            Decimal       @default(20) // KDV oranı (%)
+  minStock           Decimal       @default(0) // Alt uyarı sınırı
+  maxStock           Decimal       @default(0) // Üst uyarı sınırı (0 = limitsiz)
+  weight             Decimal? // Net ağırlık (kg)
+  volume             Decimal? // Hacim (m3)
+
+  isActive    Boolean   @default(true)
+  isDeleted   Boolean   @default(false)
+  deletedAt   DateTime?
+  createdById String?
+  updatedById String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tenant                 Tenant                  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  brand                  Brand?                  @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  category               ProductCategory?        @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  defaultWarehouse       Warehouse?              @relation("DefaultWarehouse", fields: [defaultWarehouseId], references: [id], onDelete: SetNull)
+  unit                   Unit?                   @relation(fields: [unitId], references: [id], onDelete: Restrict)
+  barcodes               ProductBarcode[]
+  prices                 ProductPrice[]
+  stockMovements         StockMovement[]
+  saleItems              SaleItem[]
+  orderItems             OrderItem[]
+  warehouseTransferItems WarehouseTransferItem[]
+  stockCountItems        StockCountItem[]
+
+  returnItems ReturnItem[]
+
+  priceListItems PriceListItem[]
+  campaigns      Campaign[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId, isDeleted])
+  @@index([tenantId, type])
+  @@index([tenantId, name])
+  @@index([tenantId, brandId])
+  @@index([tenantId, categoryId])
+  @@index([tenantId, primaryBarcode])
+}
+
+// ÜRÜN BARKODLARI (1 ürünün birden fazla barkodu olabilir, örn: koli barkodu)
+model ProductBarcode {
+  id        String  @id @default(cuid())
+  tenantId  String
+  productId String
+  barcode   String
+  unitId    String? // Barkodun temsil ettiği birim (örn: koli = 12 adet)
+  quantity  Decimal @default(1) // Bu barkodun kaç adet temsil ettiği
+  isPrimary Boolean @default(false)
+  notes     String?
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, barcode])
+  @@index([tenantId, productId])
+  @@index([productId, isPrimary])
+}
+
+// ÜRÜN FİYATLARI (Alış / Satış / Toptan / Liste — dönemsel olabilir)
+model ProductPrice {
+  id        String    @id @default(cuid())
+  tenantId  String
+  productId String
+  type      PriceType
+  amount    Decimal
+  currency  String    @default("TRY")
+  validFrom DateTime  @default(now())
+  validTo   DateTime?
+  notes     String?
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, productId, type])
+  @@index([tenantId, type])
+  @@index([productId, validFrom])
+}
+
+// STOK HAREKETİ (event-sourced — miktar buradan hesaplanır)
+model StockMovement {
+  id           String               @id @default(cuid())
+  tenantId     String
+  productId    String
+  warehouseId  String // Birincil depo (TRANSFER'de kaynak)
+  type         StockMovementType // IN | OUT | TRANSFER | ADJUST
+  quantity     Decimal // Pozitif (yön type'ta)
+  unitCost     Decimal? // Birim maliyet (opsiyonel, maliyet raporları için)
+  movementDate DateTime
+  refType      StockMovementRefType // SALE | PURCHASE | TRANSFER | ADJUST | COUNT | ...
+  refId        String?
+  refNumber    String?
+  description  String?
+  status       MovementStatus       @default(POSTED)
+
+  // TRANSFER için hedef depo
+  transferToWarehouseId String?
+
+  // Ters kayıt (self-relation)
+  reversesId String? @unique
+
+  isDeleted   Boolean   @default(false)
+  deletedAt   DateTime?
+  createdById String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tenant              Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  product             Product        @relation(fields: [productId], references: [id], onDelete: Restrict)
+  warehouse           Warehouse      @relation("WarehouseFrom", fields: [warehouseId], references: [id], onDelete: Restrict)
+  transferToWarehouse Warehouse?     @relation("WarehouseTo", fields: [transferToWarehouseId], references: [id], onDelete: SetNull)
+  reverses            StockMovement? @relation("StockMovementReversal", fields: [reversesId], references: [id], onDelete: SetNull)
+  reversedBy          StockMovement? @relation("StockMovementReversal")
+
+  @@index([tenantId, productId, warehouseId, movementDate])
+  @@index([tenantId, productId, movementDate])
+  @@index([tenantId, warehouseId, movementDate])
+  @@index([tenantId, refType, refId])
+  @@index([reversesId])
+}
+
+// =====================================================================
+// SATIŞ MODÜLÜ MODELLERİ (FAZ 8)
+// =====================================================================
+//
+// Satış + satış kalemleri.
+// Onaylanan satış OTOMATİK olarak:
+//   - 1 CustomerMovement (DEBIT) — müşteri borçlandırılır
+//   - N StockMovement (OUT) — her kalem için stok çıkışı
+//   - Ürün KDV dahil/hariç hesabı
+//   - Grand total (subTotal + vatTotal - discountTotal)
+// İptal edilen satış ise TERS kayıtlar (iade/iptal).
+// =====================================================================
+
+// SATIŞ
+model Sale {
+  id            String        @id @default(cuid())
+  tenantId      String
+  customerId    String
+  saleNumber    String // "S-2026-0001" (tenant-scoped unique)
+  saleDate      DateTime
+  dueDate       DateTime? // Vade (açık hesap)
+  type          SaleType      @default(SALE)
+  status        SaleStatus    @default(DRAFT)
+  paymentStatus PaymentStatus @default(UNPAID)
+
+  // Depo (satış hangi depodan yapıldı — stok çıkışı buradan olur)
+  warehouseId String?
+
+  // Fiyat bilgileri
+  currency      String  @default("TRY")
+  exchangeRate  Decimal @default(1)
+  subTotal      Decimal @default(0) // KDV hariç toplam
+  vatTotal      Decimal @default(0) // KDV toplamı
+  discountTotal Decimal @default(0) // İskonto toplamı
+  grandTotal    Decimal @default(0) // Genel toplam (KDV dahil)
+  paidAmount    Decimal @default(0) // Ödenen tutar
+
+  // Müşteri bilgileri (anlık snapshot — cari sonradan güncellenirse etkilenmez)
+  customerName      String // Fatura anında
+  customerTaxNumber String?
+  customerAddress   String?
+  customerPhone     String?
+  customerEmail     String?
+
+  notes         String?
+  internalNotes String? // Sadece personelin göreceği notlar
+
+  // Self-relation: iptal edilen satışın ID'si
+  cancelsSaleId String? @unique
+
+  isActive      Boolean   @default(true)
+  isDeleted     Boolean   @default(false)
+  deletedAt     DateTime?
+  createdById   String?
+  updatedById   String?
+  confirmedById String?
+  confirmedAt   DateTime?
+  cancelledById String?
+  cancelledAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customer    Customer     @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  warehouse   Warehouse?   @relation(fields: [warehouseId], references: [id], onDelete: SetNull)
+  items       SaleItem[]
+  collections Collection[]
+  cancelsSale Sale?        @relation("SaleCancel", fields: [cancelsSaleId], references: [id], onDelete: SetNull)
+  cancelledBy Sale?        @relation("SaleCancel")
+  fromOrder   Order?       @relation("SaleFromOrder")
+
+  @@unique([tenantId, saleNumber])
+  @@index([tenantId, customerId, saleDate])
+  @@index([tenantId, saleDate])
+  @@index([tenantId, paymentStatus])
+  @@index([tenantId, type])
+  @@index([cancelsSaleId])
+}
+
+// SATIŞ KALEMİ
+model SaleItem {
+  id           String         @id @default(cuid())
+  tenantId     String
+  saleId       String
+  productId    String
+  unitId       String?
+  quantity     Decimal
+  unitPrice    Decimal // Birim fiyat (KDV hariç)
+  vatRate      Decimal // KDV oranı (ürünün KDV'si, snapshot)
+  discountRate Decimal        @default(0) // Satır iskonto oranı (%)
+  description  String? // Serbest metin açıklama (kalem bazlı)
+  sortOrder    Int            @default(0)
+  status       SaleItemStatus @default(ACTIVE)
+
+  // Hesaplanmış alanlar (snapshot — uygulama katmanında set edilir)
+  lineSubTotal   Decimal // quantity * unitPrice (iskonto hariç, KDV hariç)
+  discountAmount Decimal @default(0) // İskonto tutarı
+  lineVatAmount  Decimal @default(0) // KDV tutarı
+  lineGrandTotal Decimal // KDV dahil toplam
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  sale    Sale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@index([tenantId, saleId])
+  @@index([tenantId, productId])
+}
+
+// -----------------------------------------------------------------------
+// SİPARİŞ MODÜLÜ ENUMLARI (FAZ 9)
+// -----------------------------------------------------------------------
+
+enum OrderStatus {
+  PENDING // Bekliyor (taslak)
+  CONFIRMED // Onaylandı (satışa dönüştürülabilir)
+  PARTIALLY_SHIPPED // Kısmi sevk
+  SHIPPED // Sevk edildi
+  DELIVERED // Teslim edildi
+  COMPLETED // Tamamlandı (tam ödeme + teslimat)
+  CANCELLED // İptal edildi
+}
+
+enum OrderType {
+  SALES_ORDER // Satış siparişi
+  PURCHASE_ORDER // Satın alma siparişi (gelecek faz)
+  RETURN_ORDER // İade siparişi
+  PROFORMA_ORDER // Proforma / teklif
+  CONSIGNMENT_OUT // Konsinyasyon çıkış siparişi
+}
+
+// -----------------------------------------------------------------------
+// SİPARİŞ MODÜLÜ MODELLERİ (FAZ 9)
+// -----------------------------------------------------------------------
+// Sipariş:
+//   - Satış'ın "DRAFT" haline benzer ama sipariş/takip odaklı
+//   - CONFIRMED → Sale'a dönüştürülebilir (fulfillment akışı)
+//   - Depo/stok hareketi sipariş seviyesinde değil, Sale'a dönüşünce olur
+// -----------------------------------------------------------------------
+
+// SİPARİŞ
+model Order {
+  id           String      @id @default(cuid())
+  tenantId     String
+  orderNumber  String // "OR-2026-000001" (tenant-scoped unique)
+  orderDate    DateTime
+  deliveryDate DateTime? // Teslimat tarihi (taahhüt)
+  type         OrderType   @default(SALES_ORDER)
+  status       OrderStatus @default(PENDING)
+
+  // Müşteri / Cari
+  customerId        String
+  customerName      String // Anlık kopya
+  customerTaxNumber String?
+  customerAddress   String?
+  customerPhone     String?
+  customerEmail     String?
+
+  // Fiyat
+  currency      String  @default("TRY")
+  exchangeRate  Decimal @default(1)
+  subTotal      Decimal @default(0)
+  vatTotal      Decimal @default(0)
+  discountTotal Decimal @default(0)
+  grandTotal    Decimal @default(0)
+
+  // Depo önerisi (opsiyonel)
+  warehouseId   String?
+  warehouseName String?
+
+  // Dönüştürme
+  linkedSaleId String? @unique // Bu siparişten oluşan satış
+
+  notes         String?
+  internalNotes String?
+
+  // İlişkilendirme (iptal edilen sipariş)
+  cancelsOrderId String? @unique
+
+  isActive      Boolean   @default(true)
+  isDeleted     Boolean   @default(false)
+  deletedAt     DateTime?
+  createdById   String?
+  updatedById   String?
+  confirmedById String?
+  confirmedAt   DateTime?
+  cancelledById String?
+  cancelledAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  tenant       Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customer     Customer    @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  warehouse    Warehouse?  @relation(fields: [warehouseId], references: [id], onDelete: SetNull)
+  items        OrderItem[]
+  linkedSale   Sale?       @relation("SaleFromOrder", fields: [linkedSaleId], references: [id], onDelete: SetNull)
+  cancelsOrder Order?      @relation("OrderCancel", fields: [cancelsOrderId], references: [id], onDelete: SetNull)
+  cancelledBy  Order?      @relation("OrderCancel")
+
+  @@unique([tenantId, orderNumber])
+  @@index([tenantId, customerId, orderDate])
+  @@index([tenantId, orderDate])
+  @@index([tenantId, type])
+  @@index([tenantId, linkedSaleId])
+  @@index([cancelsOrderId])
+}
+
+// SİPARİŞ KALEMİ
+model OrderItem {
+  id        String  @id @default(cuid())
+  tenantId  String
+  orderId   String
+  productId String
+  unitId    String?
+
+  // Miktar ve fiyat
+  quantity        Decimal
+  quantityShipped Decimal        @default(0) // Teslim edilen (kısmi sevk)
+  unitPrice       Decimal        @default(0) // KDV hariç birim fiyat
+  vatRate         Decimal        @default(0)
+  discountRate    Decimal        @default(0)
+  description     String?
+  sortOrder       Int            @default(0)
+  status          SaleItemStatus @default(ACTIVE)
+
+  // Hesaplanmış
+  lineSubTotal   Decimal @default(0)
+  discountAmount Decimal @default(0)
+  lineVatAmount  Decimal @default(0)
+  lineGrandTotal Decimal @default(0)
+
+  // Kalem seviyesinde not
+  notes String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@index([tenantId, orderId])
+  @@index([tenantId, productId])
+  @@index([orderId, sortOrder])
+}
+
+// -----------------------------------------------------------------------
+// TAHSİLAT MODÜLÜ ENUMS (FAZ 10)
+// -----------------------------------------------------------------------
+
+enum CollectionStatus {
+  PENDING // Bekliyor
+  CONFIRMED // Onaylandı (cari harekete dönüştü)
+  CANCELLED // İptal edildi
+  REFUNDED // İade edildi
+}
+
+enum CollectionType {
+  CASH // Nakit tahsilat
+  BANK_TRANSFER // EFT / HAVALE
+  POS // Kredi kartı (POS)
+  QR // QR kod / CepBank
+  CHECK // Çek
+  OTHER // Diğer
+}
+
+// -----------------------------------------------------------------------
+// TAHSİLAT MODÜLÜ MODELLERİ (FAZ 10)
+// -----------------------------------------------------------------------
+// Tahsilat — borçlu cari hesabından para girişi.
+// CONFIRMED durumunda OTOMATİK:
+//   - 1 CustomerMovement (CREDIT) — müşteri alacaklandırılır
+//   - 1 CashMovement (IN) — kasa/banka hesabı güncellenir
+// İptal durumunda ters kayıt (COLLECTION_CANCEL → ters hareketler).
+// -----------------------------------------------------------------------
+
+// TAHSİLAT
+model Collection {
+  id               String   @id @default(cuid())
+  tenantId         String
+  collectionNumber String // "CL-2026-000001"
+  collectionDate   DateTime
+
+  // Cari (borçlu)
+  customerId        String
+  customerName      String // Anlık kopya
+  customerTaxNumber String?
+
+  type   CollectionType   @default(CASH)
+  status CollectionStatus @default(PENDING)
+
+  // Tutan
+  amount       Decimal // Tahsil edilen tutar
+  currency     String  @default("TRY")
+  exchangeRate Decimal @default(1)
+
+  // Referans (hangi satıştan tahsilat?)
+  linkedSaleId  String?
+  notes         String?
+  internalNotes String?
+
+  // İlişkilendirme (iptal edilen tahsilat)
+  cancelsCollectionId String? @unique
+  cashAccountId       String?
+
+  isActive      Boolean   @default(true)
+  isDeleted     Boolean   @default(false)
+  deletedAt     DateTime?
+  createdById   String?
+  updatedById   String?
+  confirmedById String?
+  confirmedAt   DateTime?
+  cancelledById String?
+  cancelledAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  tenant            Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customer          Customer     @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  linkedSale        Sale?        @relation(fields: [linkedSaleId], references: [id], onDelete: SetNull)
+  cancelsCollection Collection?  @relation("CollectionCancel", fields: [cancelsCollectionId], references: [id], onDelete: SetNull)
+  cancelledBy       Collection?  @relation("CollectionCancel")
+  cashAccount       CashAccount? @relation(fields: [cashAccountId], references: [id], onDelete: SetNull)
+
+  cashMovements CashMovement[]
+
+  @@unique([tenantId, collectionNumber])
+  @@index([tenantId, customerId, collectionDate])
+  @@index([tenantId, collectionDate])
+  @@index([tenantId, type])
+  @@index([tenantId, linkedSaleId])
+  @@index([cancelsCollectionId])
+}
+
+// -----------------------------------------------------------------------
+// DEPO TRANSFER MODÜLÜ (FAZ 14)
+// -----------------------------------------------------------------------
+// Depolar arası transfer — atomik OUT + IN (tek transaction).
+// Reversal: silme yok, ters hareketler oluşturulur.
+// -----------------------------------------------------------------------
+
+// DEPO TRANSFERI
+model WarehouseTransfer {
+  id             String   @id @default(cuid())
+  tenantId       String
+  transferNumber String // "TR-2026-000001"
+  transferDate   DateTime
+
+  fromWarehouseId String
+  toWarehouseId   String
+  status          String @default("PENDING") // PENDING | CONFIRMED | CANCELLED
+
+  description   String?
+  notes         String?
+  internalNotes String?
+
+  isActive      Boolean   @default(true)
+  isDeleted     Boolean   @default(false)
+  deletedAt     DateTime?
+  createdById   String?
+  updatedById   String?
+  confirmedById String?
+  confirmedAt   DateTime?
+  cancelledById String?
+  cancelledAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  tenant        Tenant                  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  fromWarehouse Warehouse               @relation(fields: [fromWarehouseId], references: [id], onDelete: Restrict)
+  toWarehouse   Warehouse               @relation("WarehouseTransferTo", fields: [toWarehouseId], references: [id], onDelete: Restrict)
+  items         WarehouseTransferItem[]
+
+  @@unique([tenantId, transferNumber])
+  @@index([tenantId, transferDate])
+  @@index([fromWarehouseId])
+  @@index([toWarehouseId])
+}
+
+// DEPO TRANSFER KALEMI
+model WarehouseTransferItem {
+  id          String   @id @default(cuid())
+  tenantId    String
+  transferId  String
+  productId   String
+  unitId      String?
+  quantity    Decimal
+  description String?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant   Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  transfer WarehouseTransfer @relation(fields: [transferId], references: [id], onDelete: Cascade)
+  product  Product           @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@index([tenantId, transferId])
+  @@index([transferId, sortOrder])
+}
+
+// -----------------------------------------------------------------------
+// STOK SAYIM MODÜLÜ (FAZ 15)
+// -----------------------------------------------------------------------
+// Sayım: Depo bazlı stok sayımı. DRAFT → IN_PROGRESS → COMPLETED →
+// PENDING_APPROVAL → APPROVED. APPROVED olunca otomatik ADJUST hareketi.
+// Onaysız sayım cari/stok hareketi oluşturmaz.
+// -----------------------------------------------------------------------
+
+enum StockCountStatus {
+  DRAFT // Taslak
+  IN_PROGRESS // Devam ediyor (barkod okutuluyor)
+  COMPLETED // Tamamlandı (henüz onaylanmadı)
+  PENDING_APPROVAL // Onay için gönderildi
+  APPROVED // Onaylandı (ADJUST hareketi oluştu)
+  CANCELLED // İptal
+}
+
+enum StockCountType {
+  FULL // Tüm ürünler
+  PARTIAL // Sadece seçili ürünler
+  CYCLE // Sayım turu (dönemsel)
+  SPOT // Ani kontrol
+  CATEGORY // Kategori bazlı
+}
+
+enum CountItemStatus {
+  PENDING // Henüz sayılmadı
+  COUNTED // Sayıldı
+  SKIPPED // Atlandı
+  RECOUNT_NEEDED // Yeniden sayım gerekli
+}
+
+// STOK SAYIMI
+model StockCount {
+  id          String           @id @default(cuid())
+  tenantId    String
+  countNumber String // "SC-2026-000001"
+  warehouseId String
+  name        String
+  description String?
+  countType   StockCountType   @default(FULL)
+  status      StockCountStatus @default(DRAFT)
+
+  // Sayım istatistikleri
+  totalProducts   Int     @default(0)
+  countedProducts Int     @default(0)
+  differenceCount Int     @default(0) // Fark çıkan kalem sayısı
+  totalDifference Decimal @default(0) // Toplam fark (mutlak)
+
+  // Tarihler
+  startedAt   DateTime?
+  completedAt DateTime?
+  approvedAt  DateTime?
+  cancelledAt DateTime?
+
+  // Kullanıcılar
+  startedById   String?
+  completedById String?
+  approvedById  String?
+  cancelledById String?
+
+  notes         String?
+  internalNotes String?
+
+  isActive  Boolean   @default(true)
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  tenant    Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  warehouse Warehouse        @relation(fields: [warehouseId], references: [id], onDelete: Restrict)
+  items     StockCountItem[]
+
+  @@unique([tenantId, countNumber])
+  @@index([tenantId, warehouseId])
+  @@index([tenantId, countType])
+  @@index([tenantId, startedAt])
+}
+
+// SAYIM KALEMİ
+model StockCountItem {
+  id        String  @id @default(cuid())
+  tenantId  String
+  countId   String
+  productId String
+  unitId    String?
+
+  // Miktarlar
+  systemQuantity  Decimal // Sistemdeki kitap miktarı (sayım başında)
+  countedQuantity Decimal? // Sayılan miktar (null ise henüz sayılmadı)
+  difference      Decimal? // countedQuantity - systemQuantity (negatif = eksik)
+
+  // Barkod ile sayım desteği
+  barcode     String?
+  countedById String?
+  countedAt   DateTime?
+
+  status    CountItemStatus @default(PENDING)
+  sortOrder Int             @default(0)
+  notes     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant  Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  count   StockCount @relation(fields: [countId], references: [id], onDelete: Cascade)
+  product Product    @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@index([tenantId, countId])
+  @@index([countId, status])
+  @@index([tenantId, productId])
+}
+
+// =====================================================================
+// İADE MODÜLÜ (FAZ 21)
+// =====================================================================
+//
+// Satıştan veya siparişten geri alınan ürünler.
+// Onaylanan iade:
+//   - 1 CustomerMovement (CREDIT) — müşteri alacağı azalır/borcu artar
+//   - N StockMovement (IN) — ürünler depoya geri döner (returnToStock=true ise)
+// İptal edilen iade: TERS kayıtlar.
+// =====================================================================
+
+enum ReturnStatus {
+  DRAFT
+  PENDING
+  APPROVED
+  COMPLETED
+  REJECTED
+  CANCELLED
+}
+
+enum ReturnReason {
+  INTACT
+  DEFECTIVE
+  WRONG_PRODUCT
+  EXCESS
+  OTHER
+}
+
+enum ReturnSource {
+  SALE
+  ORDER
+  DIRECT
+}
+
+enum ReturnItemCondition {
+  INTACT
+  DEFECTIVE
+  DAMAGED
+}
+
+model Return {
+  id           String       @id @default(cuid())
+  tenantId     String
+  returnNumber String // "IADE-2026-0001" (tenant-scoped unique)
+  returnDate   DateTime
+  customerId   String
+  source       ReturnSource @default(DIRECT)
+  sourceId     String? // Sale.id veya Order.id
+
+  reason ReturnReason @default(OTHER)
+  status ReturnStatus @default(DRAFT)
+
+  // Müşteri snapshot
+  customerName      String
+  customerTaxNumber String?
+  customerAddress   String?
+  customerPhone     String?
+
+  // Tutar
+  currency      String  @default("TRY")
+  exchangeRate  Decimal @default(1)
+  subTotal      Decimal @default(0)
+  vatTotal      Decimal @default(0)
+  discountTotal Decimal @default(0)
+  grandTotal    Decimal @default(0)
+
+  // Stok etkisi
+  returnToStock Boolean @default(true)
+
+  // Notlar
+  notes           String?
+  internalNotes   String?
+  rejectionReason String?
+
+  // Soft delete + audit
+  isActive      Boolean   @default(true)
+  isDeleted     Boolean   @default(false)
+  deletedAt     DateTime?
+  createdById   String?
+  updatedById   String?
+  approvedById  String?
+  approvedAt    DateTime?
+  completedById String?
+  completedAt   DateTime?
+  rejectedById  String?
+  rejectedAt    DateTime?
+  cancelledById String?
+  cancelledAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  tenant   Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customer Customer     @relation(fields: [customerId], references: [id], onDelete: Restrict)
+  items    ReturnItem[]
+
+  @@unique([tenantId, returnNumber])
+  @@index([tenantId, customerId, returnDate])
+  @@index([tenantId, source, sourceId])
+}
+
+model ReturnItem {
+  id        String  @id @default(cuid())
+  tenantId  String
+  returnId  String
+  productId String
+  unitId    String?
+
+  quantity     Decimal
+  unitPrice    Decimal // KDV hariç
+  vatRate      Decimal             @default(0)
+  discountRate Decimal             @default(0)
+  condition    ReturnItemCondition @default(INTACT)
+  description  String?
+  sortOrder    Int                 @default(0)
+
+  // Hesaplanmış
+  lineSubTotal   Decimal
+  lineVatAmount  Decimal @default(0)
+  lineGrandTotal Decimal
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  return  Return  @relation(fields: [returnId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@index([tenantId, returnId])
+  @@index([tenantId, productId])
+}
+
+// =====================================================================
+// BANKA & POS MODÜLÜ (FAZ 22)
+// =====================================================================
+//
+// Banka hesapları, POS cihazları, banka hareketleri, POS tahsilatları.
+// Event-sourced: bakiye = SUM(transactions) WHERE sign
+// =====================================================================
+
+enum BankAccountStatus {
+  ACTIVE
+  PASSIVE
+  BLOCKED
+}
+
+enum BankAccountType {
+  CHECKING
+  SAVINGS
+  FOREIGN_CURRENCY
+  POS
+}
+
+enum BankTransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  TRANSFER
+  FEE
+  COLLECTION
+  PAYMENT
+  POS_COLLECTION
+  INTEREST
+  OTHER
+}
+
+enum PosStatus {
+  ACTIVE
+  PASSIVE
+}
+
+enum PosCollectionStatus {
+  PENDING
+  SETTLED
+  REVERSED
+  PARTIAL
+}
+
+model BankAccount {
+  id            String            @id @default(cuid())
+  tenantId      String
+  bankName      String
+  accountName   String
+  iban          String?           @db.VarChar(34)
+  accountNumber String?
+  currency      String            @default("TRY")
+  type          BankAccountType   @default(CHECKING)
+  status        BankAccountStatus @default(ACTIVE)
+  branchCode    String?
+  branchName    String?
+  notes         String?
+  isDefault     Boolean           @default(false)
+
+  isDeleted   Boolean   @default(false)
+  deletedAt   DateTime?
+  createdById String?
+  updatedById String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tenant         Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  transactions   BankTransaction[] @relation("BankAccountTxns")
+  counterTxns    BankTransaction[] @relation("BankAccountCounter")
+  posDevices     PosDevice[]
+  posCollections PosCollection[]
+
+  @@unique([tenantId, iban])
+  @@index([tenantId, type])
+  @@index([tenantId, isDeleted])
+}
+
+model BankTransaction {
+  id                   String              @id @default(cuid())
+  tenantId             String
+  bankAccountId        String
+  txnDate              DateTime
+  type                 BankTransactionType
+  amount               Decimal // Pozitif = giriş, negatif = çıkış
+  currency             String              @default("TRY")
+  exchangeRate         Decimal             @default(1)
+  amountTry            Decimal // TL karşılığı
+  customerId           String?
+  counterBankAccountId String?
+
+  posCollectionId String?
+  description     String?
+  refType         String?
+  refId           String?
+  refNumber       String?
+  isReconciled    Boolean   @default(false)
+  reconciledAt    DateTime?
+  isDeleted       Boolean   @default(false)
+  deletedAt       DateTime?
+  createdById     String?
+  updatedById     String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  tenant             Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  bankAccount        BankAccount    @relation("BankAccountTxns", fields: [bankAccountId], references: [id], onDelete: Restrict)
+  counterBankAccount BankAccount?   @relation("BankAccountCounter", fields: [counterBankAccountId], references: [id], onDelete: SetNull)
+  posCollection      PosCollection? @relation(fields: [posCollectionId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, bankAccountId, txnDate])
+  @@index([tenantId, type])
+  @@index([tenantId, customerId])
+  @@index([tenantId, txnDate])
+  @@index([tenantId, isDeleted])
+}
+
+model PosDevice {
+  id             String    @id @default(cuid())
+  tenantId       String
+  bankAccountId  String
+  name           String
+  posCode        String
+  commissionRate Decimal   @default(0) // %
+  blockDays      Int       @default(1)
+  status         PosStatus @default(ACTIVE)
+  notes          String?
+
+  isActive    Boolean   @default(true)
+  isDeleted   Boolean   @default(false)
+  deletedAt   DateTime?
+  createdById String?
+  updatedById String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tenant      Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  bankAccount BankAccount     @relation(fields: [bankAccountId], references: [id], onDelete: Restrict)
+  collections PosCollection[]
+
+  @@unique([tenantId, posCode])
+  @@index([tenantId, isDeleted])
+}
+
+model PosCollection {
+  id             String   @id @default(cuid())
+  tenantId       String
+  posDeviceId    String
+  bankAccountId  String
+  collectionDate DateTime
+  customerId     String?
+  customerName   String?
+
+  amount         Decimal // Brüt
+  commission     Decimal             @default(0) // Komisyon tutarı
+  netAmount      Decimal // Net (amount - commission)
+  installment    Int                 @default(1)
+  currency       String              @default("TRY")
+  status         PosCollectionStatus @default(PENDING)
+  settlementDate DateTime? // Hesaba geçeceği tarih
+  description    String?
+  refType        String?
+  refId          String?
+  isDeleted      Boolean             @default(false)
+  deletedAt      DateTime?
+  createdById    String?
+  updatedById    String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+
+  tenant           Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  posDevice        PosDevice         @relation(fields: [posDeviceId], references: [id], onDelete: Restrict)
+  bankAccount      BankAccount       @relation(fields: [bankAccountId], references: [id], onDelete: Restrict)
+  bankTransactions BankTransaction[]
+
+  @@index([tenantId, posDeviceId, collectionDate])
+  @@index([tenantId, bankAccountId, collectionDate])
+  @@index([tenantId, customerId])
+  @@index([tenantId, isDeleted])
+}
+
+// =====================================================================
+// VERİ TAŞIMA / GEÇİŞ MODÜLÜ (FAZ 24)
+// =====================================================================
+//
+// Excel/CSV/SQL/XML kaynaklardan veri aktarımı.
+// Satış geçmişi sadece arşiv amaçlı (cari/stok bakiyesi ETKİLENMEZ).
+// Aktarım sonrası soft delete + audit log ile geri alınabilir.
+// =====================================================================
+
+enum ImportSource {
+  EXCEL
+  CSV
+  XML
+  MIKRO
+  LOGO
+  NETSIS
+  PARASUT
+  CUSTOM_SQL
+  MANUAL
+}
+
+enum ImportEntityType {
+  CUSTOMER
+  PRODUCT
+  PRICE
+  BARCODE
+  WAREHOUSE
+  CUSTOMER_BALANCE
+  STOCK_BALANCE
+  ARCHIVE_SALE
+}
+
+enum ImportStatus {
+  DRAFT
+  MAPPING
+  PREVIEW
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+  ROLLED_BACK
+}
+
+model ImportBatch {
+  id         String           @id @default(cuid())
+  tenantId   String
+  name       String
+  source     ImportSource
+  entityType ImportEntityType
+  status     ImportStatus     @default(DRAFT)
+
+  // Kaynak dosya
+  fileName String?
+  fileSize Int?
+  rowCount Int     @default(0)
+
+  // Kolon eşleştirme
+  columnMapping Json? // { "kaynak_kolon": "hedef_alan" }
+
+  // Sonuç
+  successCount   Int @default(0)
+  errorCount     Int @default(0)
+  duplicateCount Int @default(0)
+
+  // Audit
+  isDeleted    Boolean   @default(false)
+  deletedAt    DateTime?
+  createdById  String?
+  startedAt    DateTime?
+  completedAt  DateTime?
+  rolledBackAt DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  tenant Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  rows   ImportRow[]
+
+  @@index([tenantId, entityType])
+  @@index([tenantId, createdAt])
+  @@index([tenantId, isDeleted])
+}
+
+model ImportRow {
+  id           String       @id @default(cuid())
+  tenantId     String
+  batchId      String
+  rowNumber    Int
+  sourceData   Json // Ham satır verisi
+  mappedData   Json? // Eşleştirilmiş veri
+  status       ImportStatus @default(DRAFT) // DRAFT | COMPLETED | FAILED
+  errorMessage String?
+  createdRefId String? // Oluşturulan kayıt ID (örn: customerId)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  tenant Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  batch  ImportBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, batchId, status])
+}
+
+// =====================================================================
+// API & WEBHOOK MODÜLÜ (FAZ 25)
+// =====================================================================
+//
+// 3rd party entegrasyonlar için API anahtarları ve webhook'lar.
+// Secret-key'ler SHA-256 hash'lenerek saklanır (asla plain text değil).
+// =====================================================================
+
+enum ApiKeyStatus {
+  ACTIVE
+  REVOKED
+  EXPIRED
+}
+
+enum WebhookStatus {
+  ACTIVE
+  PAUSED
+  FAILED
+  REVOKED
+}
+
+enum WebhookDeliveryStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  RETRYING
+  ABANDONED
+}
+
+model ApiKey {
+  id          String       @id @default(cuid())
+  tenantId    String
+  name        String
+  keyHash     String       @unique // SHA-256(full_key)
+  keyPrefix   String // "saas_live_abc123" (gösterim)
+  keyHint     String // "xyz4" (son 4)
+  scopes      String[] // ["customers:read", ...]
+  status      ApiKeyStatus @default(ACTIVE)
+  lastUsedAt  DateTime?
+  expiresAt   DateTime?
+  isDeleted   Boolean      @default(false)
+  deletedAt   DateTime?
+  createdById String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  tenant    Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  usageLogs ApiKeyUsageLog[]
+
+  @@index([tenantId, isDeleted])
+}
+
+model ApiKeyUsageLog {
+  id         String   @id @default(cuid())
+  tenantId   String
+  apiKeyId   String
+  endpoint   String
+  method     String
+  statusCode Int
+  duration   Int // ms
+  ip         String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  apiKey ApiKey @relation(fields: [apiKeyId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, apiKeyId, createdAt])
+  @@index([tenantId, statusCode])
+}
+
+model Webhook {
+  id                 String                 @id @default(cuid())
+  tenantId           String
+  name               String
+  url                String
+  events             String[] // ["order.created", ...]
+  status             WebhookStatus          @default(ACTIVE)
+  secretHash         String // SHA-256
+  secretPrefix       String // "whsec_xxxx"
+  successCount       Int                    @default(0)
+  failureCount       Int                    @default(0)
+  lastDeliveryAt     DateTime?
+  lastDeliveryStatus WebhookDeliveryStatus?
+  isDeleted          Boolean                @default(false)
+  deletedAt          DateTime?
+  createdById        String?
+  createdAt          DateTime               @default(now())
+  updatedAt          DateTime               @updatedAt
+
+  tenant     Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  deliveries WebhookDelivery[]
+
+  @@index([tenantId, isDeleted])
+}
+
+model WebhookDelivery {
+  id             String                @id @default(cuid())
+  tenantId       String
+  webhookId      String
+  eventType      String
+  payload        Json
+  responseStatus Int?
+  responseBody   String?
+  duration       Int?
+  attempt        Int                   @default(1)
+  status         WebhookDeliveryStatus @default(PENDING)
+  errorMessage   String?
+  deliveredAt    DateTime              @default(now())
+
+  tenant  Tenant  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  webhook Webhook @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, webhookId, deliveredAt])
+  @@index([tenantId, eventType])
+}
+
+// =====================================================================
+// AKILLI ASISTAN BİLGİ TABANI (FAZ 26)
+// =====================================================================
+// NOT: Chat backend bu fazda YOK. Sadece KB CRUD + Tool registry.
+// =====================================================================
+
+model HelpArticle {
+  id            String    @id @default(cuid())
+  tenantId      String
+  module        String // "cari", "urun", "satis", ...
+  page          String? // "/customers/new" (null = tüm sayfa)
+  title         String
+  content       String    @db.Text
+  contentType   String // MODULE | PAGE | BUTTON | FAQ | GUIDE | WARNING
+  permissionKey String? // "cari:write" (görüntüleme yetkisi)
+  status        String    @default("ACTIVE")
+  viewCount     Int       @default(0)
+  isDeleted     Boolean   @default(false)
+  deletedAt     DateTime?
+  createdById   String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, module])
+  @@index([tenantId, contentType])
+  @@index([tenantId, isDeleted])
+}
+
+model AssistantTool {
+  id                 String   @id @default(cuid())
+  tenantId           String
+  code               String // "get_customer_balance"
+  name               String
+  description        String   @db.Text
+  module             String
+  requiredPermission String
+  apiEndpoint        String
+  status             String   @default("ACTIVE")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, code])
+  @@index([tenantId, module])
+}
+
+// =====================================================================
+// KAMPANYA / FİYAT LİSTESİ / İSKONTO (FAZ 29)
+// =====================================================================
+
+enum PriceListStatus {
+  ACTIVE
+  PASSIVE
+  EXPIRED
+  DRAFT
+}
+
+enum DiscountType {
+  PERCENT
+  AMOUNT
+  FIXED_PRICE
+}
+
+enum CampaignType {
+  PRODUCT
+  BRAND
+  CATEGORY
+  CUSTOMER_GROUP
+  CART_AMOUNT
+  QUANTITY
+  DATE_RANGE
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PASSIVE
+  EXPIRED
+  CANCELLED
+}
+
+model PriceList {
+  id              String          @id @default(cuid())
+  tenantId        String
+  code            String
+  name            String
+  currency        String          @default("TRY")
+  validFrom       DateTime?
+  validTo         DateTime?
+  customerGroupId String?         @unique
+  description     String?
+  status          PriceListStatus @default(DRAFT)
+  isDeleted       Boolean         @default(false)
+  deletedAt       DateTime?
+  createdById     String?
+  updatedById     String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  tenant           Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  group            CustomerPriceGroup? @relation("PriceListGroup", fields: [customerGroupId], references: [id], onDelete: SetNull)
+  items            PriceListItem[]
+  defaultPriceList CustomerPriceGroup? @relation("PriceListDefaultGroup")
+
+  @@unique([tenantId, code])
+  @@index([tenantId, isDeleted])
+}
+
+model PriceListItem {
+  id              String   @id @default(cuid())
+  priceListId     String
+  productId       String
+  oldPrice        Decimal? @default(0)
+  newPrice        Decimal
+  vatRate         Decimal  @default(0)
+  minQuantity     Decimal  @default(1)
+  maxDiscountRate Decimal  @default(0) // Bu kalem için max ek iskonto
+
+  priceList PriceList @relation(fields: [priceListId], references: [id], onDelete: Cascade)
+  product   Product   @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@unique([priceListId, productId])
+  @@index([priceListId])
+}
+
+model CustomerPriceGroup {
+  id                  String    @id @default(cuid())
+  tenantId            String
+  code                String
+  name                String
+  description         String?
+  defaultPriceListId  String?   @unique
+  defaultDiscountRate Decimal   @default(0)
+  isActive            Boolean   @default(true)
+  isDeleted           Boolean   @default(false)
+  deletedAt           DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  tenant           Tenant                     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  defaultPriceList PriceList?                 @relation("PriceListDefaultGroup", fields: [defaultPriceListId], references: [id], onDelete: SetNull)
+  members          CustomerPriceGroupMember[]
+  campaigns        Campaign[]
+  groups           PriceList[]                @relation("PriceListGroup")
+
+  @@unique([tenantId, code])
+  @@index([tenantId, isActive])
+  @@index([tenantId, isDeleted])
+}
+
+model CustomerPriceGroupMember {
+  id                 String   @id @default(cuid())
+  groupId            String
+  customerId         String
+  customDiscountRate Decimal? @default(0) // Gruba ek olarak bu carinin özel indirimi
+  createdAt          DateTime @default(now())
+
+  group    CustomerPriceGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  customer Customer           @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, customerId])
+  @@index([groupId])
+  @@index([customerId])
+}
+
+model Campaign {
+  id              String         @id @default(cuid())
+  tenantId        String
+  code            String
+  name            String
+  campaignType    CampaignType
+  startDate       DateTime
+  endDate         DateTime
+  customerGroupId String?
+  customerId      String?
+  productId       String?
+  minQuantity     Decimal        @default(0)
+  minCartAmount   Decimal        @default(0)
+  discountType    DiscountType
+  discountRate    Decimal        @default(0)
+  discountAmount  Decimal        @default(0)
+  maxUsageCount   Int            @default(0) // 0 = sınırsız
+  perUserLimit    Int            @default(1)
+  usageCount      Int            @default(0)
+  description     String?
+  status          CampaignStatus @default(DRAFT)
+  isDeleted       Boolean        @default(false)
+  deletedAt       DateTime?
+  createdById     String?
+  updatedById     String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  tenant        Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customerGroup CustomerPriceGroup? @relation(fields: [customerGroupId], references: [id], onDelete: SetNull)
+  customer      Customer?           @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  product       Product?            @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@unique([tenantId, code])
+  @@index([tenantId, startDate, endDate])
+  @@index([tenantId, campaignType])
+  @@index([tenantId, isDeleted])
+}
+
+// =====================================================================
+// FATURA / BELGE / PDF ŞABLON (FAZ 30)
+// =====================================================================
+
+enum DocumentType {
+  SALE
+  ORDER
+  COLLECTION
+  RETURN
+  CASH
+  STATEMENT
+  STOCK_REPORT
+  SALES_REPORT
+  QUOTE
+}
+
+enum PageFormat {
+  A4_PORTRAIT
+  A4_LANDSCAPE
+  THERMAL_58
+  THERMAL_80
+  CUSTOM
+}
+
+model DocumentTemplate {
+  id           String       @id @default(cuid())
+  tenantId     String? // null = süper admin global şablon
+  name         String
+  documentType DocumentType
+  language     String       @default("tr")
+  pageFormat   PageFormat   @default(A4_PORTRAIT)
+  customWidth  Int? // mm
+  customHeight Int?
+  isDefault    Boolean      @default(false)
+  isActive     Boolean      @default(true)
+  sections     Json         @default("[]") // TemplateSection[]
+  isDeleted    Boolean      @default(false)
+  deletedAt    DateTime?
+  createdById  String?
+  updatedById  String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  tenant Tenant? @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, documentType])
+  @@index([tenantId, isActive])
+  @@index([tenantId, isDefault])
+  @@index([tenantId, isDeleted])
+  @@index([isDeleted])
+}
+
+// =====================================================================
+// GELİŞMİŞ RAPOR OLUŞTURUCU (FAZ 31)
+// =====================================================================
+
+enum ChartType {
+  TABLE
+  BAR
+  LINE
+  PIE
+  AREA
+}
+
+enum ReportShareScope {
+  PRIVATE
+  ALL_TENANT
+  ROLES
+  USERS
+}
+
+model ReportTemplate {
+  id          String           @id @default(cuid())
+  tenantId    String
+  name        String
+  description String?
+  config      Json // PivotConfig
+  chartType   ChartType        @default(TABLE)
+  shareScope  ReportShareScope @default(PRIVATE)
+  sharedRoles String[]         @default([])
+  sharedUsers String[]         @default([])
+  isFavorite  Boolean          @default(false)
+  isActive    Boolean          @default(true)
+  lastRunAt   DateTime?
+  runCount    Int              @default(0)
+  isDeleted   Boolean          @default(false)
+  deletedAt   DateTime?
+  createdById String?
+  updatedById String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  tenant    Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  schedules ScheduledReport[]
+
+  @@index([tenantId, isActive])
+  @@index([tenantId, isDeleted])
+  @@index([tenantId, isFavorite])
+}
+
+model ScheduledReport {
+  id               String    @id @default(cuid())
+  tenantId         String
+  templateId       String
+  frequency        String    @default("WEEKLY") // DAILY | WEEKLY | MONTHLY
+  dayOfWeek        Int? // 0-6 (WEEKLY)
+  dayOfMonth       Int? // 1-31 (MONTHLY)
+  hour             Int       @default(9)
+  recipients       String[]  @default([]) // user IDs
+  sendEmail        Boolean   @default(true)
+  sendNotification Boolean   @default(true)
+  lastRunAt        DateTime?
+  nextRunAt        DateTime?
+  isActive         Boolean   @default(true)
+  createdById      String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  tenant   Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  template ReportTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, isActive])
+  @@index([nextRunAt])
+}
+
+// ============================================
+// FAZ 32: Bildirim Kural Motoru
+// ============================================
+
+enum NotificationTriggerType {
+  SALE_CREATED
+  SALE_CANCELLED
+  SALE_OVER_LIMIT
+  COLLECTION_RECEIVED
+  PAYMENT_DUE
+  LOW_STOCK
+  PRICE_CHANGE
+  CAMPAIGN_APPLIED
+  RETURN_CREATED
+  RETURN_APPROVED
+  STOCK_COUNT_VARIANCE
+  CASH_TRANSACTION
+}
+
+enum NotificationConditionOperator {
+  EQUALS
+  NOT_EQUALS
+  GREATER_THAN
+  LESS_THAN
+  GREATER_OR_EQUAL
+  LESS_OR_EQUAL
+  CONTAINS
+  IN
+  BETWEEN
+}
+
+enum NotificationActionType {
+  SEND_NOTIFICATION
+  SEND_EMAIL
+  SEND_SMS
+  CALL_WEBHOOK
+  CREATE_TASK
+  ALERT
+}
+
+enum NotificationChannelType {
+  IN_APP
+  EMAIL
+  SMS
+  WEBHOOK
+}
+
+enum NotificationLogStatus {
+  PENDING
+  SENT
+  FAILED
+  CANCELLED
+}
+
+enum NotificationRecipientType {
+  USER
+  ROLE
+  ALL_TENANT_USERS
+  SPECIFIC_USERS
+  CUSTOMER
+  SALESPERSON
+}
+
+model NotificationChannel {
+  id          String                  @id @default(cuid())
+  tenantId    String
+  name        String
+  type        NotificationChannelType
+  description String?
+  config      Json                    @default("{}")
+  // EMAIL: { smtpHost, smtpPort, smtpUser, smtpPassword(fromSecret), fromAddress, fromName, useTls }
+  // SMS: { provider, apiKey(fromSecret), fromNumber }
+  // WEBHOOK: { url, method, headers, authType, authConfig }
+  isActive    Boolean                 @default(true)
+  isDefault   Boolean                 @default(false)
+  testStatus  String? // null | 'OK' | 'FAILED'
+  testAt      DateTime?
+  testError   String?
+  createdById String?
+  createdAt   DateTime                @default(now())
+  updatedAt   DateTime                @updatedAt
+  isDeleted   Boolean                 @default(false)
+  deletedAt   DateTime?
+
+  tenant  Tenant                      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  rules   NotificationRuleChannel[]
+  logs    NotificationLog[]
+  secrets NotificationChannelSecret[]
+
+  @@index([tenantId, isDeleted])
+  @@index([tenantId, type])
+  @@index([tenantId, isActive])
+}
+
+model NotificationChannelSecret {
+  id        String   @id @default(cuid())
+  channelId String
+  key       String // smtpPassword / apiKey / etc
+  value     String // plain — tenant şifreleme katmanı ileride
+  createdAt DateTime @default(now())
+
+  channel NotificationChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+
+  @@index([channelId])
+}
+
+model NotificationRule {
+  id              String                  @id @default(cuid())
+  tenantId        String
+  name            String
+  description     String?
+  triggerType     NotificationTriggerType
+  conditions      Json                    @default("[]")
+  // [{ field, operator, value }] - trigger sonrası entity üzerinde filtre
+  actions         Json                    @default("[]")
+  // [{ type, template, payload }]
+  recipients      Json                    @default("[]")
+  // [{ type, targetIds, roleIds }]
+  channels        Json                    @default("[]")
+  // [channelId1, channelId2] - hangi kanallara gönderilecek
+  priority        Int                     @default(5) // 1-10
+  isActive        Boolean                 @default(true)
+  cooldownMinutes Int                     @default(0) // aynı rule kaç dakika içinde tekrar tetiklenmesin
+  lastTriggeredAt DateTime?
+  triggerCount    Int                     @default(0)
+  // Kategori bazlı özel ayarlar
+  settings        Json                    @default("{}")
+  // LOW_STOCK: { thresholdMode: 'PRODUCT'|'WAREHOUSE' }
+  // PAYMENT_DUE: { daysBeforeDue: [7, 3, 0] }
+  // SALE_OVER_LIMIT: { amountLimit: 50000 }
+  createdById     String?
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
+  isDeleted       Boolean                 @default(false)
+  deletedAt       DateTime?
+
+  tenant       Tenant                    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  ruleChannels NotificationRuleChannel[]
+  logs         NotificationLog[]
+
+  @@index([tenantId, isActive])
+  @@index([tenantId, triggerType])
+  @@index([tenantId, isDeleted])
+  @@index([lastTriggeredAt])
+}
+
+model NotificationRuleChannel {
+  ruleId    String
+  channelId String
+
+  rule    NotificationRule    @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  channel NotificationChannel @relation(fields: [channelId], references: [id], onDelete: Cascade)
+
+  @@id([ruleId, channelId])
+}
+
+model NotificationLog {
+  id               String                    @id @default(cuid())
+  tenantId         String
+  ruleId           String?
+  channelId        String?
+  triggerType      NotificationTriggerType
+  recipientType    NotificationRecipientType
+  recipientId      String? // userId / customerId / etc
+  recipientName    String?
+  recipientContact String? // email/phone/webhook URL
+  subject          String?
+  body             String
+  payload          Json                      @default("{}")
+  status           NotificationLogStatus     @default(PENDING)
+  attempts         Int                       @default(0)
+  lastAttemptAt    DateTime?
+  sentAt           DateTime?
+  failedAt         DateTime?
+  error            String?
+  durationMs       Int?
+  metadata         Json                      @default("{}")
+  createdAt        DateTime                  @default(now())
+
+  tenant  Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  rule    NotificationRule?    @relation(fields: [ruleId], references: [id], onDelete: SetNull)
+  channel NotificationChannel? @relation(fields: [channelId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, createdAt])
+  @@index([ruleId, createdAt])
+  @@index([channelId, createdAt])
+  @@index([recipientId])
+}
+
+model NotificationPreferences {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  tenantId   String
+  channels   Json     @default("{}")
+  // { inApp: true, email: true, sms: false, emailAddress, phone }
+  categories Json     @default("{}")
+  // { SALE: true, COLLECTION: true, LOW_STOCK: true, ... }
+  quietHours Json     @default("{}")
+  // { enabled: false, startTime: "22:00", endTime: "08:00" }
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ============================================
+// FAZ 33: Onay Akışları
+// ============================================
+
+enum ApprovalTriggerType {
+  SALE_OVER_LIMIT
+  DISCOUNT_OVER
+  RETURN_OVER
+  PRICE_CHANGE
+  COLLECTION_WRITE_OFF
+  EXPENSE_OVER
+  EMPLOYEE_ADD
+  CASH_TRANSFER_OVER
+  INVOICE_CANCEL
+  CAMPAIGN_OVER
+  STOCK_COUNT_OVER
+  WAREHOUSE_TRANSFER
+}
+
+enum ApprovalMode {
+  SEQUENTIAL
+  PARALLEL
+  UNANIMOUS
+}
+
+enum ApprovalStepType {
+  ROLE_BASED
+  USER_BASED
+  DYNAMIC_FIELD
+  SPECIFIC_USERS
+}
+
+enum ApprovalRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+  EXPIRED
+  DELEGATED
+}
+
+enum ApprovalActionType {
+  APPROVED
+  REJECTED
+  DELEGATED
+  RETURNED
+  COMMENTED
+}
+
+enum ApprovalPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+model ApprovalRule {
+  id              String              @id @default(cuid())
+  tenantId        String
+  name            String
+  description     String?
+  triggerType     ApprovalTriggerType
+  moduleName      String? // hangi modüle bağlı
+  conditions      Json                @default("[]")
+  // [{ field, operator, value }] - miktar / yüzde / tutar
+  mode            ApprovalMode        @default(SEQUENTIAL)
+  amountField     String? // ör: "grandTotal" - miktar alanı
+  amountThreshold Decimal? // null = koşul bazlı
+  expiryHours     Int                 @default(72) // süre aşımı
+  isActive        Boolean             @default(true)
+  priority        Int                 @default(5)
+  triggerCount    Int                 @default(0)
+  lastTriggeredAt DateTime?
+  settings        Json                @default("{}")
+  // { allowDelegation: true, allowReturn: true, notifyOnPending: true }
+  createdById     String?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  isDeleted       Boolean             @default(false)
+  deletedAt       DateTime?
+
+  tenant   Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  steps    ApprovalStep[]
+  requests ApprovalRequest[]
+
+  @@index([tenantId, isActive])
+  @@index([tenantId, isDeleted])
+  @@index([triggerType])
+  @@index([lastTriggeredAt])
+}
+
+model ApprovalStep {
+  id           String           @id @default(cuid())
+  ruleId       String
+  stepOrder    Int // 1, 2, 3...
+  name         String // "Müdür Onayı", "Genel Müdür Onayı"
+  stepType     ApprovalStepType
+  // ROLE_BASED: { roleIds: ['role-1'] } - bu role sahip kullanıcılar onaylar
+  // USER_BASED: { userId: 'user-1' } - tek kullanıcı
+  // DYNAMIC_FIELD: { fieldRef: 'salesperson.managerId' } - dinamik (ör: satış temsilcisinin müdürü)
+  // SPECIFIC_USERS: { userIds: ['u1', 'u2'] } - herhangi biri onaylayabilir
+  config       Json             @default("{}")
+  requireAll   Boolean          @default(false) // SEQUENTIAL dışı - PARALLEL'de tümü mü, herhangi biri mi
+  minApprovals Int              @default(1) // PARALLEL için minimum onay sayısı
+  timeoutHours Int? // bu adım için özel timeout
+  isOptional   Boolean          @default(false) // opsiyonel adım
+  description  String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  rule    ApprovalRule     @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  actions ApprovalAction[]
+
+  @@unique([ruleId, stepOrder])
+  @@index([ruleId, stepOrder])
+}
+
+model ApprovalRequest {
+  id             String                @id @default(cuid())
+  tenantId       String
+  ruleId         String
+  ruleName       String
+  triggerType    ApprovalTriggerType
+  // Bağlam — ne onaylanıyor?
+  entityType     String // 'Sale', 'Return', 'Discount', etc.
+  entityId       String
+  entityNumber   String? // 'SLS-2026-001'
+  entityLabel    String // 'Satış #123 - 15000 TRY'
+  amount         Decimal? // varsa tutar
+  amountCurrency String?               @default("TRY")
+  requesterId    String // talep eden kullanıcı
+  requesterName  String?
+  requesterData  Json                  @default("{}") // başvuru anındaki snapshot
+  priority       ApprovalPriority      @default(NORMAL)
+  status         ApprovalRequestStatus @default(PENDING)
+  currentStep    Int                   @default(1) // kaçıncı adımda
+  totalSteps     Int
+  approvedAt     DateTime?
+  rejectedAt     DateTime?
+  cancelledAt    DateTime?
+  expiredAt      DateTime?
+  expiresAt      DateTime? // otomatik expire
+  finalComment   String?
+  metadata       Json                  @default("{}")
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+
+  tenant  Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  rule    ApprovalRule     @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  actions ApprovalAction[]
+
+  @@index([tenantId, createdAt])
+  @@index([requesterId])
+  @@index([ruleId, status])
+  @@index([entityType, entityId])
+  @@index([expiresAt])
+}
+
+model ApprovalAction {
+  id              String             @id @default(cuid())
+  requestId       String
+  stepId          String
+  stepOrder       Int
+  stepName        String
+  actionType      ApprovalActionType
+  actorId         String // işlemi yapan
+  actorName       String?
+  actorRole       String?
+  comment         String?
+  attachments     Json               @default("[]")
+  delegatedToId   String? // DELEGATED ise kime
+  delegatedToName String?
+  createdAt       DateTime           @default(now())
+
+  request ApprovalRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  step    ApprovalStep    @relation(fields: [stepId], references: [id], onDelete: Cascade)
+
+  @@index([requestId, createdAt])
+  @@index([actorId])
+  @@index([stepId])
+}
+
+// ============================================
+// FAZ 34: Denetim / Veri Tutarlılığı
+// ============================================
+
+enum DataCheckType {
+  MISSING_CUSTOMER_BALANCE
+  MISSING_PRODUCT_BARCODE
+  NEGATIVE_STOCK
+  DUPLICATE_INVOICE_NUMBER
+  ORPHANED_PAYMENT
+  STOCK_BALANCE_MISMATCH
+  CUSTOMER_NO_CONTACT
+  CASH_MOVEMENT_MISSING_DOC
+  PRICE_BELOW_COST
+  DISCOUNT_OVER_LIMIT
+  INACTIVE_PRODUCT_SOLD
+  INACTIVE_CUSTOMER_SALE
+  STOCK_NO_WAREHOUSE
+  RETURN_NO_REASON
+  COLLECTION_OVERDUE
+  TAX_NUMBER_INVALID
+  EMAIL_INVALID
+  PHONE_INVALID
+}
+
+enum DataCheckSeverity {
+  INFO
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum DataCheckRunStatus {
+  DRAFT
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum DataCheckResultStatus {
+  OPEN
+  ACKNOWLEDGED
+  IN_PROGRESS
+  FIXED
+  IGNORED
+  FALSE_POSITIVE
+}
+
+enum DataCheckFrequency {
+  MANUAL
+  HOURLY
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+model DataCheckRule {
+  id              String            @id @default(cuid())
+  tenantId        String
+  name            String
+  description     String?
+  checkType       DataCheckType
+  severity        DataCheckSeverity @default(MEDIUM)
+  isActive        Boolean           @default(true)
+  parameters      Json              @default("{}")
+  // { daysOverdue: 30, maxDiscount: 50, minStock: 0, vs. }
+  query           String? // custom SQL-ish açıklama
+  autoFixable     Boolean           @default(false)
+  notifyUsers     Json              @default("[]")
+  // [userId1, userId2]
+  lastRunAt       DateTime?
+  runCount        Int               @default(0)
+  lastResultCount Int               @default(0)
+  createdById     String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  isDeleted       Boolean           @default(false)
+  deletedAt       DateTime?
+
+  tenant  Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  runs    DataCheckRun[]
+  results DataCheckResult[]
+
+  @@index([tenantId, isActive])
+  @@index([tenantId, isDeleted])
+  @@index([checkType])
+}
+
+model DataCheckRun {
+  id          String             @id @default(cuid())
+  tenantId    String
+  ruleId      String
+  ruleName    String
+  checkType   DataCheckType
+  status      DataCheckRunStatus @default(RUNNING)
+  startedAt   DateTime           @default(now())
+  completedAt DateTime?
+  durationMs  Int?
+  resultCount Int                @default(0)
+  errorCount  Int                @default(0)
+  warning     String?
+  parameters  Json               @default("{}")
+  triggeredBy String? // 'SCHEDULED' | 'MANUAL' | userId
+  summary     Json               @default("{}")
+  createdAt   DateTime           @default(now())
+
+  tenant  Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  rule    DataCheckRule     @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  results DataCheckResult[]
+
+  @@index([tenantId, startedAt])
+  @@index([ruleId, startedAt])
+  @@index([status])
+}
+
+model DataCheckResult {
+  id               String                @id @default(cuid())
+  tenantId         String
+  ruleId           String
+  runId            String?
+  checkType        DataCheckType
+  severity         DataCheckSeverity
+  status           DataCheckResultStatus @default(OPEN)
+  // Etkilenen entity
+  entityType       String // 'Customer' | 'Product' | 'Sale' | vs.
+  entityId         String
+  entityLabel      String // 'Müşteri #123 - ABC Ltd.'
+  entityNumber     String?
+  description      String // 'Negatif stok: Ürün X (-5 adet)'
+  details          Json                  @default("{}")
+  // { currentStock: -5, productCode: 'X', warehouse: 'Merkez' }
+  suggestedFix     String?
+  autoFixable      Boolean               @default(false)
+  fixedAt          DateTime?
+  fixedById        String?
+  fixedByName      String?
+  fixNote          String?
+  acknowledgedAt   DateTime?
+  acknowledgedById String?
+  ignoredAt        DateTime?
+  ignoredById      String?
+  ignoreReason     String?
+  metadata         Json                  @default("{}")
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+
+  tenant Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  rule   DataCheckRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  run    DataCheckRun? @relation(fields: [runId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, severity])
+  @@index([tenantId, createdAt])
+  @@index([ruleId, status])
+  @@index([entityType, entityId])
+  @@index([runId])
+}
+
+model DataCheckSchedule {
+  id               String             @id @default(cuid())
+  tenantId         String
+  name             String
+  ruleIds          Json               @default("[]")
+  // [ruleId1, ruleId2]
+  schedule         DataCheckFrequency @default(DAILY)
+  hour             Int                @default(2)
+  dayOfWeek        Int?
+  dayOfMonth       Int?
+  isActive         Boolean            @default(true)
+  lastRunAt        DateTime?
+  nextRunAt        DateTime?
+  notifyOnComplete Boolean            @default(false)
+  notifyUserIds    Json               @default("[]")
+  createdById      String?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  isDeleted        Boolean            @default(false)
+  deletedAt        DateTime?
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, isActive])
+  @@index([nextRunAt])
+}
+
+model DataCheckActionLog {
+  id          String   @id @default(cuid())
+  tenantId    String
+  resultId    String
+  actionType  String // 'FIXED' | 'IGNORED' | 'ACKNOWLEDGED' | 'AUTO_FIXED'
+  actorId     String?
+  actorName   String?
+  note        String?
+  beforeState Json?
+  afterState  Json?
+  createdAt   DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, createdAt])
+  @@index([resultId])
+}
+
+// ============================================
+// FAZ 35: AI Chat & LLM Konfigürasyon
+// ============================================
+
+enum LLMProvider {
+  OPENROUTER
+  OPENAI
+  ANTHROPIC
+  DEEPSEEK
+  OLLAMA
+  CUSTOM
+}
+
+enum AssistantMessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+  TOOL
+}
+
+enum AssistantConversationStatus {
+  ACTIVE
+  ARCHIVED
+  DELETED
+}
+
+model TenantLLMConfig {
+  id               String      @id @default(cuid())
+  tenantId         String      @unique
+  provider         LLMProvider @default(OPENROUTER)
+  apiKey           String // encrypted at rest (basit maskeleme, prod'da KMS)
+  baseUrl          String? // null = provider default
+  defaultModel     String      @default("deepseek/deepseek-chat")
+  fallbackModel    String? // hata durumunda alternatif
+  maxTokens        Int         @default(2048)
+  temperature      Float       @default(0.3)
+  topP             Float       @default(0.9)
+  systemPrompt     String?     @db.Text
+  // { customSystemPrompt: 'Sen Mavis adında bir Türkçe SaaS asistanısın...' }
+  enabledModules   Json        @default("[]")
+  // ['sales', 'cari', 'stock', 'reports', 'pricing'] — hangi modüllere erişebilir
+  rateLimitPerHour Int         @default(100)
+  monthlyBudgetUSD Float? // null = limitsiz
+  monthlyUsageUSD  Float       @default(0)
+  isActive         Boolean     @default(true)
+  // Tool izinleri
+  toolPermissions  Json        @default("[]")
+  // ['get_customer_balance', 'list_pending_invoices', vs.] — tüm tool'lar için izin listesi
+  createdById      String?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  tenant        Tenant                  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  conversations AssistantConversation[]
+
+  @@index([tenantId, isActive])
+}
+
+model AssistantConversation {
+  id            String                      @id @default(cuid())
+  tenantId      String
+  userId        String
+  title         String // otomatik oluşturulan başlık (ilk mesajdan)
+  status        AssistantConversationStatus @default(ACTIVE)
+  context       Json                        @default("{}")
+  // { lastModule: 'cari', activeFilter: {...} }
+  messageCount  Int                         @default(0)
+  totalTokens   Int                         @default(0)
+  totalCostUSD  Float                       @default(0)
+  metadata      Json                        @default("{}")
+  // { ip, userAgent, vs. }
+  createdAt     DateTime                    @default(now())
+  updatedAt     DateTime                    @updatedAt
+  lastMessageAt DateTime                    @default(now())
+
+  tenant      Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user        User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  llmConfig   TenantLLMConfig?    @relation(fields: [llmConfigId], references: [id], onDelete: SetNull)
+  llmConfigId String?
+  messages    AssistantMessage[]
+  toolCalls   AssistantToolCall[]
+
+  @@index([tenantId, userId, status])
+  @@index([tenantId, lastMessageAt])
+  @@index([userId, status])
+}
+
+model AssistantMessage {
+  id             String               @id @default(cuid())
+  conversationId String
+  tenantId       String
+  role           AssistantMessageRole
+  content        String               @db.Text
+  // Tool çağrıları (assistant mesajı içinde)
+  toolCalls      Json                 @default("[]")
+  // [{ toolId, toolCode, arguments, result, error }]
+  tokens         Int? // kullanılan token
+  costUSD        Float? // mesaj maliyeti
+  model          String? // hangi model kullanıldı
+  latencyMs      Int? // yanıt süresi
+  feedbackRating Int? // 1-5 (thumbs)
+  feedbackNote   String?              @db.Text
+  metadata       Json                 @default("{}")
+  // { sources: [helpArticleId1, helpArticleId2], retrievedKB: 5 }
+  createdAt      DateTime             @default(now())
+
+  conversation AssistantConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+  @@index([tenantId, role])
+}
+
+model AssistantToolCall {
+  id             String   @id @default(cuid())
+  conversationId String
+  messageId      String?
+  tenantId       String
+  toolCode       String // 'get_customer_balance'
+  toolName       String
+  arguments      Json
+  result         Json?
+  error          String?  @db.Text
+  status         String   @default("PENDING") // PENDING | SUCCESS | FAILED
+  latencyMs      Int?
+  createdAt      DateTime @default(now())
+
+  conversation AssistantConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
+  @@index([toolCode, status])
+  @@index([tenantId, createdAt])
+}
+
+model AssistantUsageStats {
+  id            String   @id @default(cuid())
+  tenantId      String
+  userId        String
+  date          DateTime @default(now()) // gün bazında
+  model         String
+  requestCount  Int      @default(0)
+  totalTokens   Int      @default(0)
+  inputTokens   Int      @default(0)
+  outputTokens  Int      @default(0)
+  totalCostUSD  Float    @default(0)
+  toolCallCount Int      @default(0)
+  errorCount    Int      @default(0)
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, userId, date, model])
+  @@index([tenantId, date])
+}
+
+// ============================================
+// FAZ 36: AI İzleme & Eğitim Verisi (Süper Admin)
+// ============================================
+
+enum AIFeedbackType {
+  POSITIVE
+  NEGATIVE
+  NEUTRAL
+  CORRECTED
+}
+
+enum AIAuditAction {
+  CONVERSATION_STARTED
+  CONVERSATION_DELETED
+  MESSAGE_SENT
+  MESSAGE_RATED
+  TOOL_CALLED
+  TOOL_FAILED
+  RAG_RETRIEVED
+  LLM_API_ERROR
+  RATE_LIMITED
+  BUDGET_EXCEEDED
+  CONFIG_UPDATED
+}
+
+model AIAuditLog {
+  id             String        @id @default(cuid())
+  tenantId       String?
+  userId         String?
+  conversationId String?
+  messageId      String?
+  action         AIAuditAction
+  details        Json          @default("{}")
+  // { model, tokens, cost, toolCode, errorMessage, latencyMs, rating, vs. }
+  ipAddress      String?
+  userAgent      String?
+  severity       String        @default("INFO") // INFO | WARN | ERROR
+  createdAt      DateTime      @default(now())
+
+  @@index([tenantId, createdAt])
+  @@index([userId, createdAt])
+  @@index([conversationId])
+  @@index([action, createdAt])
+  @@index([severity, createdAt])
+}
+
+model AITrainingEntry {
+  id              String          @id @default(cuid())
+  tenantId        String
+  conversationId  String
+  messageId       String
+  userId          String?
+  userQuery       String          @db.Text
+  assistantAnswer String          @db.Text
+  model           String
+  toolCalls       Json            @default("[]")
+  sources         Json            @default("[]")
+  feedback        AIFeedbackType?
+  feedbackNote    String?         @db.Text
+  correctedAnswer String?         @db.Text
+  rating          Int? // 1-5
+  tokens          Int?
+  costUSD         Float?
+  latencyMs       Int?
+  metadata        Json            @default("{}")
+  isExported      Boolean         @default(false)
+  exportedAt      DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([tenantId, createdAt])
+  @@index([feedback, createdAt])
+  @@index([model, createdAt])
+  @@index([isExported, createdAt])
+  @@index([rating])
+}
+
+model AITrainingDataset {
+  id                  String    @id @default(cuid())
+  tenantId            String?
+  name                String
+  description         String?
+  format              String    @default("OPENAI_JSONL") // OPENAI_JSONL | ALPACA | SHARE_GPT
+  entryCount          Int       @default(0)
+  includeOnlyPositive Boolean   @default(false)
+  includeCorrected    Boolean   @default(true)
+  filterModel         String?
+  filterFrom          DateTime?
+  filterTo            DateTime?
+  generatedAt         DateTime?
+  fileUrl             String?
+  createdById         String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@index([tenantId, createdAt])
+  @@index([generatedAt])
+}
+
+// ============================================
+// FAZ 39: Onboarding Sihirbazı
+// ============================================
+
+enum OnboardingStep {
+  START
+  COMPANY_INFO
+  BRAND
+  BRANCHES
+  WAREHOUSES
+  CASH_ACCOUNTS
+  BANKS
+  USER_INVITES
+  PERMISSION_TEMPLATE
+  DATA_IMPORT
+  FIRST_SALE_TEST
+  COMPLETED
+}
+
+enum OnboardingStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  SKIPPED
+}
+
+model OnboardingProgress {
+  id             String           @id @default(cuid())
+  tenantId       String           @unique
+  status         OnboardingStatus @default(NOT_STARTED)
+  currentStep    OnboardingStep   @default(START)
+  completedSteps Json             @default("[]")
+  skippedSteps   Json             @default("[]")
+  data           Json             @default("{}")
+  // { companyInfo: {...}, branches: [...], users: [...], etc. }
+  startedAt      DateTime?
+  completedAt    DateTime?
+  startedById    String?
+  completedById  String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  tenant Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  logs   OnboardingStepLog[]
+
+}
+
+model OnboardingStepLog {
+  id         String         @id @default(cuid())
+  tenantId   String
+  progressId String
+  step       OnboardingStep
+  action     String // 'VIEWED' | 'COMPLETED' | 'SKIPPED' | 'BACK'
+  data       Json?
+  createdAt  DateTime       @default(now())
+
+  tenant   Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  progress OnboardingProgress @relation(fields: [progressId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, step])
+  @@index([progressId])
+}
+
+// ============================================
+// FAZ 40: Sektör Şablonları
+// ============================================
+
+model IndustryTemplate {
+  id          String   @id @default(cuid())
+  code        String   @unique // 'wholesale', 'toys', 'food', 'textile', 'hardware', 'stationery', 'warehouse', 'field_sales'
+  name        String
+  description String?
+  icon        String   @default("📦")
+  sectorKey   String // 'toptanci', 'oyuncakci', etc.
+  // Şablon içeriği (JSON)
+  config      Json     @default("{}")
+  // { activeModules: ['sales', 'cari', ...], defaultRoles: [...], defaultReports: [...], defaultDashboards: [...], salesSettings: {...}, notificationRules: [...] }
+  isActive    Boolean  @default(true)
+  isSystem    Boolean  @default(true) // platform şablonu vs custom
+  usageCount  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  applications TenantAppliedTemplate[]
+
+  @@index([code])
+  @@index([isActive])
+}
+
+model TenantAppliedTemplate {
+  id           String   @id @default(cuid())
+  tenantId     String
+  templateId   String
+  templateName String
+  appliedById  String?
+  appliedData  Json     @default("{}")
+  // { appliedModules, createdRoleIds, createdReportIds, vs. }
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  tenant   Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  template IndustryTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([templateId])
+}
+
+// ============================================
+// FAZ 41: Demo Firma Modu
+// ============================================
+
+enum DemoDataSize {
+  SMALL
+  MEDIUM
+  LARGE
+}
+
+model DemoDataTemplate {
+  id          String       @id @default(cuid())
+  code        String       @unique
+  name        String
+  size        DemoDataSize
+  description String?
+  // Hedef veri sayıları
+  config      Json         @default("{}")
+  // { customerCount: 50, productCount: 100, saleCount: 200, days: 30 }
+  isActive    Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model DemoCompany {
+  id           String       @id @default(cuid())
+  tenantId     String       @unique
+  size         DemoDataSize
+  templateCode String
+  isActive     Boolean      @default(true)
+  resetCount   Int          @default(0)
+  lastResetAt  DateTime?
+  convertedAt  DateTime?
+  // Demo state
+  state        Json         @default("{}")
+  // { seededAt, version, customerCount, productCount, saleCount }
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  tenant   Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  seedLogs DemoSeedLog[]
+
+  @@index([tenantId])
+  @@index([size])
+}
+
+model DemoSeedLog {
+  id            String       @id @default(cuid())
+  demoCompanyId String
+  action        String // 'SEEDED' | 'RESET' | 'CONVERTED'
+  size          DemoDataSize
+  data          Json         @default("{}")
+  // { customerCount, productCount, saleCount, durationMs }
+  error         String?
+  createdById   String?
+  createdAt     DateTime     @default(now())
+
+  demoCompany DemoCompany @relation(fields: [demoCompanyId], references: [id], onDelete: Cascade)
+
+  @@index([demoCompanyId])
+}
+
+// ============================================
+// FAZ 42: Ziyaret / Rota Planlama
+// ============================================
+
+enum VisitStatus {
+  PLANNED
+  IN_PROGRESS
+  VISITED
+  ORDER_TAKEN
+  COLLECTION_TAKEN
+  COULDNT_MEET
+  CANCELLED
+}
+
+enum VisitPlanStatus {
+  DRAFT
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum VisitCheckinType {
+  CHECK_IN
+  CHECK_OUT
+}
+
+model VisitPlan {
+  id               String          @id @default(cuid())
+  tenantId         String
+  name             String
+  description      String?
+  planDate         DateTime // planlanan tarih
+  salespersonId    String // plasiyer
+  region           String? // bölge
+  customerGroupId  String? // müşteri grubu filtresi
+  status           VisitPlanStatus @default(DRAFT)
+  totalCustomers   Int             @default(0)
+  visitedCount     Int             @default(0)
+  orderCount       Int             @default(0)
+  collectionAmount Decimal         @default(0)
+  startedAt        DateTime?
+  completedAt      DateTime?
+  notes            String?
+  createdById      String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @default(now()) @updatedAt
+
+  tenant     Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  customers  VisitPlanCustomer[]
+  checkins   VisitCheckin[]
+  notes_     VisitNote[]
+  statusLogs VisitStatusLog[]
+
+  @@index([tenantId, planDate])
+  @@index([salespersonId, planDate])
+}
+
+model VisitPlanCustomer {
+  id                 String      @id @default(cuid())
+  planId             String
+  customerId         String
+  customerName       String
+  customerAddress    String?
+  customerPhone      String?
+  customerBalance    Decimal     @default(0)
+  lastOrderDate      DateTime?
+  order              Int // sıra
+  status             VisitStatus @default(PLANNED)
+  plannedTime        DateTime?
+  arrivedAt          DateTime?
+  leftAt             DateTime?
+  resultOrderId      String?
+  resultCollectionId String?
+  reason             String? // 'görüşülemedi' sebebi
+  notes              String?
+  latitude           Float?
+  longitude          Float?
+
+  plan VisitPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@index([planId, order])
+  @@index([customerId])
+}
+
+model VisitCheckin {
+  id         String           @id @default(cuid())
+  planId     String
+  customerId String
+  type       VisitCheckinType
+  latitude   Float
+  longitude  Float
+  address    String?
+  accuracy   Float?
+  photo      String? // base64 veya URL
+  notes      String?
+  createdAt  DateTime         @default(now())
+
+  plan VisitPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@index([planId, createdAt])
+  @@index([customerId])
+}
+
+model VisitNote {
+  id          String   @id @default(cuid())
+  planId      String
+  customerId  String
+  content     String   @db.Text
+  type        String   @default("GENERAL") // 'GENERAL' | 'COMPLAINT' | 'REQUEST' | 'COMPETITOR'
+  attachments Json     @default("[]")
+  createdById String
+  createdAt   DateTime @default(now())
+
+  plan VisitPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@index([planId, createdAt])
+}
+
+model VisitStatusLog {
+  id         String       @id @default(cuid())
+  planId     String
+  customerId String?
+  fromStatus VisitStatus?
+  toStatus   VisitStatus
+  actorId    String
+  reason     String?
+  metadata   Json         @default("{}")
+  createdAt  DateTime     @default(now())
+
+  plan VisitPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@index([planId, createdAt])
+}
+
+// ============================================
+// FAZ 43: Hedef / Performans + Prim
+// ============================================
+
+enum TargetType {
+  SALES_AMOUNT
+  SALES_COUNT
+  COLLECTION
+  NEW_CUSTOMER
+  VISIT_COUNT
+  ORDER_COUNT
+  BRAND_SALES
+  PRODUCT_SALES
+}
+
+enum TargetStatus {
+  ACTIVE
+  COMPLETED
+  FAILED
+  EXCEEDED
+  CANCELLED
+}
+
+enum TargetPeriod {
+  MONTHLY
+  QUARTERLY
+  YEARLY
+  CUSTOM
+}
+
+enum CommissionType {
+  PERCENTAGE
+  FIXED
+  TIERED
+  BONUS
+}
+
+model PerformanceTarget {
+  id              String       @id @default(cuid())
+  tenantId        String
+  name            String
+  description     String?
+  type            TargetType
+  period          TargetPeriod @default(MONTHLY)
+  startDate       DateTime
+  endDate         DateTime
+  // Atamalar
+  assigneeType    String // 'USER' | 'TEAM' | 'BRANCH' | 'ALL'
+  assigneeId      String? // userId/teamId/branchId
+  assigneeName    String?
+  // Hedef değer (tipine göre anlamı değişir)
+  targetValue     Decimal
+  currency        String       @default("TRY")
+  // Tier hedefleri (BONUS için)
+  tiers           Json         @default("[]")
+  // [{ percent: 80, bonus: 500 }, { percent: 100, bonus: 1000 }]
+  // Filtre: marka, ürün, kategori
+  filters         Json         @default("{}")
+  // { brandIds: [], productIds: [], categoryIds: [] }
+  status          TargetStatus @default(ACTIVE)
+  // Snapshot'lar
+  achievedValue   Decimal      @default(0)
+  achievementRate Float        @default(0) // %
+  lastSnapshotAt  DateTime?
+  createdById     String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  isDeleted       Boolean      @default(false)
+  deletedAt       DateTime?
+
+  tenant       Tenant                @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  progressLogs TargetProgressLog[]
+  snapshots    PerformanceSnapshot[]
+
+  @@index([tenantId, type])
+  @@index([assigneeId, status])
+  @@index([startDate, endDate])
+}
+
+model TargetProgressLog {
+  id            String   @id @default(cuid())
+  targetId      String
+  achievedValue Decimal
+  delta         Decimal
+  sourceType    String // 'SALE' | 'COLLECTION' | 'VISIT' | etc.
+  sourceId      String?
+  metadata      Json     @default("{}")
+  createdAt     DateTime @default(now())
+
+  target PerformanceTarget @relation(fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@index([targetId, createdAt])
+}
+
+model PerformanceSnapshot {
+  id              String   @id @default(cuid())
+  tenantId        String
+  targetId        String
+  userId          String?
+  date            DateTime @default(now())
+  // günlük snapshot
+  achievedValue   Decimal
+  targetValue     Decimal
+  achievementRate Float
+  // Tip bazlı
+  metadata        Json     @default("{}")
+  // { rank, percentile, periodLabel }
+
+  tenant Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  target PerformanceTarget @relation(fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, date])
+  @@index([targetId, date])
+  @@index([userId, date])
+}
+
+model CommissionRule {
+  id                 String         @id @default(cuid())
+  tenantId           String
+  name               String
+  description        String?
+  targetType         TargetType
+  // Tetik koşulu
+  minAchievementRate Float          @default(100) // %100 üstü prim kazanır
+  commissionType     CommissionType
+  // PERCENTAGE: { rate: 0.02 } (kazancın %2'si)
+  // FIXED: { amount: 500 }
+  // TIERED: { tiers: [{ minRate: 80, type: 'PERCENT', value: 0.5 }, { minRate: 100, type: 'PERCENT', value: 1.0 }, { minRate: 150, type: 'FIXED', value: 2000 }] }
+  // BONUS: { triggerRate: 120, amount: 1000 }
+  config             Json           @default("{}")
+  maxAmount          Decimal? // üst limit
+  minAmount          Decimal? // alt limit (minimum prim)
+  isActive           Boolean        @default(true)
+  effectiveFrom      DateTime?
+  effectiveTo        DateTime?
+  createdById        String?
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  tenant          Tenant                     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  calculationLogs CommissionCalculationLog[]
+
+  @@index([tenantId, isActive])
+  @@index([targetType])
+}
+
+model CommissionCalculationLog {
+  id               String    @id @default(cuid())
+  tenantId         String
+  ruleId           String
+  userId           String
+  userName         String?
+  period           String // '2026-Q1', '2026-01', vs.
+  targetId         String?
+  achievedValue    Decimal
+  achievementRate  Float
+  // Hesaplanan
+  baseAmount       Decimal // temel (satış tutarı)
+  calculatedAmount Decimal // hesaplanan prim
+  finalAmount      Decimal // uygulanan (min/max sınırları sonrası)
+  status           String    @default("PENDING") // PENDING | APPROVED | PAID | REJECTED
+  notes            String?
+  metadata         Json      @default("{}")
+  calculatedAt     DateTime  @default(now())
+  approvedAt       DateTime?
+  approvedById     String?
+  paidAt           DateTime?
+
+  tenant Tenant         @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  rule   CommissionRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, period])
+  @@index([userId, period])
+  @@index([ruleId])
+  @@index([status])
+}
+
+// ============================================
+// FAZ 44-52: Kullanıcı Deneyimi & Operasyonel Hız
+// ============================================
+
+// Global Arama
+model GlobalSearchHistory {
+  id          String   @id @default(cuid())
+  tenantId    String
+  userId      String
+  query       String
+  resultCount Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([tenantId, userId, createdAt])
+  @@index([tenantId, query])
+}
+
+model CommandDefinition {
+  id                 String   @id @default(cuid())
+  code               String   @unique
+  name               String
+  description        String?
+  category           String // 'NAVIGATION' | 'CREATE' | 'ACTION'
+  targetRoute        String
+  requiredPermission String
+  requiredModule     String?
+  icon               String   @default("⚡")
+  shortcut           String? // 'Ctrl+Shift+N'
+  isActive           Boolean  @default(true)
+  sortOrder          Int      @default(0)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([isActive, sortOrder])
+}
+
+// Teklif
+enum QuoteStatus {
+  DRAFT
+  SENT
+  VIEWED
+  ACCEPTED
+  REJECTED
+  EXPIRED
+  CONVERTED_TO_ORDER
+  CONVERTED_TO_SALE
+  CANCELLED
+}
+
+model Quote {
+  id               String      @id @default(cuid())
+  tenantId         String
+  quoteNumber      String
+  customerId       String
+  customerName     String
+  quoteDate        DateTime    @default(now())
+  validUntil       DateTime
+  currency         String      @default("TRY")
+  exchangeRate     Decimal     @default(1)
+  subTotal         Decimal     @default(0)
+  discountRate     Decimal     @default(0)
+  discountAmount   Decimal     @default(0)
+  vatTotal         Decimal     @default(0)
+  grandTotal       Decimal     @default(0)
+  paymentTerms     String?
+  deliveryTerms    String?
+  notes            String?     @db.Text
+  status           QuoteStatus @default(DRAFT)
+  sentAt           DateTime?
+  viewedAt         DateTime?
+  acceptedAt       DateTime?
+  rejectedAt       DateTime?
+  rejectedReason   String?
+  convertedAt      DateTime?
+  convertedRefType String? // 'Order' | 'Sale'
+  convertedRefId   String?
+  preparedById     String?
+  createdById      String?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  isDeleted        Boolean     @default(false)
+  deletedAt        DateTime?
+
+  items      QuoteItem[]
+  statusLogs QuoteStatusLog[]
+
+  @@index([tenantId, customerId])
+  @@index([tenantId, quoteDate])
+  @@index([tenantId, validUntil])
+}
+
+model QuoteItem {
+  id             String  @id @default(cuid())
+  quoteId        String
+  productId      String
+  productCode    String
+  productName    String
+  unitId         String?
+  unitName       String?
+  quantity       Decimal
+  unitPrice      Decimal
+  discountRate   Decimal @default(0)
+  discountAmount Decimal @default(0)
+  vatRate        Decimal
+  vatAmount      Decimal @default(0)
+  lineTotal      Decimal
+  description    String? @db.Text
+  sortOrder      Int     @default(0)
+
+  quote Quote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+
+  @@index([quoteId, sortOrder])
+}
+
+model QuoteStatusLog {
+  id         String       @id @default(cuid())
+  quoteId    String
+  fromStatus QuoteStatus?
+  toStatus   QuoteStatus
+  actorId    String
+  actorName  String?
+  note       String?
+  metadata   Json         @default("{}")
+  createdAt  DateTime     @default(now())
+
+  quote Quote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+
+  @@index([quoteId, createdAt])
+}
+
+// Müşteri Risk
+enum CustomerRiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+model CustomerRiskConfig {
+  id                   String   @id @default(cuid())
+  tenantId             String
+  name                 String
+  description          String?
+  // Esikler (TL)
+  balanceWarning       Decimal  @default(10000)
+  balanceCritical      Decimal  @default(50000)
+  overdue30Warn        Decimal  @default(5000)
+  overdue60Warn        Decimal  @default(10000)
+  overdue90Crit        Decimal  @default(20000)
+  daysSinceOrderWarn   Int      @default(60)
+  daysSinceOrderCrit   Int      @default(120)
+  daysSincePaymentWarn Int      @default(45)
+  daysSincePaymentCrit Int      @default(90)
+  isActive             Boolean  @default(true)
+  isDefault            Boolean  @default(false)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([tenantId, isActive])
+}
+
+model CustomerRiskSnapshot {
+  id               String            @id @default(cuid())
+  tenantId         String
+  customerId       String
+  customerName     String
+  riskLevel        CustomerRiskLevel
+  balance          Decimal
+  overdue30        Decimal           @default(0)
+  overdue60        Decimal           @default(0)
+  overdue90        Decimal           @default(0)
+  daysSinceOrder   Int?
+  daysSincePayment Int?
+  riskScore        Int               @default(0) // 0-100
+  reasons          Json              @default("[]")
+  // [{ factor: 'OVERDUE_90', weight: 30, message: '90+ gün gecikme: 5K' }]
+  snapshotAt       DateTime          @default(now())
+
+  @@index([tenantId, riskLevel])
+  @@index([tenantId, customerId, snapshotAt])
+}
+
+// Ürün Öneri
+enum RecommendationType {
+  PREVIOUSLY_PURCHASED
+  FREQUENTLY_BOUGHT_BUNDLE
+  PROMOTIONAL
+  OVERSTOCK
+  TOP_SELLING
+  SAME_CATEGORY
+  SAME_BRAND
+}
+
+model ProductRecommendationRule {
+  id          String             @id @default(cuid())
+  tenantId    String
+  name        String
+  type        RecommendationType
+  isActive    Boolean            @default(true)
+  priority    Int                @default(5)
+  config      Json               @default("{}")
+  // PREVIOUSLY_PURCHASED: { minCount: 2, lookbackDays: 365 }
+  // FREQUENTLY_BOUGHT_BUNDLE: { minCoOccurrence: 3 }
+  // OVERSTOCK: { minDaysOfStock: 90 }
+  // TOP_SELLING: { lookbackDays: 90, limit: 5 }
+  createdById String?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  @@index([tenantId, isActive])
+  @@index([type])
+}
+
+model ProductRecommendationLog {
+  id          String             @id @default(cuid())
+  tenantId    String
+  customerId  String?
+  productId   String
+  type        RecommendationType
+  userId      String?
+  context     String? // 'sales_screen' | 'cart'
+  addedToCart Boolean            @default(false)
+  createdAt   DateTime           @default(now())
+
+  @@index([tenantId, createdAt])
+  @@index([customerId, productId])
+}
+
+// Toplu İşlem
+enum BulkOperationType {
+  PRICE_UPDATE
+  CATEGORY_CHANGE
+  BRAND_ASSIGN
+  CUSTOMER_GROUP_ASSIGN
+  SALESPERSON_ASSIGN
+  PRODUCT_DEACTIVATE
+  CUSTOMER_DEACTIVATE
+  CAMPAIGN_ASSIGN
+  RISK_LIMIT_UPDATE
+  WAREHOUSE_UPDATE
+}
+
+enum BulkOperationStatus {
+  DRAFT
+  PREVIEW
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+  ROLLED_BACK
+}
+
+model BulkOperation {
+  id             String              @id @default(cuid())
+  tenantId       String
+  name           String
+  type           BulkOperationType
+  status         BulkOperationStatus @default(DRAFT)
+  filters        Json                @default("{}")
+  // { type: 'PRODUCT', categoryIds: ['cat-1'], status: 'ACTIVE' }
+  update         Json                @default("{}")
+  // { field: 'salePrice', value: 100, percentage: 10 } veya { field: 'categoryId', value: 'cat-2' }
+  totalMatched   Int                 @default(0)
+  totalProcessed Int                 @default(0)
+  totalSuccess   Int                 @default(0)
+  totalFailed    Int                 @default(0)
+  batchId        String? // unique execution batch ID
+  errorMessage   String?
+  startedAt      DateTime?
+  completedAt    DateTime?
+  rolledBackAt   DateTime?
+  approvedAt     DateTime?
+  approvedById   String?
+  createdById    String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  isDeleted      Boolean             @default(false)
+  deletedAt      DateTime?
+
+  items BulkOperationItem[]
+  logs  BulkOperationLog[]
+
+  @@index([tenantId, type])
+  @@index([tenantId, createdAt])
+}
+
+model BulkOperationItem {
+  id          String    @id @default(cuid())
+  operationId String
+  entityType  String
+  entityId    String
+  beforeState Json
+  afterState  Json
+  status      String    @default("PENDING") // PENDING | SUCCESS | FAILED
+  error       String?
+  processedAt DateTime?
+
+  operation BulkOperation @relation(fields: [operationId], references: [id], onDelete: Cascade)
+
+  @@index([operationId])
+  @@index([entityType, entityId])
+}
+
+model BulkOperationLog {
+  id          String   @id @default(cuid())
+  operationId String
+  action      String // 'PREVIEW' | 'EXECUTE' | 'APPROVE' | 'ROLLBACK'
+  actorId     String
+  details     Json     @default("{}")
+  createdAt   DateTime @default(now())
+
+  operation BulkOperation @relation(fields: [operationId], references: [id], onDelete: Cascade)
+
+  @@index([operationId, createdAt])
+}
+
+// Etiket
+enum LabelType {
+  BARCODE
+  SHELF
+  PRICE
+  QR
+  CARTON
+}
+
+enum LabelPageSize {
+  A4
+  SIZE_58MM
+  SIZE_80MM
+  CUSTOM
+}
+
+model LabelTemplate {
+  id          String        @id @default(cuid())
+  tenantId    String? // null = global template
+  name        String
+  type        LabelType
+  pageSize    LabelPageSize @default(A4)
+  widthMm     Float         @default(50)
+  heightMm    Float         @default(30)
+  isGlobal    Boolean       @default(false)
+  isActive    Boolean       @default(true)
+  // Layout JSON: { fields: [{ field, x, y, fontSize, fontWeight, align }], barcode: { type, position, size } }
+  layout      Json          @default("{}")
+  previewSvg  String? // base64 PNG
+  createdById String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  printJobs LabelPrintJob[]
+
+  @@index([tenantId, isActive])
+  @@index([type])
+}
+
+model LabelPrintJob {
+  id          String   @id @default(cuid())
+  tenantId    String
+  templateId  String
+  productIds  Json     @default("[]")
+  copies      Int      @default(1)
+  status      String   @default("COMPLETED")
+  printedById String
+  printedAt   DateTime @default(now())
+
+  tenant   Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  template LabelTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, printedAt])
+}
+
+// Ürün Görsel
+model ProductImage {
+  id           String    @id @default(cuid())
+  tenantId     String
+  productId    String
+  r2Key        String
+  url          String
+  thumbnailUrl String?
+  fileName     String
+  fileSize     Int
+  mimeType     String
+  width        Int?
+  height       Int?
+  isMain       Boolean   @default(false)
+  sortOrder    Int       @default(0)
+  altText      String?
+  uploadedById String?
+  uploadedAt   DateTime  @default(now())
+  isDeleted    Boolean   @default(false)
+  deletedAt    DateTime?
+
+  @@index([tenantId, productId, isDeleted])
+  @@index([tenantId, productId, sortOrder])
+}
+
+model ImageUploadBatch {
+  id           String    @id @default(cuid())
+  tenantId     String
+  uploadedById String
+  totalFiles   Int       @default(0)
+  successCount Int       @default(0)
+  failedCount  Int       @default(0)
+  matchBy      String // 'filename' | 'barcode' | 'productCode'
+  status       String    @default("PROCESSING")
+  startedAt    DateTime  @default(now())
+  completedAt  DateTime?
+
+  matchLogs ImageMatchLog[]
+
+  @@index([tenantId, startedAt])
+}
+
+model ImageMatchLog {
+  id          String   @id @default(cuid())
+  batchId     String
+  fileName    String
+  matched     Boolean  @default(false)
+  productId   String?
+  errorReason String?
+  createdAt   DateTime @default(now())
+
+  batch ImageUploadBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  @@index([batchId])
+}
+
+// Müşteri Segment
+enum SegmentType {
+  MANUAL
+  AUTOMATIC
+}
+
+model CustomerSegment {
+  id            String      @id @default(cuid())
+  tenantId      String
+  name          String
+  description   String?
+  type          SegmentType @default(MANUAL)
+  // Otomatik kurallar
+  rules         Json        @default("[]")
+  // [{ field: 'totalSalesAmount', operator: '>=', value: 100000 }]
+  // [{ field: 'daysSinceOrder', operator: '>=', value: 30 }]
+  memberCount   Int         @default(0)
+  lastRefreshAt DateTime?
+  isActive      Boolean     @default(true)
+  color         String      @default("blue")
+  icon          String      @default("👥")
+  createdById   String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  isDeleted     Boolean     @default(false)
+  deletedAt     DateTime?
+
+  members  CustomerSegmentMember[]
+  ruleDefs CustomerSegmentRule[]
+
+  @@index([tenantId, isDeleted])
+  @@index([tenantId, type])
+}
+
+model CustomerSegmentRule {
+  id        String  @id @default(cuid())
+  segmentId String
+  // Ayrıntılı kural tanımı (ileride rule builder için)
+  field     String
+  operator  String
+  value     String
+  joinWith  String? @default("AND")
+  sortOrder Int     @default(0)
+
+  ruleSegment CustomerSegment @relation(fields: [segmentId], references: [id], onDelete: Cascade)
+
+  @@index([segmentId])
+}
+
+model CustomerSegmentMember {
+  id         String   @id @default(cuid())
+  segmentId  String
+  customerId String
+  addedAt    DateTime @default(now())
+  addedBy    String? // 'MANUAL' | 'AUTO_RULE' | 'AUTO_REFRESH'
+  metadata   Json     @default("{}")
+
+  segment CustomerSegment @relation(fields: [segmentId], references: [id], onDelete: Cascade)
+
+  @@unique([segmentId, customerId])
+  @@index([segmentId])
+  @@index([customerId])
+}
+
+// Veri Temizlik / Arşiv
+enum CleanupType {
+  OLD_LOGS
+  OLD_IMPORT_FILES
+  UNUSED_IMAGES
+  INACTIVE_CUSTOMERS
+  INACTIVE_PRODUCTS
+  STORAGE_OPTIMIZE
+}
+
+enum CleanupStatus {
+  PENDING
+  PREVIEW
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model CleanupJob {
+  id            String        @id @default(cuid())
+  tenantId      String? // null = super admin tüm tenantlar
+  type          CleanupType
+  status        CleanupStatus @default(PENDING)
+  filters       Json          @default("{}")
+  // { olderThanDays: 365, fileType: 'image/' }
+  totalMatched  Int           @default(0)
+  totalArchived Int           @default(0)
+  totalDeleted  Int           @default(0)
+  totalFreedMB  Float         @default(0)
+  errorMessage  String?
+  preview       Json? // önizleme: silinecek/arşivlenecek dosyalar
+  startedAt     DateTime?
+  completedAt   DateTime?
+  createdById   String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  items CleanupJobItem[]
+  logs  CleanupLog[]
+
+  @@index([tenantId, type, status])
+  @@index([tenantId, createdAt])
+}
+
+model CleanupJobItem {
+  id         String    @id @default(cuid())
+  jobId      String
+  entityType String
+  entityId   String
+  label      String
+  sizeMB     Float     @default(0)
+  status     String    @default("PENDING") // PENDING | ARCHIVED | DELETED | SKIPPED
+  archivedAt DateTime?
+  deletedAt  DateTime?
+  error      String?
+
+  job CleanupJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+}
+
+model CleanupLog {
+  id        String   @id @default(cuid())
+  jobId     String
+  action    String // 'PREVIEW' | 'EXECUTE' | 'ARCHIVE' | 'DELETE'
+  count     Int      @default(0)
+  sizeMB    Float    @default(0)
+  actorId   String
+  details   Json     @default("{}")
+  createdAt DateTime @default(now())
+
+  job CleanupJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId, createdAt])
+}
+
+model ArchiveRecord {
+  id           String    @id @default(cuid())
+  tenantId     String
+  entityType   String // 'Customer' | 'Product' | 'Order' | 'Image' | etc.
+  entityId     String
+  archivedData Json // snapshot of archived data
+  reason       String
+  archivedById String
+  archivedAt   DateTime  @default(now())
+  expiresAt    DateTime? // otomatik silme için (GDPR uyumlu)
+  isRestored   Boolean   @default(false)
+  restoredAt   DateTime?
+
+  @@index([tenantId, entityType, archivedAt])
+  @@index([tenantId, entityId])
+  @@index([expiresAt])
+}
+
+// ============================================================================
+// FAZ 58: Idempotency
+// ============================================================================
+model IdempotencyKey {
+  id          String    @id @default(cuid())
+  key         String    @unique
+  tenantId    String
+  fingerprint String
+  method      String
+  url         String
+  status      String    @default("PROCESSING")
+  statusCode  Int?
+  response    Json?
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+  expiresAt   DateTime?
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, expiresAt])
+  @@index([createdAt])
+}
+
+// ============================================================================
+// FAZ HR-1: İK / Bordro Hazırlık - Personel Özlük Kartı
+// ============================================================================
+
+enum HrGender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum MaritalStatus {
+  SINGLE
+  MARRIED
+  DIVORCED
+  WIDOWED
+}
+
+enum EmploymentStatus {
+  ACTIVE
+  ON_LEAVE
+  SUSPENDED
+  RESIGNED
+  TERMINATED
+  ARCHIVED
+}
+
+enum ContractType {
+  INDEFINITE
+  DEFINITE
+  PART_TIME
+  INTERNSHIP
+  SEASONAL
+  OUTSOURCE
+}
+
+enum WorkingType {
+  FULL_TIME
+  PART_TIME
+  HOURLY
+  TEMPORARY
+  INTERN
+  OUTSOURCE
+}
+
+enum HrDocumentType {
+  IDENTITY_COPY
+  EMPLOYMENT_CONTRACT
+  KVKK_CONSENT
+  HEALTH_REPORT
+  CRIMINAL_RECORD
+  DIPLOMA_CERTIFICATE
+  RESIDENCE_CERTIFICATE
+  PHOTO
+  OSH_TRAINING
+  INVENTORY_FORM
+  SGK_ENTRY_DECLARATION
+  TERMINATION_PAPERS
+  OTHER
+}
+
+enum HrDocumentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  EXPIRED
+}
+
+model HrEmployee {
+  id                String           @id @default(cuid())
+  tenantId          String
+  employeeNo        String // Otomatik veya manuel
+  firstName         String
+  lastName          String
+  identityNumber    String? // TC Kimlik No - maskeli gösterilecek
+  birthDate         DateTime?
+  gender            HrGender?
+  maritalStatus     MaritalStatus?
+  bloodType         String?
+  phone             String?
+  email             String?
+  address           String?
+  emergencyContact  String?
+  emergencyPhone    String?
+  iban              String? // IBAN - maskeli gösterilecek
+  photoUrl          String?
+  status            EmploymentStatus @default(ACTIVE)
+  isDeleted         Boolean          @default(false)
+  deletedAt         DateTime?
+  deletedBy         String?
+  hireDate          DateTime?
+  terminationDate   DateTime?
+  terminationReason String?
+  notes             String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  createdBy         String?
+  updatedBy         String?
+
+  tenant     Tenant                    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  documents  HrEmployeeDocument[]
+  employment HrEmployeeEmploymentInfo?
+  onboards   HrOnboardingChecklist[]
+  offboards  HrOffboardingChecklist[]
+  leaveBalances HrLeaveBalance[]
+  leaveRequests HrLeaveRequest[]
+  leaveAdjustments HrLeaveAdjustment[]
+  payrollRecords HrPayrollRecord[]
+  payrollSupplements HrPayrollSupplement[]
+  absenceRecords HrAbsenceRecord[]
+  disciplinaryCases HrDisciplinaryCase[]
+  careerRecords HrCareerRecord[]
+  performanceReviews HrPerformanceReview[]
+  punchRecords HrPunchRecord[]
+  advanceRequests HrAdvanceRequest[]
+  trainingParticipants HrTrainingParticipant[]
+
+  @@unique([tenantId, employeeNo])
+  @@index([tenantId, isDeleted])
+  @@index([tenantId, lastName, firstName])
+  @@index([tenantId, identityNumber])
+}
+
+model HrEmployeeEmploymentInfo {
+  id                String       @id @default(cuid())
+  tenantId          String
+  employeeId        String       @unique
+  department        String?
+  branch            String?
+  position          String?
+  workingType       WorkingType  @default(FULL_TIME)
+  contractType      ContractType @default(INDEFINITE)
+  contractStartDate DateTime?
+  contractEndDate   DateTime?
+  probationMonths   Int          @default(0)
+  probationEndDate  DateTime?
+  sgkRegistrationNo String?
+  sgkEmployerNo     String?
+  sgkWorkplaceCode  String?
+  jobDescription    String?
+  weeklyHours       Decimal?     @db.Decimal(5, 2)
+  workLocation      String?
+  isActive          Boolean      @default(true)
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  createdBy         String?
+  updatedBy         String?
+
+  tenant   Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee HrEmployee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([tenantId, department])
+  @@index([tenantId, branch])
+}
+
+model HrEmployeeDocument {
+  id              String           @id @default(cuid())
+  tenantId        String
+  employeeId      String
+  documentType    HrDocumentType
+  title           String
+  fileName        String
+  fileSize        Int
+  mimeType        String
+  storageKey      String // R2 / MinIO path
+  storageProvider String           @default("r2")
+  status          HrDocumentStatus @default(PENDING)
+  issueDate       DateTime?
+  expiryDate      DateTime?
+  description     String?
+  uploadedBy      String
+  approvedBy      String?
+  approvedAt      DateTime?
+  isDeleted       Boolean          @default(false)
+  deletedAt       DateTime?
+  deletedBy       String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  tenant   Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee HrEmployee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, employeeId])
+  @@index([tenantId, documentType])
+  @@index([tenantId, employeeId, isDeleted])
+  @@index([expiryDate])
+}
+
+// ============================================================================
+// FAZ HR-2: İşe Giriş / İşten Çıkış Checklist
+// ============================================================================
+
+enum HrOnboardingStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  PENDING_DOCS
+  COMPLETED
+  CANCELLED
+}
+
+enum HrOnboardingItemStatus {
+  PENDING
+  IN_PROGRESS
+  DONE
+  BLOCKED
+  NOT_APPLICABLE
+}
+
+model HrOnboardingChecklist {
+  id          String   @id @default(cuid())
+  tenantId    String
+  employeeId  String
+  startDate   DateTime
+  targetCompletionDate DateTime?
+  completedAt DateTime?
+  cancelledAt DateTime?
+  status      HrOnboardingStatus @default(NOT_STARTED)
+  notes       String?
+  createdBy   String?
+  updatedBy   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isDeleted   Boolean  @default(false)
+  deletedAt   DateTime?
+  deletedBy   String?
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee    HrEmployee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  items       HrOnboardingChecklistItem[]
+
+  @@index([tenantId, isDeleted])
+  @@index([tenantId, employeeId])
+}
+
+model HrOnboardingChecklistItem {
+  id            String   @id @default(cuid())
+  tenantId      String
+  checklistId   String
+  itemKey       String   // 'identity_info', 'contract_uploaded', etc.
+  title         String
+  description   String?
+  isRequired    Boolean  @default(true)
+  isCompleted   Boolean  @default(false)
+  completedAt   DateTime?
+  completedBy   String?
+  status        HrOnboardingItemStatus @default(PENDING)
+  notes         String?
+  documentId    String?  // bağlı evrak (HrEmployeeDocument.id)
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  checklist     HrOnboardingChecklist @relation(fields: [checklistId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, checklistId])
+  @@index([tenantId, itemKey])
+}
+
+model HrOffboardingChecklist {
+  id          String   @id @default(cuid())
+  tenantId    String
+  employeeId  String
+  terminationDate DateTime
+  reason      String?
+  completedAt DateTime?
+  cancelledAt DateTime?
+  status      HrOnboardingStatus @default(NOT_STARTED)
+  notes       String?
+  createdBy   String?
+  updatedBy   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isDeleted   Boolean  @default(false)
+  deletedAt   DateTime?
+  deletedBy   String?
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee    HrEmployee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  items       HrOffboardingChecklistItem[]
+
+  @@index([tenantId, isDeleted])
+  @@index([tenantId, employeeId])
+}
+
+model HrOffboardingChecklistItem {
+  id            String   @id @default(cuid())
+  tenantId      String
+  checklistId   String
+  itemKey       String
+  title         String
+  description   String?
+  isRequired    Boolean  @default(true)
+  isCompleted   Boolean  @default(false)
+  completedAt   DateTime?
+  completedBy   String?
+  status        HrOnboardingItemStatus @default(PENDING)
+  notes         String?
+  documentId    String?
+  sortOrder     Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  checklist     HrOffboardingChecklist @relation(fields: [checklistId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, checklistId])
+  @@index([tenantId, itemKey])
+}
+
+// ============================================================================
+// FAZ HR-3: İzin Yönetimi
+// ============================================================================
+
+enum HrLeaveTypeCode {
+  ANNUAL       // Yıllık ücretli izin
+  WEEKLY       // Haftalık izin
+  UNPAID       // Ücretsiz izin
+  MATERNITY    // Doğum izni
+  PATERNITY    // Babalık izni
+  SICK         // Hastalık izni
+  DEATH        // Ölüm izni
+  EXCUSE       // Mazeret izni
+  COMPENSATION // Fazla mesai izinleri (ücretsiz)
+  MARRIAGE     // Evlilik izni
+}
+
+enum HrLeaveAccrualMethod {
+  STANDARD  // Yıl başında tam hak
+  MONTHLY   // Her ay eşit birikir
+  NONE      // Sınırsız (ücretsiz gibi)
+}
+
+enum HrLeaveRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+model HrLeaveType {
+  id                String   @id @default(cuid())
+  tenantId          String
+  name              String
+  code              HrLeaveTypeCode
+  color             String   @default("#6B7280")
+  icon              String   @default("📋")
+  accrualMethod     HrLeaveAccrualMethod @default(STANDARD)
+  defaultDaysPerYear Int     @default(0)
+  requiresApproval  Boolean  @default(true)
+  requiresDocument  Boolean  @default(false)
+  minDaysNotice     Int      @default(0)
+  maxConsecutiveDays Int     @default(0)
+  canCarryOver      Boolean  @default(false)
+  carryOverDays    Int      @default(0)
+  isPaid           Boolean  @default(true)
+  isActive          Boolean  @default(true)
+  sortOrder        Int      @default(0)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  isDeleted         Boolean  @default(false)
+  deletedAt         DateTime?
+
+  tenant            Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  leaveBalances     HrLeaveBalance[]
+  leaveRequests     HrLeaveRequest[]
+  leaveAdjustments HrLeaveAdjustment[]
+
+  @@index([tenantId, isActive])
+  @@index([tenantId, code])
+}
+
+model HrLeaveBalance {
+  id            String   @id @default(cuid())
+  tenantId      String
+  employeeId    String
+  leaveTypeId   String
+  year          Int
+  entitledDays  Decimal  @default(0)
+  accruedDays   Decimal  @default(0)
+  usedDays      Decimal  @default(0)
+  pendingDays   Decimal  @default(0)
+  carriedOverDays Int    @default(0)
+  expiresAt     DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee      HrEmployee   @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  leaveType     HrLeaveType  @relation(fields: [leaveTypeId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, employeeId, leaveTypeId, year])
+  @@index([tenantId, employeeId, year])
+}
+
+model HrLeaveRequest {
+  id                     String   @id @default(cuid())
+  tenantId               String
+  employeeId             String
+  leaveTypeId            String
+  startDate              DateTime
+  endDate                DateTime
+  totalDays              Decimal
+  workingDays            Decimal
+  reason                 String?
+  status                 HrLeaveRequestStatus @default(PENDING)
+  approverId             String?
+  approvedAt             DateTime?
+  rejectedAt             DateTime?
+  rejectionReason        String?
+  documentUrl            String?
+  replacementEmployeeId  String?
+  cancellationReason     String?
+  createdBy              String
+  updatedBy              String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  isDeleted              Boolean  @default(false)
+  deletedAt              DateTime?
+
+  tenant                Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee              HrEmployee   @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  leaveType             HrLeaveType  @relation(fields: [leaveTypeId], references: [id], onDelete: Cascade)
+  approver              User?        @relation("LeaveRequestApprover", fields: [approverId], references: [id])
+
+  @@index([tenantId, employeeId, status])
+  @@index([tenantId, status, startDate])
+  @@index([approverId, status])
+}
+
+model HrLeaveAdjustment {
+  id            String   @id @default(cuid())
+  tenantId      String
+  employeeId     String
+  leaveTypeId   String
+  year          Int
+  adjustment    Decimal
+  reason        String
+  adjustedBy    String
+  createdAt     DateTime @default(now())
+
+  tenant        Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee      HrEmployee   @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  leaveType     HrLeaveType  @relation(fields: [leaveTypeId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, employeeId, year])
+}
+
+// =====================================================================
+// HR-4: BORDRO HAZIRLIK
+// Muhasebeye gönderilecek bordro dökümleri (hesaplama müşteri/muhasebe tarafından yapılır)
+// =====================================================================
+
+enum PayrollPeriodType {
+  MONTHLY  // Aylık
+  WEEKLY   // Haftalık
+}
+
+enum PayrollPeriodStatus {
+  DRAFT      // Taslak
+  REVIEW     // İncelemede
+  CONFIRMED  // Onaylandı
+  EXPORTED   // Dışa aktarıldı (muhasebeye gönderildi)
+  CLOSED     // Kapatıldı
+}
+
+enum PayrollRecordStatus {
+  DRAFT     // Veri girişi
+  REVIEW    // İnceleme
+  CONFIRMED // Kesinleşti
+  EXPORTED  // Dışa aktarıldı
+}
+
+enum SupplementType {
+  BONUS          // Prim
+  INCENTIVE      // Teşvik/İkramiye
+  ALLOWANCE      // Ek ödeme/Allowance
+  DEDUCTION      // Kesinti
+  SOCIAL_SEC     // SGK kesintisi
+  TAX            // Vergi kesintisi
+  OTHER          // Diğer
+}
+
+model HrPayrollPeriod {
+  id            String   @id @default(cuid())
+  tenantId      String
+  year          Int      // 2025
+  period        Int      // 1-12 (aylık) veya 1-52 (haftalık)
+  periodType    PayrollPeriodType @default(MONTHLY)
+  startDate     DateTime
+  endDate       DateTime
+  status        PayrollPeriodStatus @default(DRAFT)
+  totalGross    Decimal?  @db.Decimal(15,2)
+  totalNet      Decimal?  @db.Decimal(15,2)
+  employeeCount Int?
+  confirmedBy   String?
+  confirmedAt   DateTime?
+  exportedBy    String?
+  exportedAt    DateTime?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  isDeleted     Boolean  @default(false)
+  deletedAt     DateTime?
+
+  tenant         Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  records        HrPayrollRecord[]
+  supplements    HrPayrollSupplement[]
+
+  @@unique([tenantId, year, period, periodType])
+  @@index([tenantId, year])
+  @@index([tenantId, status])
+}
+
+model HrPayrollRecord {
+  id                 String   @id @default(cuid())
+  tenantId           String
+  periodId           String
+  employeeId         String
+  workingDays        Decimal  @default(0) @db.Decimal(5,2)
+  absentDays         Decimal  @default(0) @db.Decimal(5,2)
+  overtimeHours      Decimal  @default(0) @db.Decimal(8,2)
+  lateHours          Decimal  @default(0) @db.Decimal(8,2)
+  baseSalary         Decimal  @db.Decimal(15,2)
+  grossPay           Decimal  @default(0) @db.Decimal(15,2)
+  sgkEmployee        Decimal  @default(0) @db.Decimal(15,2)
+  unemploymentEmployee Decimal @default(0) @db.Decimal(15,2)
+  incomeTax          Decimal  @default(0) @db.Decimal(15,2)
+  netPay             Decimal  @default(0) @db.Decimal(15,2)
+  status             PayrollRecordStatus @default(DRAFT)
+  exportedAt         DateTime?
+  exportedBy         String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  createdBy          String?
+  updatedBy          String?
+
+  tenant      Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  period      HrPayrollPeriod    @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  employee    HrEmployee         @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  supplements HrPayrollSupplement[]
+
+  @@unique([tenantId, periodId, employeeId])
+  @@index([tenantId, periodId])
+  @@index([tenantId, employeeId])
+  @@index([tenantId, status])
+}
+
+model HrPayrollSupplement {
+  id          String   @id @default(cuid())
+  tenantId    String
+  periodId    String
+  employeeId  String
+  recordId    String?
+  type        SupplementType
+  name        String
+  amount      Decimal  @db.Decimal(15,2)
+  isDeduction Boolean  @default(false)
+  notes       String?
+  createdAt   DateTime @default(now())
+
+  tenant  Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  period  HrPayrollPeriod @relation(fields: [periodId], references: [id], onDelete: Cascade)
+  employee HrEmployee     @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  record  HrPayrollRecord? @relation(fields: [recordId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, periodId])
+  @@index([tenantId, employeeId])
+  @@index([tenantId, type])
+}
+
+// =====================================================================
+// HR-5: BORDRO PARAMETRELERİ & KESENEK
+// SGK kesenek oranları, vergi dilimleri, asgari ücret, bordro parametreleri
+// =====================================================================
+
+model HrPayrollParam {
+  id          String   @id @default(cuid())
+  tenantId    String
+  year        Int      // 2025, 2026...
+  paramKey    String   // "sgk_employee_rate", "min_wage", "agc_exemption_limit"...
+  paramValue  Decimal  @db.Decimal(15,4)
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, year, paramKey])
+  @@index([tenantId, year])
+}
+
+// =====================================================================
+// HR-6: DEVAMSIZLIK & DİSİPLİN
+// =====================================================================
+
+enum AbsenceType {
+  UNPAID_LEAVE    // Ücretsiz izin
+  SICK            // Hastalık (devamsızlık)
+  UNAUTHORIZED    // İzinsiz devamsızlık
+  LATE            // Geç kalma
+  EARLY_LEAVE     // Erken çıkış
+  OTHER           // Diğer
+}
+
+enum DisciplinaryActionType {
+  WARNING           // Uyarı
+  SUSPENSION        // Tecil/mesai durdurma
+  SALARY_CUT        // Maaş kesintisi
+  TERMINATION       // İşten çıkarma
+  OTHER             // Diğer
+}
+
+model HrAbsenceRecord {
+  id          String   @id @default(cuid())
+  tenantId    String
+  employeeId   String
+  absenceType  AbsenceType
+  startDate    DateTime
+  endDate      DateTime
+  totalDays    Decimal  @db.Decimal(5,2)
+  reason       String?
+  isJustified  Boolean  @default(false)  // Mazeretli devamsızlık
+  deductionAmount Decimal @default(0) @db.Decimal(15,2) // Kesinti tutarı
+  periodId     String?  // Hangi bordro döneminde kesinti yapıldı
+  createdBy    String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+
+  tenant   Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee HrEmployee      @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, employeeId])
+  @@index([tenantId, startDate])
+  @@index([tenantId, absenceType])
+}
+
+model HrDisciplinaryCase {
+  id            String   @id @default(cuid())
+  tenantId      String
+  employeeId    String
+  caseNo        String   // "DISC-2025-001"
+  incidentDate  DateTime
+  incidentDesc  String
+  actionType    DisciplinaryActionType
+  actionDate    DateTime?
+  actionNotes   String?
+  isClosed      Boolean  @default(false)
+  closedBy      String?
+  closedAt      DateTime?
+  createdBy     String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+
+  tenant   Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee HrEmployee      @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, caseNo])
+  @@index([tenantId, employeeId])
+  @@index([tenantId, actionType])
+  @@index([tenantId, isClosed])
+}
+
+// =====================================================================
+// HR-7: KARİYER & EĞİTİM & PERFORMANS
+// =====================================================================
+
+model HrCareerRecord {
+  id          String   @id @default(cuid())
+  tenantId    String
+  employeeId  String
+  recordType  String   // "PROMOTION", "TRANSFER", "SALARY_CHANGE", "TITLE_CHANGE"
+  effectiveDate DateTime
+  oldValue    String?  // Önceki değer
+  newValue    String?  // Yeni değer
+  notes       String?
+  approvedBy  String?
+  createdAt   DateTime @default(now())
+
+  tenant   Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee HrEmployee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, employeeId])
+  @@index([tenantId, recordType])
+  @@index([tenantId, effectiveDate])
+}
+
+model HrTraining {
+  id              String   @id @default(cuid())
+  tenantId        String
+  name            String
+  description     String?
+  trainer         String?
+  startDate       DateTime
+  endDate         DateTime
+  location        String?
+  trainingType    String   // "ON_SITE", "ONLINE", "SEMINAR", "CERTIFICATION"
+  maxParticipants Int?
+  status          String   @default("PLANNED") // PLANNED, IN_PROGRESS, COMPLETED, CANCELLED
+  createdBy       String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
+
+  tenant    Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  participants HrTrainingParticipant[]
+
+  @@index([tenantId, status])
+}
+
+model HrTrainingParticipant {
+  id          String   @id @default(cuid())
+  trainingId  String
+  employeeId  String
+  status      String   @default("REGISTERED") // REGISTERED, ATTENDED, COMPLETED, CANCELLED, NO_SHOW
+  score       Decimal? @db.Decimal(5,2)
+  certificateUrl String?
+  notes       String?
+  createdAt   DateTime @default(now())
+
+  training HrTraining @relation(fields: [trainingId], references: [id], onDelete: Cascade)
+  employee HrEmployee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@unique([trainingId, employeeId])
+}
+
+model HrPerformanceReview {
+  id          String   @id @default(cuid())
+  tenantId    String
+  employeeId  String
+  period      String   // "2025-Q1", "2025-YIL"
+  reviewerId  String
+  status      String   @default("PENDING") // PENDING, SELF_REVIEW, MANAGER_REVIEW, COMPLETED
+  // Puanlar (1-5)
+  overallScore    Decimal? @db.Decimal(3,2)
+  taskCompletion  Decimal? @db.Decimal(3,2)
+  teamwork        Decimal? @db.Decimal(3,2)
+  communication   Decimal? @db.Decimal(3,2)
+  problemSolving  Decimal? @db.Decimal(3,2)
+  leadership      Decimal? @db.Decimal(3,2)
+  // Metin değerlendirmeler
+  strengths       String?
+  developmentAreas String?
+  goals           String?
+  reviewerNotes   String?
+  employeeComment String?
+  completedAt     DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
+
+  tenant   Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee HrEmployee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  reviewer User        @relation(fields: [reviewerId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, employeeId])
+  @@index([tenantId, period])
+  @@index([tenantId, status])
+}
+
+// =====================================================================
+// HR-8: PUANTAJ / YOKLAMA
+// Günlük giriş-çıkış kayıtları, puantaj özeti
+// =====================================================================
+
+enum PunchStatus {
+  CLOCKED_IN   // Mesai başında
+  CLOCKED_OUT  // Mesai sonunda
+  ON_BREAK     // Molada
+  ABSENT       // Devamsız
+}
+
+model HrPunchRecord {
+  id            String   @id @default(cuid())
+  tenantId      String
+  employeeId    String
+  punchDate     DateTime @db.Date  // Gün bilgisi (tarih only)
+  clockIn       DateTime?          // Giriş saati
+  clockOut      DateTime?          // Çıkış saati
+  breakStart    DateTime?
+  breakEnd      DateTime?
+  totalHours    Decimal  @default(0) @db.Decimal(5,2)  // Toplam çalışma saati (net)
+  overtimeHours Decimal  @default(0) @db.Decimal(5,2)
+  lateMinutes   Int      @default(0)
+  earlyMinutes  Int      @default(0)
+  status        PunchStatus @default(CLOCKED_OUT)
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+
+  tenant   Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee HrEmployee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, employeeId, punchDate])
+  @@index([tenantId, punchDate])
+  @@index([tenantId, employeeId])
+  @@index([tenantId, status])
+}
+
+// =====================================================================
+// HR-9: AVANS
+// Personel avans talepleri ve bordroya mahsup
+// =====================================================================
+
+enum AdvanceStatus {
+  PENDING    // Beklemede
+  APPROVED   // Onaylandı
+  REJECTED   // Reddedildi
+  PAID       // Ödendi
+  DEDUCTED   // Bordroda mahsup edildi
+}
+
+model HrAdvanceRequest {
+  id          String   @id @default(cuid())
+  tenantId    String
+  employeeId  String
+  amount      Decimal  @db.Decimal(15,2)
+  reason      String?
+  status      AdvanceStatus @default(PENDING)
+  requestedBy String   // Kim talep etti (user.id)
+  approvedBy  String?
+  approvedAt  DateTime?
+  paidAt      DateTime?
+  paidBy      String?
+  deductionMonth String?  // Hangi ay bordrosundan düşülecek
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  tenant   Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  employee HrEmployee        @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  repayments HrAdvanceRepayment[]
+
+  @@index([tenantId, employeeId])
+  @@index([tenantId, status])
+  @@index([tenantId, createdAt])
+}
+
+model HrAdvanceRepayment {
+  id            String   @id @default(cuid())
+  tenantId      String
+  advanceId    String
+  periodId      String?  // Hangi bordro döneminde mahsup edildi
+  amount        Decimal  @db.Decimal(15,2)
+  createdAt     DateTime @default(now())
+
+  tenant  Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  advance HrAdvanceRequest @relation(fields: [advanceId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, advanceId])
+  @@index([tenantId, periodId])
+}

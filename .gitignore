@@ -1,0 +1,73 @@
+# Bağımlılıklar
+node_modules/
+.pnpm-store/
+
+# Build çıktıları
+dist/
+build/
+out/
+.tsbuildinfo
+*.tsbuildinfo
+next/
+.nuxt/
+.turbo/
+.cache/
+
+# Çevre dosyaları
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Log dosyaları
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# IDE ve editör
+.vscode/
+!.vscode/settings.json.example
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Test çıktıları
+coverage/
+.nyc_output/
+*.lcov
+
+# Prisma
+apps/api/prisma/migrations/dev.db
+apps/api/prisma/migrations/dev.db-journal
+
+# Yüklenen dosyalar (lokal geliştirme)
+storage/
+public/uploads/
+public/temp/
+apps/api/storage/
+
+# Bundle ve patch dosyaları (kullanıcıya teslim)
+*.bundle
+*.patch
+
+# Çalışma zamanı
+.pid
+.seed
+.pid.lock
+
+# OS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+ehthumbs.db
+Desktop.ini
+
+# Lokal referans tasarım klasörü (GitHub'daki orijinal repoda zaten var)
+repo_reference/

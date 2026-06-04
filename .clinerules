@@ -1,0 +1,63 @@
+# Cline Rules — VSCode Cline
+# https://docs.cline.bot/improving-your-prompting/cline-rules
+
+## Project
+Türkçe multi-tenant SaaS işletme yönetim platformu. Monorepo (pnpm).
+Frontend: React + TS + Vite. Backend: NestJS + Prisma. Shared: @saas/shared.
+
+## Hard Rules
+1. **UI dili TÜRKÇE** — kod İngilizce, commit Türkçe
+2. **Multi-tenant** — her tablo `tenantId`, her endpoint `req.user.tenantId`
+3. **Soft delete** — `isDeleted Boolean @default(false)` + `deletedAt DateTime?`, fiziksel silme YOK
+4. **Event sourcing** — bakiye SAKLANMAZ, `SUM(movements)` ile hesaplanır
+5. **Para = Decimal** — asla Float
+6. **Multi-line enum** — `enum X { A B C }` tek satır HATA VERİR
+
+## Component Library (REUSE FIRST — yenisini yapma)
+- `DataTable<T>` — `@/components/data/DataTable`
+- `MobileCardList<T>` — `@/components/data/MobileCardList`
+- `ConfirmModal` — variant: 'danger' | 'info' | 'warning'
+- `PageHeader` — title, description (NOT subtitle), actions
+- `EmptyState` — action?: ReactNode (not {label, onClick})
+- `LoadingState`, `ErrorState`, `PageGuard`
+
+## Frontend API Pattern
+```ts
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiClient } from '@/lib/api-client';
+export function useXxx(params) {
+  return useQuery({
+    queryKey: ['xxx', params],
+    queryFn: async () => {
+      const { data } = await apiClient.get('/xxx', { params });
+      return data;
+    },
+  });
+}
+```
+
+## Backend Module Pattern
+```
+apps/api/src/modules/{domain}/
+  {domain}.module.ts
+  {domain}.controller.ts   (@UseGuards(JwtAuthGuard, TenantGuard))
+  {domain}.service.ts      (tenantId: string first param)
+  {domain}.service.spec.ts
+```
+
+## NEVER Do
+- ❌ Redux
+- ❌ Float for money
+- ❌ Hard delete
+- ❌ tenantId from request body
+- ❌ Single-line enum
+- ❌ English UI text
+- ❌ Re-inventing existing components
+- ❌ N+1 queries
+- ❌ Inline `style={{}}`
+- ❌ Empty `catch {}` (always log)
+
+## Color Tokens
+- `bg-primary text-on-primary` — primary
+- `bg-surface border-outline` — cards
+- Semantic: green=success, amber=warning, red=danger, blue=info

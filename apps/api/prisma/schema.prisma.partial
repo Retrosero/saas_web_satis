@@ -1,0 +1,20 @@
+// IdempotencyKey - idempotency_keys tablosu
+model IdempotencyKey {
+  id          String   @id @default(cuid())
+  key         String   @unique // format: {tenantId}:{key}
+  tenantId    String
+  fingerprint String   // SHA-256(method + url + body)
+  method      String
+  url         String
+  status      String   @default("PROCESSING") // 'PROCESSING' | 'COMPLETED' | 'FAILED'
+  statusCode  Int?
+  response    Json?
+  createdAt   DateTime @default(now())
+  completedAt DateTime?
+  expiresAt   DateTime?
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, expiresAt])
+  @@index([createdAt])
+}

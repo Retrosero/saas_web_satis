@@ -1,0 +1,231 @@
+version: 1
+name: 8. Paket — Performans & Güvenilirlik İyileştirmeleri
+description: >
+  52 FAZ sonrası platformun ölçeklenebilirlik, hız ve güvenilirliğini artırmak
+  için teknik iyileştirmeler. Yeni iş özelliği yok, mevcut yapıyı sağlamlaştırma.
+  Yurt dışı müşteri yok → CDN/multi-region çıkarıldı.
+
+# ===========================================================================
+# FAZ 53-61: 9 İyileştirme Maddesi, 3 grup halinde
+# ===========================================================================
+
+goals:
+  - 10x performans artışı (Redis cache + index optimizasyonu)
+  - Zero-downtime arka plan işleri (BullMQ queue)
+  - Sub-50ms global arama (Meilisearch)
+  - Güvenli bulk işlem (idempotency + transaction)
+  - Prod hata takibi (Sentry) + tracing (OpenTelemetry)
+  - %60+ test coverage backend, %40+ frontend
+  - E2E test: satış→tahsilat→fatura kritik akış
+
+# Frontend zaten zod+react-hook-form+react-query+axios+sentry-sıfır var
+# Backend zaten jest kurulu, swagger var, Prisma generate edilebilir
+# Redis docker-compose'da zaten var
+
+phases:
+  # =====================================================================
+  # GRUP 1: ALTYAPI & PERFORMANS (FAZ 53-55)
+  # =====================================================================
+
+  - faz: 53
+    title: "Redis Cache Katmanı"
+    summary: >
+      Tüm read-heavy endpoint'lere Redis cache eklenmesi. 60s-300s TTL
+      stratejisi, invalidation pattern'leri.
+    pages: 1
+    backend_modules: [CacheModule]
+    tables_added: 0
+    new_endpoints: 0
+    tasks:
+      - Redis connection (ioredis), CacheModule oluştur
+      - Cache interceptor: @CacheTTL(60) decorator
+      - Cache invalidation on write: smart invalidation
+      - İlk hedef endpoint'ler: dashboard, lookups (cari/ürün), permission list
+      - Cache key standardizasyonu: tenant:{id}:module:entity
+      - Cache hit/miss metric'leri (prom-client)
+    expected_impact: "Dashboard yükü %70 azalma, ortalama response time 200ms→50ms"
+
+  - faz: 54
+    title: "BullMQ Queue + Worker"
+    summary: >
+      Zaman alan işlemleri (mail, PDF, rapor, bulk ops) BullMQ queue'ya al.
+      3 ayrı queue: mail, report, bulk.
+    pages: 1
+    backend_modules: [QueueModule, MailWorker, ReportWorker, BulkWorker]
+    tables_added: 0
+    new_endpoints: 0
+    tasks:
+      - @nestjs/bullmq + ioredis kurulumu
+      - QueueModule: 3 queue tanımı
+      - BullMQ dashboard (admin endpoint'ler: queue length, failed jobs)
+      - Mail queue'ya aktar: forgot-password, invite-user, quote-sent
+      - Report queue'ya aktar: weekly, monthly raporlar
+      - Bulk queue'ya aktar: 100+ kayıtlık toplu işlemler
+      - Retry policy: 3 deneme, exponential backoff
+      - Dead letter queue (DLQ) handling
+    expected_impact: "API response time sabit kalır, arka plan işleri 5-10x hızlı"
+
+  - faz: 55
+    title: "DB Index Optimizasyonu + Query Profiling"
+    summary: >
+      125 tabloda composite/partial index'ler, slow query log analizi.
+    pages: 0
+    backend_modules: []
+    tables_added: 0
+    new_endpoints: 0
+    tasks:
+      - Slow query log analizi (pg_stat_statements)
+      - Eksik composite index'ler: (tenantId, isDeleted, createdAt) pattern
+      - Partial index: status=ACTIVE, isDeleted=false
+      - Foreign key index kontrolü (hepsi index'li mi?)
+      - N+1 query tespiti (Prisma include optimizasyonu)
+      - Migration: 20260624000000_perf_indexes
+    expected_impact: "Liste sayfaları 3-10x hızlı, %40 memory tasarrufu"
+
+  # =====================================================================
+  # GRUP 2: ARAMA & REAL-TIME (FAZ 56-58)
+  # =====================================================================
+
+  - faz: 56
+    title: "Meilisearch Full-Text Search Engine"
+    summary: >
+      Global arama, müşteri/ürün/satış listelerinde sub-50ms arama.
+      Prisma contains() yerine Meilisearch.
+    pages: 0
+    backend_modules: [SearchModule, SearchIndexer]
+    tables_added: 0
+    new_endpoints: 4
+    tasks:
+      - Meilisearch instance (docker-compose'a ekle)
+      - Index'ler: customers, products, sales, quotes
+      - Indexer: Prisma middleware (auto-sync on create/update/delete)
+      - Multi-tenant index isolation (tenantId field, filterable)
+      - GlobalSearchService Meilisearch'e geçiş (fallback Prisma)
+      - Frontend: arama typing debounce iyileştirmesi
+    expected_impact: "Arama 500ms→30ms, typo-tolerant (Türkçe), fuzzy match"
+
+  - faz: 57
+    title: "WebSocket Gateway (Socket.io)"
+    summary: >
+      Real-time bildirim, AI chat streaming, online kullanıcı göstergesi,
+      dashboard canlı veri.
+    pages: 0
+    backend_modules: [RealtimeModule, RealtimeGateway, NotificationStreamer]
+    tables_added: 0
+    new_endpoints: 0
+    tasks:
+      - @nestjs/websockets + socket.io server
+      - Auth middleware: JWT doğrulama
+      - Tenant-scoped rooms: tenant:{id}
+      - User-scoped: user:{id}
+      - Events: notification.new, sale.created, customer.balance-changed
+      - Frontend: socket.io-client provider, useRealtime hook
+      - Notification dropdown'ı canlı güncelle
+      - AI chat için streaming event
+    expected_impact: "Bildirim gecikmesi 0ms, dashboard canlı veri, AI streaming"
+
+  - faz: 58
+    title: "API Rate Limiting + Idempotency Keys"
+    summary: >
+      DDoS/abuse koruması, çift kayıt önleme (bulk + payment).
+    pages: 0
+    backend_modules: [ThrottlerModule, IdempotencyMiddleware]
+    tables_added: 1
+    new_endpoints: 0
+    tasks:
+      - @nestjs/throttler: tier-based rate limit (plan bazlı)
+      - Tenant bazlı: Starter 60/min, Pro 300/min, Enterprise 1000/min
+      - Idempotency middleware: Idempotency-Key header
+      - idempotency_keys tablosu (24h TTL)
+      - Bulk operations + payment endpoint'lerinde zorunlu
+      - 409 Conflict on duplicate
+    expected_impact: "Abuse koruması, çift ödeme/bulk kayıt %100 önlenir"
+
+  # =====================================================================
+  # GRUP 3: GÖZLEMLENEBİLİRLİK & TEST (FAZ 59-61)
+  # =====================================================================
+
+  - faz: 59
+    title: "Sentry + OpenTelemetry Observability"
+    summary: >
+      Prod hata takibi, performance tracing, kullanıcı session replay.
+    pages: 1
+    backend_modules: [ObservabilityModule]
+    tables_added: 0
+    new_endpoints: 0
+    tasks:
+      - Sentry backend + frontend setup
+      - @sentry/node, @sentry/react
+      - OpenTelemetry SDK: HTTP, Prisma, BullMQ auto-instrumentation
+      - Custom spans: business events (sale.created, customer.created)
+      - User context: tenant + user + session
+      - Error boundary frontend
+      - Source map upload (sentry-cli)
+      - 1 ay ücretsiz, sonra plan
+    expected_impact: "Prod hata 24 saatte görülür, regresyon %50 erken yakalanır"
+
+  - faz: 60
+    title: "Backend Test Coverage (Jest)"
+    summary: >
+      Kritik modüller için unit + integration test. %60+ coverage.
+    pages: 0
+    backend_modules: []
+    tables_added: 0
+    new_endpoints: 0
+    tasks:
+      - Jest config (zaten var) güncelle
+      - Test database: ayrı Postgres schema
+      - Test factory'ler (faker.js)
+      - Unit tests: services (muhasebe motoru, event sourcing)
+      - Integration tests: e2e/ klasörü, supertest
+      - Coverage: 53 FAZ'da oluşturulan 9 yeni modül öncelikli
+      - Threshold: %60 services, %40 controllers
+      - CI: coverage report upload (codecov.io)
+    expected_impact: "Refactor güvenliği, regression %80 önlenir"
+
+  - faz: 61
+    title: "E2E Test + Frontend Test (Playwright + Vitest)"
+    summary: >
+      Kritik kullanıcı akışları E2E + component testleri.
+    pages: 0
+    backend_modules: []
+    tables_added: 0
+    new_endpoints: 0
+    tasks:
+      - Playwright kurulum + config
+      - 5 kritik akış: login, sale-create, collection, quote-convert, bulk-op
+      - Vitest + React Testing Library (frontend)
+      - Component tests: 20 kritik component (DataTable, ConfirmModal, PageHeader)
+      - Hook tests: useAuth, useDebounce
+      - GitHub Actions: her PR'da E2E + component test
+    expected_impact: "Manuel QA %70 azalır, CI %100 regresyon koruması"
+
+# ===========================================================================
+# Toplam Etki
+# ===========================================================================
+
+deliverables:
+  backend:
+    new_modules: 7 (Cache, Queue, Search, Realtime, Throttler, Idempotency, Observability)
+    new_endpoints: ~12
+    new_dependencies: redis, ioredis, @nestjs/bullmq, meilisearch, @nestjs/throttler, @sentry/node, @opentelemetry/sdk, @playwright/test
+  frontend:
+    new_pages: 4 (Queue Dashboard, Cache Inspector, Search Admin, Sentry Test)
+    new_dependencies: socket.io-client, @sentry/react, meilisearch (client optional)
+  database:
+    new_tables: 1 (idempotency_keys)
+    new_migrations: 2 (perf_indexes, idempotency)
+  devops:
+    new_services: 2 (meilisearch docker-compose'a, Sentry cloud)
+    new_ci_jobs: 4 (backend-test, frontend-test, e2e-test, coverage)
+
+timeline_estimate:
+  grup_1_altyapi: "8-10 gün (FAZ 53-55)"
+  grup_2_arama: "8-10 gün (FAZ 56-58)"
+  grup_3_gozlem_test: "10-12 gün (FAZ 59-61)"
+  total: "26-32 gün (yoğun çalışmayla)"
+
+# ===========================================================================
+# NOT: Aynı dosya yapısı korunur (53 FAZ = 9 yeni modül, 4 yeni sayfa, ...)
+# Sıralı işleyiş için Phase 1 önce tamamlanır, sonra Phase 2
+# ===========================================================================
