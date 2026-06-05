@@ -56,6 +56,7 @@ export function ReturnListPage() {
   const [page, setPage] = useState(1);
   const [confirmDelete, setConfirmDelete] = useState<{ id: string; number: string } | null>(null);
   const [confirmCancel, setConfirmCancel] = useState<{ id: string; number: string } | null>(null);
+  const actionMutation = useReturnAction();
 
   const { data, isLoading, error, refetch } = useReturnsList({
     page,
@@ -66,8 +67,6 @@ export function ReturnListPage() {
   });
 
   const deleteMutation = useDeleteReturn();
-  const actionMutation = useReturnAction('');
-
   const rows: ReturnListItem[] = data?.data ?? [];
   const pagination = data?.pagination;
 
@@ -161,7 +160,7 @@ export function ReturnListPage() {
           {r.status === 'DRAFT' && (
             <button
               onClick={async () => {
-                await actionMutation.mutateAsync({ action: 'submit' } as any);
+                await actionMutation.mutateAsync({ id: r.id, action: 'submit' });
                 refetch();
               }}
               className="rounded-md p-1.5 text-blue-600 hover:bg-blue-50"
@@ -343,8 +342,7 @@ export function ReturnListPage() {
           onClose={() => setConfirmCancel(null)}
           onConfirm={async () => {
             if (confirmCancel) {
-              const m = useReturnAction(confirmCancel.id);
-              await m.mutateAsync({ action: 'cancel' });
+              await actionMutation.mutateAsync({ id: confirmCancel.id, action: 'cancel' });
               setConfirmCancel(null);
               refetch();
             }

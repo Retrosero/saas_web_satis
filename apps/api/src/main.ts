@@ -19,17 +19,26 @@ async function bootstrap(): Promise<void> {
   // Logger
   app.useLogger(app.get(PinoLogger));
 
-  // Güvenlik
-  app.use(helmet());
+  // Güvenlik — helmet CORS başlıklarını yemesin diye crossOriginResourcePolicy gevşetiyoruz
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+      crossOriginEmbedderPolicy: false,
+    }),
+  );
 
-  // CORS
-  const origins = (config.get<string>('API_CORS_ORIGINS') ?? '')
+  // CORS — frontend 5173/5174'ün erişebilmesi için
+  const origins = (config.get<string>('API_CORS_ORIGINS') ?? 'http://localhost:5173,http://localhost:5174')
     .split(',')
     .map((o) => o.trim())
     .filter(Boolean);
   app.enableCors({
     origin: origins.length > 0 ? origins : true,
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+    exposedHeaders: ['Content-Range', 'X-Content-Range'],
+    maxAge: 86400,
   });
 
   // Global prefix

@@ -22,6 +22,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (err || !user) {
       throw new UnauthorizedException('Geçersiz veya eksik kimlik bilgisi');
     }
+    // JWT strategy'den gelen payload: { sub, tid, email, ... }
+    // Normalize et: req.user.id = sub, req.user.tenantId = tid
+    const u = user as any;
+    if (u.sub && !u.id) u.id = u.sub;
+    if (u.tid && !u.tenantId) u.tenantId = u.tid;
     return user;
   }
 }

@@ -220,12 +220,12 @@ export class NotificationsExtendedService {
   }
 
   // ===== INBOX =====
-  async listInbox(tenantId: string, userId: string, filters: { isRead?: boolean; category?: string; page?: number; pageSize?: number }): Promise<{ items: NotificationInbox[]; total: number; unread: number }> {
+  async listInbox(tenantId: string, userId: string, filters: { isRead?: boolean; category?: string; page?: number | string; pageSize?: number | string }): Promise<{ items: NotificationInbox[]; total: number; unread: number }> {
     const where: any = { tenantId, OR: [{ userId }, { userId: null }] };
     if (filters.isRead !== undefined) where.isRead = filters.isRead;
     if (filters.category) where.category = filters.category;
-    const page = filters.page ?? 1;
-    const pageSize = filters.pageSize ?? 20;
+    const page = Number(filters.page ?? 1);
+    const pageSize = Number(filters.pageSize ?? 20);
     const [notifs, total, unread] = await Promise.all([
       this.prisma.client.notification.findMany({ where, orderBy: { createdAt: 'desc' }, skip: (page - 1) * pageSize, take: pageSize }),
       this.prisma.client.notification.count({ where }),

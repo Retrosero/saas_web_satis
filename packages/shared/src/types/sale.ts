@@ -1,4 +1,4 @@
-import type { PaymentStatus, SaleItemStatus, SaleStatus, SaleType } from '../enums/common.enum.js';
+import type { PaymentStatus, SaleItemStatus, SaleStatus, SaleType } from '../enums/common.enum';
 
 export interface Sale {
   id: string;

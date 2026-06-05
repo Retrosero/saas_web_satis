@@ -3,7 +3,7 @@ import type {
   CampaignType,
   DiscountType,
   PriceListStatus,
-} from '../enums/pricing.enum.js';
+} from '../enums/pricing.enum';
 
 export interface PriceList {
   id: string;

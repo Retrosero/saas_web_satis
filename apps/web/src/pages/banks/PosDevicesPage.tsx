@@ -18,7 +18,7 @@ export function PosDevicesPage() {
   const { data: devices = [], isLoading, error, refetch } = usePosDevices();
   const { data: accounts = [] } = useBankAccounts();
   const createMut = useCreatePosDevice();
-  const updateMut = useUpdatePosDevice('');
+  const updateMut = useUpdatePosDevice();
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<PosDevice | null>(null);
   const [bankAccountId, setBankAccountId] = useState('');
@@ -42,14 +42,14 @@ export function PosDevicesPage() {
   const submit = async () => {
     if (!bankAccountId || !name || !posCode || commissionRate === '') return;
     const payload = { bankAccountId, name, posCode, commissionRate: Number(commissionRate), blockDays: Number(blockDays) || 1 };
-    if (editing) await updateMut.mutateAsync(payload);
+    if (editing) await updateMut.mutateAsync({ id: editing.id, ...payload });
     else await createMut.mutateAsync(payload);
     reset();
     refetch();
   };
 
   const toggleStatus = async (d: PosDevice) => {
-    await updateMut.mutateAsync({ status: d.status === 'ACTIVE' ? 'PASSIVE' : 'ACTIVE' });
+    await updateMut.mutateAsync({ id: d.id, status: d.status === 'ACTIVE' ? 'PASSIVE' : 'ACTIVE' });
     refetch();
   };
 

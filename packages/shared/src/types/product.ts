@@ -1,4 +1,4 @@
-import type { PriceType, ProductStatus, ProductType, UnitType, WarehouseStatus } from '../enums/common.enum.js';
+import type { PriceType, ProductStatus, ProductType, UnitType, WarehouseStatus } from '../enums/common.enum';
 
 export interface Unit {
   id: string;

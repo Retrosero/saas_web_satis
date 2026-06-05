@@ -6,8 +6,8 @@ export function useChannels(filters: { type?: string; isActive?: boolean; search
   return useQuery({
     queryKey: ['notif', 'channels', filters],
     queryFn: async () => {
-      const { data } = await apiClient.get<NotificationChannel[]>('/notifications-extended/channels', { params: filters });
-      return data;
+      const { data } = await apiClient.get<{ data: NotificationChannel[] }>('/notifications-extended/channels', { params: filters });
+      return data.data;
     },
   });
 }
@@ -16,8 +16,8 @@ export function useChannel(id: string) {
   return useQuery({
     queryKey: ['notif', 'channels', id],
     queryFn: async () => {
-      const { data } = await apiClient.get<NotificationChannel>(`/notifications-extended/channels/${id}`);
-      return data;
+      const { data } = await apiClient.get<{ data: NotificationChannel }>(`/notifications-extended/channels/${id}`);
+      return data.data;
     },
     enabled: !!id,
   });
@@ -66,8 +66,8 @@ export function useRules(filters: { triggerType?: string; isActive?: boolean; se
   return useQuery({
     queryKey: ['notif', 'rules', filters],
     queryFn: async () => {
-      const { data } = await apiClient.get<NotificationRule[]>('/notifications-extended/rules', { params: filters });
-      return data;
+      const { data } = await apiClient.get<{ data: NotificationRule[] }>('/notifications-extended/rules', { params: filters });
+      return data.data;
     },
   });
 }
@@ -76,8 +76,8 @@ export function useRule(id: string) {
   return useQuery({
     queryKey: ['notif', 'rules', id],
     queryFn: async () => {
-      const { data } = await apiClient.get<NotificationRule>(`/notifications-extended/rules/${id}`);
-      return data;
+      const { data } = await apiClient.get<{ data: NotificationRule }>(`/notifications-extended/rules/${id}`);
+      return data.data;
     },
     enabled: !!id,
   });
@@ -137,8 +137,8 @@ export function useLogs(params: { status?: string; ruleId?: string; channelId?: 
   return useQuery({
     queryKey: ['notif', 'logs', params],
     queryFn: async () => {
-      const { data } = await apiClient.get<{ items: NotificationLog[]; total: number; page: number; pageSize: number }>('/notifications-extended/logs', { params });
-      return data;
+      const { data } = await apiClient.get<{ data: { items: NotificationLog[]; total: number; page: number; pageSize: number } }>('/notifications-extended/logs', { params });
+      return data.data;
     },
   });
 }
@@ -147,8 +147,8 @@ export function useInbox(params: { isRead?: boolean; category?: string; page?: n
   return useQuery({
     queryKey: ['notif', 'inbox', params],
     queryFn: async () => {
-      const { data } = await apiClient.get<{ items: NotificationInbox[]; total: number; unread: number }>('/notifications-extended/inbox', { params });
-      return data;
+      const { data } = await apiClient.get<{ data: { items: NotificationInbox[]; total: number; unread: number } }>('/notifications-extended/inbox', { params });
+      return data.data;
     },
     refetchInterval: 30_000,
   });

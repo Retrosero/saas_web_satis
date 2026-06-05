@@ -4,7 +4,7 @@ import type {
   WebhookDeliveryStatus,
   WebhookEventType,
   WebhookStatus,
-} from '../enums/api.enum.js';
+} from '../enums/api.enum';
 
 export interface ApiKey {
   id: string;

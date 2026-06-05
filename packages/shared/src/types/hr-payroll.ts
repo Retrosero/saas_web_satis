@@ -6,7 +6,7 @@ import type {
   PayrollPeriodStatus,
   PayrollRecordStatus,
   SupplementType,
-} from '../enums/hr-personnel.enum.js';
+} from '../enums/hr-personnel.enum';
 
 export interface HrPayrollPeriodDTO {
   id: string;

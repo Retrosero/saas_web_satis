@@ -40,7 +40,7 @@ export function ReturnFormPage() {
   const { data: existing, isLoading } = useReturn(id ?? '');
   const createMut = useCreateReturn();
   const updateMut = useUpdateReturn(id ?? '');
-  const actionMut = useReturnAction(id ?? '');
+  const actionMut = useReturnAction();
 
   const [customerId, setCustomerId] = useState('');
   const [returnDate, setReturnDate] = useState(new Date().toISOString().slice(0, 10));
@@ -129,12 +129,11 @@ export function ReturnFormPage() {
     };
     if (isEdit) {
       await updateMut.mutateAsync(payload);
-      if (andSubmit) await actionMut.mutateAsync({ action: 'submit' });
+      if (andSubmit && id) await actionMut.mutateAsync({ id, action: 'submit' });
     } else {
       const created = await createMut.mutateAsync(payload as any);
       if (andSubmit && created?.id) {
-        const m = useReturnAction(created.id);
-        await m.mutateAsync({ action: 'submit' });
+        await actionMut.mutateAsync({ id: created.id, action: 'submit' });
       }
     }
     navigate('/returns');

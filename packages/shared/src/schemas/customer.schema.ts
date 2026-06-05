@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { CustomerType } from '../enums/common.enum.js';
+import { CustomerType } from '../enums/common.enum';
 
 export const CreateCustomerSchema = z.object({
   code: z

@@ -1,5 +1,5 @@
-import type { TenantStatus, WorkingMode } from '../enums/index.js';
-import type { SubscriptionStatus } from '../enums/plan.enum.js';
+import type { TenantStatus, WorkingMode } from '../enums/index';
+import type { SubscriptionStatus } from '../enums/plan.enum';
 
 export interface Tenant {
   id: string;

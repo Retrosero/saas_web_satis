@@ -1,4 +1,4 @@
-import type { PlanCode, Currency } from '../enums/plan.enum.js';
+import type { PlanCode, Currency } from '../enums/plan.enum';
 
 export interface Plan {
   id: string;

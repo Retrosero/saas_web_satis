@@ -1,7 +1,7 @@
 // Shared types for HR-3: İzin Yönetimi
-import type { HrLeaveTypeCode, HrLeaveAccrualMethod, HrLeaveRequestStatus } from '../enums/hr-personnel.enum.js';
+import type { HrLeaveTypeCode, HrLeaveAccrualMethod, HrLeaveRequestStatus } from '../enums/hr-personnel.enum';
 // Labels are exported from hr-personnel.enum.js — re-export for convenience
-export { HrLeaveRequestStatusLabels, HrLeaveRequestStatusColors, HrLeaveTypeCodeLabels } from '../enums/hr-personnel.enum.js';
+export { HrLeaveRequestStatusLabels, HrLeaveRequestStatusColors, HrLeaveTypeCodeLabels } from '../enums/hr-personnel.enum';
 
 export interface HrLeaveTypeDTO {
   id: string;

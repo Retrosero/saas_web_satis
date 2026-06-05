@@ -1,4 +1,4 @@
-import type { ImportEntityType, ImportSource, ImportStatus } from '../enums/import.enum.js';
+import type { ImportEntityType, ImportSource, ImportStatus } from '../enums/import.enum';
 
 export interface ImportBatch {
   id: string;

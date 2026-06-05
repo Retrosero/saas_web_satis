@@ -1,5 +1,5 @@
-import type { DataScope } from '../enums/user.enum.js';
-import type { Permission } from './permission.js';
+import type { DataScope } from '../enums/user.enum';
+import type { Permission } from './permission';
 
 export interface Role {
   id: string;

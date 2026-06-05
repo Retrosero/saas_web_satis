@@ -83,6 +83,9 @@ importers:
       '@prisma/client':
         specifier: ^5.20.0
         version: 5.22.0(prisma@5.22.0)
+      '@saas/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@sentry/node':
         specifier: ^8.36.0
         version: 8.55.2

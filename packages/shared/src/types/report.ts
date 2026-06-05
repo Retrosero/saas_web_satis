@@ -1,4 +1,4 @@
-import type { AggregateType, ChartType, ReportShareScope } from '../enums/report.enum.js';
+import type { AggregateType, ChartType, ReportShareScope } from '../enums/report.enum';
 
 export interface PivotConfig {
   rows: string[];            // group by alanları (örn: ['customer.city', 'product.brand'])

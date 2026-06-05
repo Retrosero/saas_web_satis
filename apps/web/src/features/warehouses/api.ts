@@ -57,7 +57,8 @@ export interface WarehouseTransfer {
 export function useWarehouses(params?: { status?: WarehouseStatus; search?: string }) {
   return useQuery({
     queryKey: ['warehouses', params],
-    queryFn: () => apiClient.get<PaginatedResponse<Warehouse>>('/warehouses', { params }).then((r) => r.data),
+    queryFn: () =>
+      apiClient.get<{ data: PaginatedResponse<Warehouse> }>('/warehouses', { params }).then((r) => r.data.data),
     staleTime: 30_000,
   });
 }
@@ -65,7 +66,7 @@ export function useWarehouses(params?: { status?: WarehouseStatus; search?: stri
 export function useWarehouse(id: string | undefined) {
   return useQuery({
     queryKey: ['warehouses', id],
-    queryFn: () => apiClient.get<Warehouse>(`/warehouses/${id}`).then((r) => r.data),
+    queryFn: () => apiClient.get<{ data: Warehouse }>(`/warehouses/${id}`).then((r) => r.data.data),
     enabled: !!id,
   });
 }
@@ -74,7 +75,7 @@ export function useWarehouseStock(warehouseId: string | undefined) {
   return useQuery({
     queryKey: ['warehouses', warehouseId, 'stock'],
     queryFn: () =>
-      apiClient.get<WarehouseStockItem[]>(`/warehouses/${warehouseId}/stock`).then((r) => r.data),
+      apiClient.get<{ data: WarehouseStockItem[] }>(`/warehouses/${warehouseId}/stock`).then((r) => r.data.data),
     enabled: !!warehouseId,
   });
 }
@@ -83,7 +84,7 @@ export function useWarehouseTransfers(params?: { fromWarehouseId?: string; toWar
   return useQuery({
     queryKey: ['warehouses', 'transfers', params],
     queryFn: () =>
-      apiClient.get<PaginatedResponse<WarehouseTransfer>>('/warehouses/transfers', { params }).then((r) => r.data),
+      apiClient.get<{ data: PaginatedResponse<WarehouseTransfer> }>('/warehouses/transfers', { params }).then((r) => r.data.data),
     staleTime: 30_000,
   });
 }

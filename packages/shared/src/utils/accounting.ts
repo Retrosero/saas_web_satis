@@ -25,7 +25,7 @@
  * Daha fazla detay: docs/muhasebe-mantigi.md
  */
 
-import type { CustomerMovementType, StockMovementType, CashMovementType } from '../enums/common.enum.js';
+import type { CustomerMovementType, StockMovementType, CashMovementType } from '../enums/common.enum';
 
 // =============================================================================
 // TİPLER

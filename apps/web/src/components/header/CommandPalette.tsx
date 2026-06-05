@@ -18,7 +18,8 @@ export function CommandPalette() {
     return () => document.removeEventListener('keydown', key);
   }, []);
 
-  if (!commands) return null;
+  // API 401 vb. hata dönerse data array değil objedir — guard
+  if (!commands || !Array.isArray(commands)) return null;
   const filtered = commands.filter((c: CommandDefinition) => !debounced || c.name.toLowerCase().includes(debounced.toLowerCase()) || (c.description ?? '').toLowerCase().includes(debounced.toLowerCase()));
   const byCat = filtered.reduce<Record<string, any[]>>((acc, c) => { (acc[c.category] ??= []).push(c); return acc; }, {});
 

@@ -6,8 +6,8 @@ export function useReportPresets() {
   return useQuery({
     queryKey: ['reports', 'presets'],
     queryFn: async () => {
-      const { data } = await apiClient.get<PresetReport[]>('/reports/presets');
-      return data;
+      const { data } = await apiClient.get<{ data: PresetReport[] }>('/reports/presets');
+      return data.data;
     },
     staleTime: Infinity,
   });
@@ -16,8 +16,8 @@ export function useReportPresets() {
 export function useRunPreset() {
   return useMutation({
     mutationFn: async (code: string) => {
-      const { data } = await apiClient.get<ReportResult>(`/reports/presets/${code}`);
-      return data;
+      const { data } = await apiClient.get<{ data: ReportResult }>(`/reports/presets/${code}`);
+      return data.data;
     },
   });
 }
@@ -25,8 +25,8 @@ export function useRunPreset() {
 export function useExecuteReport() {
   return useMutation({
     mutationFn: async (config: PivotConfig) => {
-      const { data } = await apiClient.post<ReportResult>('/reports/execute', config);
-      return data;
+      const { data } = await apiClient.post<{ data: ReportResult }>('/reports/execute', config);
+      return data.data;
     },
   });
 }
@@ -35,8 +35,8 @@ export function useReportTemplates(params?: { isFavorite?: boolean; sharedWithMe
   return useQuery({
     queryKey: ['reports', 'templates', params],
     queryFn: async () => {
-      const { data } = await apiClient.get<ReportTemplate[]>('/reports/templates', { params });
-      return data;
+      const { data } = await apiClient.get<{ data: ReportTemplate[] }>('/reports/templates', { params });
+      return data.data;
     },
   });
 }
@@ -45,8 +45,8 @@ export function useReportTemplate(id: string) {
   return useQuery({
     queryKey: ['reports', 'templates', id],
     queryFn: async () => {
-      const { data } = await apiClient.get<ReportTemplate>(`/reports/templates/${id}`);
-      return data;
+      const { data } = await apiClient.get<{ data: ReportTemplate }>(`/reports/templates/${id}`);
+      return data.data;
     },
     enabled: !!id,
   });
@@ -97,8 +97,8 @@ export function useSchedules() {
   return useQuery({
     queryKey: ['reports', 'schedules'],
     queryFn: async () => {
-      const { data } = await apiClient.get<any[]>('/reports/schedules');
-      return data;
+      const { data } = await apiClient.get<{ data: any[] }>('/reports/schedules');
+      return data.data;
     },
   });
 }

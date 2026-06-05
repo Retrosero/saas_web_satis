@@ -194,7 +194,7 @@ export function useOnboardings(params?: { status?: HrOnboardingStatus; employeeI
   return useQuery({
     queryKey: ['hr', 'onboardings', params],
     queryFn: async () => {
-      const { data } = await apiClient.get<Array<{
+      const { data } = await apiClient.get<{ data: Array<{
         id: string;
         employeeId: string;
         employee: { id: string; fullName: string; employeeNo: string; department: string | null };
@@ -203,8 +203,8 @@ export function useOnboardings(params?: { status?: HrOnboardingStatus; employeeI
         status: HrOnboardingStatus;
         itemCount: number;
         createdAt: string;
-      }>>('/hr/checklists/onboardings', { data: params });
-      return data;
+      }> }>('/hr/checklists/onboardings', { params });
+      return data.data;
     },
   });
 }
@@ -213,8 +213,8 @@ export function useOnboarding(id: string | null) {
   return useQuery({
     queryKey: ['hr', 'onboardings', id],
     queryFn: async () => {
-      const { data } = await apiClient.get<HrOnboardingChecklist>(`/hr/checklists/onboardings/${id}`);
-      return data;
+      const { data } = await apiClient.get<{ data: HrOnboardingChecklist }>(`/hr/checklists/onboardings/${id}`);
+      return data.data;
     },
     enabled: !!id,
   });
@@ -224,8 +224,8 @@ export function useStartOnboarding() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: { employeeId: string; startDate: string; targetCompletionDate?: string; notes?: string }) => {
-      const { data } = await apiClient.post<HrOnboardingChecklist>('/hr/checklists/onboardings', input);
-      return data;
+      const { data } = await apiClient.post<{ data: HrOnboardingChecklist }>('/hr/checklists/onboardings', input);
+      return data.data;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['hr', 'onboardings'] }),
   });
@@ -235,11 +235,11 @@ export function useUpdateOnboardingItem() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: { checklistId: string; itemId: string; status: HrOnboardingItemStatus; notes?: string; documentId?: string }) => {
-      const { data } = await apiClient.patch<HrOnboardingChecklist>(
+      const { data } = await apiClient.patch<{ data: HrOnboardingChecklist }>(
         `/hr/checklists/onboardings/${input.checklistId}/items/${input.itemId}`,
         { status: input.status, notes: input.notes, documentId: input.documentId },
       );
-      return data;
+      return data.data;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['hr', 'onboardings'] }),
   });
@@ -249,8 +249,8 @@ export function useCompleteOnboarding() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { data } = await apiClient.post<HrOnboardingChecklist>(`/hr/checklists/onboardings/${id}/complete`);
-      return data;
+      const { data } = await apiClient.post<{ data: HrOnboardingChecklist }>(`/hr/checklists/onboardings/${id}/complete`);
+      return data.data;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['hr', 'onboardings'] }),
   });
@@ -260,8 +260,8 @@ export function useCancelOnboarding() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { data } = await apiClient.post<HrOnboardingChecklist>(`/hr/checklists/onboardings/${id}/cancel`);
-      return data;
+      const { data } = await apiClient.post<{ data: HrOnboardingChecklist }>(`/hr/checklists/onboardings/${id}/cancel`);
+      return data.data;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['hr', 'onboardings'] }),
   });
@@ -271,7 +271,7 @@ export function useOffboardings(params?: { status?: HrOnboardingStatus; employee
   return useQuery({
     queryKey: ['hr', 'offboardings', params],
     queryFn: async () => {
-      const { data } = await apiClient.get<Array<{
+      const { data } = await apiClient.get<{ data: Array<{
         id: string;
         employeeId: string;
         employee: { id: string; fullName: string; employeeNo: string; department: string | null };
@@ -280,8 +280,8 @@ export function useOffboardings(params?: { status?: HrOnboardingStatus; employee
         status: HrOnboardingStatus;
         itemCount: number;
         createdAt: string;
-      }>>('/hr/checklists/offboardings', { data: params });
-      return data;
+      }> }>('/hr/checklists/offboardings', { params });
+      return data.data;
     },
   });
 }
@@ -290,8 +290,8 @@ export function useOffboarding(id: string | null) {
   return useQuery({
     queryKey: ['hr', 'offboardings', id],
     queryFn: async () => {
-      const { data } = await apiClient.get<HrOffboardingChecklist>(`/hr/checklists/offboardings/${id}`);
-      return data;
+      const { data } = await apiClient.get<{ data: HrOffboardingChecklist }>(`/hr/checklists/offboardings/${id}`);
+      return data.data;
     },
     enabled: !!id,
   });
@@ -301,8 +301,8 @@ export function useStartOffboarding() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: { employeeId: string; terminationDate: string; reason?: string; notes?: string }) => {
-      const { data } = await apiClient.post<HrOffboardingChecklist>('/hr/checklists/offboardings', input);
-      return data;
+      const { data } = await apiClient.post<{ data: HrOffboardingChecklist }>('/hr/checklists/offboardings', input);
+      return data.data;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['hr', 'offboardings'] }),
   });
@@ -312,11 +312,11 @@ export function useUpdateOffboardingItem() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: { checklistId: string; itemId: string; status: HrOnboardingItemStatus; notes?: string; documentId?: string }) => {
-      const { data } = await apiClient.patch<HrOffboardingChecklist>(
+      const { data } = await apiClient.patch<{ data: HrOffboardingChecklist }>(
         `/hr/checklists/offboardings/${input.checklistId}/items/${input.itemId}`,
         { status: input.status, notes: input.notes, documentId: input.documentId },
       );
-      return data;
+      return data.data;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['hr', 'offboardings'] }),
   });
@@ -326,8 +326,8 @@ export function useCompleteOffboarding() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { data } = await apiClient.post<HrOffboardingChecklist>(`/hr/checklists/offboardings/${id}/complete`);
-      return data;
+      const { data } = await apiClient.post<{ data: HrOffboardingChecklist }>(`/hr/checklists/offboardings/${id}/complete`);
+      return data.data;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['hr', 'offboardings'] }),
   });
@@ -337,8 +337,8 @@ export function useCancelOffboarding() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const { data } = await apiClient.post<HrOffboardingChecklist>(`/hr/checklists/offboardings/${id}/cancel`);
-      return data;
+      const { data } = await apiClient.post<{ data: HrOffboardingChecklist }>(`/hr/checklists/offboardings/${id}/cancel`);
+      return data.data;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['hr', 'offboardings'] }),
   });

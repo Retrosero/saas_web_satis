@@ -1,4 +1,4 @@
-import type { DocumentType, PageFormat } from '../enums/template.enum.js';
+import type { DocumentType, PageFormat } from '../enums/template.enum';
 
 /**
  * Bir template section (blok). Frontend'de blok-bazlı editörde gösterilir.

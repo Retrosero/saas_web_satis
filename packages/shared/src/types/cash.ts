@@ -1,4 +1,4 @@
-import type { CashAccountType, CashAccountStatus, CashMovementType } from '../enums/common.enum.js';
+import type { CashAccountType, CashAccountStatus, CashMovementType } from '../enums/common.enum';
 
 export interface CashAccount {
   id: string;

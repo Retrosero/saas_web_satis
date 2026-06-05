@@ -2,7 +2,7 @@
  * FAZ HR-2: Checklist Tipleri
  */
 
-import type { HrOnboardingItemStatus, HrOnboardingStatus } from '../enums/hr-personnel.enum.js';
+import type { HrOnboardingItemStatus, HrOnboardingStatus } from '../enums/hr-personnel.enum';
 
 export interface HrChecklistItem {
   id: string;

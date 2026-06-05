@@ -3,7 +3,7 @@ import type {
   ReturnReason,
   ReturnSource,
   ReturnStatus,
-} from '../enums/return.enum.js';
+} from '../enums/return.enum';
 
 export interface Return {
   id: string;

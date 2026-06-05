@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { tenantAdminApi } from './api';
+import { authApi } from '@/features/auth/api';
+import { useAuthStore } from '@/stores/auth-store';
 
 export function useTenantInfo() {
   return useQuery({ queryKey: ['tenant-admin', 'me'], queryFn: tenantAdminApi.getMe, staleTime: 60_000 });
@@ -18,18 +20,30 @@ export function useSubscription() {
 }
 
 export function useTenantModules() {
-  return useQuery({ queryKey: ['tenant-admin', 'modules'], queryFn: tenantAdminApi.getModules, staleTime: 30_000 });
+  return useQuery({
+    queryKey: ['tenant-admin', 'modules'],
+    queryFn: tenantAdminApi.getModules,
+    staleTime: 30_000,
+  });
 }
 
 export function useToggleModule() {
   const qc = useQueryClient();
+  const setUser = useAuthStore((s) => s.setUser);
   return useMutation({
     mutationFn: ({ code, isActive }: { code: string; isActive: boolean }) =>
       tenantAdminApi.toggleModule(code, isActive),
-    onSuccess: () => {
+    onSuccess: async () => {
       qc.invalidateQueries({ queryKey: ['tenant-admin', 'modules'] });
       qc.invalidateQueries({ queryKey: ['tenant-admin', 'subscription'] });
       qc.invalidateQueries({ queryKey: ['notifications'] });
+      // Kullanıcının activeModules'ini güncelle
+      try {
+        const userData = await authApi.me();
+        setUser(userData);
+      } catch (e) {
+        // Auth me başarısız olursa sessizce devam et, kullanıcı zaten login değilse hata vermez
+      }
     },
   });
 }

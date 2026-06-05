@@ -18,8 +18,8 @@ export function useSearchHistory(limit = 10) {
   return useQuery({
     queryKey: ['global-search', 'history', limit],
     queryFn: async () => {
-      const { data } = await apiClient.get<any[]>('/global-search/history', { params: { limit } });
-      return data;
+      const { data } = await apiClient.get<{ data: any[] }>('/global-search/history', { params: { limit } });
+      return data.data;
     },
   });
 }
@@ -28,8 +28,8 @@ export function useCommandPalette() {
   return useQuery({
     queryKey: ['command-palette'],
     queryFn: async () => {
-      const { data } = await apiClient.get<any[]>('/command-palette/commands');
-      return data;
+      const { data } = await apiClient.get<{ data: any[] }>('/command-palette/commands');
+      return data.data;
     },
     staleTime: 5 * 60_000,
   });

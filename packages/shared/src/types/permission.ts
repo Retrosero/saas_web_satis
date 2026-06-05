@@ -1,5 +1,5 @@
-import type { ModuleCode } from '../enums/module.enum.js';
-import type { PermissionAction } from '../enums/permission.enum.js';
+import type { ModuleCode } from '../enums/module.enum';
+import type { PermissionAction } from '../enums/permission.enum';
 
 export interface Permission {
   id: string;

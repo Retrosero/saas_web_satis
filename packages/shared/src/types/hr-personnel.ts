@@ -10,7 +10,7 @@ import type {
   HrGender,
   MaritalStatus,
   WorkingType,
-} from '../enums/hr-personnel.enum.js';
+} from '../enums/hr-personnel.enum';
 
 /**
  * Personel özlük kartı (maskeli DTO)

@@ -7,8 +7,8 @@ export function useLLMConfig() {
   return useQuery({
     queryKey: ['assistant-chat', 'config'],
     queryFn: async () => {
-      const { data } = await apiClient.get<TenantLLMConfig | null>('/assistant-chat/config');
-      return data;
+      const { data } = await apiClient.get<{ data: TenantLLMConfig | null }>('/assistant-chat/config');
+      return data.data;
     },
   });
 }
@@ -17,8 +17,8 @@ export function useUpsertConfig() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: { provider: LLMProvider; apiKey: string; baseUrl?: string; defaultModel?: string; fallbackModel?: string; maxTokens?: number; temperature?: number; topP?: number; systemPrompt?: string; enabledModules?: string[]; rateLimitPerHour?: number; monthlyBudgetUSD?: number; toolPermissions?: string[] }) => {
-      const { data } = await apiClient.post<TenantLLMConfig>('/assistant-chat/config', input);
-      return data;
+      const { data } = await apiClient.post<{ data: TenantLLMConfig }>('/assistant-chat/config', input);
+      return data.data;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['assistant-chat'] }),
   });
@@ -35,8 +35,8 @@ export function useDeleteConfig() {
 export function useTestConfig() {
   return useMutation({
     mutationFn: async (input: { provider: LLMProvider; apiKey: string; baseUrl?: string; defaultModel?: string }) => {
-      const { data } = await apiClient.post<{ ok: boolean; message: string; latencyMs: number; model: string }>('/assistant-chat/config/test', input);
-      return data;
+      const { data } = await apiClient.post<{ data: { ok: boolean; message: string; latencyMs: number; model: string } }>('/assistant-chat/config/test', input);
+      return data.data;
     },
   });
 }
@@ -45,8 +45,8 @@ export function useConversations(filters: { status?: AssistantConversationStatus
   return useQuery({
     queryKey: ['assistant-chat', 'conversations', filters],
     queryFn: async () => {
-      const { data } = await apiClient.get<{ items: AssistantConversation[]; total: number; page: number; pageSize: number }>('/assistant-chat/conversations', { params: filters });
-      return data;
+      const { data } = await apiClient.get<{ data: { items: AssistantConversation[]; total: number; page: number; pageSize: number } }>('/assistant-chat/conversations', { params: filters });
+      return data.data;
     },
   });
 }
@@ -55,8 +55,8 @@ export function useConversation(id: string) {
   return useQuery({
     queryKey: ['assistant-chat', 'conversations', id],
     queryFn: async () => {
-      const { data } = await apiClient.get<AssistantConversation>(`/assistant-chat/conversations/${id}`);
-      return data;
+      const { data } = await apiClient.get<{ data: AssistantConversation }>(`/assistant-chat/conversations/${id}`);
+      return data.data;
     },
     enabled: !!id,
   });
@@ -66,8 +66,8 @@ export function useUpdateConversation(id: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: { title?: string; status?: AssistantConversationStatus }) => {
-      const { data } = await apiClient.put<AssistantConversation>(`/assistant-chat/conversations/${id}`, input);
-      return data;
+      const { data } = await apiClient.put<{ data: AssistantConversation }>(`/assistant-chat/conversations/${id}`, input);
+      return data.data;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['assistant-chat', 'conversations'] }),
   });
@@ -85,8 +85,8 @@ export function useSendMessage() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: { conversationId?: string; message: string; model?: string; temperature?: number; maxTokens?: number }) => {
-      const { data } = await apiClient.post<ChatResponse>('/assistant-chat/chat', input);
-      return data;
+      const { data } = await apiClient.post<{ data: ChatResponse }>('/assistant-chat/chat', input);
+      return data.data;
     },
     onSuccess: (data) => {
       qc.invalidateQueries({ queryKey: ['assistant-chat', 'conversations'] });
@@ -109,8 +109,8 @@ export function useStats(days = 30) {
   return useQuery({
     queryKey: ['assistant-chat', 'stats', days],
     queryFn: async () => {
-      const { data } = await apiClient.get<AssistantUsageStats>('/assistant-chat/stats', { params: { days } });
-      return data;
+      const { data } = await apiClient.get<{ data: AssistantUsageStats }>('/assistant-chat/stats', { params: { days } });
+      return data.data;
     },
   });
 }
@@ -119,8 +119,8 @@ export function useKBSearch(q: string, module?: string) {
   return useQuery({
     queryKey: ['assistant-chat', 'kb', q, module],
     queryFn: async () => {
-      const { data } = await apiClient.get<any[]>('/assistant-chat/kb/search', { params: { q, module } });
-      return data;
+      const { data } = await apiClient.get<{ data: any[] }>('/assistant-chat/kb/search', { params: { q, module } });
+      return data.data;
     },
     enabled: q.length >= 3,
   });

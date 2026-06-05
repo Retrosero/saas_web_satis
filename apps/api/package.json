@@ -5,9 +5,9 @@
   "description": "SaaS API - NestJS + Prisma + PostgreSQL",
   "scripts": {
     "build": "nest build",
-    "dev": "nest start --watch",
-    "start": "node dist/main.js",
-    "start:prod": "NODE_ENV=production node dist/main.js",
+    "dev": "pnpm run build && powershell -NoProfile -Command \"Start-Process -FilePath pnpm.cmd -ArgumentList 'run','build','--','--watch' -WorkingDirectory '.' -WindowStyle Hidden; node --watch dist/apps/api/src/main.js\"",
+    "start": "node dist/apps/api/src/main.js",
+    "start:prod": "NODE_ENV=production node dist/apps/api/src/main.js",
     "lint": "eslint \"{src,test}/**/*.ts\" --max-warnings 50",
     "typecheck": "tsc --noEmit",
     "test": "jest",
@@ -21,6 +21,7 @@
     "test:cov": "jest --coverage"
   },
   "dependencies": {
+    "@saas/shared": "workspace:*",
     "@aws-sdk/client-s3": "^3.658.0",
     "@aws-sdk/s3-request-presigner": "^3.658.0",
     "@nestjs/common": "^10.4.0",

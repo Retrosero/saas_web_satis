@@ -1,4 +1,4 @@
-import type { CustomerStatus, CustomerType } from '../enums/common.enum.js';
+import type { CustomerStatus, CustomerType } from '../enums/common.enum';
 
 /**
  * Cari hesap (müşteri + tedarikçi tek tip).

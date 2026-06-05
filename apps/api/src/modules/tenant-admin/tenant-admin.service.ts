@@ -12,9 +12,16 @@ export class TenantAdminService {
     private readonly notifications: NotificationsService,
   ) {}
 
+  private ensureTenantScope(tenantId: string): void {
+    if (!tenantId || tenantId === 'SYSTEM') {
+      throw new ForbiddenException('Bu işlem tenant hesabı gerektirir');
+    }
+  }
+
   // ---------------- Tenant Info ----------------
 
   async getTenantInfo(tenantId: string) {
+    this.ensureTenantScope(tenantId);
     const t = await this.prisma.client.tenant.findUnique({
       where: { id: tenantId },
       include: { settings: true },
@@ -45,6 +52,7 @@ export class TenantAdminService {
     tenantId: string,
     input: { name?: string; currency?: string; taxOffice?: string; taxNumber?: string; companyInfo?: Record<string, unknown> },
   ) {
+    this.ensureTenantScope(tenantId);
     const t = await this.prisma.client.tenant.findUnique({ where: { id: tenantId }, include: { settings: true } });
     if (!t || t.isDeleted) throw new NotFoundException('Firma bulunamadı');
 
@@ -77,6 +85,7 @@ export class TenantAdminService {
   // ---------------- Subscription ----------------
 
   async getSubscription(tenantId: string) {
+    this.ensureTenantScope(tenantId);
     const sub = await this.prisma.client.subscription.findFirst({
       where: { tenantId, status: { in: ['TRIAL', 'ACTIVE', 'PAST_DUE'] } },
       orderBy: { createdAt: 'desc' },
@@ -109,6 +118,7 @@ export class TenantAdminService {
   }
 
   async getSubscriptionUsage(tenantId: string) {
+    this.ensureTenantScope(tenantId);
     const sub = await this.getSubscription(tenantId);
     if (!sub) {
       return {
@@ -138,6 +148,7 @@ export class TenantAdminService {
   // ---------------- Modules ----------------
 
   async getModules(tenantId: string) {
+    this.ensureTenantScope(tenantId);
     const tenantModules = await this.prisma.client.tenantModule.findMany({
       where: { tenantId, isActive: true },
       include: { module: true },
@@ -174,6 +185,7 @@ export class TenantAdminService {
   }
 
   async toggleModule(tenantId: string, moduleCode: string, isActive: boolean, actorUserId: string) {
+    this.ensureTenantScope(tenantId);
     const mod = await this.prisma.client.module.findUnique({ where: { code: moduleCode } });
     if (!mod) throw new NotFoundException('Modül bulunamadı');
 
@@ -216,6 +228,7 @@ export class TenantAdminService {
   // ---------------- Users ----------------
 
   async listUsers(tenantId: string, params: { page: number; pageSize: number; search?: string }) {
+    this.ensureTenantScope(tenantId);
     const where: Record<string, unknown> = { tenantId, isDeleted: false };
     if (params.search) {
       where.OR = [

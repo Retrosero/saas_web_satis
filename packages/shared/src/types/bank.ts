@@ -4,7 +4,7 @@ import type {
   BankTransactionType,
   PosCollectionStatus,
   PosStatus,
-} from '../enums/bank.enum.js';
+} from '../enums/bank.enum';
 
 export interface BankAccount {
   id: string;

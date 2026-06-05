@@ -8,6 +8,7 @@ const LoginPage = lazy(() => import('@/pages/auth/LoginPage').then((m) => ({ def
 const DashboardPage = lazy(() => import('@/pages/dashboard/DashboardPage').then((m) => ({ default: m.DashboardPage })));
 const TenantsPage = lazy(() => import('@/pages/super-admin/TenantsPage').then((m) => ({ default: m.TenantsPage })));
 const TenantDetailPage = lazy(() => import('@/pages/super-admin/TenantDetailPage').then((m) => ({ default: m.TenantDetailPage })));
+const TenantPlansPage = lazy(() => import('@/pages/super-admin/TenantPlansPage').then((m) => ({ default: m.TenantPlansPage })));
 const SuperAdminDashboardPage = lazy(() => import('@/pages/super-admin/SuperAdminDashboardPage').then((m) => ({ default: m.SuperAdminDashboardPage })));
 const SuperAdminLogsPage = lazy(() => import('@/pages/super-admin/SuperAdminLogsPage').then((m) => ({ default: m.SuperAdminLogsPage })));
 const PlansPage = lazy(() => import('@/pages/super-admin/PlansPage').then((m) => ({ default: m.PlansPage })));
@@ -253,6 +254,7 @@ const routes: RouteObject[] = [
       { path: 'super-admin/dashboard', element: withSuspense(<SuperAdminDashboardPage />) },
       { path: 'super-admin/tenants', element: withSuspense(<TenantsPage />) },
       { path: 'super-admin/tenants/:id', element: withSuspense(<TenantDetailPage />) },
+      { path: 'super-admin/tenants/:id/plans', element: withSuspense(<TenantPlansPage />) },
       { path: 'super-admin/users', element: withSuspense(<UsersPage />) },
       { path: 'super-admin/plans', element: withSuspense(<PlansPage />) },
       { path: 'super-admin/modules', element: withSuspense(<ModulesPage />) },

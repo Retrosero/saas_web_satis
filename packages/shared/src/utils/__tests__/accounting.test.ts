@@ -30,7 +30,7 @@ import {
   buildInventorySnapshot,
   buildCustomerBalanceSnapshot,
   AccountingError,
-} from '../accounting.js';
+} from '../accounting';
 
 describe('roundMoney', () => {
   it('2 ondalık basamağa yuvarlar', () => {

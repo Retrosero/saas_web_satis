@@ -1,4 +1,4 @@
-import { ModuleCode, ModuleCategory } from '../enums/module.enum.js';
+import { ModuleCode, ModuleCategory } from '../enums/module.enum';
 
 /**
  * Modül kataloğu (sistem genelinde). Seed sırasında `modules` tablosuna

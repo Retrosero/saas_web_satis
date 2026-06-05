@@ -163,7 +163,7 @@ export class AuthService {
     });
     if (!u) throw new UnauthorizedException('Kullanıcı bulunamadı');
 
-    const roles = u.userRoles.map((ur) => ({
+    let roles = u.userRoles.map((ur) => ({
       roleId: ur.roleId,
       roleCode: ur.role.code,
       roleName: ur.role.name,
@@ -172,6 +172,19 @@ export class AuthService {
       dataScope: ur.dataScope,
       branchIds: ur.branchIds,
     }));
+
+    // Süper admin (tenantId null) ve roles boşsa, varsayılan super_admin rolü ekle
+    if (!u.tenantId && roles.length === 0) {
+      roles = [{
+        roleId: 'system',
+        roleCode: 'super_admin',
+        roleName: 'Süper Admin',
+        tenantId: 'SYSTEM',
+        permissions: ['*'],
+        dataScope: 'TENANT' as const,
+        branchIds: [],
+      }];
+    }
 
     // Aktif modülleri tenant_modules + plan_modules birleşiminden getir
     let activeModules: string[] = [];

@@ -6,8 +6,8 @@
  * 2) Burada bir PlanDefinition objesi ekle
  * 3) PLAN_MODULES ile modül eşleştirmesini yap
  */
-import { PlanCode, Currency } from '../enums/plan.enum.js';
-import { ModuleCode } from '../enums/module.enum.js';
+import { PlanCode, Currency } from '../enums/plan.enum';
+import { ModuleCode } from '../enums/module.enum';
 
 export interface PlanDefinition {
   code: PlanCode;

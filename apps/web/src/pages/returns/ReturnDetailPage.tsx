@@ -21,7 +21,7 @@ export function ReturnDetailPage() {
   const navigate = useNavigate();
   const { id = '' } = useParams<{ id: string }>();
   const { data: r, isLoading, error, refetch } = useReturn(id);
-  const action = useReturnAction(id);
+  const action = useReturnAction();
 
   const [confirmApprove, setConfirmApprove] = useState(false);
   const [confirmReject, setConfirmReject] = useState(false);
@@ -69,7 +69,7 @@ export function ReturnDetailPage() {
           </span>
           <div className="ml-auto flex flex-wrap gap-2">
             {canSubmit && (
-              <button onClick={async () => { await action.mutateAsync({ action: 'submit' }); refetch(); }} className="flex items-center gap-2 rounded-md border border-blue-600 bg-surface px-3 py-1.5 text-sm font-medium text-blue-600">
+              <button onClick={async () => { await action.mutateAsync({ id, action: 'submit' }); refetch(); }} className="flex items-center gap-2 rounded-md border border-blue-600 bg-surface px-3 py-1.5 text-sm font-medium text-blue-600">
                 <Send className="h-4 w-4" /> Onaya Gönder
               </button>
             )}
@@ -243,9 +243,9 @@ export function ReturnDetailPage() {
           </div>
         </div>
 
-        <ConfirmModal open={confirmApprove} title="İade Onaylansın mı?" description="İade onaylandıktan sonra tamamlama adımı uygulanabilir." confirmText="Onayla" variant="info" onConfirm={async () => { await action.mutateAsync({ action: 'approve' }); setConfirmApprove(false); refetch(); }} onClose={() => setConfirmApprove(false)} />
-        <ConfirmModal open={confirmComplete} title="İade Tamamlansın mı?" description="Tamamlama sonrası stok ve cari hareketleri oluşturulur. Bu işlem geri alınamaz." confirmText="Tamamla" variant="info" onConfirm={async () => { await action.mutateAsync({ action: 'complete' }); setConfirmComplete(false); refetch(); }} onClose={() => setConfirmComplete(false)} />
-        <ConfirmModal open={confirmCancel} title="İade İptal Edilsin mi?" description="İade iptal edilecek." confirmText="İptal Et" variant="warning" onConfirm={async () => { await action.mutateAsync({ action: 'cancel' }); setConfirmCancel(false); refetch(); }} onClose={() => setConfirmCancel(false)} />
+        <ConfirmModal open={confirmApprove} title="İade Onaylansın mı?" description="İade onaylandıktan sonra tamamlama adımı uygulanabilir." confirmText="Onayla" variant="info" onConfirm={async () => { await action.mutateAsync({ id, action: 'approve' }); setConfirmApprove(false); refetch(); }} onClose={() => setConfirmApprove(false)} />
+        <ConfirmModal open={confirmComplete} title="İade Tamamlansın mı?" description="Tamamlama sonrası stok ve cari hareketleri oluşturulur. Bu işlem geri alınamaz." confirmText="Tamamla" variant="info" onConfirm={async () => { await action.mutateAsync({ id, action: 'complete' }); setConfirmComplete(false); refetch(); }} onClose={() => setConfirmComplete(false)} />
+        <ConfirmModal open={confirmCancel} title="İade İptal Edilsin mi?" description="İade iptal edilecek." confirmText="İptal Et" variant="warning" onConfirm={async () => { await action.mutateAsync({ id, action: 'cancel' }); setConfirmCancel(false); refetch(); }} onClose={() => setConfirmCancel(false)} />
 
         {confirmReject && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
@@ -255,7 +255,7 @@ export function ReturnDetailPage() {
               <div className="mt-3 flex justify-end gap-2">
                 <button onClick={() => setConfirmReject(false)} className="rounded-md border border-outline px-3 py-1.5 text-sm">Vazgeç</button>
                 <button
-                  onClick={async () => { if (rejectionReason.trim().length >= 3) { await action.mutateAsync({ action: 'reject', rejectionReason }); setConfirmReject(false); setRejectionReason(''); refetch(); } }}
+                  onClick={async () => { if (rejectionReason.trim().length >= 3) { await action.mutateAsync({ id, action: 'reject', rejectionReason }); setConfirmReject(false); setRejectionReason(''); refetch(); } }}
                   className="rounded-md bg-red-600 px-3 py-1.5 text-sm font-medium text-white disabled:opacity-40"
                   disabled={rejectionReason.trim().length < 3}
                 >Reddet</button>

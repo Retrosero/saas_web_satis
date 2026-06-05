@@ -94,16 +94,16 @@ export class NotificationsExtendedController {
   // ===== INBOX =====
   @Get('inbox')
   listInbox(@Req() req: any, @Query() q: any) {
-    return this.svc.listInbox(req.user.tenantId, req.user.id, q);
+    return this.svc.listInbox(req.user.tenantId, req.user.sub ?? req.user.id, q);
   }
 
   @Post('inbox/read')
   markRead(@Req() req: any, @Body() body: { ids: string[] }) {
-    return this.svc.markRead(req.user.tenantId, req.user.id, body.ids);
+    return this.svc.markRead(req.user.tenantId, req.user.sub ?? req.user.id, body.ids);
   }
 
   @Post('inbox/read-all')
   markAllRead(@Req() req: any) {
-    return this.svc.markAllRead(req.user.tenantId, req.user.id);
+    return this.svc.markAllRead(req.user.tenantId, req.user.sub ?? req.user.id);
   }
 }

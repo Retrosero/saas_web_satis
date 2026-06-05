@@ -1,4 +1,4 @@
-import type { AssistantToolStatus, HelpContentType } from '../enums/assistant.enum.js';
+import type { AssistantToolStatus, HelpContentType } from '../enums/assistant.enum';
 
 export interface HelpArticle {
   id: string;

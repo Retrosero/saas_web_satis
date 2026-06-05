@@ -1,4 +1,4 @@
-import type { CollectionStatus, CollectionType } from '../enums/common.enum.js';
+import type { CollectionStatus, CollectionType } from '../enums/common.enum';
 
 export interface Collection {
   id: string;

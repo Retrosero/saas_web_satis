@@ -59,8 +59,8 @@ export function useReturnsList(params?: {
   return useQuery({
     queryKey: ['returns', 'list', params],
     queryFn: async () => {
-      const { data } = await apiClient.get<PaginatedResponse<ReturnListItem>>('/returns', { params });
-      return data;
+      const { data } = await apiClient.get<{ data: PaginatedResponse<ReturnListItem> }>('/returns', { params });
+      return data.data;
     },
   });
 }
@@ -69,8 +69,8 @@ export function useReturn(id: string) {
   return useQuery({
     queryKey: ['returns', 'detail', id],
     queryFn: async () => {
-      const { data } = await apiClient.get<ReturnDetail>(`/returns/${id}`);
-      return data;
+      const { data } = await apiClient.get<{ data: ReturnDetail }>(`/returns/${id}`);
+      return data.data;
     },
     enabled: !!id,
   });
@@ -80,8 +80,8 @@ export function useCreateReturn() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: CreateReturnInput) => {
-      const { data } = await apiClient.post<ReturnDetail>('/returns', input);
-      return data;
+      const { data } = await apiClient.post<{ data: ReturnDetail }>('/returns', input);
+      return data.data;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['returns'] }),
   });
@@ -91,8 +91,8 @@ export function useUpdateReturn(id: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: Partial<CreateReturnInput>) => {
-      const { data } = await apiClient.put<ReturnDetail>(`/returns/${id}`, input);
-      return data;
+      const { data } = await apiClient.put<{ data: ReturnDetail }>(`/returns/${id}`, input);
+      return data.data;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['returns'] });
@@ -101,16 +101,16 @@ export function useUpdateReturn(id: string) {
   });
 }
 
-export function useReturnAction(id: string) {
+export function useReturnAction() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (input: { action: 'submit' | 'approve' | 'reject' | 'complete' | 'cancel'; rejectionReason?: string }) => {
-      const { data } = await apiClient.post<Return>(`/returns/${id}/action`, input);
-      return data;
+    mutationFn: async ({ id, ...input }: { id: string; action: 'submit' | 'approve' | 'reject' | 'complete' | 'cancel'; rejectionReason?: string }) => {
+      const { data } = await apiClient.post<{ data: Return }>(`/returns/${id}/action`, input);
+      return data.data;
     },
-    onSuccess: () => {
+    onSuccess: (_result, vars) => {
       qc.invalidateQueries({ queryKey: ['returns'] });
-      qc.invalidateQueries({ queryKey: ['returns', 'detail', id] });
+      qc.invalidateQueries({ queryKey: ['returns', 'detail', vars.id] });
     },
   });
 }

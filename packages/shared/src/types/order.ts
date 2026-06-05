@@ -1,4 +1,4 @@
-import type { OrderStatus, OrderType } from '../enums/common.enum.js';
+import type { OrderStatus, OrderType } from '../enums/common.enum';
 
 export interface Order {
   id: string;

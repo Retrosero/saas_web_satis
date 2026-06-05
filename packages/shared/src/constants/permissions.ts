@@ -2,8 +2,8 @@
  * Tüm permission code'ları (modül:resource:action).
  * Seed sırasında `permissions` tablosuna bu liste ile birlikte INSERT yapılır.
  */
-import { ModuleCode } from '../enums/module.enum.js';
-import { PermissionAction } from '../enums/permission.enum.js';
+import { ModuleCode } from '../enums/module.enum';
+import { PermissionAction } from '../enums/permission.enum';
 
 export interface PermissionDefinition {
   code: string;

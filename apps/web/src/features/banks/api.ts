@@ -25,8 +25,8 @@ export function useBankAccounts(params?: { search?: string; status?: BankAccount
   return useQuery({
     queryKey: ['banks', 'accounts', params],
     queryFn: async () => {
-      const { data } = await apiClient.get<BankAccountWithBalance[]>('/banks/accounts', { params });
-      return data;
+      const { data } = await apiClient.get<{ data: BankAccountWithBalance[] }>('/banks/accounts', { params });
+      return data.data;
     },
   });
 }
@@ -35,8 +35,8 @@ export function useBankAccount(id: string) {
   return useQuery({
     queryKey: ['banks', 'accounts', id],
     queryFn: async () => {
-      const { data } = await apiClient.get<BankAccountWithBalance>(`/banks/accounts/${id}`);
-      return data;
+      const { data } = await apiClient.get<{ data: BankAccountWithBalance }>(`/banks/accounts/${id}`);
+      return data.data;
     },
     enabled: !!id,
   });
@@ -76,8 +76,8 @@ export function useBankTransactions(params?: { page?: number; pageSize?: number;
   return useQuery({
     queryKey: ['banks', 'transactions', params],
     queryFn: async () => {
-      const { data } = await apiClient.get<PaginatedResponse<BankTransactionWithAccount>>('/banks/transactions', { params });
-      return data;
+      const { data } = await apiClient.get<{ data: PaginatedResponse<BankTransactionWithAccount> }>('/banks/transactions', { params });
+      return data.data;
     },
   });
 }
@@ -111,8 +111,8 @@ export function usePosDevices() {
   return useQuery({
     queryKey: ['banks', 'pos-devices'],
     queryFn: async () => {
-      const { data } = await apiClient.get<PosDevice[]>('/banks/pos-devices');
-      return data;
+      const { data } = await apiClient.get<{ data: PosDevice[] }>('/banks/pos-devices');
+      return data.data;
     },
   });
 }
@@ -128,12 +128,12 @@ export function useCreatePosDevice() {
   });
 }
 
-export function useUpdatePosDevice(id: string) {
+export function useUpdatePosDevice() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (input: Partial<PosDevice>) => {
-      const { data } = await apiClient.put<PosDevice>(`/banks/pos-devices/${id}`, input);
-      return data;
+    mutationFn: async ({ id, ...input }: Partial<PosDevice> & { id: string }) => {
+      const { data } = await apiClient.put<{ data: PosDevice }>(`/banks/pos-devices/${id}`, input);
+      return data.data;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['banks', 'pos-devices'] }),
   });
@@ -143,8 +143,8 @@ export function usePosCollections(params?: { page?: number; pageSize?: number; p
   return useQuery({
     queryKey: ['banks', 'pos-collections', params],
     queryFn: async () => {
-      const { data } = await apiClient.get<PaginatedResponse<PosCollection & { posDeviceName?: string; posCode?: string }>>('/banks/pos-collections', { params });
-      return data;
+      const { data } = await apiClient.get<{ data: PaginatedResponse<PosCollection & { posDeviceName?: string; posCode?: string }> }>('/banks/pos-collections', { params });
+      return data.data;
     },
   });
 }
@@ -178,8 +178,8 @@ export function usePosCommissionReport(params?: { from?: string; to?: string; po
   return useQuery({
     queryKey: ['banks', 'reports', 'pos-commission', params],
     queryFn: async () => {
-      const { data } = await apiClient.get<{ totalGross: number; totalCommission: number; totalNet: number; byDevice: any[] }>('/banks/reports/pos-commission', { params });
-      return data;
+      const { data } = await apiClient.get<{ data: { totalGross: number; totalCommission: number; totalNet: number; byDevice: any[] } }>('/banks/reports/pos-commission', { params });
+      return data.data;
     },
   });
 }

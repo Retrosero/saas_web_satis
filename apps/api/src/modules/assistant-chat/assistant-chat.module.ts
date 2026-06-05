@@ -17,6 +17,7 @@ import { AIObservabilityService } from './ai-observability/ai-observability.serv
   providers: [
     AssistantChatService,
     RAGService,
+    AIObservabilityService,
     GetCustomerBalanceTool,
     ListCustomerPendingSalesTool,
     CheckProductStockTool,
