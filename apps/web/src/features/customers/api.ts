@@ -55,22 +55,22 @@ export type UpdateCustomerInput = Partial<CreateCustomerInput>;
 
 export const customersApi = {
   list: (params: { page?: number; pageSize?: number; search?: string; type?: CustomerType; status?: CustomerStatus }) =>
-    apiClient.get<PaginatedResponse<CustomerListItem>>('/customers', { params }).then((r) => r.data),
+    apiClient.get<{ data: PaginatedResponse<CustomerListItem> }>('/customers', { params }).then((r) => r.data.data),
 
   get: (id: string) =>
-    apiClient.get<CustomerListItem>(`/customers/${id}`).then((r) => r.data),
+    apiClient.get<{ data: CustomerListItem }>(`/customers/${id}`).then((r) => r.data.data),
 
   statement: (id: string, params: { from?: string; to?: string; refType?: string; page?: number; pageSize?: number } = {}) =>
-    apiClient.get<CustomerStatement>(`/customers/${id}/statement`, { params }).then((r) => r.data),
+    apiClient.get<{ data: CustomerStatement }>(`/customers/${id}/statement`, { params }).then((r) => r.data.data),
 
   create: (data: CreateCustomerInput) =>
-    apiClient.post<Customer>('/customers', data).then((r) => r.data),
+    apiClient.post<{ data: Customer }>('/customers', data).then((r) => r.data.data),
 
   update: (id: string, data: UpdateCustomerInput) =>
-    apiClient.patch<Customer>(`/customers/${id}`, data).then((r) => r.data),
+    apiClient.patch<{ data: Customer }>(`/customers/${id}`, data).then((r) => r.data.data),
 
   deactivate: (id: string) =>
-    apiClient.patch<Customer>(`/customers/${id}/deactivate`).then((r) => r.data),
+    apiClient.patch<{ data: Customer }>(`/customers/${id}/deactivate`).then((r) => r.data.data),
 
   remove: (id: string) =>
     apiClient.delete<void>(`/customers/${id}`).then((r) => r.data),

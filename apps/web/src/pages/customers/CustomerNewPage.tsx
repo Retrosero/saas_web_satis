@@ -58,7 +58,8 @@ export function CustomerNewPage() {
           navigate(`/customers/${created.id}`);
         },
         onError: (err: unknown) => {
-          const message = (err as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Cari oluşturulamadı';
+          const rawMessage = (err as { response?: { data?: { message?: string | string[] } } })?.response?.data?.message;
+          const message = Array.isArray(rawMessage) ? rawMessage.join(', ') : (rawMessage ?? 'Cari oluşturulamadı');
           toast.error(message);
         },
       },

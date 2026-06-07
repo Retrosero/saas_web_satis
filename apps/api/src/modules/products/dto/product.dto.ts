@@ -11,7 +11,7 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { ProductStatus, ProductType, UnitType, PriceType } from '@saas/shared';
+import { ProductStatus, ProductType } from '@saas/shared';
 
 export class CreateProductDto {
   @ApiProperty({ required: false, description: 'Boş bırakılırsa otomatik üretilir' })
@@ -62,9 +62,10 @@ export class CreateProductDto {
   @IsString()
   defaultWarehouseId?: string;
 
-  @ApiProperty({ example: 'clxyz123...' })
+  @ApiProperty({ example: 'clxyz123...', required: false, description: 'Boşsa varsayılan aktif birim atanır' })
+  @IsOptional()
   @IsString()
-  unitId!: string;
+  unitId?: string;
 
   @ApiProperty({ required: false })
   @IsOptional()

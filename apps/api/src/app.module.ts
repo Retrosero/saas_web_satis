@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { LoggerModule } from 'nestjs-pino';
 import { PrismaModule } from './prisma/prisma.module';
@@ -69,6 +70,8 @@ import { r2Config } from './config/r2.config';
 @Module({
   imports: [
     AppCacheModule,
+    DashboardModule,
+
     // Config
     ConfigModule.forRoot({
       isGlobal: true,

@@ -41,16 +41,16 @@ export type UpdateProductInput = Partial<CreateProductInput>;
 
 export const productsApi = {
   list: (params: { page?: number; pageSize?: number; search?: string; type?: ProductType; status?: ProductStatus; brandId?: string; categoryId?: string }) =>
-    apiClient.get<PaginatedResponse<ProductListItem>>('/products', { params }).then((r) => r.data),
+    apiClient.get<{ data: PaginatedResponse<ProductListItem> }>('/products', { params }).then((r) => r.data.data),
 
   get: (id: string) =>
-    apiClient.get<ProductDetail>(`/products/${id}`).then((r) => r.data),
+    apiClient.get<{ data: ProductDetail }>(`/products/${id}`).then((r) => r.data.data),
 
   create: (data: CreateProductInput) =>
-    apiClient.post<Product>('/products', data).then((r) => r.data),
+    apiClient.post<{ data: Product }>('/products', data).then((r) => r.data.data),
 
   update: (id: string, data: UpdateProductInput) =>
-    apiClient.patch<Product>(`/products/${id}`, data).then((r) => r.data),
+    apiClient.patch<{ data: Product }>(`/products/${id}`, data).then((r) => r.data.data),
 
   remove: (id: string) =>
     apiClient.delete<void>(`/products/${id}`).then((r) => r.data),

@@ -117,7 +117,7 @@ export class ProductsService {
       brandId?: string;
       categoryId?: string;
       defaultWarehouseId?: string;
-      unitId: string;
+      unitId?: string;
       primaryBarcode?: string;
       trackStock?: boolean;
       vatRate?: number;
@@ -135,11 +135,7 @@ export class ProductsService {
     });
     if (existing) throw new ConflictException(`Bu ürün kodu zaten kullanılıyor: ${code}`);
 
-    // Unit kontrolü
-    const unit = await this.prisma.client.unit.findFirst({
-      where: { id: input.unitId, OR: [{ tenantId }, { tenantId: null }] },
-    });
-    if (!unit) throw new BadRequestException('Geçersiz birim (unitId)');
+    const unitId = await this.resolveUnitId(tenantId, input.unitId);
 
     const created = await this.prisma.client.product.create({
       data: {
@@ -153,7 +149,7 @@ export class ProductsService {
         brandId: input.brandId ?? null,
         categoryId: input.categoryId ?? null,
         defaultWarehouseId: input.defaultWarehouseId ?? null,
-        unitId: input.unitId,
+        unitId,
         primaryBarcode: input.primaryBarcode ?? null,
         trackStock: input.trackStock ?? true,
         vatRate: new Prisma.Decimal(input.vatRate ?? 20),
@@ -244,6 +240,42 @@ export class ProductsService {
       if (m) n = Number(m[1]) + 1;
     }
     return `P-${String(n).padStart(5, '0')}`;
+  }
+
+  private async resolveUnitId(tenantId: string, unitId?: string): Promise<string> {
+    if (unitId) {
+      const unit = await this.prisma.client.unit.findFirst({
+        where: { id: unitId, isActive: true, OR: [{ tenantId }, { tenantId: null }] },
+      });
+      if (!unit) throw new BadRequestException('Geçersiz birim (unitId)');
+      return unit.id;
+    }
+
+    const fallbackUnit = await this.prisma.client.unit.findFirst({
+      where: {
+        isActive: true,
+        OR: [{ tenantId, isDefault: true }, { tenantId: null, isDefault: true }, { tenantId }, { tenantId: null }],
+      },
+      orderBy: [{ tenantId: 'desc' }, { isDefault: 'desc' }, { sortOrder: 'asc' }, { name: 'asc' }],
+    });
+
+    if (fallbackUnit) {
+      return fallbackUnit.id;
+    }
+
+    const createdUnit = await this.prisma.client.unit.create({
+      data: {
+        tenantId,
+        code: 'ADET',
+        name: 'Adet',
+        type: 'PIECE',
+        isActive: true,
+        isDefault: true,
+        sortOrder: 0,
+      },
+    });
+
+    return createdUnit.id;
   }
 
   /**

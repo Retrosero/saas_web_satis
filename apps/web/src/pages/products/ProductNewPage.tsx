@@ -48,7 +48,8 @@ export function ProductNewPage() {
           navigate(`/products/${created.id}`);
         },
         onError: (err: unknown) => {
-          const message = (err as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Ürün oluşturulamadı';
+          const rawMessage = (err as { response?: { data?: { message?: string | string[] } } })?.response?.data?.message;
+          const message = Array.isArray(rawMessage) ? rawMessage.join(', ') : (rawMessage ?? 'Ürün oluşturulamadı');
           toast.error(message);
         },
       },
@@ -185,7 +186,7 @@ export function ProductNewPage() {
         </div>
 
         <div className="card p-4 bg-tertiary-container/30 text-xs text-on-surface-variant">
-          ℹ️ Birim, marka, kategori ve varsayılan depo bilgileri ayrı catalog modüllerinden (FAZ 8) eklenecek.
+          ℹ️ Birim seçimi bu ekranda henüz açık değil. Kayıtta firma varsayılan birimi kullanılır; marka, kategori ve varsayılan depo bilgileri ayrı katalog modüllerinden güncellenebilir.
         </div>
 
         <div className="flex justify-end gap-2">
