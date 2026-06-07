@@ -2,6 +2,8 @@ import { Body, Controller, Get, Param, Post, Query, UseGuards, Patch } from '@ne
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
 import { TenantGuard } from '../../common/guards/tenant.guard.js';
+import { PermissionGuard } from '../../common/guards/permission.guard.js';
+import { RequirePermission } from '../../common/guards/require-permission.decorator.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { CashService } from './cash.service.js';
 import {
@@ -18,7 +20,8 @@ import type {
 
 @ApiTags('cash')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard, TenantGuard)
+@UseGuards(JwtAuthGuard, TenantGuard, PermissionGuard)
+@RequirePermission('kasa:cash_account:view')
 @Controller('cash')
 export class CashController {
   constructor(private readonly cash: CashService) {}

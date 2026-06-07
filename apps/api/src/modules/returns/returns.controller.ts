@@ -12,6 +12,8 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
 import { TenantGuard } from '../../common/guards/tenant.guard.js';
+import { PermissionGuard } from '../../common/guards/permission.guard.js';
+import { RequirePermission } from '../../common/guards/require-permission.decorator.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { ReturnsService } from './returns.service.js';
 import { CreateReturnSchema, UpdateReturnSchema, ReturnActionSchema } from './dto/return.dto.js';
@@ -19,12 +21,13 @@ import type { JwtPayload, ReturnReason, ReturnSource, ReturnStatus } from '@saas
 
 @ApiTags('returns')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard, TenantGuard)
+@UseGuards(JwtAuthGuard, TenantGuard, PermissionGuard)
 @Controller('returns')
 export class ReturnsController {
   constructor(private readonly returns: ReturnsService) {}
 
   @Get()
+  @RequirePermission('iade:return:view')
   @ApiOperation({ summary: 'İade listesi' })
   list(
     @CurrentUser() user: JwtPayload,
@@ -54,6 +57,7 @@ export class ReturnsController {
   }
 
   @Post()
+  @RequirePermission('iade:return:create')
   @ApiOperation({ summary: 'Yeni iade oluştur (taslak)' })
   create(@CurrentUser() user: JwtPayload, @Body() body: unknown) {
     const input = CreateReturnSchema.parse(body);
@@ -61,6 +65,7 @@ export class ReturnsController {
   }
 
   @Put(':id')
+  @RequirePermission('iade:return:update')
   @ApiOperation({ summary: 'İade güncelle (taslak/onay bekleyen)' })
   update(@CurrentUser() user: JwtPayload, @Param('id') id: string, @Body() body: unknown) {
     const input = UpdateReturnSchema.parse(body);
@@ -68,6 +73,7 @@ export class ReturnsController {
   }
 
   @Post(':id/action')
+  @RequirePermission('iade:return:approve')
   @ApiOperation({ summary: 'İade aksiyonu (submit/approve/reject/complete/cancel)' })
   action(@CurrentUser() user: JwtPayload, @Param('id') id: string, @Body() body: unknown) {
     const input = ReturnActionSchema.parse(body);
@@ -82,6 +88,7 @@ export class ReturnsController {
   }
 
   @Delete(':id')
+  @RequirePermission('iade:return:view')
   @ApiOperation({ summary: 'İade sil (soft delete)' })
   async delete(@CurrentUser() user: JwtPayload, @Param('id') id: string) {
     await this.returns.softDelete(user.tid, id, user.sub);

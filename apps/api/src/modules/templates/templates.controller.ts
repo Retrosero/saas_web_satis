@@ -2,13 +2,16 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } fro
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
 import { TenantGuard } from '../../common/guards/tenant.guard.js';
+import { PermissionGuard } from '../../common/guards/permission.guard.js';
+import { RequirePermission } from '../../common/guards/require-permission.decorator.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { TemplatesService } from './templates.service.js';
 import type { DocumentType, JwtPayload, PageFormat } from '@saas/shared';
 
 @ApiTags('templates')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard, TenantGuard)
+@UseGuards(JwtAuthGuard, TenantGuard, PermissionGuard)
+@RequirePermission('raporlar:report:view')
 @Controller('templates')
 export class TemplatesController {
   constructor(private readonly svc: TemplatesService) {}

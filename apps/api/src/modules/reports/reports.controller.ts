@@ -2,13 +2,16 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } fro
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
 import { TenantGuard } from '../../common/guards/tenant.guard.js';
+import { PermissionGuard } from '../../common/guards/permission.guard.js';
+import { RequirePermission } from '../../common/guards/require-permission.decorator.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { ReportsService } from './reports.service.js';
 import type { JwtPayload, ReportTemplate } from '@saas/shared';
 
 @ApiTags('reports')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard, TenantGuard)
+@UseGuards(JwtAuthGuard, TenantGuard, PermissionGuard)
+@RequirePermission('raporlar:report:view')
 @Controller('reports')
 export class ReportsController {
   constructor(private readonly svc: ReportsService) {}

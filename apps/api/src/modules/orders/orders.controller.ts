@@ -11,6 +11,8 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
 import { TenantGuard } from '../../common/guards/tenant.guard.js';
+import { PermissionGuard } from '../../common/guards/permission.guard.js';
+import { RequirePermission } from '../../common/guards/require-permission.decorator.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { OrdersService } from './orders.service.js';
 import { CreateOrderDto } from './dto/order.dto.js';
@@ -23,12 +25,13 @@ import type {
 
 @ApiTags('orders')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard, TenantGuard)
+@UseGuards(JwtAuthGuard, TenantGuard, PermissionGuard)
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly orders: OrdersService) {}
 
   @Get()
+  @RequirePermission('siparis:order:view')
   @ApiOperation({ summary: 'Sipariş listesi' })
   list(
     @CurrentUser() user: JwtPayload,
@@ -60,6 +63,7 @@ export class OrdersController {
   }
 
   @Post()
+  @RequirePermission('siparis:order:create')
   @ApiOperation({ summary: 'Yeni sipariş (PENDING)' })
   create(@CurrentUser() user: JwtPayload, @Body() dto: CreateOrderDto) {
     return this.orders.create(
@@ -80,12 +84,14 @@ export class OrdersController {
   }
 
   @Post(':id/confirm')
+  @RequirePermission('siparis:order:approve')
   @ApiOperation({ summary: 'Siparişi onayla (PENDING → CONFIRMED)' })
   confirm(@CurrentUser() user: JwtPayload, @Param('id') id: string) {
     return this.orders.confirm(user.tid, id, user.sub);
   }
 
   @Post(':id/cancel')
+  @RequirePermission('siparis:order:cancel')
   @ApiOperation({ summary: 'Siparişi iptal et' })
   cancel(
     @CurrentUser() user: JwtPayload,
@@ -96,6 +102,7 @@ export class OrdersController {
   }
 
   @Delete(':id')
+  @RequirePermission('siparis:order:view')
   @ApiOperation({ summary: 'Sipariş sil (sadece PENDING + satışa bağlı değil)' })
   remove(@CurrentUser() user: JwtPayload, @Param('id') id: string) {
     return this.orders.remove(user.tid, id);

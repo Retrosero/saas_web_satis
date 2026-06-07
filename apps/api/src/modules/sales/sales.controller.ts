@@ -2,6 +2,8 @@ import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@n
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
 import { TenantGuard } from '../../common/guards/tenant.guard.js';
+import { PermissionGuard } from '../../common/guards/permission.guard.js';
+import { RequirePermission } from '../../common/guards/require-permission.decorator.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { SalesService } from './sales.service';
 import { CreateSaleDto } from './dto/sale.dto.js';
@@ -9,12 +11,13 @@ import type { JwtPayload, PaymentStatus, SaleStatus, SaleType } from '@saas/shar
 
 @ApiTags('sales')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard, TenantGuard)
+@UseGuards(JwtAuthGuard, TenantGuard, PermissionGuard)
 @Controller('sales')
 export class SalesController {
   constructor(private readonly sales: SalesService) {}
 
   @Get()
+  @RequirePermission('satis:sale:view')
   @ApiOperation({ summary: 'Satış listesi' })
   list(
     @CurrentUser() user: JwtPayload,
@@ -38,12 +41,14 @@ export class SalesController {
   }
 
   @Get(':id')
+  @RequirePermission('satis:sale:view')
   @ApiOperation({ summary: 'Satış detayı (kalemlerle)' })
   findById(@CurrentUser() user: JwtPayload, @Param('id') id: string) {
     return this.sales.findById(user.tid, id);
   }
 
   @Post()
+  @RequirePermission('satis:sale:create')
   @ApiOperation({ summary: 'Yeni satış (DRAFT veya CONFIRMED)' })
   create(@CurrentUser() user: JwtPayload, @Body() dto: CreateSaleDto) {
     return this.sales.create(
@@ -64,12 +69,14 @@ export class SalesController {
   }
 
   @Post(':id/cancel')
+  @RequirePermission('satis:sale:cancel')
   @ApiOperation({ summary: 'Satış iptal (ters kayıt)' })
   cancel(@CurrentUser() user: JwtPayload, @Param('id') id: string, @Body() body: { reason?: string }) {
     return this.sales.cancel(user.tid, id, user.sub, body?.reason);
   }
 
   @Delete(':id')
+  @RequirePermission('satis:sale:view')
   @ApiOperation({ summary: 'Taslak satışı sil (soft)' })
   remove(@CurrentUser() user: JwtPayload, @Param('id') id: string) {
     return this.sales.remove(user.tid, id);

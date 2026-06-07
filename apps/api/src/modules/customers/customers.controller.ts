@@ -16,12 +16,14 @@ import { UpdateCustomerDto } from './dto/update-customer.dto.js';
 import { FilterCustomerDto } from './dto/filter-customer.dto.js';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
 import { TenantGuard } from '../../common/guards/tenant.guard.js';
+import { PermissionGuard } from '../../common/guards/permission.guard.js';
+import { RequirePermission } from '../../common/guards/require-permission.decorator.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import type { JwtPayload } from '@saas/shared';
 
 @ApiTags('customers')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard, TenantGuard)
+@UseGuards(JwtAuthGuard, TenantGuard, PermissionGuard)
 @Controller('customers')
 export class CustomersController {
   constructor(private readonly customers: CustomersService) {}
@@ -31,6 +33,7 @@ export class CustomersController {
    * Her satırda anlık bakiye ve hareket sayısı döner.
    */
   @Get()
+  @RequirePermission('cari:customer:view')
   @ApiOperation({ summary: 'Cari listesi (müşteri + tedarikçi)' })
   @ApiQuery({ name: 'type', required: false, description: 'CUSTOMER | SUPPLIER | BOTH' })
   list(@CurrentUser() user: JwtPayload, @Query() filter: FilterCustomerDto) {
@@ -41,6 +44,7 @@ export class CustomersController {
    * Tek cari detayı.
    */
   @Get(':id')
+  @RequirePermission('cari:customer:view')
   @ApiOperation({ summary: 'Cari detayı (anlık bakiye dahil)' })
   findById(@CurrentUser() user: JwtPayload, @Param('id') id: string) {
     return this.customers.findById(user.tid, id);
@@ -50,6 +54,7 @@ export class CustomersController {
    * Cari ekstresi — hareket listesi + dönem toplamları + bakiye.
    */
   @Get(':id/statement')
+  @RequirePermission('cari:customer:view')
   @ApiOperation({ summary: 'Cari ekstresi (hareketler + bakiye)' })
   @ApiQuery({ name: 'from', required: false, type: String, description: 'ISO tarih (YYYY-MM-DD)' })
   @ApiQuery({ name: 'to', required: false, type: String })
@@ -79,6 +84,7 @@ export class CustomersController {
    * Açılış bakiyesi varsa otomatik OPENING_BALANCE hareketi oluşturulur.
    */
   @Post()
+  @RequirePermission('cari:customer:create')
   @ApiOperation({ summary: 'Yeni cari oluştur' })
   create(@CurrentUser() user: JwtPayload, @Body() dto: CreateCustomerDto) {
     return this.customers.create(user.tid, dto, user.sub);
@@ -88,6 +94,7 @@ export class CustomersController {
    * Cari güncelle. code değiştirilemez.
    */
   @Patch(':id')
+  @RequirePermission('cari:customer:update')
   @ApiOperation({ summary: 'Cari güncelle' })
   update(
     @CurrentUser() user: JwtPayload,
@@ -113,6 +120,7 @@ export class CustomersController {
    * Hareketi varsa deactivate kullanın.
    */
   @Delete(':id')
+  @RequirePermission('cari:customer:delete')
   @ApiOperation({ summary: 'Cari sil (soft, sadece hareketi yoksa)' })
   remove(@CurrentUser() user: JwtPayload, @Param('id') id: string) {
     return this.customers.remove(user.tid, id, user.sub);

@@ -11,6 +11,8 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
 import { TenantGuard } from '../../common/guards/tenant.guard.js';
+import { PermissionGuard } from '../../common/guards/permission.guard.js';
+import { RequirePermission } from '../../common/guards/require-permission.decorator.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { CollectionsService } from './collections.service.js';
 import { CreateCollectionDto } from './dto/collection.dto.js';
@@ -22,12 +24,13 @@ import type {
 
 @ApiTags('collections')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard, TenantGuard)
+@UseGuards(JwtAuthGuard, TenantGuard, PermissionGuard)
 @Controller('collections')
 export class CollectionsController {
   constructor(private readonly collections: CollectionsService) {}
 
   @Get()
+  @RequirePermission('tahsilat:collection:view')
   @ApiOperation({ summary: 'Tahsilat listesi' })
   list(
     @CurrentUser() user: JwtPayload,
@@ -59,6 +62,7 @@ export class CollectionsController {
   }
 
   @Post()
+  @RequirePermission('tahsilat:collection:create')
   @ApiOperation({ summary: 'Yeni tahsilat (PENDING)' })
   create(@CurrentUser() user: JwtPayload, @Body() dto: CreateCollectionDto) {
     return this.collections.create(
@@ -77,6 +81,7 @@ export class CollectionsController {
   }
 
   @Post(':id/confirm')
+  @RequirePermission('tahsilat:collection:view')
   @ApiOperation({ summary: 'Tahsilatı onayla — cari alacak + kasa hareketi oluştur' })
   confirm(
     @CurrentUser() user: JwtPayload,
@@ -87,6 +92,7 @@ export class CollectionsController {
   }
 
   @Post(':id/cancel')
+  @RequirePermission('tahsilat:collection:cancel')
   @ApiOperation({ summary: 'Tahsilatı iptal et — ters hareketler oluştur' })
   cancel(
     @CurrentUser() user: JwtPayload,
@@ -97,6 +103,7 @@ export class CollectionsController {
   }
 
   @Delete(':id')
+  @RequirePermission('tahsilat:collection:view')
   @ApiOperation({ summary: 'Tahsilat sil (sadece PENDING)' })
   remove(@CurrentUser() user: JwtPayload, @Param('id') id: string) {
     return this.collections.remove(user.tid, id);
