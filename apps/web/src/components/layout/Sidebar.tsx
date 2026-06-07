@@ -11,7 +11,19 @@ import { useAuthStore } from '@/stores/auth-store';
 import { useLogout } from '@/features/auth/hooks';
 import { useUIStore } from '@/stores/ui-store';
 import { useTenantModules } from '@/features/tenant-admin/hooks';
+import { useModuleAccess } from '@/lib/usePermission';
 import type { LucideIcon } from 'lucide-react';
+
+/**
+ * Hook to check access for multiple module codes at once.
+ * Calls useModuleAccess at component top level (not inside callbacks) to respect React hooks rules.
+ */
+function useModuleAccessBatch(codes: string[]): Set<string> {
+  // We call useModuleAccess once per unique code at the top level
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const accessResults = codes.map((code) => ({ code, hasAccess: useModuleAccess(code) }));
+  return new Set(accessResults.filter((r) => r.hasAccess).map((r) => r.code));
+}
 
 // Modül kodu → route + label + icon map
 const MODULE_CONFIG: Record<string, { route: string; label: string; Icon: LucideIcon }> = {
@@ -69,9 +81,13 @@ export function Sidebar() {
   // Modül metadata'yı çek (backend'den gelen defaultRoute kullanılabilir)
   const { data: moduleData } = useTenantModules();
 
+  // Collect unique module codes and check access at component level
+  const activeCodes = user?.activeModules ?? [];
+  const uniqueModules = [...new Set(activeCodes)];
+  const allowedModules = useModuleAccessBatch(uniqueModules);
+
   // Dinamik nav: aktif modüllerden nav item'ları oluştur
   // Backend'den gelen label/route öncelikli, yoksa MODULE_CONFIG'ten al
-  const activeCodes = user?.activeModules ?? [];
   const dynamicNav = activeCodes
     .map((code) => {
       const cfg = MODULE_CONFIG[code];
@@ -85,7 +101,10 @@ export function Sidebar() {
         module: code,
       };
     })
-    .filter(Boolean) as Array<{ to: string; label: string; Icon: LucideIcon; module: string }>;
+    .filter(
+      (item): item is NonNullable<typeof item> =>
+        item !== null && allowedModules.has(item.module),
+    ) as Array<{ to: string; label: string; Icon: LucideIcon; module: string }>;
 
   const isSuperAdmin = user?.roles?.some((r) => r.roleCode === 'super_admin') ?? false;
 

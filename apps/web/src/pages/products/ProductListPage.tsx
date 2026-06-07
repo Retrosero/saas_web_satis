@@ -6,6 +6,7 @@ import { EmptyState } from '@/components/data/EmptyState';
 import { LoadingState } from '@/components/data/LoadingState';
 import { ErrorState } from '@/components/data/ErrorState';
 import { useProducts } from '@/features/products/api';
+import { usePermission } from '@/lib/usePermission';
 import { formatNumber } from '@saas/shared';
 import type { ProductStatus, ProductType } from '@saas/shared';
 
@@ -37,16 +38,20 @@ export function ProductListPage() {
     pageSize: 100,
   });
 
+  const canCreate = usePermission('stok:product:create');
+
   return (
     <div className="flex flex-col gap-4">
       <PageHeader
         title="Ürünler / Stok"
         description="Ürün kartları ve anlık stok miktarları (event-sourcing)"
         actions={
-          <button onClick={() => navigate('/products/new')} className="btn-primary">
-            <Plus className="h-4 w-4" />
-            Yeni Ürün
-          </button>
+          canCreate ? (
+            <button onClick={() => navigate('/products/new')} className="btn-primary">
+              <Plus className="h-4 w-4" />
+              Yeni Ürün
+            </button>
+          ) : null
         }
       />
 
@@ -93,10 +98,12 @@ export function ProductListPage() {
             title="Henüz ürün yok"
             description="Ürün kartları satış, alış ve stok işlemlerinde kullanılır. İlk ürününüzü oluşturarak başlayın."
             action={
-              <button onClick={() => navigate('/products/new')} className="btn-primary">
-                <Plus className="h-4 w-4" />
-                İlk Ürünü Oluştur
-              </button>
+              canCreate ? (
+                <button onClick={() => navigate('/products/new')} className="btn-primary">
+                  <Plus className="h-4 w-4" />
+                  İlk Ürünü Oluştur
+                </button>
+              ) : null
             }
           />
         </div>

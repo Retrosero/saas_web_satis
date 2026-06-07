@@ -6,6 +6,7 @@ import { EmptyState } from '@/components/data/EmptyState';
 import { LoadingState } from '@/components/data/LoadingState';
 import { ErrorState } from '@/components/data/ErrorState';
 import { useSalesList } from '@/features/sales/api';
+import { usePermission } from '@/lib/usePermission';
 import { formatCurrency } from '@saas/shared';
 import type { PaymentStatus, SaleStatus, SaleType } from '@saas/shared';
 import toast from 'react-hot-toast';
@@ -42,16 +43,20 @@ export function SaleListPage() {
     pageSize: 100,
   });
 
+  const canCreate = usePermission('satis:sale:create');
+
   return (
     <div className="flex flex-col gap-4">
       <PageHeader
         title="Satışlar"
         description="Faturalar ve satış belgeleri — onayla, iptal et, detayı gör"
         actions={
-          <button onClick={() => navigate('/sales/new')} className="btn-primary">
-            <Plus className="h-4 w-4" />
-            Yeni Satış
-          </button>
+          canCreate ? (
+            <button onClick={() => navigate('/sales/new')} className="btn-primary">
+              <Plus className="h-4 w-4" />
+              Yeni Satış
+            </button>
+          ) : null
         }
       />
 
@@ -101,10 +106,12 @@ export function SaleListPage() {
             title="Henüz satış yok"
             description="Satış oluşturmak için taslak olarak kaydedin veya doğrudan onaylayın. Satış onaylandığında stok ve cari hareketleri otomatik oluşur."
             action={
-              <button onClick={() => navigate('/sales/new')} className="btn-primary">
-                <Plus className="h-4 w-4" />
-                İlk Satışı Oluştur
-              </button>
+              canCreate ? (
+                <button onClick={() => navigate('/sales/new')} className="btn-primary">
+                  <Plus className="h-4 w-4" />
+                  İlk Satışı Oluştur
+                </button>
+              ) : null
             }
           />
         </div>

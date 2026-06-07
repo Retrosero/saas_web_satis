@@ -6,6 +6,7 @@ import { EmptyState } from '@/components/data/EmptyState';
 import { LoadingState } from '@/components/data/LoadingState';
 import { ErrorState } from '@/components/data/ErrorState';
 import { useCustomers, useDeactivateCustomer } from '@/features/customers/api';
+import { usePermission } from '@/lib/usePermission';
 import { formatCurrency } from '@saas/shared';
 import type { CustomerStatus, CustomerType } from '@saas/shared';
 import toast from 'react-hot-toast';
@@ -36,6 +37,9 @@ export function CustomerListPage() {
   });
   const deactivate = useDeactivateCustomer();
 
+  const canCreate = usePermission('cari:customer:create');
+  const canDelete = usePermission('cari:customer:delete');
+
   const handleDeactivate = (id: string, name: string) => {
     if (!confirm(`"${name}" carisini pasife almak istediğinizden emin misiniz? Hareketleri saklanır.`)) return;
     deactivate.mutate(id, {
@@ -53,10 +57,12 @@ export function CustomerListPage() {
         title="Cari Hesaplar"
         description="Müşteri ve tedarikçi hesaplarınız — bakiyeler anlık hesaplanır"
         actions={
-          <button onClick={() => navigate('/customers/new')} className="btn-primary">
-            <Plus className="h-4 w-4" />
-            Yeni Cari
-          </button>
+          canCreate ? (
+            <button onClick={() => navigate('/customers/new')} className="btn-primary">
+              <Plus className="h-4 w-4" />
+              Yeni Cari
+            </button>
+          ) : null
         }
       />
 
@@ -103,10 +109,12 @@ export function CustomerListPage() {
             title="Henüz cari hesap yok"
             description="Müşteri veya tedarikçi ekleyerek başlayın. Cari hesapları fatura, tahsilat ve kasa işlemlerinde kullanılır."
             action={
-              <button onClick={() => navigate('/customers/new')} className="btn-primary">
-                <Plus className="h-4 w-4" />
-                İlk Cariyi Oluştur
-              </button>
+              canCreate ? (
+                <button onClick={() => navigate('/customers/new')} className="btn-primary">
+                  <Plus className="h-4 w-4" />
+                  İlk Cariyi Oluştur
+                </button>
+              ) : null
             }
           />
         </div>
@@ -181,7 +189,7 @@ export function CustomerListPage() {
                         </span>
                       </td>
                       <td className="px-4 py-3 text-right" onClick={(e) => e.stopPropagation()}>
-                        {c.status === 'ACTIVE' ? (
+                        {canDelete && c.status === 'ACTIVE' ? (
                           <button
                             onClick={() => handleDeactivate(c.id, c.name)}
                             disabled={deactivate.isPending}

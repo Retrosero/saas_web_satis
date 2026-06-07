@@ -5,6 +5,7 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import { LoadingState } from '@/components/data/LoadingState';
 import { ErrorState } from '@/components/data/ErrorState';
 import { useCollection, useConfirmCollection, useCancelCollection } from '@/features/collections/api';
+import { usePermission } from '@/lib/usePermission';
 import { formatCurrency, formatDate } from '@saas/shared';
 import type { CollectionStatus, CollectionType } from '@saas/shared';
 import toast from 'react-hot-toast';
@@ -34,9 +35,12 @@ export function CollectionDetailPage() {
   const confirmMutation = useConfirmCollection();
   const cancelMutation = useCancelCollection();
 
+  const canView = usePermission('tahsilat:collection:view');
+  const canCancel = usePermission('tahsilat:collection:cancel');
+
   const st = data ? STATUS_LABEL[data.status] : null;
   const canConfirm = data?.status === 'PENDING';
-  const canCancel = data?.status !== 'CANCELLED';
+  const canCancelStatus = data?.status !== 'CANCELLED';
 
   const handleConfirm = () => {
     if (!cashAccountId) {
@@ -183,7 +187,7 @@ export function CollectionDetailPage() {
 
           {/* Kasa seçimi + işlemler */}
           <div className="card p-4 flex flex-col gap-3">
-            {canConfirm && (
+            {canView && canConfirm && (
               <>
                 <div>
                   <label className="block text-xs text-on-surface-variant mb-1">
@@ -209,7 +213,7 @@ export function CollectionDetailPage() {
                 </p>
               </>
             )}
-            {canCancel && data.status !== 'CANCELLED' && (
+            {canCancel && canCancelStatus && data.status !== 'CANCELLED' && (
               <button
                 onClick={handleCancel}
                 disabled={cancelMutation.isPending}

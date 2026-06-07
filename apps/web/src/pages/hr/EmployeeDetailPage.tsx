@@ -24,6 +24,7 @@ import {
   useUpdateDocumentStatus,
   useUploadDocument,
 } from '@/features/hr/api';
+import { usePermission } from '@/lib/usePermission';
 
 const STATUS_COLORS: Record<string, string> = {
   PENDING: 'bg-amber-100 text-amber-700',
@@ -38,6 +39,7 @@ export function EmployeeDetailPage() {
   const { data: employee, isLoading } = useEmployee(id!);
   const { data: sensitive } = useEmployeeSensitive(id!);
   const { data: documents } = useEmployeeDocuments(id!);
+  const canViewSensitive = usePermission('ik:sensitive_data:view');
   const archiveMut = useArchiveEmployee();
   const terminateMut = useTerminateEmployee();
   const uploadMut = useUploadDocument(id!);
@@ -101,7 +103,7 @@ export function EmployeeDetailPage() {
             label="TC Kimlik No"
             masked={employee.identityNumber}
             full={sensitive?.identityNumber}
-            show={showSensitive}
+            show={showSensitive && canViewSensitive}
           />
           <Row label="Doğum Tarihi" value={employee.birthDate ? new Date(employee.birthDate).toLocaleDateString('tr-TR') : '—'} />
           <Row label="Cinsiyet" value={employee.gender ? genderLabel(employee.gender) : '—'} />
@@ -151,7 +153,7 @@ export function EmployeeDetailPage() {
             label="IBAN"
             masked={employee.iban}
             full={sensitive?.iban}
-            show={showSensitive}
+            show={showSensitive && canViewSensitive}
           />
           <button
             onClick={() => setShowSensitive(!showSensitive)}

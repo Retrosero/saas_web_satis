@@ -9,6 +9,7 @@ import { EmptyState } from '@/components/data/EmptyState';
 import { ErrorState } from '@/components/data/ErrorState';
 import { ConfirmModal } from '@/components/data/ConfirmModal';
 import { useBankAccounts, useDeleteBankAccount, type BankAccountWithBalance } from '@/features/banks/api';
+import { usePermission } from '@/lib/usePermission';
 import {
   BankAccountStatusLabel,
   BankAccountTypeLabel,
@@ -36,6 +37,8 @@ export function BankAccountsPage() {
     type: typeFilter !== 'all' ? typeFilter : undefined,
   });
 
+  const canView = usePermission('banka:bank_account:view');
+
   const deleteMut = useDeleteBankAccount();
   const accounts = data ?? [];
 
@@ -59,6 +62,13 @@ export function BankAccountsPage() {
   ];
 
   if (error) return <ErrorState message="Banka hesapları yüklenemedi" onRetry={refetch} />;
+  if (!canView) {
+    return (
+      <div className="rounded-lg border border-error/30 bg-error-container/20 p-8 text-center">
+        <p className="text-error font-medium">Bu sayfayı görüntüleme yetkiniz yok.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">

@@ -7,6 +7,7 @@ import { ErrorState } from '@/components/data/ErrorState';
 import { PageGuard } from '@/components/data/PageGuard';
 import { ConfirmModal } from '@/components/data/ConfirmModal';
 import { useReturn, useReturnAction } from '@/features/returns/api';
+import { usePermission } from '@/lib/usePermission';
 import {
   ReturnItemConditionLabel,
   ReturnReasonLabel,
@@ -23,6 +24,9 @@ export function ReturnDetailPage() {
   const { data: r, isLoading, error, refetch } = useReturn(id);
   const action = useReturnAction();
 
+  const canApproveReturn = usePermission('iade:return:approve');
+  const canCancelReturn = usePermission('iade:return:cancel');
+
   const [confirmApprove, setConfirmApprove] = useState(false);
   const [confirmReject, setConfirmReject] = useState(false);
   const [confirmComplete, setConfirmComplete] = useState(false);
@@ -34,9 +38,9 @@ export function ReturnDetailPage() {
 
   const canEdit = ['DRAFT', 'PENDING'].includes(r.status);
   const canSubmit = r.status === 'DRAFT';
-  const canApprove = r.status === 'PENDING';
+  const canApproveStatus = r.status === 'PENDING';
   const canComplete = r.status === 'APPROVED';
-  const canCancel = !['COMPLETED', 'CANCELLED', 'REJECTED'].includes(r.status);
+  const canCancelStatus = !['COMPLETED', 'CANCELLED', 'REJECTED'].includes(r.status);
 
   return (
     <div>
@@ -68,12 +72,12 @@ export function ReturnDetailPage() {
             {ReturnStatusLabel[r.status]}
           </span>
           <div className="ml-auto flex flex-wrap gap-2">
-            {canSubmit && (
+            {canApproveReturn && canSubmit && (
               <button onClick={async () => { await action.mutateAsync({ id, action: 'submit' }); refetch(); }} className="flex items-center gap-2 rounded-md border border-blue-600 bg-surface px-3 py-1.5 text-sm font-medium text-blue-600">
                 <Send className="h-4 w-4" /> Onaya Gönder
               </button>
             )}
-            {canApprove && (
+            {canApproveReturn && canApproveStatus && (
               <>
                 <button onClick={() => setConfirmApprove(true)} className="flex items-center gap-2 rounded-md bg-green-600 px-3 py-1.5 text-sm font-medium text-white">
                   <Check className="h-4 w-4" /> Onayla
@@ -83,12 +87,12 @@ export function ReturnDetailPage() {
                 </button>
               </>
             )}
-            {canComplete && (
+            {canApproveReturn && canComplete && (
               <button onClick={() => setConfirmComplete(true)} className="flex items-center gap-2 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-on-primary">
                 <Check className="h-4 w-4" /> Tamamla
               </button>
             )}
-            {canCancel && (
+            {canCancelReturn && canCancelStatus && (
               <button onClick={() => setConfirmCancel(true)} className="flex items-center gap-2 rounded-md border border-amber-600 bg-surface px-3 py-1.5 text-sm font-medium text-amber-600">
                 <X className="h-4 w-4" /> İptal Et
               </button>

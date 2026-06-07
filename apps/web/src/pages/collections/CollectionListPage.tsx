@@ -6,6 +6,7 @@ import { EmptyState } from '@/components/data/EmptyState';
 import { LoadingState } from '@/components/data/LoadingState';
 import { ErrorState } from '@/components/data/ErrorState';
 import { useCollectionsList } from '@/features/collections/api';
+import { usePermission } from '@/lib/usePermission';
 import { formatCurrency } from '@saas/shared';
 import type { CollectionStatus, CollectionType } from '@saas/shared';
 
@@ -36,16 +37,20 @@ export function CollectionListPage() {
     pageSize: 100,
   });
 
+  const canCreate = usePermission('tahsilat:collection:create');
+
   return (
     <div className="flex flex-col gap-4">
       <PageHeader
         title="Tahsilatlar"
         description="Müşterilerden tahsil edilen ödemeler — onayla, iptal et"
         actions={
-          <button onClick={() => navigate('/collections/new')} className="btn-primary">
-            <Plus className="h-4 w-4" />
-            Yeni Tahsilat
-          </button>
+          canCreate ? (
+            <button onClick={() => navigate('/collections/new')} className="btn-primary">
+              <Plus className="h-4 w-4" />
+              Yeni Tahsilat
+            </button>
+          ) : null
         }
       />
 
@@ -82,10 +87,12 @@ export function CollectionListPage() {
             title="Henüz tahsilat yok"
             description="Müşterilerden tahsilat yapmak için yeni tahsilat oluşturun. Tahsilat onaylandığında cari hesap güncellenir."
             action={
-              <button onClick={() => navigate('/collections/new')} className="btn-primary">
-                <Plus className="h-4 w-4" />
-                İlk Tahsilatı Oluştur
-              </button>
+              canCreate ? (
+                <button onClick={() => navigate('/collections/new')} className="btn-primary">
+                  <Plus className="h-4 w-4" />
+                  İlk Tahsilatı Oluştur
+                </button>
+              ) : null
             }
           />
         </div>

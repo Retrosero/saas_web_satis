@@ -10,6 +10,7 @@ import { ErrorState } from '@/components/data/ErrorState';
 import { ConfirmModal } from '@/components/data/ConfirmModal';
 import { PageGuard } from '@/components/data/PageGuard';
 import { useReturnsList, useReturnAction, useDeleteReturn } from '@/features/returns/api';
+import { usePermission } from '@/lib/usePermission';
 import {
   ReturnReasonLabel,
   ReturnSourceLabel,
@@ -57,6 +58,8 @@ export function ReturnListPage() {
   const [confirmDelete, setConfirmDelete] = useState<{ id: string; number: string } | null>(null);
   const [confirmCancel, setConfirmCancel] = useState<{ id: string; number: string } | null>(null);
   const actionMutation = useReturnAction();
+
+  const canCreate = usePermission('iade:return:create');
 
   const { data, isLoading, error, refetch } = useReturnsList({
     page,
@@ -200,13 +203,15 @@ export function ReturnListPage() {
           title="İade Yönetimi"
           description="Müşterilerden alınan iadeleri yönetin"
           actions={
-            <button
-              onClick={() => navigate('/returns/new')}
-              className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-on-primary hover:bg-primary/90"
-            >
-              <Plus className="h-4 w-4" />
-              Yeni İade
-            </button>
+            canCreate ? (
+              <button
+                onClick={() => navigate('/returns/new')}
+                className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-on-primary hover:bg-primary/90"
+              >
+                <Plus className="h-4 w-4" />
+                Yeni İade
+              </button>
+            ) : null
           }
         />
 

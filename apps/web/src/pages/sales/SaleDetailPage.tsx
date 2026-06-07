@@ -15,6 +15,7 @@ import {
   useConfirmSale,
   useCancelSale,
 } from '@/features/sales/api';
+import { usePermission } from '@/lib/usePermission';
 import { formatCurrency, formatDate } from '@saas/shared';
 import type { PaymentStatus, SaleStatus, SaleType } from '@saas/shared';
 import toast from 'react-hot-toast';
@@ -53,6 +54,8 @@ export function SaleDetailPage() {
   const { data, isLoading, isError, error, refetch } = useSale(id);
   const confirmMutation = useConfirmSale();
   const cancelMutation = useCancelSale();
+
+  const canCancelSale = usePermission('satis:sale:cancel');
 
   const st = data ? STATUS_LABEL[data.status] : null;
   const py = data ? PAYMENT_LABEL[data.paymentStatus] : null;
@@ -338,7 +341,7 @@ export function SaleDetailPage() {
                 {confirmMutation.isPending ? 'Onaylanıyor…' : '✓ Satışı Onayla'}
               </button>
             )}
-            {canCancel && (
+            {canCancelSale && canCancel && (
               <button
                 onClick={handleCancel}
                 disabled={cancelMutation.isPending}

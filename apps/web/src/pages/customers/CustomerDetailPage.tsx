@@ -26,6 +26,7 @@ import {
   useDeactivateCustomer,
   useDeleteCustomer,
 } from '@/features/customers/api';
+import { usePermission } from '@/lib/usePermission';
 import { formatCurrency, formatDate } from '@saas/shared';
 import type { CustomerStatus, CustomerType } from '@saas/shared';
 import toast from 'react-hot-toast';
@@ -64,6 +65,9 @@ export function CustomerDetailPage() {
   });
   const deactivate = useDeactivateCustomer();
   const remove = useDeleteCustomer();
+
+  const canUpdate = usePermission('cari:customer:update');
+  const canDelete = usePermission('cari:customer:delete');
 
   if (isLoading) return <LoadingState label="Cari yükleniyor…" />;
   if (isError) return <ErrorState message={(error as Error).message} onRetry={() => refetch()} />;
@@ -115,13 +119,13 @@ export function CustomerDetailPage() {
         }
         actions={
           <div className="flex gap-2">
-            {customer.status === 'ACTIVE' && (
+            {canUpdate && customer.status === 'ACTIVE' && (
               <button onClick={handleDeactivate} disabled={deactivate.isPending} className="btn-secondary text-sm">
                 <Power className="h-4 w-4" />
                 Pasife Al
               </button>
             )}
-            {customer.movementCount === 0 && (
+            {canDelete && customer.movementCount === 0 && (
               <button onClick={handleDelete} disabled={remove.isPending} className="btn-ghost text-sm text-error">
                 Sil
               </button>

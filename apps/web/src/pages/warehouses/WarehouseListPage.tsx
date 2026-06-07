@@ -8,6 +8,7 @@ import { LoadingState } from '@/components/data/LoadingState';
 import { EmptyState } from '@/components/data/EmptyState';
 import { useWarehouses } from '@/features/warehouses/api';
 import { PageGuard } from '@/components/data/PageGuard';
+import { usePermission } from '@/lib/usePermission';
 import type { WarehouseStatus } from '@saas/shared';
 
 const STATUS_LABEL: Record<WarehouseStatus, { text: string; color: string }> = {
@@ -24,6 +25,8 @@ export function WarehouseListPage() {
     search: search || undefined,
     status: statusFilter !== 'all' ? statusFilter : undefined,
   });
+
+  const canCreate = usePermission('depo:warehouse:create');
 
   const rows = data?.data ?? [];
 
@@ -120,10 +123,12 @@ export function WarehouseListPage() {
               <ArrowLeftRight className="h-4 w-4" />
               Transfer
             </button>
-            <button onClick={() => navigate('/warehouses/new')} className="btn-primary">
-              <Plus className="h-4 w-4" />
-              Yeni Depo
-            </button>
+            {canCreate && (
+              <button onClick={() => navigate('/warehouses/new')} className="btn-primary">
+                <Plus className="h-4 w-4" />
+                Yeni Depo
+              </button>
+            )}
           </div>
         }
       />
@@ -172,10 +177,12 @@ export function WarehouseListPage() {
             title="Henüz depo yok"
             description="Ürünlerinizi takip edebilmek için önce depo tanımlayın."
             action={
-              <button onClick={() => navigate('/warehouses/new')} className="btn-primary">
-                <Plus className="h-4 w-4" />
-                İlk Depoyu Oluştur
-              </button>
+              canCreate ? (
+                <button onClick={() => navigate('/warehouses/new')} className="btn-primary">
+                  <Plus className="h-4 w-4" />
+                  İlk Depoyu Oluştur
+                </button>
+              ) : null
             }
           />
         </div>

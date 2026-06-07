@@ -6,6 +6,7 @@ import { EmptyState } from '@/components/data/EmptyState';
 import { LoadingState } from '@/components/data/LoadingState';
 import { ErrorState } from '@/components/data/ErrorState';
 import { useCashAccounts, useCreateCashAccount } from '@/features/cash/api';
+import { usePermission } from '@/lib/usePermission';
 import { formatCurrency } from '@saas/shared';
 import type { CashAccountType, CashAccountStatus } from '@saas/shared';
 import toast from 'react-hot-toast';
@@ -36,6 +37,9 @@ export function CashListPage() {
     search: search || undefined,
   });
   const create = useCreateCashAccount();
+
+  const canView = usePermission('kasa:cash_account:view');
+  const canCreate = usePermission('kasa:cash_account:create');
 
   const handleCreate = () => {
     if (!newCode.trim() || !newName.trim()) {
@@ -73,10 +77,12 @@ export function CashListPage() {
         title="Kasa / Banka"
         description="Nakit, banka ve POS hesapları — bakiyeler event-sourced"
         actions={
-          <button onClick={() => setShowNewModal(true)} className="btn-primary">
-            <Plus className="h-4 w-4" />
-            Yeni Hesap
-          </button>
+          canCreate ? (
+            <button onClick={() => setShowNewModal(true)} className="btn-primary">
+              <Plus className="h-4 w-4" />
+              Yeni Hesap
+            </button>
+          ) : null
         }
       />
 
@@ -105,6 +111,11 @@ export function CashListPage() {
 
       {isLoading && <LoadingState label="Hesaplar yükleniyor…" />}
       {isError && <ErrorState message={(error as Error).message} onRetry={() => refetch()} />}
+      {!isLoading && !isError && !canView && (
+        <div className="rounded-lg border border-error/30 bg-error-container/20 p-8 text-center">
+          <p className="text-error font-medium">Bu sayfayı görüntüleme yetkiniz yok.</p>
+        </div>
+      )}
       {data && data.data.length === 0 && (
         <div className="card">
           <EmptyState
@@ -112,10 +123,12 @@ export function CashListPage() {
             title="Henüz kasa/banka yok"
             description="Nakit kasa, banka hesabı veya POS cihazı ekleyerek başlayın."
             action={
-              <button onClick={() => setShowNewModal(true)} className="btn-primary">
-                <Plus className="h-4 w-4" />
-                İlk Hesabı Oluştur
-              </button>
+              canCreate ? (
+                <button onClick={() => setShowNewModal(true)} className="btn-primary">
+                  <Plus className="h-4 w-4" />
+                  İlk Hesabı Oluştur
+                </button>
+              ) : null
             }
           />
         </div>

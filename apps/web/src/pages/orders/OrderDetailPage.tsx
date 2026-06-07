@@ -14,6 +14,7 @@ import {
   useConfirmOrder,
   useCancelOrder,
 } from '@/features/orders/api';
+import { usePermission } from '@/lib/usePermission';
 import { formatCurrency, formatDate } from '@saas/shared';
 import type { OrderStatus, OrderType } from '@saas/shared';
 import toast from 'react-hot-toast';
@@ -43,6 +44,9 @@ export function OrderDetailPage() {
   const { data, isLoading, isError, error, refetch } = useOrder(id);
   const confirmMutation = useConfirmOrder();
   const cancelMutation = useCancelOrder();
+
+  const canApproveOrder = usePermission('siparis:order:approve');
+  const canCancelOrder = usePermission('siparis:order:cancel');
 
   const st = data ? STATUS_LABEL[data.status] : null;
   const canConfirm = data?.status === 'PENDING' && !data.linkedSaleId;
@@ -300,7 +304,7 @@ export function OrderDetailPage() {
           </div>
 
           <div className="card p-4 flex flex-col gap-2">
-            {canConfirm && (
+            {canApproveOrder && canConfirm && (
               <button
                 onClick={handleConfirm}
                 disabled={confirmMutation.isPending}
@@ -309,7 +313,7 @@ export function OrderDetailPage() {
                 {confirmMutation.isPending ? 'Onaylanıyor…' : '✓ Siparişi Onayla'}
               </button>
             )}
-            {canCancel && (
+            {canCancelOrder && canCancel && (
               <button
                 onClick={handleCancel}
                 disabled={cancelMutation.isPending}

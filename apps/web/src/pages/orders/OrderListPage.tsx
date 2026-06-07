@@ -6,6 +6,7 @@ import { EmptyState } from '@/components/data/EmptyState';
 import { LoadingState } from '@/components/data/LoadingState';
 import { ErrorState } from '@/components/data/ErrorState';
 import { useOrdersList } from '@/features/orders/api';
+import { usePermission } from '@/lib/usePermission';
 import { formatCurrency } from '@saas/shared';
 import type { OrderStatus } from '@saas/shared';
 
@@ -38,16 +39,20 @@ export function OrderListPage() {
     pageSize: 100,
   });
 
+  const canCreate = usePermission('siparis:order:create');
+
   return (
     <div className="flex flex-col gap-4">
       <PageHeader
         title="Siparişler"
         description="Satış siparişleri ve teklifler — onayla, satışa dönüştür"
         actions={
-          <button onClick={() => navigate('/orders/new')} className="btn-primary">
-            <Plus className="h-4 w-4" />
-            Yeni Sipariş
-          </button>
+          canCreate ? (
+            <button onClick={() => navigate('/orders/new')} className="btn-primary">
+              <Plus className="h-4 w-4" />
+              Yeni Sipariş
+            </button>
+          ) : null
         }
       />
 
@@ -87,10 +92,12 @@ export function OrderListPage() {
             title="Henüz sipariş yok"
             description="Satış siparişi oluşturun. Onaylanan sipariş daha sonra satışa dönüştürülebilir."
             action={
-              <button onClick={() => navigate('/orders/new')} className="btn-primary">
-                <Plus className="h-4 w-4" />
-                İlk Siparişi Oluştur
-              </button>
+              canCreate ? (
+                <button onClick={() => navigate('/orders/new')} className="btn-primary">
+                  <Plus className="h-4 w-4" />
+                  İlk Siparişi Oluştur
+                </button>
+              ) : null
             }
           />
         </div>
