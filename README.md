@@ -73,16 +73,15 @@ pnpm install
 # 2) Çevre değişkenlerini hazırla
 cp .env.example .env
 
-# 3) Lokal servisleri başlat (Postgres, Redis, MinIO)
-docker compose up -d
-
-# 4) Veritabanı migration
+# 3) Veritabanı migration
 pnpm --filter @saas/api prisma migrate dev
 pnpm --filter @saas/api prisma db seed
 
-# 5) Tüm uygulamaları geliştirme modunda başlat
+# 4) Tüm uygulamaları geliştirme modunda başlat
 pnpm dev
 ```
+
+`pnpm dev` komutu lokal Docker servislerini (`postgres`, `redis`, `meilisearch`, `minio`) otomatik başlatır ve PostgreSQL erişilebilir olana kadar bekler.
 
 - **Web:** http://localhost:5173
 - **API:** http://localhost:3000/api/v1

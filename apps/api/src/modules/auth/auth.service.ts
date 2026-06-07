@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Throttle } from '@nestjs/throttler';
@@ -22,10 +22,13 @@ export class AuthService {
     refreshToken: string;
     user: UserWithRoles;
   }> {
+    const normalizedEmail = input.email.toLowerCase();
+    const normalizedTenantCode = input.tenantCode?.trim().toUpperCase();
     let tenantId: string | null = null;
-    let user = await this.prisma.client.user.findFirst({
+
+    let superAdminUser = await this.prisma.client.user.findFirst({
       where: {
-        email: input.email.toLowerCase(),
+        email: normalizedEmail,
         tenantId: null, // önce süper admin
         isDeleted: false,
       },
@@ -35,17 +38,42 @@ export class AuthService {
       },
     });
 
-    if (!user && input.tenantCode) {
+    let user = superAdminUser;
+
+    if (normalizedTenantCode === 'SYSTEM') {
+      user = superAdminUser;
+    } else if (input.tenantCode) {
       const tenant = await this.prisma.client.tenant.findUnique({ where: { code: input.tenantCode } });
       if (!tenant) throw new UnauthorizedException('Geçersiz e-posta veya şifre');
       tenantId = tenant.id;
       user = await this.prisma.client.user.findFirst({
-        where: { email: input.email.toLowerCase(), tenantId, isDeleted: false },
+        where: { email: normalizedEmail, tenantId, isDeleted: false },
         include: {
           userRoles: { include: { role: { include: { permissions: { include: { permission: true } } } } } },
           tenant: true,
         },
       });
+    } else {
+      const tenantUsers = await this.prisma.client.user.findMany({
+        where: {
+          email: normalizedEmail,
+          tenantId: { not: null },
+          isDeleted: false,
+          tenant: { isDeleted: false, isActive: true },
+        },
+        include: {
+          userRoles: { include: { role: { include: { permissions: { include: { permission: true } } } } } },
+          tenant: true,
+        },
+        orderBy: { createdAt: 'asc' },
+      });
+
+      if (tenantUsers.length === 1) {
+        user = tenantUsers[0];
+        tenantId = tenantUsers[0].tenantId;
+      } else if (tenantUsers.length > 1) {
+        throw new BadRequestException('Birden fazla firma hesabı bulundu. Lütfen firma kodu girin');
+      }
     }
 
     if (!user) throw new UnauthorizedException('Geçersiz e-posta veya şifre');

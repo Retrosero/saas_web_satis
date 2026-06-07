@@ -24,8 +24,8 @@ export function useCollectionsList(params?: {
     queryKey: ['collections', 'list', params],
     queryFn: () =>
       apiClient
-        .get<PaginatedResponse<CollectionListItem>>('/collections', { params })
-        .then((r) => r.data),
+        .get<{ data: PaginatedResponse<CollectionListItem> }>('/collections', { params })
+        .then((r) => r.data.data),
     staleTime: 30_000,
   });
 }
@@ -34,7 +34,7 @@ export function useCollection(id: string | undefined) {
   return useQuery({
     queryKey: ['collections', id],
     queryFn: () =>
-      apiClient.get<Collection>(`/collections/${id}`).then((r) => r.data),
+      apiClient.get<{ data: Collection }>(`/collections/${id}`).then((r) => r.data.data),
     enabled: !!id,
     staleTime: 30_000,
   });
@@ -50,21 +50,21 @@ export function useCreateCollection() {
       linkedSaleId?: string;
       notes?: string;
     }) =>
-      apiClient.post<Collection>('/collections', input).then((r) => r.data),
+      apiClient.post<{ data: Collection }>('/collections', input).then((r) => r.data.data),
   });
 }
 
 export function useConfirmCollection() {
   return useMutation({
     mutationFn: ({ id, cashAccountId }: { id: string; cashAccountId: string }) =>
-      apiClient.post<Collection>(`/collections/${id}/confirm`, { cashAccountId }).then((r) => r.data),
+      apiClient.post<{ data: Collection }>(`/collections/${id}/confirm`, { cashAccountId }).then((r) => r.data.data),
   });
 }
 
 export function useCancelCollection() {
   return useMutation({
     mutationFn: ({ id, reason }: { id: string; reason?: string }) =>
-      apiClient.post<Collection>(`/collections/${id}/cancel`, { reason }).then((r) => r.data),
+      apiClient.post<{ data: Collection }>(`/collections/${id}/cancel`, { reason }).then((r) => r.data.data),
   });
 }
 
@@ -75,15 +75,15 @@ export function useDeleteCollection() {
 }
 
 export function useCustomerSearch(keyword: string) {
+  const normalizedKeyword = keyword.trim();
   return useQuery({
-    queryKey: ['customers', 'search', keyword],
+    queryKey: ['customers', 'search', normalizedKeyword],
     queryFn: () =>
       apiClient
-        .get<PaginatedResponse<Customer>>('/customers', {
-          params: { search: keyword, pageSize: 20, status: 'ACTIVE' },
+        .get<{ data: PaginatedResponse<Customer> }>('/customers', {
+          params: { search: normalizedKeyword || undefined, pageSize: 20, status: 'ACTIVE' },
         })
-        .then((r) => r.data.data),
-    enabled: keyword.length >= 2,
+        .then((r) => r.data.data.data),
     staleTime: 10_000,
   });
 }

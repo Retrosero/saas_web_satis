@@ -24,6 +24,12 @@ export class CreateWarehouseDto {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
+  @MaxLength(100)
+  branch?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
   @MaxLength(500)
   address?: string;
 
@@ -70,6 +76,12 @@ export class UpdateWarehouseDto {
   @IsOptional()
   @IsEnum(WarehouseStatus)
   status?: WarehouseStatus;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  @MaxLength(100)
+  branch?: string | null;
 
   @ApiProperty({ required: false })
   @IsOptional()

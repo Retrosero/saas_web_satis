@@ -20,15 +20,15 @@ const MODULES: ModuleSeed[] = [
   { code: 'siparis', name: 'Siparişler', category: 'operations', defaultRoute: '/orders', icon: 'shopping_cart', sortOrder: 50, description: 'Müşteri ve tedarik sipariş takibi' },
   { code: 'tahsilat', name: 'Tahsilat', category: 'finance', defaultRoute: '/collections', icon: 'payments', sortOrder: 60, description: 'Cari tahsilat ve ödeme kayıtları' },
   { code: 'kasa', name: 'Kasa', category: 'finance', defaultRoute: '/cash', icon: 'account_balance_wallet', sortOrder: 70, description: 'Kasa tanımları ve nakit hareketleri' },
-  { code: 'banka', name: 'Banka', category: 'finance', defaultRoute: '/bank', icon: 'account_balance', sortOrder: 75, description: 'Banka hesapları ve hareketleri' },
-  { code: 'pos', name: 'POS', category: 'finance', defaultRoute: '/pos', icon: 'credit_card', sortOrder: 78, description: 'POS cihaz tanımları ve işlemleri' },
+  { code: 'banka', name: 'Banka', category: 'finance', defaultRoute: '/banks/accounts', icon: 'account_balance', sortOrder: 75, description: 'Banka hesapları ve hareketleri' },
+  { code: 'pos', name: 'POS', category: 'finance', defaultRoute: '/banks/pos-devices', icon: 'credit_card', sortOrder: 78, description: 'POS cihaz tanımları ve işlemleri' },
   { code: 'depo', name: 'Depo', category: 'operations', defaultRoute: '/warehouses', icon: 'warehouse', sortOrder: 80, description: 'Depo yönetimi' },
   { code: 'sayim', name: 'Stok Sayım', category: 'operations', defaultRoute: '/stock-counts', icon: 'fact_check', sortOrder: 85, description: 'Sayım başlık ve kalemleri' },
   { code: 'iade', name: 'İade', category: 'operations', defaultRoute: '/returns', icon: 'assignment_return', sortOrder: 88, description: 'Satış ve alım iadeleri' },
   { code: 'raporlar', name: 'Raporlar', category: 'operations', defaultRoute: '/reports', icon: 'analytics', sortOrder: 100, description: 'Günlük satış, cari bakiye, stok ve tahsilat raporları' },
   { code: 'ik', name: 'İnsan Kaynakları', category: 'hr', defaultRoute: '/hr', icon: 'badge', sortOrder: 110, description: 'Personel yönetimi' },
   { code: 'zimmet', name: 'Zimmet', category: 'hr', defaultRoute: '/assignments', icon: 'inventory', sortOrder: 115, description: 'Personel zimmet takibi' },
-  { code: 'servis', name: 'Servis / Bakım', category: 'operations', defaultRoute: '/service', icon: 'build', sortOrder: 120, description: 'Servis ve bakım talepleri' },
+  { code: 'servis', name: 'Servis / Bakım', category: 'operations', defaultRoute: '/support', icon: 'build', sortOrder: 120, description: 'Servis ve bakım talepleri' },
   { code: 'bayi_portali', name: 'Bayi Portalı', category: 'addon', defaultRoute: '/portal', icon: 'storefront', sortOrder: 130, description: 'Bayi ve müşteri portalı' },
   { code: 'api_webhook', name: 'API & Webhook', category: 'integration', defaultRoute: '/api-webhooks', icon: 'webhook', sortOrder: 140, description: 'Public API ve webhook entegrasyonları' },
   { code: 'erp_entegrasyon', name: 'ERP Entegrasyonu', category: 'integration', defaultRoute: '/erp', icon: 'sync_alt', sortOrder: 145, description: 'Mikro, Logo, Netsis, Paraşüt adaptörleri' },
@@ -53,6 +53,10 @@ const PERMISSIONS: PermissionSeed[] = [
   { code: 'stok:product:delete', module: 'stok', resource: 'product', action: 'delete', description: 'Ürün silme' },
   { code: 'stok:product:export', module: 'stok', resource: 'product', action: 'export', description: 'Ürün dışa aktarma' },
   { code: 'stok:product:import', module: 'stok', resource: 'product', action: 'import', description: 'Ürün içe aktarma' },
+  { code: 'depo:warehouse:view', module: 'depo', resource: 'warehouse', action: 'view', description: 'Depo görüntüleme' },
+  { code: 'depo:warehouse:create', module: 'depo', resource: 'warehouse', action: 'create', description: 'Depo oluşturma' },
+  { code: 'depo:warehouse:update', module: 'depo', resource: 'warehouse', action: 'update', description: 'Depo düzenleme' },
+  { code: 'depo:warehouse:delete', module: 'depo', resource: 'warehouse', action: 'delete', description: 'Depo silme' },
   { code: 'satis:sale:view', module: 'satis', resource: 'sale', action: 'view', description: 'Satış görüntüleme' },
   { code: 'satis:sale:create', module: 'satis', resource: 'sale', action: 'create', description: 'Satış oluşturma' },
   { code: 'satis:sale:update', module: 'satis', resource: 'sale', action: 'update', description: 'Satış düzenleme' },
@@ -72,6 +76,7 @@ const PERMISSIONS: PermissionSeed[] = [
   { code: 'raporlar:report:view', module: 'raporlar', resource: 'report', action: 'view', description: 'Rapor görüntüleme' },
   { code: 'raporlar:report:export', module: 'raporlar', resource: 'report', action: 'export', description: 'Rapor dışa aktarma' },
   { code: 'log_audit:audit_log:view', module: 'log_audit', resource: 'audit_log', action: 'view', description: 'Audit log görüntüleme' },
+  { code: 'asistan:assistant:view', module: 'asistan', resource: 'assistant', action: 'view', description: 'Akıllı asistan görüntüleme' },
   { code: 'ayarlar:user:view', module: 'ayarlar', resource: 'user', action: 'view', description: 'Kullanıcı görüntüleme' },
   { code: 'ayarlar:user:create', module: 'ayarlar', resource: 'user', action: 'create', description: 'Kullanıcı oluşturma' },
   { code: 'ayarlar:user:update', module: 'ayarlar', resource: 'user', action: 'update', description: 'Kullanıcı düzenleme' },
@@ -354,10 +359,54 @@ async function main(): Promise<void> {
       },
     });
 
+    const existingSystemMirror = await prisma.user.findFirst({
+      where: {
+        tenantId: demoTenant.id,
+        email: normalizedSuperAdminEmail,
+      },
+    });
+    const systemMirrorUser = existingSystemMirror
+      ? await prisma.user.update({
+          where: { id: existingSystemMirror.id },
+          data: {
+            passwordHash,
+            fullName: `${superAdminName} (Demo)`,
+            status: 'ACTIVE',
+            isActive: true,
+            isDeleted: false,
+          },
+        })
+      : await prisma.user.create({
+          data: {
+            tenantId: demoTenant.id,
+            email: normalizedSuperAdminEmail,
+            passwordHash,
+            fullName: `${superAdminName} (Demo)`,
+            status: 'ACTIVE',
+          },
+        });
+    await prisma.userRole.upsert({
+      where: {
+        userId_roleId_tenantId: {
+          userId: systemMirrorUser.id,
+          roleId: tenantAdminRole.id,
+          tenantId: demoTenant.id,
+        },
+      },
+      create: {
+        userId: systemMirrorUser.id,
+        roleId: tenantAdminRole.id,
+        tenantId: demoTenant.id,
+        dataScope: 'TENANT',
+      },
+      update: { dataScope: 'TENANT' },
+    });
+
     console.log('   Demo tenant verileri hazır.');
     console.log(`   Demo firma: ${demoTenantCode}`);
     console.log(`     - Firma yöneticisi: admin@demo.local / Demo123!`);
     console.log(`     - Muhasebeci: muhasebe@demo.local / Demo123!`);
+    console.log(`     - Sistem kullanıcısı (demo erişimi): ${normalizedSuperAdminEmail} / ${superAdminPassword}`);
     console.log(`     - 2 rol (tenant_admin, accountant)`);
 
     // Örnek bildirimler
@@ -431,6 +480,83 @@ async function main(): Promise<void> {
     console.log(`     - ${sampleNotifications.length} örnek bildirim`);
 
     console.log('   Operasyonel veriler (cari, ürün, vb.) FAZ 6+ sonrası eklenecek.');
+  }
+
+  const demoTenant = await prisma.tenant.findUnique({ where: { code: demoTenantCode } });
+  if (demoTenant) {
+    const tenantAdminRole =
+      (await prisma.role.findFirst({
+        where: { tenantId: demoTenant.id, code: 'tenant_admin' },
+      })) ??
+      (await prisma.role.create({
+        data: {
+          tenantId: demoTenant.id,
+          code: 'tenant_admin',
+          name: 'Firma Yöneticisi',
+          description: 'Firma içi tüm yetkiler',
+          isSystem: true,
+        },
+      }));
+
+    for (const p of allPerms) {
+      await prisma.rolePermission.upsert({
+        where: {
+          roleId_permissionId: {
+            roleId: tenantAdminRole.id,
+            permissionId: p.id,
+          },
+        },
+        create: {
+          roleId: tenantAdminRole.id,
+          permissionId: p.id,
+        },
+        update: {},
+      });
+    }
+
+    const existingSystemMirror = await prisma.user.findFirst({
+      where: {
+        tenantId: demoTenant.id,
+        email: normalizedSuperAdminEmail,
+      },
+    });
+    const systemMirrorUser = existingSystemMirror
+      ? await prisma.user.update({
+          where: { id: existingSystemMirror.id },
+          data: {
+            passwordHash,
+            fullName: `${superAdminName} (Demo)`,
+            status: 'ACTIVE',
+            isActive: true,
+            isDeleted: false,
+          },
+        })
+      : await prisma.user.create({
+          data: {
+            tenantId: demoTenant.id,
+            email: normalizedSuperAdminEmail,
+            passwordHash,
+            fullName: `${superAdminName} (Demo)`,
+            status: 'ACTIVE',
+          },
+        });
+
+    await prisma.userRole.upsert({
+      where: {
+        userId_roleId_tenantId: {
+          userId: systemMirrorUser.id,
+          roleId: tenantAdminRole.id,
+          tenantId: demoTenant.id,
+        },
+      },
+      create: {
+        userId: systemMirrorUser.id,
+        roleId: tenantAdminRole.id,
+        tenantId: demoTenant.id,
+        dataScope: 'TENANT',
+      },
+      update: { dataScope: 'TENANT' },
+    });
   }
 }
 

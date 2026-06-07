@@ -87,7 +87,7 @@ export function useSalesList(params?: {
   return useQuery({
     queryKey: ['sales', 'list', params],
     queryFn: () =>
-      apiClient.get<PaginatedResponse<SaleListItem>>('/sales', { params }).then((r) => r.data),
+      apiClient.get<{ data: PaginatedResponse<SaleListItem> }>('/sales', { params }).then((r) => r.data.data),
     staleTime: 30_000,
   });
 }
@@ -95,7 +95,7 @@ export function useSalesList(params?: {
 export function useSale(id: string | undefined) {
   return useQuery({
     queryKey: ['sales', id],
-    queryFn: () => apiClient.get<SaleDetail>(`/sales/${id}`).then((r) => r.data),
+    queryFn: () => apiClient.get<{ data: SaleDetail }>(`/sales/${id}`).then((r) => r.data.data),
     enabled: !!id,
     staleTime: 30_000,
   });
@@ -105,7 +105,7 @@ export function useCreateSale() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (input: CreateSaleInput) =>
-      apiClient.post<Sale>('/sales', input).then((r) => r.data),
+      apiClient.post<{ data: Sale }>('/sales', input).then((r) => r.data.data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['sales'] });
       qc.invalidateQueries({ queryKey: ['customers'] });
@@ -117,7 +117,7 @@ export function useCreateSale() {
 export function useConfirmSale() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => apiClient.post<Sale>(`/sales/${id}/confirm`).then((r) => r.data),
+    mutationFn: (id: string) => apiClient.post<{ data: Sale }>(`/sales/${id}/confirm`).then((r) => r.data.data),
     onSuccess: (data) => {
       qc.invalidateQueries({ queryKey: ['sales', data.id] });
       qc.invalidateQueries({ queryKey: ['sales', 'list'] });
@@ -131,7 +131,7 @@ export function useCancelSale() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: ({ id, reason }: { id: string; reason?: string }) =>
-      apiClient.post<Sale>(`/sales/${id}/cancel`, { reason }).then((r) => r.data),
+      apiClient.post<{ data: Sale }>(`/sales/${id}/cancel`, { reason }).then((r) => r.data.data),
     onSuccess: (data) => {
       qc.invalidateQueries({ queryKey: ['sales', data.id] });
       qc.invalidateQueries({ queryKey: ['sales', 'list'] });
@@ -153,30 +153,30 @@ export function useDeleteSale() {
 
 // Ürün arama (satış formu için)
 export function useProductSearch(keyword: string) {
+  const normalizedKeyword = keyword.trim();
   return useQuery({
-    queryKey: ['products', 'search', keyword],
+    queryKey: ['products', 'search', normalizedKeyword],
     queryFn: () =>
       apiClient
-        .get<PaginatedResponse<Product>>('/products', {
-          params: { search: keyword, pageSize: 20, status: 'ACTIVE' },
+        .get<{ data: PaginatedResponse<Product> }>('/products', {
+          params: { search: normalizedKeyword || undefined, pageSize: 20, status: 'ACTIVE' },
         })
-        .then((r) => r.data.data),
-    enabled: keyword.length >= 2,
+        .then((r) => r.data.data.data),
     staleTime: 10_000,
   });
 }
 
 // Cari arama (satış formu için)
 export function useCustomerSearch(keyword: string) {
+  const normalizedKeyword = keyword.trim();
   return useQuery({
-    queryKey: ['customers', 'search', keyword],
+    queryKey: ['customers', 'search', normalizedKeyword],
     queryFn: () =>
       apiClient
-        .get<PaginatedResponse<Customer>>('/customers', {
-          params: { search: keyword, pageSize: 20, status: 'ACTIVE' },
+        .get<{ data: PaginatedResponse<Customer> }>('/customers', {
+          params: { search: normalizedKeyword || undefined, pageSize: 20, status: 'ACTIVE' },
         })
-        .then((r) => r.data.data),
-    enabled: keyword.length >= 2,
+        .then((r) => r.data.data.data),
     staleTime: 10_000,
   });
 }

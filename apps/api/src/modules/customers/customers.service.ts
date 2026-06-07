@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.module.js';
 import type {
@@ -33,6 +33,7 @@ export class CustomersService {
       status?: CustomerStatus;
     },
   ): Promise<PaginatedResponse<Customer & { balance: number; movementCount: number }>> {
+    this.ensureTenantScope(tenantId);
     const page = params.page ?? 1;
     const pageSize = params.pageSize ?? 20;
     const where: Prisma.CustomerWhereInput = {
@@ -88,6 +89,7 @@ export class CustomersService {
    * Tek cari detayı + anlık bakiye.
    */
   async findById(tenantId: string, id: string): Promise<Customer & { balance: number; movementCount: number }> {
+    this.ensureTenantScope(tenantId);
     const c = await this.prisma.client.customer.findFirst({
       where: { id, tenantId, isDeleted: false },
     });
@@ -129,6 +131,7 @@ export class CustomersService {
     },
     createdById?: string,
   ): Promise<Customer> {
+    this.ensureTenantScope(tenantId);
     const type = input.type ?? 'CUSTOMER';
     const code = input.code ?? (await this.generateNextCode(tenantId, type));
 
@@ -224,6 +227,7 @@ export class CustomersService {
     },
     updatedById?: string,
   ): Promise<Customer> {
+    this.ensureTenantScope(tenantId);
     const exists = await this.prisma.client.customer.findFirst({
       where: { id, tenantId, isDeleted: false },
     });
@@ -265,6 +269,7 @@ export class CustomersService {
    * Hard delete KULLANILMAZ (muhasebe izi için).
    */
   async remove(tenantId: string, id: string, deletedById?: string): Promise<void> {
+    this.ensureTenantScope(tenantId);
     const exists = await this.prisma.client.customer.findFirst({
       where: { id, tenantId, isDeleted: false },
     });
@@ -296,6 +301,7 @@ export class CustomersService {
    * Veri silinmez, sadece status=ACTIVE çıkar.
    */
   async deactivate(tenantId: string, id: string, updatedById?: string): Promise<Customer> {
+    this.ensureTenantScope(tenantId);
     return this.update(tenantId, id, { status: 'PASSIVE' }, updatedById);
   }
 
@@ -329,6 +335,7 @@ export class CustomersService {
       reversedById?: string | null;
     }>;
   }> {
+    this.ensureTenantScope(tenantId);
     const customer = await this.prisma.client.customer.findFirst({
       where: { id: customerId, tenantId, isDeleted: false },
     });
@@ -463,6 +470,12 @@ export class CustomersService {
   private async computeSingleBalance(tenantId: string, customerId: string): Promise<{ balance: number; movementCount: number }> {
     const map = await this.computeBalances(tenantId, [customerId]);
     return map.get(customerId) ?? { balance: 0, movementCount: 0 };
+  }
+
+  private ensureTenantScope(tenantId: string): void {
+    if (!tenantId || tenantId === 'SYSTEM') {
+      throw new ForbiddenException('Bu işlem için firma seçili bir kullanıcı ile giriş yapmalısınız');
+    }
   }
 
   private toDto(c: {

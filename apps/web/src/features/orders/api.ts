@@ -112,29 +112,29 @@ export function useDeleteOrder() {
 }
 
 export function useProductSearch(keyword: string) {
+  const normalizedKeyword = keyword.trim();
   return useQuery({
-    queryKey: ['products', 'search', keyword],
+    queryKey: ['products', 'search', normalizedKeyword],
     queryFn: () =>
       apiClient
-        .get<PaginatedResponse<Product>>('/products', {
-          params: { search: keyword, pageSize: 20, status: 'ACTIVE' },
+        .get<{ data: PaginatedResponse<Product> }>('/products', {
+          params: { search: normalizedKeyword || undefined, pageSize: 20, status: 'ACTIVE' },
         })
-        .then((r) => r.data.data),
-    enabled: keyword.length >= 2,
+        .then((r) => r.data.data.data),
     staleTime: 10_000,
   });
 }
 
 export function useCustomerSearch(keyword: string) {
+  const normalizedKeyword = keyword.trim();
   return useQuery({
-    queryKey: ['customers', 'search', keyword],
+    queryKey: ['customers', 'search', normalizedKeyword],
     queryFn: () =>
       apiClient
-        .get<PaginatedResponse<Customer>>('/customers', {
-          params: { search: keyword, pageSize: 20, status: 'ACTIVE' },
+        .get<{ data: PaginatedResponse<Customer> }>('/customers', {
+          params: { search: normalizedKeyword || undefined, pageSize: 20, status: 'ACTIVE' },
         })
-        .then((r) => r.data.data),
-    enabled: keyword.length >= 2,
+        .then((r) => r.data.data.data),
     staleTime: 10_000,
   });
 }

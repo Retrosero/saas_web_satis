@@ -42,6 +42,7 @@ export interface Warehouse {
   code: string;
   name: string;
   status: WarehouseStatus;
+  branch: string | null;
   address: string | null;
   city: string | null;
   manager: string | null;

@@ -6,8 +6,8 @@ export function useRecentNotifications(limit = 5) {
   return useQuery({
     queryKey: ['notif', 'recent', limit],
     queryFn: async () => {
-      const { data } = await apiClient.get<{ items: NotificationInbox[] }>('/notifications-extended/inbox', { params: { pageSize: limit } });
-      return data.items;
+      const { data } = await apiClient.get<{ data: { items: NotificationInbox[] } }>('/notifications-extended/inbox', { params: { pageSize: limit } });
+      return data.data.items ?? [];
     },
     refetchInterval: 30_000,
     staleTime: 0,
@@ -18,8 +18,8 @@ export function useUnreadCount() {
   return useQuery({
     queryKey: ['notif', 'unread-count'],
     queryFn: async () => {
-      const { data } = await apiClient.get<{ unread: number }>('/notifications-extended/inbox');
-      return { count: data.unread };
+      const { data } = await apiClient.get<{ data: { unread: number } }>('/notifications-extended/inbox');
+      return { count: data.data.unread ?? 0 };
     },
     refetchInterval: 30_000,
     staleTime: 0,

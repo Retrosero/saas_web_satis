@@ -17,7 +17,9 @@ export function useCashAccounts(params?: {
   return useQuery({
     queryKey: ['cash', 'accounts', params],
     queryFn: () =>
-      apiClient.get<PaginatedResponse<CashAccountWithBalance>>('/cash/accounts', { params }).then((r) => r.data),
+      apiClient
+        .get<{ data: PaginatedResponse<CashAccountWithBalance> }>('/cash/accounts', { params })
+        .then((r) => r.data.data),
     staleTime: 30_000,
   });
 }
@@ -25,7 +27,10 @@ export function useCashAccounts(params?: {
 export function useCashAccount(id: string | undefined) {
   return useQuery({
     queryKey: ['cash', 'accounts', id],
-    queryFn: () => apiClient.get<CashAccountWithBalance>(`/cash/accounts/${id}`).then((r) => r.data),
+    queryFn: () =>
+      apiClient
+        .get<{ data: CashAccountWithBalance }>(`/cash/accounts/${id}`)
+        .then((r) => r.data.data),
     enabled: !!id,
     staleTime: 30_000,
   });
@@ -43,7 +48,9 @@ export function useCashMovements(params?: {
   return useQuery({
     queryKey: ['cash', 'movements', params],
     queryFn: () =>
-      apiClient.get<PaginatedResponse<CashMovement>>('/cash/movements', { params }).then((r) => r.data),
+      apiClient
+        .get<{ data: PaginatedResponse<CashMovement> }>('/cash/movements', { params })
+        .then((r) => r.data.data),
     staleTime: 30_000,
   });
 }
@@ -62,7 +69,10 @@ export function useCreateCashAccount() {
       accountHolder?: string;
       isDefault?: boolean;
       notes?: string;
-    }) => apiClient.post<CashAccount>('/cash/accounts', input).then((r) => r.data),
+    }) =>
+      apiClient
+        .post<{ data: CashAccount }>('/cash/accounts', input)
+        .then((r) => r.data.data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['cash'] });
     },
@@ -81,7 +91,10 @@ export function useCreateCashMovement() {
       description?: string;
       transferToAccountId?: string;
       customerId?: string;
-    }) => apiClient.post<CashMovement>('/cash/movements', input).then((r) => r.data),
+    }) =>
+      apiClient
+        .post<{ data: CashMovement }>('/cash/movements', input)
+        .then((r) => r.data.data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['cash'] });
     },
@@ -91,7 +104,10 @@ export function useCreateCashMovement() {
 export function useReverseCashMovement() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => apiClient.post<CashMovement>(`/cash/movements/${id}/reverse`).then((r) => r.data),
+    mutationFn: (id: string) =>
+      apiClient
+        .post<{ data: CashMovement }>(`/cash/movements/${id}/reverse`)
+        .then((r) => r.data.data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['cash'] });
     },

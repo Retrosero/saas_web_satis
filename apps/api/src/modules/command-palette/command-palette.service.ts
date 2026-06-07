@@ -18,7 +18,7 @@ export class CommandPaletteService implements OnModuleInit {
     { code: 'customer_balance', name: 'Cari Bakiye Raporu', description: 'Tüm carilerin bakiye dökümü', category: 'NAVIGATION', targetRoute: '/reports/customer-balance', requiredPermission: 'reports:view', requiredModule: 'REPORTS', icon: '💼' },
     { code: 'add_user', name: 'Kullanıcı Ekle', description: 'Yeni çalışan davet et', category: 'CREATE', targetRoute: '/users/new', requiredPermission: 'users:write', requiredModule: null, icon: '👤' },
     { code: 'log_center', name: 'Log Merkezi', description: 'Sistem loglarını gör', category: 'NAVIGATION', targetRoute: '/logs', requiredPermission: 'logs:view', requiredModule: null, icon: '📜' },
-    { code: 'ai_assistant', name: 'AI Asistan', description: 'Yapay zeka ile sohbet başlat', category: 'NAVIGATION', targetRoute: '/assistant-chat', requiredPermission: null, requiredModule: null, icon: '🤖' },
+    { code: 'ai_assistant', name: 'AI Asistan', description: 'Yapay zeka ile sohbet başlat', category: 'NAVIGATION', targetRoute: '/assistant-chat', requiredPermission: 'asistan:assistant:view', requiredModule: 'ASISTAN', icon: '🤖' },
   ];
 
   constructor(private readonly prisma: PrismaService) {}

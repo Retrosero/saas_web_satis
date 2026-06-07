@@ -66,6 +66,7 @@ export class WarehousesService {
     code?: string;
     name: string;
     status?: WarehouseStatus;
+    branch?: string;
     address?: string;
     city?: string;
     manager?: string;
@@ -97,6 +98,7 @@ export class WarehousesService {
         code,
         name: input.name,
         status: input.status ?? 'ACTIVE',
+        branch: input.branch?.trim() ? input.branch.trim() : null,
         address: input.address ?? null,
         city: input.city ?? null,
         manager: input.manager ?? null,
@@ -111,6 +113,7 @@ export class WarehousesService {
   async update(tenantId: string, id: string, input: {
     name?: string;
     status?: WarehouseStatus;
+    branch?: string | null;
     address?: string | null;
     city?: string | null;
     manager?: string | null;
@@ -133,6 +136,7 @@ export class WarehousesService {
       data: {
         ...(input.name !== undefined ? { name: input.name } : {}),
         ...(input.status !== undefined ? { status: input.status } : {}),
+        ...(input.branch !== undefined ? { branch: input.branch?.trim() ? input.branch.trim() : null } : {}),
         ...(input.address !== undefined ? { address: input.address } : {}),
         ...(input.city !== undefined ? { city: input.city } : {}),
         ...(input.manager !== undefined ? { manager: input.manager } : {}),
@@ -207,6 +211,7 @@ export class WarehousesService {
     code: string;
     name: string;
     status: 'ACTIVE' | 'PASSIVE';
+    branch: string | null;
     address: string | null;
     city: string | null;
     manager: string | null;
@@ -224,6 +229,7 @@ export class WarehousesService {
       code: w.code,
       name: w.name,
       status: w.status,
+      branch: w.branch,
       address: w.address,
       city: w.city,
       manager: w.manager,

@@ -93,7 +93,7 @@ export function useCreateWarehouse() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (input: Partial<Warehouse>) =>
-      apiClient.post<Warehouse>('/warehouses', input).then((r) => r.data),
+      apiClient.post<{ data: Warehouse }>('/warehouses', input).then((r) => r.data.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['warehouses'] }),
   });
 }
@@ -102,7 +102,7 @@ export function useUpdateWarehouse() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: ({ id, ...input }: Partial<Warehouse> & { id: string }) =>
-      apiClient.put<Warehouse>(`/warehouses/${id}`, input).then((r) => r.data),
+      apiClient.patch<{ data: Warehouse }>(`/warehouses/${id}`, input).then((r) => r.data.data),
     onSuccess: (_, vars) => {
       qc.invalidateQueries({ queryKey: ['warehouses'] });
       qc.invalidateQueries({ queryKey: ['warehouses', vars.id] });

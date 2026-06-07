@@ -59,7 +59,7 @@ export function LoginPage() {
         <TextInput
           label="Firma Kodu (opsiyonel)"
           placeholder="örn. AKDENIZ"
-          hint="Süper admin girişinde boş bırakın"
+          hint="Boşsa tek firma hesabınız otomatik seçilir. Global süper admin için SYSTEM yazın"
           {...register('tenantCode')}
           error={errors.tenantCode?.message}
         />
@@ -88,6 +88,7 @@ export function LoginPage() {
       <div className="mt-6 pt-6 border-t border-outline-variant">
         <p className="text-xs text-on-surface-variant text-center">
           Demo: <span className="font-mono">admin@sistem.local</span> / <span className="font-mono">ChangeMe123!</span>
+          {' '}<span>(otomatik demo firma)</span>
         </p>
       </div>
     </div>

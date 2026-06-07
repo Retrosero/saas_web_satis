@@ -64,6 +64,7 @@ export interface ActiveModule {
   name: string;
   category: ModuleCategory;
   icon: string;
+  defaultRoute: string;
   source: 'plan' | 'manual_override';
   validUntil: string | null;
 }

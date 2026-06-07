@@ -163,6 +163,7 @@ export class TenantAdminService {
         name: tm.module.name,
         category: tm.module.category,
         icon: tm.module.icon,
+        defaultRoute: tm.module.defaultRoute,
         source: tm.source,
         validUntil: tm.validUntil?.toISOString() ?? null,
       })),

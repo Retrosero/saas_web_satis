@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.module.js';
 import type { PaginatedResponse, Product, ProductStatus, ProductType } from '@saas/shared';
@@ -19,6 +19,7 @@ export class ProductsService {
       categoryId?: string;
     },
   ): Promise<PaginatedResponse<Product & { totalStock: number; brandName: string | null; categoryName: string | null; unitName: string }>> {
+    this.ensureTenantScope(tenantId);
     const page = params.page ?? 1;
     const pageSize = params.pageSize ?? 50;
     const where: Prisma.ProductWhereInput = {
@@ -84,6 +85,7 @@ export class ProductsService {
     categoryName: string | null;
     unitName: string;
   }> {
+    this.ensureTenantScope(tenantId);
     const p = await this.prisma.client.product.findFirst({
       where: { id, tenantId, isDeleted: false },
       include: { brand: true, category: true, unit: true },
@@ -128,6 +130,7 @@ export class ProductsService {
     },
     createdById?: string,
   ): Promise<Product> {
+    this.ensureTenantScope(tenantId);
     const code = input.code ?? (await this.generateNextCode(tenantId));
 
     const existing = await this.prisma.client.product.findFirst({
@@ -180,6 +183,7 @@ export class ProductsService {
     weight?: number | null;
     volume?: number | null;
   }, updatedById?: string): Promise<Product> {
+    this.ensureTenantScope(tenantId);
     const exists = await this.prisma.client.product.findFirst({ where: { id, tenantId, isDeleted: false } });
     if (!exists) throw new NotFoundException('Ürün bulunamadı');
 
@@ -208,6 +212,7 @@ export class ProductsService {
   }
 
   async remove(tenantId: string, id: string): Promise<void> {
+    this.ensureTenantScope(tenantId);
     const exists = await this.prisma.client.product.findFirst({ where: { id, tenantId, isDeleted: false } });
     if (!exists) throw new NotFoundException('Ürün bulunamadı');
 
@@ -276,6 +281,12 @@ export class ProductsService {
     });
 
     return createdUnit.id;
+  }
+
+  private ensureTenantScope(tenantId: string): void {
+    if (!tenantId || tenantId === 'SYSTEM') {
+      throw new ForbiddenException('Bu işlem için firma seçili bir kullanıcı ile giriş yapmalısınız');
+    }
   }
 
   /**

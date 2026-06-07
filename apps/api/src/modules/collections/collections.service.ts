@@ -88,6 +88,10 @@ export class CollectionsService {
     cashAccountId: string,
     confirmedById?: string,
   ): Promise<Collection> {
+    if (!cashAccountId?.trim()) {
+      throw new BadRequestException('Kasa/banka seçimi zorunlu');
+    }
+
     const collection = await (this.prisma.client as any).collection.findFirst({
       where: { id: collectionId, tenantId, isDeleted: false },
     });
@@ -132,6 +136,7 @@ export class CollectionsService {
           amount: Number(collection.amount),
           currency: collection.currency,
           exchangeRate: Number(collection.exchangeRate),
+          amountTry: Number(collection.amount),
           movementDate: collection.collectionDate,
           refType: 'COLLECTION',
           refId: collection.id,
@@ -216,6 +221,7 @@ export class CollectionsService {
               amount: m.amount,
               currency: m.currency,
               exchangeRate: m.exchangeRate,
+              amountTry: m.amountTry,
               movementDate: new Date(),
               refType: 'COLLECTION_CANCEL',
               refId: collection.id,
@@ -338,7 +344,16 @@ export class CollectionsService {
   }
 
   private num(v: unknown): number {
-    return typeof v === 'number' ? v : 0;
+    if (typeof v === 'number') return v;
+    if (typeof v === 'string') {
+      const parsed = Number(v);
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+    if (v && typeof v === 'object' && 'toString' in v) {
+      const parsed = Number(v.toString());
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+    return 0;
   }
 
   private toDto(r: any): Collection {
