@@ -34,4 +34,4 @@ COPY --from=builder /repo/node_modules ./node_modules
 COPY --from=builder /repo/apps/api/node_modules ./apps/api/node_modules
 COPY --from=builder /repo/packages ./packages
 EXPOSE 3000
-CMD ["node", "dist/main.js"]
+CMD ["node", "dist/apps/api/src/main.js"]

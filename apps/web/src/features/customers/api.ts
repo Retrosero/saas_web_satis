@@ -15,13 +15,50 @@ export interface CustomerStatement {
   movements: Array<{
     id: string;
     movementDate: string;
+    dueDate?: string | null;
     type: 'DEBIT' | 'CREDIT';
     amount: number;
     refType: string;
+    refId: string | null;
     refNumber: string | null;
     description: string | null;
     reversesId: string | null;
+    reversedById?: string | null;
+    detailRoute?: string | null;
+    editable?: boolean;
+    deletable?: boolean;
+    printable?: boolean;
   }>;
+}
+
+export interface CustomerMovementDetail {
+  movement: {
+    id: string;
+    movementDate: string;
+    dueDate: string | null;
+    type: 'DEBIT' | 'CREDIT';
+    amount: number;
+    currency: string;
+    exchangeRate: number;
+    amountTry: number;
+    refType: string;
+    refId: string | null;
+    refNumber: string | null;
+    description: string | null;
+    status: 'DRAFT' | 'POSTED' | 'PENDING' | 'CANCELLED';
+    reversesId: string | null;
+    reversedById: string | null;
+    paymentMethodId: string | null;
+    cashAccountId: string | null;
+    isDeleted: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
+  customer: Customer;
+  detailRoute: string | null;
+  editable: boolean;
+  deletable: boolean;
+  printable: boolean;
 }
 
 export interface CreateCustomerInput {
@@ -74,6 +111,25 @@ export const customersApi = {
 
   remove: (id: string) =>
     apiClient.delete<void>(`/customers/${id}`).then((r) => r.data),
+
+  getMovement: (customerId: string, movementId: string) =>
+    apiClient
+      .get<{ data: CustomerMovementDetail }>(`/customers/${customerId}/movements/${movementId}`)
+      .then((r) => r.data.data),
+
+  updateMovement: (
+    customerId: string,
+    movementId: string,
+    data: { movementDate: string; dueDate?: string | null; amount: number; description?: string | null },
+  ) =>
+    apiClient
+      .patch<{ data: CustomerMovementDetail['movement'] }>(`/customers/${customerId}/movements/${movementId}`, data)
+      .then((r) => r.data.data),
+
+  reverseMovement: (customerId: string, movementId: string, reason?: string) =>
+    apiClient
+      .post<{ data: CustomerMovementDetail['movement'] }>(`/customers/${customerId}/movements/${movementId}/reverse`, { reason })
+      .then((r) => r.data.data),
 };
 
 // ---------- Hook'lar ----------
@@ -142,6 +198,48 @@ export function useDeleteCustomer() {
     mutationFn: (id: string) => customersApi.remove(id),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['customers'] });
+    },
+  });
+}
+
+export function useCustomerMovement(customerId: string | undefined, movementId: string | undefined) {
+  return useQuery({
+    queryKey: ['customers', customerId, 'movements', movementId],
+    queryFn: () => customersApi.getMovement(customerId!, movementId!),
+    enabled: !!customerId && !!movementId,
+    staleTime: 10_000,
+  });
+}
+
+export function useUpdateCustomerMovement() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      customerId,
+      movementId,
+      data,
+    }: {
+      customerId: string;
+      movementId: string;
+      data: { movementDate: string; dueDate?: string | null; amount: number; description?: string | null };
+    }) => customersApi.updateMovement(customerId, movementId, data),
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: ['customers', vars.customerId, 'statement'] });
+      qc.invalidateQueries({ queryKey: ['customers', vars.customerId, 'movements', vars.movementId] });
+      qc.invalidateQueries({ queryKey: ['customers', vars.customerId] });
+    },
+  });
+}
+
+export function useReverseCustomerMovement() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ customerId, movementId, reason }: { customerId: string; movementId: string; reason?: string }) =>
+      customersApi.reverseMovement(customerId, movementId, reason),
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: ['customers', vars.customerId, 'statement'] });
+      qc.invalidateQueries({ queryKey: ['customers', vars.customerId, 'movements', vars.movementId] });
+      qc.invalidateQueries({ queryKey: ['customers', vars.customerId] });
     },
   });
 }

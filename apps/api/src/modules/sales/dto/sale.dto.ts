@@ -107,4 +107,4 @@ export class CreateSaleDto {
   internalNotes?: string;
 }
 
-import { Max as _Max } from 'class-validator';
+export class UpdateSaleDto extends CreateSaleDto {}

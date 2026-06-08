@@ -326,9 +326,10 @@ export function CustomerDetailPage() {
                     {statement.movements.map((m) => (
                       <tr
                         key={m.id}
+                        onClick={() => m.detailRoute && navigate(m.detailRoute)}
                         className={`border-b border-outline-variant last:border-0 ${
                           m.reversesId ? 'bg-error-container/30 line-through' : ''
-                        }`}
+                        } ${m.detailRoute ? 'cursor-pointer hover:bg-surface-variant/60' : ''}`}
                       >
                         <td className="px-4 py-2 text-xs font-mono text-on-surface-variant whitespace-nowrap">
                           {new Date(m.movementDate).toLocaleDateString('tr-TR')}

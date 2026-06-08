@@ -10,7 +10,15 @@ import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 @Controller('product-images')
 export class ProductImagesController {
   constructor(private readonly svc: ProductImagesService) {}
-  @Get() list(@Req() req: any, @Query() q: any) { return this.svc.list(req.user.tenantId, q); }
+  @Get()
+  list(@Req() req: any, @Query() q: any) {
+    return this.svc.list(req.user.tenantId, {
+      productId: q.productId,
+      isMain: q.isMain === undefined ? undefined : q.isMain === 'true',
+      page: q.page ? Number(q.page) : undefined,
+      pageSize: q.pageSize ? Number(q.pageSize) : undefined,
+    });
+  }
   @Get('dashboard') dashboard(@Req() req: any) { return this.svc.getDashboard(req.user.tenantId); }
   @Post() add(@Req() req: any, @Body() body: any) { return this.svc.add(req.user.tenantId, body, req.user.id); }
   @Post('batch-upload') batch(@Req() req: any, @Body() body: { files: any[]; matchBy: 'filename' | 'barcode' | 'productCode' }) { return this.svc.batchUpload(req.user.tenantId, body, req.user.id); }

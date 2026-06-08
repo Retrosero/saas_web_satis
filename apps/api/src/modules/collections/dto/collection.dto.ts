@@ -37,3 +37,5 @@ export class CreateCollectionDto {
   @MaxLength(500)
   internalNotes?: string;
 }
+
+export class UpdateCollectionDto extends CreateCollectionDto {}

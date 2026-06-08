@@ -1,15 +1,17 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Package, Barcode, Warehouse as WarehouseIcon, TrendingUp, TrendingDown, Tag } from 'lucide-react';
+import { ArrowLeft, Package, Barcode, Warehouse as WarehouseIcon, TrendingUp, TrendingDown, Tag, Pencil } from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader';
+import { EmptyState } from '@/components/data/EmptyState';
 import { LoadingState } from '@/components/data/LoadingState';
 import { ErrorState } from '@/components/data/ErrorState';
-import { useProduct } from '@/features/products/api';
+import { useProduct, useProductImages } from '@/features/products/api';
 import { formatNumber, formatDate } from '@saas/shared';
 
 export function ProductDetailPage() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { data: product, isLoading, isError, error, refetch } = useProduct(id);
+  const { data: images = [] } = useProductImages(id);
 
   if (isLoading) return <LoadingState label="Ürün yükleniyor…" />;
   if (isError) return <ErrorState message={(error as Error).message} onRetry={() => refetch()} />;
@@ -31,6 +33,12 @@ export function ProductDetailPage() {
             <span className="text-xs text-on-surface-variant font-mono">{product.code}</span>
             {product.shortName && <span className="text-xs text-on-surface-variant">· {product.shortName}</span>}
           </div>
+        }
+        actions={
+          <button onClick={() => navigate(`/products/${product.id}/edit`)} className="btn-secondary">
+            <Pencil className="h-4 w-4" />
+            Düzenle
+          </button>
         }
       />
 
@@ -103,6 +111,38 @@ export function ProductDetailPage() {
         </div>
 
         <div className="lg:col-span-2 flex flex-col gap-4">
+          <div className="card overflow-hidden">
+            <div className="px-4 py-3 border-b border-outline-variant bg-surface-container">
+              <h3 className="text-sm font-semibold text-foreground">Ürün Görselleri</h3>
+            </div>
+            {images.length === 0 ? (
+              <div className="p-6">
+                <EmptyState title="Ürün görseli yok" description="Bu ürün için henüz yüklenmiş görsel bulunmuyor." />
+              </div>
+            ) : (
+              <div className="grid gap-3 p-4 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+                <div className="overflow-hidden rounded-lg border border-outline-variant bg-surface-variant">
+                  <img
+                    src={images.find((image) => image.isMain)?.url ?? images[0]!.url}
+                    alt={images.find((image) => image.isMain)?.altText ?? product.name}
+                    className="h-72 w-full object-cover"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {images.map((image) => (
+                    <div key={image.id} className="overflow-hidden rounded-lg border border-outline-variant bg-surface-variant">
+                      <img
+                        src={image.thumbnailUrl ?? image.url}
+                        alt={image.altText ?? image.fileName}
+                        className="h-32 w-full object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* Toplam Stok */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div className="card p-5">

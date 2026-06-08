@@ -327,12 +327,19 @@ export class CustomersService {
     movements: Array<{
       id: string;
       movementDate: Date;
+      dueDate?: Date | null;
       type: 'DEBIT' | 'CREDIT';
       amount: number;
       refType: string;
+      refId: string | null;
       refNumber?: string | null;
       description?: string | null;
+      reversesId?: string | null;
       reversedById?: string | null;
+      detailRoute?: string | null;
+      editable?: boolean;
+      deletable?: boolean;
+      printable?: boolean;
     }>;
   }> {
     this.ensureTenantScope(tenantId);
@@ -362,6 +369,7 @@ export class CustomersService {
     const [movements] = await Promise.all([
       this.prisma.client.customerMovement.findMany({
         where,
+        include: { reversedBy: true },
         orderBy: [{ movementDate: 'desc' }, { createdAt: 'desc' }],
         skip: (page - 1) * pageSize,
         take: pageSize,
@@ -387,14 +395,118 @@ export class CustomersService {
       movements: movements.map((m) => ({
         id: m.id,
         movementDate: m.movementDate,
+        dueDate: m.dueDate,
         type: m.type,
         amount: Number(m.amount),
         refType: m.refType,
+        refId: m.refId,
         refNumber: m.refNumber,
         description: m.description,
         reversesId: m.reversesId,
+        reversedById: m.reversedBy?.id ?? null,
+        detailRoute: this.resolveMovementDetailRoute(customerId, m.id, m.refType, m.refId),
+        editable: this.isGenericMovementEditable(m.refType, m.refId, m.reversesId, m.reversedBy?.id ?? null),
+        deletable: this.isGenericMovementEditable(m.refType, m.refId, m.reversesId, m.reversedBy?.id ?? null),
+        printable: true,
       })),
     };
+  }
+
+  async getMovement(tenantId: string, customerId: string, movementId: string) {
+    this.ensureTenantScope(tenantId);
+    const customer = await this.prisma.client.customer.findFirst({
+      where: { id: customerId, tenantId, isDeleted: false },
+    });
+    if (!customer) throw new NotFoundException('Cari bulunamadı');
+
+    const movement = await this.prisma.client.customerMovement.findFirst({
+      where: { id: movementId, tenantId, customerId, isDeleted: false },
+      include: { reversedBy: true },
+    });
+    if (!movement) throw new NotFoundException('Cari hareketi bulunamadı');
+
+    return {
+      movement: this.toMovementDto(movement),
+      customer: this.toDto(customer),
+      detailRoute: this.resolveMovementDetailRoute(customerId, movement.id, movement.refType, movement.refId),
+      editable: this.isGenericMovementEditable(movement.refType, movement.refId, movement.reversesId, movement.reversedBy?.id ?? null),
+      deletable: this.isGenericMovementEditable(movement.refType, movement.refId, movement.reversesId, movement.reversedBy?.id ?? null),
+      printable: true,
+    };
+  }
+
+  async updateMovement(
+    tenantId: string,
+    customerId: string,
+    movementId: string,
+    input: { movementDate: Date; dueDate?: Date | null; amount: number; description?: string | null },
+  ) {
+    this.ensureTenantScope(tenantId);
+    const movement = await this.prisma.client.customerMovement.findFirst({
+      where: { id: movementId, tenantId, customerId, isDeleted: false },
+      include: { reversedBy: true },
+    });
+    if (!movement) throw new NotFoundException('Cari hareketi bulunamadı');
+    if (!this.isGenericMovementEditable(movement.refType, movement.refId, movement.reversesId, movement.reversedBy?.id ?? null)) {
+      throw new BadRequestException('Bu hareket belge üzerinden yönetiliyor, doğrudan düzenlenemez');
+    }
+    if (input.amount <= 0) throw new BadRequestException('Tutar sıfırdan büyük olmalı');
+
+    const updated = await this.prisma.client.customerMovement.update({
+      where: { id: movementId },
+      data: {
+        movementDate: input.movementDate,
+        dueDate: input.dueDate ?? null,
+        amount: new Prisma.Decimal(input.amount),
+        amountTry: new Prisma.Decimal(input.amount * Number(movement.exchangeRate)),
+        description: input.description ?? null,
+      },
+      include: { reversedBy: true },
+    });
+
+    return this.toMovementDto(updated);
+  }
+
+  async reverseMovement(
+    tenantId: string,
+    customerId: string,
+    movementId: string,
+    createdById?: string,
+    reason?: string,
+  ) {
+    this.ensureTenantScope(tenantId);
+    const movement = await this.prisma.client.customerMovement.findFirst({
+      where: { id: movementId, tenantId, customerId, isDeleted: false },
+      include: { reversedBy: true },
+    });
+    if (!movement) throw new NotFoundException('Cari hareketi bulunamadı');
+    if (!this.isGenericMovementEditable(movement.refType, movement.refId, movement.reversesId, movement.reversedBy?.id ?? null)) {
+      throw new BadRequestException('Bu hareket belge üzerinden yönetiliyor, doğrudan silinemez');
+    }
+
+    const reversed = await this.prisma.client.customerMovement.create({
+      data: {
+        tenantId,
+        customerId,
+        type: movement.type === 'DEBIT' ? 'CREDIT' : 'DEBIT',
+        amount: movement.amount,
+        currency: movement.currency,
+        exchangeRate: movement.exchangeRate,
+        amountTry: movement.amountTry,
+        movementDate: new Date(),
+        dueDate: movement.dueDate,
+        refType: 'ADJUST',
+        refId: movement.id,
+        refNumber: movement.refNumber ? `IPT-${movement.refNumber}` : null,
+        description: reason ? `${movement.description ?? 'Cari hareket iptali'} — ${reason}` : `${movement.description ?? 'Cari hareket iptali'}`,
+        status: 'POSTED',
+        reversesId: movement.id,
+        createdById: createdById ?? null,
+      },
+      include: { reversedBy: true },
+    });
+
+    return this.toMovementDto(reversed);
   }
 
   // ----- PRIVATE -----
@@ -476,6 +588,74 @@ export class CustomersService {
     if (!tenantId || tenantId === 'SYSTEM') {
       throw new ForbiddenException('Bu işlem için firma seçili bir kullanıcı ile giriş yapmalısınız');
     }
+  }
+
+  private resolveMovementDetailRoute(customerId: string, movementId: string, refType: string, refId: string | null): string | null {
+    if (refId && refType === 'SALE') return `/sales/${refId}`;
+    if (refId && refType === 'COLLECTION') return `/collections/${refId}`;
+    if (refId && refType === 'RETURN') return `/returns/${refId}`;
+    return `/customers/${customerId}/movements/${movementId}`;
+  }
+
+  private isGenericMovementEditable(
+    refType: string,
+    refId: string | null,
+    reversesId: string | null,
+    reversedById: string | null,
+  ): boolean {
+    if (reversesId || reversedById) return false;
+    if (refId && ['SALE', 'COLLECTION', 'RETURN'].includes(refType)) return false;
+    return ['OPENING_BALANCE', 'ADJUST', 'TRANSFER'].includes(refType) || !refId;
+  }
+
+  private toMovementDto(m: {
+    id: string;
+    tenantId: string;
+    customerId: string;
+    type: 'DEBIT' | 'CREDIT';
+    amount: Prisma.Decimal | number;
+    currency: string;
+    exchangeRate: Prisma.Decimal | number;
+    amountTry: Prisma.Decimal | number;
+    movementDate: Date;
+    dueDate: Date | null;
+    refType: string;
+    refId: string | null;
+    refNumber: string | null;
+    description: string | null;
+    status: 'DRAFT' | 'POSTED' | 'PENDING' | 'CANCELLED';
+    reversesId: string | null;
+    reversedBy?: { id: string } | null;
+    paymentMethodId: string | null;
+    cashAccountId: string | null;
+    isDeleted: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    return {
+      id: m.id,
+      tenantId: m.tenantId,
+      customerId: m.customerId,
+      type: m.type,
+      amount: Number(m.amount),
+      currency: m.currency,
+      exchangeRate: Number(m.exchangeRate),
+      amountTry: Number(m.amountTry),
+      movementDate: m.movementDate.toISOString(),
+      dueDate: m.dueDate?.toISOString() ?? null,
+      refType: m.refType,
+      refId: m.refId,
+      refNumber: m.refNumber,
+      description: m.description,
+      status: m.status,
+      reversesId: m.reversesId,
+      reversedById: m.reversedBy?.id ?? null,
+      paymentMethodId: m.paymentMethodId,
+      cashAccountId: m.cashAccountId,
+      isDeleted: m.isDeleted,
+      createdAt: m.createdAt.toISOString(),
+      updatedAt: m.updatedAt.toISOString(),
+    };
   }
 
   private toDto(c: {

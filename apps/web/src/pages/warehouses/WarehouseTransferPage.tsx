@@ -6,7 +6,7 @@ import {
 import { PageHeader } from '@/components/layout/PageHeader';
 import { LoadingState } from '@/components/data/LoadingState';
 import { ErrorState } from '@/components/data/ErrorState';
-import { useWarehouses, useCreateTransfer, useConfirmTransfer } from '@/features/warehouses/api';
+import { useWarehouses, useCreateTransfer } from '@/features/warehouses/api';
 import { formatCurrency } from '@saas/shared';
 import toast from 'react-hot-toast';
 
@@ -27,7 +27,6 @@ export function WarehouseTransferPage() {
 
   const { data: warehouses, isLoading } = useWarehouses();
   const create = useCreateTransfer();
-  const confirm = useConfirmTransfer();
 
   const [fromId, setFromId] = useState(defaultFrom);
   const [toId, setToId] = useState('');
@@ -274,7 +273,7 @@ export function WarehouseTransferPage() {
               className="w-full font-semibold py-3 rounded-md bg-primary text-on-primary hover:bg-primary-hover disabled:opacity-50"
             >
               <Save className="inline h-4 w-4 mr-1" />
-              {create.isPending ? 'Kaydediliyor…' : 'Transferi Kaydet (PENDING)'}
+              {create.isPending ? 'Kaydediliyor…' : 'Transferi Kaydet'}
             </button>
             <button onClick={() => navigate(-1)} className="w-full py-2.5 text-sm text-on-surface-variant hover:text-foreground">
               İptal

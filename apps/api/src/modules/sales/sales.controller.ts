@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard.js';
 import { TenantGuard } from '../../common/guards/tenant.guard.js';
@@ -6,7 +6,7 @@ import { PermissionGuard } from '../../common/guards/permission.guard.js';
 import { RequirePermission } from '../../common/guards/require-permission.decorator.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { SalesService } from './sales.service';
-import { CreateSaleDto } from './dto/sale.dto.js';
+import { CreateSaleDto, UpdateSaleDto } from './dto/sale.dto.js';
 import type { JwtPayload, PaymentStatus, SaleStatus, SaleType } from '@saas/shared';
 
 @ApiTags('sales')
@@ -53,6 +53,21 @@ export class SalesController {
   create(@CurrentUser() user: JwtPayload, @Body() dto: CreateSaleDto) {
     return this.sales.create(
       user.tid,
+      {
+        ...dto,
+        saleDate: new Date(dto.saleDate),
+        dueDate: dto.dueDate ? new Date(dto.dueDate) : undefined,
+      },
+      user.sub,
+    );
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Taslak satış güncelle' })
+  update(@CurrentUser() user: JwtPayload, @Param('id') id: string, @Body() dto: UpdateSaleDto) {
+    return this.sales.update(
+      user.tid,
+      id,
       {
         ...dto,
         saleDate: new Date(dto.saleDate),

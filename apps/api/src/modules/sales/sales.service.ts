@@ -143,6 +143,129 @@ export class SalesService {
     });
   }
 
+  async update(
+    tenantId: string,
+    saleId: string,
+    input: {
+      customerId: string;
+      saleDate: Date;
+      dueDate?: Date;
+      type?: SaleType;
+      status?: SaleStatus;
+      warehouseId?: string;
+      currency?: string;
+      exchangeRate?: number;
+      items: Array<{ productId: string; unitId?: string; quantity: number; unitPrice: number; vatRate: number; discountRate?: number; description?: string }>;
+      notes?: string;
+      internalNotes?: string;
+    },
+    updatedById?: string,
+  ): Promise<Sale> {
+    const existing = await this.prisma.client.sale.findFirst({
+      where: { id: saleId, tenantId, isDeleted: false },
+      include: { items: true },
+    });
+    if (!existing) throw new NotFoundException('Satış bulunamadı');
+    if (existing.status !== 'DRAFT') {
+      throw new BadRequestException('Sadece taslak satışlar düzenlenebilir');
+    }
+
+    const customer = await this.prisma.client.customer.findFirst({
+      where: { id: input.customerId, tenantId, isDeleted: false },
+    });
+    if (!customer) throw new NotFoundException('Müşteri bulunamadı');
+
+    if (input.warehouseId) {
+      const wh = await this.prisma.client.warehouse.findFirst({
+        where: { id: input.warehouseId, tenantId, isDeleted: false },
+      });
+      if (!wh) throw new NotFoundException('Depo bulunamadı');
+    }
+
+    if (!input.items || input.items.length === 0) {
+      throw new BadRequestException('En az 1 satır gerekiyor');
+    }
+
+    const productIds = input.items.map((i) => i.productId);
+    const products = await this.prisma.client.product.findMany({
+      where: { id: { in: productIds }, tenantId, isDeleted: false },
+    });
+    if (products.length !== new Set(productIds).size) {
+      throw new BadRequestException('Bir veya daha fazla ürün bulunamadı');
+    }
+
+    let subTotal = 0;
+    let vatTotal = 0;
+    let discountTotal = 0;
+    const lineCalcs = input.items.map((i) => {
+      const lineSub = i.quantity * i.unitPrice;
+      const discountAmount = lineSub * (i.discountRate ?? 0) / 100;
+      const netAmount = lineSub - discountAmount;
+      const vatAmount = netAmount * i.vatRate / 100;
+      const lineGrand = netAmount + vatAmount;
+      subTotal += lineSub;
+      discountTotal += discountAmount;
+      vatTotal += vatAmount;
+      return { subTotal: lineSub, discountAmount, vatAmount, grandTotal: lineGrand };
+    });
+    const grandTotal = subTotal - discountTotal + vatTotal;
+
+    return this.prisma.client.$transaction(async (tx) => {
+      await tx.saleItem.deleteMany({ where: { saleId } });
+
+      const sale = await tx.sale.update({
+        where: { id: saleId },
+        data: {
+          customerId: input.customerId,
+          saleDate: input.saleDate,
+          dueDate: input.dueDate ?? null,
+          type: input.type ?? existing.type,
+          warehouseId: input.warehouseId ?? null,
+          currency: input.currency ?? existing.currency,
+          exchangeRate: new Prisma.Decimal(input.exchangeRate ?? existing.exchangeRate),
+          subTotal: new Prisma.Decimal(subTotal),
+          vatTotal: new Prisma.Decimal(vatTotal),
+          discountTotal: new Prisma.Decimal(discountTotal),
+          grandTotal: new Prisma.Decimal(grandTotal),
+          customerName: customer.name,
+          customerTaxNumber: customer.taxNumber,
+          customerAddress: customer.address,
+          customerPhone: customer.phone,
+          customerEmail: customer.email,
+          notes: input.notes ?? null,
+          internalNotes: input.internalNotes ?? null,
+          updatedById: updatedById ?? null,
+        },
+      });
+
+      for (let idx = 0; idx < input.items.length; idx++) {
+        const item = input.items[idx]!;
+        const li = lineCalcs[idx]!;
+        await tx.saleItem.create({
+          data: {
+            tenantId,
+            saleId: sale.id,
+            productId: item.productId,
+            unitId: item.unitId ?? null,
+            quantity: new Prisma.Decimal(item.quantity),
+            unitPrice: new Prisma.Decimal(item.unitPrice),
+            vatRate: new Prisma.Decimal(item.vatRate),
+            discountRate: new Prisma.Decimal(item.discountRate ?? 0),
+            description: item.description ?? null,
+            sortOrder: idx,
+            status: 'ACTIVE',
+            lineSubTotal: new Prisma.Decimal(li.subTotal),
+            discountAmount: new Prisma.Decimal(li.discountAmount),
+            lineVatAmount: new Prisma.Decimal(li.vatAmount),
+            lineGrandTotal: new Prisma.Decimal(li.grandTotal),
+          },
+        });
+      }
+
+      return this.toDto(sale);
+    });
+  }
+
   /**
    * DRAFT → CONFIRMED geçişi. Stok + cari hareketleri oluşturur.
    */

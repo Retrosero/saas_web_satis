@@ -17,6 +17,17 @@ export interface ProductDetail extends Product {
   unitName: string;
 }
 
+export interface ProductImageItem {
+  id: string;
+  productId: string;
+  url: string;
+  thumbnailUrl: string | null;
+  fileName: string;
+  isMain: boolean;
+  sortOrder: number;
+  altText: string | null;
+}
+
 export interface CreateProductInput {
   code?: string;
   name: string;
@@ -97,5 +108,19 @@ export function useDeleteProduct() {
   return useMutation({
     mutationFn: (id: string) => productsApi.remove(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['products'] }),
+  });
+}
+
+export function useProductImages(productId: string | undefined) {
+  return useQuery({
+    queryKey: ['product-images', productId],
+    queryFn: async () => {
+      const { data } = await apiClient.get<{ data: { items: ProductImageItem[] } }>('/product-images', {
+        params: { productId, pageSize: 20 },
+      });
+      return data.data.items;
+    },
+    enabled: !!productId,
+    staleTime: 10_000,
   });
 }

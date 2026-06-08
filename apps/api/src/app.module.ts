@@ -59,6 +59,7 @@ import { IdempotencyAdminController } from './common/idempotency/idempotency-adm
 import { StockModule } from './modules/stock/stock.module';
 import { SalesModule } from './modules/sales/sales.module';
 import { OrdersModule } from './modules/orders/orders.module';
+import { PurchaseInvoicesModule } from './modules/purchase-invoices/purchase-invoices.module';
 import { CollectionsModule } from './modules/collections/collections.module';
 import { CashModule } from './modules/cash/cash.module';
 import { appConfig } from './config/app.config';
@@ -110,6 +111,7 @@ import { r2Config } from './config/r2.config';
     WarehousesModule,
     SalesModule,
     OrdersModule,
+    PurchaseInvoicesModule,
     CollectionsModule,
     CashModule,
     ReturnsModule,

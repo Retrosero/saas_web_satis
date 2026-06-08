@@ -28,6 +28,7 @@ const ForbiddenPage = lazy(() => import('@/pages/errors/ForbiddenPage').then((m)
 const CustomerListPage = lazy(() => import('@/pages/customers/CustomerListPage').then((m) => ({ default: m.CustomerListPage })));
 const CustomerNewPage = lazy(() => import('@/pages/customers/CustomerNewPage').then((m) => ({ default: m.CustomerNewPage })));
 const CustomerDetailPage = lazy(() => import('@/pages/customers/CustomerDetailPage').then((m) => ({ default: m.CustomerDetailPage })));
+const CustomerMovementDetailPage = lazy(() => import('@/pages/customers/CustomerMovementDetailPage').then((m) => ({ default: m.CustomerMovementDetailPage })));
 
 // FAZ HR-1 — İK Personel Özlük Kartı
 const EmployeeListPage = lazy(() => import('@/pages/hr/EmployeeListPage').then((m) => ({ default: m.EmployeeListPage })));
@@ -100,6 +101,11 @@ const OrderDetailPage = lazy(() => import('@/pages/orders/OrderDetailPage').then
 const CollectionListPage = lazy(() => import('@/pages/collections/CollectionListPage').then((m) => ({ default: m.CollectionListPage })));
 const CollectionNewPage = lazy(() => import('@/pages/collections/CollectionNewPage').then((m) => ({ default: m.CollectionNewPage })));
 const CollectionDetailPage = lazy(() => import('@/pages/collections/CollectionDetailPage').then((m) => ({ default: m.CollectionDetailPage })));
+
+// Alış Faturaları
+const PurchaseInvoiceListPage = lazy(() => import('@/pages/purchase-invoices/PurchaseInvoiceListPage').then((m) => ({ default: m.PurchaseInvoiceListPage })));
+const PurchaseInvoiceFormPage = lazy(() => import('@/pages/purchase-invoices/PurchaseInvoiceFormPage').then((m) => ({ default: m.PurchaseInvoiceFormPage })));
+const PurchaseInvoiceDetailPage = lazy(() => import('@/pages/purchase-invoices/PurchaseInvoiceDetailPage').then((m) => ({ default: m.PurchaseInvoiceDetailPage })));
 
 // FAZ 11 — Kasa Modülü
 const CashListPage = lazy(() => import('@/pages/cash/CashListPage').then((m) => ({ default: m.CashListPage })));
@@ -263,9 +269,11 @@ const routes: RouteObject[] = [
       { path: 'customers', element: withSuspense(<CustomerListPage />) },
       { path: 'customers/new', element: withSuspense(<CustomerNewPage />) },
       { path: 'customers/:id', element: withSuspense(<CustomerDetailPage />) },
+      { path: 'customers/:id/movements/:movementId', element: withSuspense(<CustomerMovementDetailPage />) },
       { path: 'products', element: withSuspense(<ProductListPage />) },
       { path: 'products/new', element: withSuspense(<ProductNewPage />) },
       { path: 'products/:id', element: withSuspense(<ProductDetailPage />) },
+      { path: 'products/:id/edit', element: withSuspense(<ProductNewPage />) },
       { path: 'warehouses', element: withSuspense(<WarehouseListPage />) },
 
       // FAZ 21 — İade Yönetimi route'ları
@@ -428,14 +436,21 @@ const routes: RouteObject[] = [
       { path: 'sales', element: withSuspense(<SaleListPage />) },
       { path: 'sales/new', element: withSuspense(<SaleNewPage />) },
       { path: 'sales/:id', element: withSuspense(<SaleDetailPage />) },
+      { path: 'sales/:id/edit', element: withSuspense(<SaleNewPage />) },
       // FAZ 9 — Sipariş Modülü
       { path: 'orders', element: withSuspense(<OrderListPage />) },
       { path: 'orders/new', element: withSuspense(<OrderNewPage />) },
       { path: 'orders/:id', element: withSuspense(<OrderDetailPage />) },
-      // FAZ 10 — Tahsilat Modülü
+// FAZ 10 — Tahsilat Modülü
       { path: 'collections', element: withSuspense(<CollectionListPage />) },
       { path: 'collections/new', element: withSuspense(<CollectionNewPage />) },
       { path: 'collections/:id', element: withSuspense(<CollectionDetailPage />) },
+      { path: 'collections/:id/edit', element: withSuspense(<CollectionNewPage />) },
+      // Alış Faturaları
+      { path: 'purchase-invoices', element: withSuspense(<PurchaseInvoiceListPage />) },
+      { path: 'purchase-invoices/new', element: withSuspense(<PurchaseInvoiceFormPage />) },
+      { path: 'purchase-invoices/:id', element: withSuspense(<PurchaseInvoiceDetailPage />) },
+      { path: 'purchase-invoices/:id/edit', element: withSuspense(<PurchaseInvoiceFormPage />) },
       // FAZ 11 — Kasa Modülü
       { path: 'cash', element: withSuspense(<CashListPage />) },
       { path: 'cash/:id', element: withSuspense(<CashDetailPage />) },

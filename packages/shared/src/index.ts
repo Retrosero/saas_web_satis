@@ -55,6 +55,7 @@ export * from './types/hr-personnel';
 export * from './types/hr-checklist';
 export * from './types/hr-leave';
 export * from './types/hr-payroll';
+export * from './types/purchase-invoice';
 
 
 // DTOs

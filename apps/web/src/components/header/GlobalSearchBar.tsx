@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Clock, X } from 'lucide-react';
+import { Clock, Search, X } from 'lucide-react';
 import { useGlobalSearch, useSearchHistory } from '@/features/global-search/api';
 import { useSearch as useMeiliSearch } from '@/features/search/api';
 import { useDebounce } from '@/lib/use-debounce';
@@ -14,14 +14,29 @@ export function GlobalSearchBar() {
   const { data: prismaData } = useGlobalSearch(debounced, 5);
   const { data: history } = useSearchHistory(5);
   const data = meiliData ?? prismaData;
+  const results = data?.results ?? [];
+  const byModule = data?.byModule ?? {};
+  const safeHistory = history ?? [];
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handler = (e: MouseEvent) => { if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false); };
-    const key = (e: KeyboardEvent) => { if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); setOpen(true); } else if (e.key === 'Escape') setOpen(false); };
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    const key = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setOpen(true);
+      } else if (e.key === 'Escape') {
+        setOpen(false);
+      }
+    };
     document.addEventListener('mousedown', handler);
     document.addEventListener('keydown', key);
-    return () => { document.removeEventListener('mousedown', handler); document.removeEventListener('keydown', key); };
+    return () => {
+      document.removeEventListener('mousedown', handler);
+      document.removeEventListener('keydown', key);
+    };
   }, []);
 
   return (
@@ -32,39 +47,73 @@ export function GlobalSearchBar() {
           type="text"
           placeholder="Ara: cari, ürün, satış, teklif, sipariş, kullanıcı..."
           value={query}
-          onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setOpen(true);
+          }}
           onFocus={() => setOpen(true)}
           className="w-72 bg-transparent text-sm outline-none placeholder:text-on-surface-variant"
         />
         <kbd className="rounded bg-surface-variant px-1.5 py-0.5 text-xs text-on-surface-variant">Ctrl K</kbd>
-        {query && <button onClick={() => setQuery('')} className="rounded p-0.5 hover:bg-surface-variant"><X className="h-3 w-3" /></button>}
+        {query && (
+          <button onClick={() => setQuery('')} className="rounded p-0.5 hover:bg-surface-variant">
+            <X className="h-3 w-3" />
+          </button>
+        )}
       </div>
 
-      {open && (debounced.length >= 2 || (history && history.length > 0)) && (
-        <div className="absolute right-0 z-50 mt-1 w-[420px] max-h-[480px] overflow-y-auto rounded-md border border-outline bg-surface shadow-lg">
+      {open && (debounced.length >= 2 || safeHistory.length > 0) && (
+        <div className="absolute right-0 z-50 mt-1 max-h-[480px] w-[420px] overflow-y-auto rounded-md border border-outline bg-surface shadow-lg">
           {!data && debounced.length >= 2 && <div className="p-4 text-sm text-on-surface-variant">Aranıyor...</div>}
-          {data && data.results.length === 0 && debounced.length >= 2 && <div className="p-4 text-sm text-on-surface-variant">Sonuç bulunamadı</div>}
-          {data && Object.entries(data.byModule).map(([mod, items]) => (
-            <div key={mod} className="border-b border-outline-variant last:border-0">
-              <div className="bg-surface-variant px-3 py-1 text-xs font-semibold uppercase tracking-wide text-on-surface-variant">{mod}</div>
-              {(items as any[]).map((r) => (
-                <button key={`${r.type}-${r.id}`} onClick={() => { navigate(r.link); setOpen(false); setQuery(''); }} className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left hover:bg-surface-variant">
-                  <div className="flex-1 min-w-0">
-                    <p className="truncate text-sm font-medium">{r.title}</p>
-                    <p className="truncate text-xs text-on-surface-variant">{r.description}</p>
-                  </div>
-                  {r.status && <span className="rounded-full bg-blue-50 px-2 py-0.5 text-xs text-blue-700">{r.status}</span>}
+          {data && results.length === 0 && debounced.length >= 2 && (
+            <div className="p-4 text-sm text-on-surface-variant">Sonuç bulunamadı</div>
+          )}
+          {data &&
+            Object.entries(byModule).map(([mod, items]) => (
+              <div key={mod} className="border-b border-outline-variant last:border-0">
+                <div className="bg-surface-variant px-3 py-1 text-xs font-semibold uppercase tracking-wide text-on-surface-variant">
+                  {mod}
+                </div>
+                {(items as any[]).map((r) => (
+                  <button
+                    key={`${r.type}-${r.id}`}
+                    onClick={() => {
+                      navigate(r.link);
+                      setOpen(false);
+                      setQuery('');
+                    }}
+                    className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left hover:bg-surface-variant"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium">{r.title}</p>
+                      <p className="truncate text-xs text-on-surface-variant">{r.description}</p>
+                    </div>
+                    {r.status && <span className="rounded-full bg-blue-50 px-2 py-0.5 text-xs text-blue-700">{r.status}</span>}
+                  </button>
+                ))}
+              </div>
+            ))}
+          {debounced.length < 2 && safeHistory.length > 0 && (
+            <div>
+              <div className="flex items-center gap-1 bg-surface-variant px-3 py-1 text-xs font-semibold uppercase tracking-wide text-on-surface-variant">
+                <Clock className="h-3 w-3" /> Son Aramalar
+              </div>
+              {safeHistory.map((h) => (
+                <button
+                  key={h.id}
+                  onClick={() => setQuery(h.query)}
+                  className="block w-full px-3 py-1.5 text-left text-sm hover:bg-surface-variant"
+                >
+                  {h.query}
                 </button>
               ))}
             </div>
-          ))}
-          {debounced.length < 2 && history && history.length > 0 && (
-            <div>
-              <div className="bg-surface-variant px-3 py-1 text-xs font-semibold uppercase tracking-wide text-on-surface-variant flex items-center gap-1"><Clock className="h-3 w-3" /> Son Aramalar</div>
-              {history.map((h) => <button key={h.id} onClick={() => setQuery(h.query)} className="block w-full px-3 py-1.5 text-left text-sm hover:bg-surface-variant">{h.query}</button>)}
+          )}
+          {data && results.length > 0 && (
+            <div className="border-t border-outline-variant bg-surface-variant px-3 py-1 text-xs text-on-surface-variant">
+              {data.totalCount} sonuç ({data.durationMs}ms)
             </div>
           )}
-          {data && data.results.length > 0 && <div className="border-t border-outline-variant bg-surface-variant px-3 py-1 text-xs text-on-surface-variant">{data.totalCount} sonuç ({data.durationMs}ms)</div>}
         </div>
       )}
     </div>

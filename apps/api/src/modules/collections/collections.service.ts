@@ -78,6 +78,63 @@ export class CollectionsService {
     });
   }
 
+  async update(
+    tenantId: string,
+    collectionId: string,
+    input: {
+      customerId: string;
+      collectionDate: Date;
+      type?: CollectionType;
+      amount: number;
+      linkedSaleId?: string;
+      notes?: string;
+      internalNotes?: string;
+    },
+    updatedById?: string,
+  ): Promise<Collection> {
+    const existing = await (this.prisma.client as any).collection.findFirst({
+      where: { id: collectionId, tenantId, isDeleted: false },
+    });
+    if (!existing) throw new NotFoundException('Tahsilat bulunamadı');
+    if (existing.status !== 'PENDING') {
+      throw new BadRequestException('Sadece bekleyen tahsilatlar düzenlenebilir');
+    }
+
+    const customer = await (this.prisma.client as any).customer.findFirst({
+      where: { id: input.customerId, tenantId, isDeleted: false },
+    });
+    if (!customer) throw new NotFoundException('Müşteri bulunamadı');
+
+    if (input.amount <= 0) {
+      throw new BadRequestException('Tutar sıfırdan büyük olmalı');
+    }
+
+    if (input.linkedSaleId) {
+      const sale = await (this.prisma.client as any).sale.findFirst({
+        where: { id: input.linkedSaleId, tenantId, isDeleted: false, status: { in: ['CONFIRMED'] } },
+      });
+      if (!sale) throw new NotFoundException('Belirtilen satış bulunamadı veya onaylanmamış');
+    }
+
+    const updated = await (this.prisma.client as any).collection.update({
+      where: { id: collectionId },
+      data: {
+        customerId: input.customerId,
+        collectionDate: input.collectionDate,
+        type: input.type ?? existing.type,
+        amount: input.amount,
+        linkedSaleId: input.linkedSaleId ?? null,
+        customerName: customer.name,
+        customerTaxNumber: customer.taxNumber,
+        notes: input.notes ?? null,
+        internalNotes: input.internalNotes ?? null,
+        updatedById: updatedById ?? null,
+      },
+    });
+
+    return this.toDto(updated);
+  }
+
   /**
    * Tahsilatı onayla (PENDING → CONFIRMED).
    * Otomatik: 1 CustomerMovement (CREDIT) + 1 CashMovement (IN)

@@ -45,6 +45,6 @@ describe('SearchService', () => {
     mockPrisma.client.quote.findMany.mockResolvedValue([]);
     const r = await service.reindexTenant('t1');
     expect(r.ok).toBe(true);
-    expect(r.counts.customers).toBe(1);
+    expect(r.counts?.customers).toBe(1);
   });
 });

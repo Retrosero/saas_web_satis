@@ -54,6 +54,26 @@ export function useCreateCollection() {
   });
 }
 
+export function useUpdateCollection() {
+  return useMutation({
+    mutationFn: ({
+      id,
+      input,
+    }: {
+      id: string;
+      input: {
+        customerId: string;
+        collectionDate: string;
+        type?: CollectionType;
+        amount: number;
+        linkedSaleId?: string;
+        notes?: string;
+        internalNotes?: string;
+      };
+    }) => apiClient.patch<{ data: Collection }>(`/collections/${id}`, input).then((r) => r.data.data),
+  });
+}
+
 export function useConfirmCollection() {
   return useMutation({
     mutationFn: ({ id, cashAccountId }: { id: string; cashAccountId: string }) =>

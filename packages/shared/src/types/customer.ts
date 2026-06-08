@@ -50,12 +50,14 @@ export interface CustomerMovement {
   exchangeRate: number;
   amountTry: number;
   movementDate: string;
+  dueDate: string | null;
   refType: string;
   refId: string | null;
   refNumber: string | null;
   description: string | null;
   status: 'DRAFT' | 'POSTED' | 'PENDING' | 'CANCELLED';
   reversesId: string | null;
+  reversedById: string | null;
   paymentMethodId: string | null;
   cashAccountId: string | null;
   isDeleted: boolean;

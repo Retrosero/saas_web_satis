@@ -6,7 +6,10 @@ export interface SearchResponse { results: any[]; byModule: Record<string, any[]
 export function useSearch(q: string, limit = 5) {
   return useQuery({
     queryKey: ['search', q, limit],
-    queryFn: async () => { const { data } = await apiClient.get<SearchResponse>('/search', { params: { q, limit } }); return data; },
+    queryFn: async () => {
+      const { data } = await apiClient.get<{ data: SearchResponse }>('/search', { params: { q, limit } });
+      return data.data;
+    },
     enabled: q.length >= 2,
     staleTime: 30_000,
   });
@@ -15,7 +18,10 @@ export function useSearch(q: string, limit = 5) {
 export function useSearchStats() {
   return useQuery({
     queryKey: ['search', 'stats'],
-    queryFn: async () => { const { data } = await apiClient.get<any>('/search/stats'); return data; },
+    queryFn: async () => {
+      const { data } = await apiClient.get<{ data: any }>('/search/stats');
+      return data.data;
+    },
     refetchInterval: 10000,
   });
 }

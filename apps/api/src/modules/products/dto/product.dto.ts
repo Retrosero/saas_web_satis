@@ -117,6 +117,11 @@ export class CreateProductDto {
 }
 
 export class UpdateProductDto {
+  @ApiProperty({ required: false, enum: ProductType })
+  @IsOptional()
+  @IsEnum(ProductType)
+  type?: ProductType;
+
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()

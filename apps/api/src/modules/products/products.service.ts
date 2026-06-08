@@ -139,6 +139,7 @@ export class ProductsService {
     if (existing) throw new ConflictException(`Bu ürün kodu zaten kullanılıyor: ${code}`);
 
     const unitId = await this.resolveUnitId(tenantId, input.unitId);
+    const defaultWarehouseId = await this.resolveWarehouseId(tenantId, input.defaultWarehouseId);
 
     const created = await this.prisma.client.product.create({
       data: {
@@ -151,7 +152,7 @@ export class ProductsService {
         status: input.status ?? 'ACTIVE',
         brandId: input.brandId ?? null,
         categoryId: input.categoryId ?? null,
-        defaultWarehouseId: input.defaultWarehouseId ?? null,
+        defaultWarehouseId,
         unitId,
         primaryBarcode: input.primaryBarcode ?? null,
         trackStock: input.trackStock ?? true,
@@ -170,6 +171,7 @@ export class ProductsService {
     name?: string;
     shortName?: string | null;
     description?: string | null;
+    type?: ProductType;
     status?: ProductStatus;
     brandId?: string | null;
     categoryId?: string | null;
@@ -186,6 +188,9 @@ export class ProductsService {
     this.ensureTenantScope(tenantId);
     const exists = await this.prisma.client.product.findFirst({ where: { id, tenantId, isDeleted: false } });
     if (!exists) throw new NotFoundException('Ürün bulunamadı');
+    const defaultWarehouseId = input.defaultWarehouseId !== undefined
+      ? await this.resolveWarehouseId(tenantId, input.defaultWarehouseId ?? undefined)
+      : undefined;
 
     const updated = await this.prisma.client.product.update({
       where: { id },
@@ -193,10 +198,11 @@ export class ProductsService {
         ...(input.name !== undefined ? { name: input.name } : {}),
         ...(input.shortName !== undefined ? { shortName: input.shortName } : {}),
         ...(input.description !== undefined ? { description: input.description } : {}),
+        ...(input.type !== undefined ? { type: input.type } : {}),
         ...(input.status !== undefined ? { status: input.status } : {}),
         ...(input.brandId !== undefined ? { brandId: input.brandId } : {}),
         ...(input.categoryId !== undefined ? { categoryId: input.categoryId } : {}),
-        ...(input.defaultWarehouseId !== undefined ? { defaultWarehouseId: input.defaultWarehouseId } : {}),
+        ...(defaultWarehouseId !== undefined ? { defaultWarehouseId } : {}),
         ...(input.unitId !== undefined ? { unitId: input.unitId } : {}),
         ...(input.primaryBarcode !== undefined ? { primaryBarcode: input.primaryBarcode } : {}),
         ...(input.trackStock !== undefined ? { trackStock: input.trackStock } : {}),
@@ -281,6 +287,15 @@ export class ProductsService {
     });
 
     return createdUnit.id;
+  }
+
+  private async resolveWarehouseId(tenantId: string, warehouseId?: string): Promise<string | null> {
+    if (!warehouseId) return null;
+    const warehouse = await this.prisma.client.warehouse.findFirst({
+      where: { id: warehouseId, tenantId, isDeleted: false, status: 'ACTIVE' },
+    });
+    if (!warehouse) throw new BadRequestException('Geçersiz depo (defaultWarehouseId)');
+    return warehouse.id;
   }
 
   private ensureTenantScope(tenantId: string): void {

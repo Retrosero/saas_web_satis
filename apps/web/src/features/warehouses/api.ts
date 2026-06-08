@@ -54,6 +54,13 @@ export interface WarehouseTransfer {
   createdAt: string;
 }
 
+export interface UnassignedWarehouseProduct {
+  id: string;
+  code: string;
+  name: string;
+  primaryBarcode: string | null;
+}
+
 export function useWarehouses(params?: { status?: WarehouseStatus; search?: string }) {
   return useQuery({
     queryKey: ['warehouses', params],
@@ -89,6 +96,17 @@ export function useWarehouseTransfers(params?: { fromWarehouseId?: string; toWar
   });
 }
 
+export function useUnassignedWarehouseProducts(search?: string) {
+  return useQuery({
+    queryKey: ['warehouses', 'unassigned-products', search],
+    queryFn: () =>
+      apiClient
+        .get<{ data: UnassignedWarehouseProduct[] }>('/warehouses/unassigned-products/list', { params: { search } })
+        .then((r) => r.data.data),
+    staleTime: 10_000,
+  });
+}
+
 export function useCreateWarehouse() {
   const qc = useQueryClient();
   return useMutation({
@@ -113,7 +131,7 @@ export function useUpdateWarehouse() {
 export function useDeactivateWarehouse() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => apiClient.post(`/warehouses/${id}/deactivate`).then((r) => r.data),
+    mutationFn: (id: string) => apiClient.post<{ data: Warehouse }>(`/warehouses/${id}/deactivate`).then((r) => r.data.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['warehouses'] }),
   });
 }
@@ -127,7 +145,7 @@ export function useCreateTransfer() {
       transferDate: string;
       description?: string;
       items: Array<{ productId: string; quantity: number; description?: string }>;
-    }) => apiClient.post<WarehouseTransfer>('/warehouses/transfers', input).then((r) => r.data),
+    }) => apiClient.post<{ data: WarehouseTransfer }>('/warehouses/transfers', input).then((r) => r.data.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['warehouses', 'transfers'] }),
   });
 }
@@ -135,7 +153,21 @@ export function useCreateTransfer() {
 export function useConfirmTransfer() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => apiClient.post(`/warehouses/transfers/${id}/confirm`).then((r) => r.data),
+    mutationFn: (id: string) => apiClient.post<{ data: WarehouseTransfer }>(`/warehouses/transfers/${id}/confirm`).then((r) => r.data.data),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['warehouses'] }),
+  });
+}
+
+export function useAssignProductsToWarehouse() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ warehouseId, productIds }: { warehouseId: string; productIds: string[] }) =>
+      apiClient.post<{ data: { updatedCount: number } }>(`/warehouses/${warehouseId}/assign-products`, { productIds }).then((r) => r.data.data),
+    onSuccess: (_, vars) => {
+      qc.invalidateQueries({ queryKey: ['warehouses', vars.warehouseId] });
+      qc.invalidateQueries({ queryKey: ['warehouses', vars.warehouseId, 'stock'] });
+      qc.invalidateQueries({ queryKey: ['warehouses', 'unassigned-products'] });
+      qc.invalidateQueries({ queryKey: ['products'] });
+    },
   });
 }

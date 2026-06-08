@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -15,7 +16,7 @@ import { PermissionGuard } from '../../common/guards/permission.guard.js';
 import { RequirePermission } from '../../common/guards/require-permission.decorator.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { CollectionsService } from './collections.service.js';
-import { CreateCollectionDto } from './dto/collection.dto.js';
+import { CreateCollectionDto, UpdateCollectionDto } from './dto/collection.dto.js';
 import type {
   CollectionStatus,
   CollectionType,
@@ -67,6 +68,26 @@ export class CollectionsController {
   create(@CurrentUser() user: JwtPayload, @Body() dto: CreateCollectionDto) {
     return this.collections.create(
       user.tid,
+      {
+        customerId: dto.customerId,
+        collectionDate: new Date(dto.collectionDate),
+        type: dto.type,
+        amount: dto.amount,
+        linkedSaleId: dto.linkedSaleId,
+        notes: dto.notes,
+        internalNotes: dto.internalNotes,
+      },
+      user.sub,
+    );
+  }
+
+  @Patch(':id')
+  @RequirePermission('tahsilat:collection:create')
+  @ApiOperation({ summary: 'Bekleyen tahsilatı güncelle' })
+  update(@CurrentUser() user: JwtPayload, @Param('id') id: string, @Body() dto: UpdateCollectionDto) {
+    return this.collections.update(
+      user.tid,
+      id,
       {
         customerId: dto.customerId,
         collectionDate: new Date(dto.collectionDate),

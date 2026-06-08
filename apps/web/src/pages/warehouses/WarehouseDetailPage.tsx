@@ -4,7 +4,7 @@ import { ArrowLeft, Warehouse, MapPin, Phone, User, Package, Activity, ArrowLeft
 import { PageHeader } from '@/components/layout/PageHeader';
 import { LoadingState } from '@/components/data/LoadingState';
 import { ErrorState } from '@/components/data/ErrorState';
-import { useWarehouse, useDeactivateWarehouse, useWarehouseStock, useWarehouseTransfers } from '@/features/warehouses/api';
+import { useWarehouse, useDeactivateWarehouse, useWarehouseStock, useWarehouseTransfers, useUnassignedWarehouseProducts, useAssignProductsToWarehouse } from '@/features/warehouses/api';
 import { ConfirmModal } from '@/components/data/ConfirmModal';
 import { formatDate, formatCurrency } from '@saas/shared';
 import toast from 'react-hot-toast';
@@ -20,6 +20,9 @@ export function WarehouseDetailPage() {
   const { data, isLoading, isError, error, refetch } = useWarehouse(id);
   const { data: stock } = useWarehouseStock(id);
   const { data: transfers } = useWarehouseTransfers({ fromWarehouseId: id });
+  const [productSearch, setProductSearch] = useState('');
+  const { data: unassignedProducts = [] } = useUnassignedWarehouseProducts(productSearch || undefined);
+  const assignProducts = useAssignProductsToWarehouse();
   const deactivate = useDeactivateWarehouse();
   const [showDeactivateModal, setShowDeactivateModal] = useState(false);
 
@@ -138,6 +141,55 @@ export function WarehouseDetailPage() {
             </div>
           </div>
 
+          <div className="card p-4">
+            <h3 className="mb-3 font-semibold text-foreground flex items-center gap-2">
+              <Package className="h-4 w-4" /> Deposu Olmayan Ürün Ekle
+            </h3>
+            <div className="flex flex-col gap-3">
+              <input
+                type="search"
+                value={productSearch}
+                onChange={(e) => setProductSearch(e.target.value)}
+                placeholder="Ürün kodu, adı veya barkod ile ara..."
+                className="w-full h-10 px-3 rounded-md bg-surface text-sm border border-outline-variant focus:border-primary focus:outline-none"
+              />
+              <div className="max-h-60 overflow-y-auto rounded-md border border-outline-variant">
+                {unassignedProducts.length === 0 ? (
+                  <div className="px-3 py-4 text-sm text-on-surface-variant">Deposu olmayan uygun ürün bulunamadı.</div>
+                ) : (
+                  unassignedProducts.map((product) => (
+                    <div key={product.id} className="flex items-center justify-between border-b border-outline-variant px-3 py-2 last:border-0">
+                      <div>
+                        <div className="font-medium text-foreground">{product.name}</div>
+                        <div className="text-xs font-mono text-on-surface-variant">
+                          {product.code}
+                          {product.primaryBarcode ? ` • ${product.primaryBarcode}` : ''}
+                        </div>
+                      </div>
+                      <button
+                        onClick={() =>
+                          assignProducts.mutate(
+                            { warehouseId: id!, productIds: [product.id] },
+                            {
+                              onSuccess: () => toast.success('Ürün depoya atandı'),
+                              onError: (err: unknown) => {
+                                toast.error(((err as any)?.response?.data?.message as string) || 'Ürün atanamadı');
+                              },
+                            },
+                          )
+                        }
+                        disabled={assignProducts.isPending}
+                        className="btn-secondary text-xs"
+                      >
+                        Depoya Ekle
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+
           {/* Son transferler */}
           {transfers && transfers.data.length > 0 && (
             <div className="card overflow-hidden">
@@ -148,10 +200,9 @@ export function WarehouseDetailPage() {
               </div>
               <div className="divide-y divide-outline-variant">
                 {transfers.data.slice(0, 5).map((t) => (
-                  <button
+                  <div
                     key={t.id}
-                    onClick={() => navigate(`/warehouses/transfer/${t.id}`)}
-                    className="w-full px-4 py-2 hover:bg-surface-container flex justify-between items-center text-left"
+                    className="w-full px-4 py-2 flex justify-between items-center text-left"
                   >
                     <div>
                       <div className="font-mono text-sm text-foreground">{t.transferNumber}</div>
@@ -163,7 +214,7 @@ export function WarehouseDetailPage() {
                       <div className="text-xs text-on-surface-variant">{formatDate(t.transferDate)}</div>
                       <div className="text-xs font-medium text-foreground">{t.itemCount} kalem</div>
                     </div>
-                  </button>
+                  </div>
                 ))}
               </div>
             </div>

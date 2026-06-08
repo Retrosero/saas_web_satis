@@ -79,6 +79,46 @@ export class CustomersController {
     });
   }
 
+  @Get(':id/movements/:movementId')
+  @RequirePermission('cari:customer:view')
+  @ApiOperation({ summary: 'Cari hareket detayı' })
+  getMovement(
+    @CurrentUser() user: JwtPayload,
+    @Param('id') id: string,
+    @Param('movementId') movementId: string,
+  ) {
+    return this.customers.getMovement(user.tid, id, movementId);
+  }
+
+  @Patch(':id/movements/:movementId')
+  @RequirePermission('cari:customer:update')
+  @ApiOperation({ summary: 'Cari hareket güncelle' })
+  updateMovement(
+    @CurrentUser() user: JwtPayload,
+    @Param('id') id: string,
+    @Param('movementId') movementId: string,
+    @Body() body: { movementDate: string; dueDate?: string | null; amount: number; description?: string | null },
+  ) {
+    return this.customers.updateMovement(user.tid, id, movementId, {
+      movementDate: new Date(body.movementDate),
+      dueDate: body.dueDate ? new Date(body.dueDate) : null,
+      amount: body.amount,
+      description: body.description,
+    });
+  }
+
+  @Post(':id/movements/:movementId/reverse')
+  @RequirePermission('cari:customer:update')
+  @ApiOperation({ summary: 'Cari hareket ters kayıt oluştur' })
+  reverseMovement(
+    @CurrentUser() user: JwtPayload,
+    @Param('id') id: string,
+    @Param('movementId') movementId: string,
+    @Body() body: { reason?: string },
+  ) {
+    return this.customers.reverseMovement(user.tid, id, movementId, user.sub, body?.reason);
+  }
+
   /**
    * Yeni cari oluştur.
    * Açılış bakiyesi varsa otomatik OPENING_BALANCE hareketi oluşturulur.

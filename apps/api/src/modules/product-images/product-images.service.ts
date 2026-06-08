@@ -9,8 +9,8 @@ export class ProductImagesService {
     const where: any = { tenantId, isDeleted: false };
     if (filters.productId) where.productId = filters.productId;
     if (filters.isMain !== undefined) where.isMain = filters.isMain;
-    const page = filters.page ?? 1;
-    const pageSize = filters.pageSize ?? 30;
+    const page = Number(filters.page ?? 1);
+    const pageSize = Number(filters.pageSize ?? 30);
     const [items, total] = await Promise.all([this.prisma.client.productImage.findMany({ where, orderBy: [{ productId: 'asc' }, { sortOrder: 'asc' }], skip: (page - 1) * pageSize, take: pageSize }), this.prisma.client.productImage.count({ where })]);
     return { items, total, page, pageSize };
   }

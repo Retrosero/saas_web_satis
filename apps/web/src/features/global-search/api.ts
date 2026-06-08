@@ -6,8 +6,8 @@ export function useGlobalSearch(q: string, limit = 5) {
   return useQuery({
     queryKey: ['global-search', q, limit],
     queryFn: async () => {
-      const { data } = await apiClient.get<GlobalSearchResponse>('/global-search', { params: { q, limit } });
-      return data;
+      const { data } = await apiClient.get<{ data: GlobalSearchResponse }>('/global-search', { params: { q, limit } });
+      return data.data;
     },
     enabled: q.length >= 2,
     staleTime: 30_000,

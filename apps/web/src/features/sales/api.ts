@@ -67,6 +67,8 @@ export interface CreateSaleInput {
   internalNotes?: string;
 }
 
+export type UpdateSaleInput = CreateSaleInput;
+
 // ---------- API ----------
 
 function saleToFormData(s: SaleListItem) {
@@ -163,6 +165,20 @@ export function useProductSearch(keyword: string) {
         })
         .then((r) => r.data.data.data),
     staleTime: 10_000,
+  });
+}
+
+export function useUpdateSale() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, input }: { id: string; input: UpdateSaleInput }) =>
+      apiClient.patch<{ data: Sale }>(`/sales/${id}`, input).then((r) => r.data.data),
+    onSuccess: (data) => {
+      qc.invalidateQueries({ queryKey: ['sales', data.id] });
+      qc.invalidateQueries({ queryKey: ['sales', 'list'] });
+      qc.invalidateQueries({ queryKey: ['customers'] });
+      qc.invalidateQueries({ queryKey: ['stock'] });
+    },
   });
 }
 

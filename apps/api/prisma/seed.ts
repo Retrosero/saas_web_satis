@@ -18,6 +18,7 @@ const MODULES: ModuleSeed[] = [
   { code: 'stok', name: 'Stok Yönetimi', category: 'operations', defaultRoute: '/products', icon: 'inventory_2', sortOrder: 30, description: 'Ürün, barkod, marka, kategori ve stok takibi' },
   { code: 'satis', name: 'Satış', category: 'operations', defaultRoute: '/sales', icon: 'point_of_sale', sortOrder: 40, description: 'Satış işlemleri, sepet ve fiş yönetimi' },
   { code: 'siparis', name: 'Siparişler', category: 'operations', defaultRoute: '/orders', icon: 'shopping_cart', sortOrder: 50, description: 'Müşteri ve tedarik sipariş takibi' },
+  { code: 'alis_faturasi', name: 'Alış Faturaları', category: 'operations', defaultRoute: '/purchase-invoices', icon: 'receipt_long', sortOrder: 55, description: 'Tedarikçilerden yapılan alımlar için alış faturaları' },
   { code: 'tahsilat', name: 'Tahsilat', category: 'finance', defaultRoute: '/collections', icon: 'payments', sortOrder: 60, description: 'Cari tahsilat ve ödeme kayıtları' },
   { code: 'kasa', name: 'Kasa', category: 'finance', defaultRoute: '/cash', icon: 'account_balance_wallet', sortOrder: 70, description: 'Kasa tanımları ve nakit hareketleri' },
   { code: 'banka', name: 'Banka', category: 'finance', defaultRoute: '/banks/accounts', icon: 'account_balance', sortOrder: 75, description: 'Banka hesapları ve hareketleri' },
@@ -66,6 +67,12 @@ const PERMISSIONS: PermissionSeed[] = [
   { code: 'siparis:order:create', module: 'siparis', resource: 'order', action: 'create', description: 'Sipariş oluşturma' },
   { code: 'siparis:order:update', module: 'siparis', resource: 'order', action: 'update', description: 'Sipariş düzenleme' },
   { code: 'siparis:order:cancel', module: 'siparis', resource: 'order', action: 'cancel', description: 'Sipariş iptal' },
+  { code: 'stok:purchase:view', module: 'alis_faturasi', resource: 'purchase', action: 'view', description: 'Alış faturası görüntüleme' },
+  { code: 'stok:purchase:create', module: 'alis_faturasi', resource: 'purchase', action: 'create', description: 'Alış faturası oluşturma' },
+  { code: 'stok:purchase:update', module: 'alis_faturasi', resource: 'purchase', action: 'update', description: 'Alış faturası düzenleme' },
+  { code: 'stok:purchase:confirm', module: 'alis_faturasi', resource: 'purchase', action: 'approve', description: 'Alış faturası onaylama' },
+  { code: 'stok:purchase:cancel', module: 'alis_faturasi', resource: 'purchase', action: 'cancel', description: 'Alış faturası iptal' },
+  { code: 'stok:purchase:delete', module: 'alis_faturasi', resource: 'purchase', action: 'delete', description: 'Alış faturası silme' },
   { code: 'tahsilat:collection:view', module: 'tahsilat', resource: 'collection', action: 'view', description: 'Tahsilat görüntüleme' },
   { code: 'tahsilat:collection:create', module: 'tahsilat', resource: 'collection', action: 'create', description: 'Tahsilat oluşturma' },
   { code: 'tahsilat:collection:cancel', module: 'tahsilat', resource: 'collection', action: 'cancel', description: 'Tahsilat iptal' },
@@ -89,8 +96,8 @@ const PERMISSIONS: PermissionSeed[] = [
 
 const PLANS: PlanSeed[] = [
   { code: 'starter', name: 'Başlangıç', description: 'Küçük işletmeler için temel modüller', monthlyPrice: 499, yearlyPrice: 4990, userLimit: 3, branchLimit: 1, warehouseLimit: 1, apiKeyLimit: 0, webhookLimit: 0, storageMbLimit: 2048, modules: ['dashboard', 'cari', 'stok', 'satis', 'tahsilat', 'kasa', 'raporlar'] },
-  { code: 'standard', name: 'Standart', description: 'Büyüyen işletmeler için genişletilmiş özellikler', monthlyPrice: 999, yearlyPrice: 9990, userLimit: 10, branchLimit: 3, warehouseLimit: 3, apiKeyLimit: 2, webhookLimit: 5, storageMbLimit: 10240, modules: ['dashboard', 'cari', 'stok', 'satis', 'siparis', 'tahsilat', 'kasa', 'banka', 'raporlar', 'bildirim'] },
-  { code: 'professional', name: 'Profesyonel', description: 'Kurumsal operasyonlar için tam özellik seti', monthlyPrice: 2499, yearlyPrice: 24990, userLimit: 50, branchLimit: 10, warehouseLimit: 10, apiKeyLimit: 10, webhookLimit: 25, storageMbLimit: 51200, modules: ['dashboard', 'cari', 'stok', 'satis', 'siparis', 'tahsilat', 'kasa', 'banka', 'pos', 'depo', 'sayim', 'iade', 'raporlar', 'api_webhook', 'bildirim', 'log_audit'] },
+  { code: 'standard', name: 'Standart', description: 'Büyüyen işletmeler için genişletilmiş özellikler', monthlyPrice: 999, yearlyPrice: 9990, userLimit: 10, branchLimit: 3, warehouseLimit: 3, apiKeyLimit: 2, webhookLimit: 5, storageMbLimit: 10240, modules: ['dashboard', 'cari', 'stok', 'satis', 'siparis', 'alis_faturasi', 'tahsilat', 'kasa', 'banka', 'raporlar', 'bildirim'] },
+  { code: 'professional', name: 'Profesyonel', description: 'Kurumsal operasyonlar için tam özellik seti', monthlyPrice: 2499, yearlyPrice: 24990, userLimit: 50, branchLimit: 10, warehouseLimit: 10, apiKeyLimit: 10, webhookLimit: 25, storageMbLimit: 51200, modules: ['dashboard', 'cari', 'stok', 'satis', 'siparis', 'alis_faturasi', 'tahsilat', 'kasa', 'banka', 'pos', 'depo', 'sayim', 'iade', 'raporlar', 'api_webhook', 'bildirim', 'log_audit'] },
   { code: 'enterprise', name: 'Kurumsal', description: 'Büyük ölçekli firmalar için sınırsız', monthlyPrice: 0, yearlyPrice: 0, userLimit: 9999, branchLimit: 9999, warehouseLimit: 9999, apiKeyLimit: 9999, webhookLimit: 9999, storageMbLimit: 512000, modules: MODULES.map((m) => m.code) },
 ];
 

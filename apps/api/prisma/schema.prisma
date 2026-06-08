@@ -187,6 +187,9 @@ model Tenant {
   returns     Return[]
   returnItems ReturnItem[]
 
+  purchaseInvoices     PurchaseInvoice[]
+  purchaseInvoiceItems PurchaseInvoiceItem[]
+
   bankAccounts     BankAccount[]
   bankTransactions BankTransaction[]
   posDevices       PosDevice[]
@@ -588,6 +591,8 @@ enum CustomerMovementType {
 enum CustomerMovementRefType {
   SALE
   SALE_CANCEL
+  PURCHASE
+  PURCHASE_CANCEL
   COLLECTION
   COLLECTION_CANCEL
   RETURN
@@ -846,6 +851,8 @@ model Customer {
 
   returns Return[]
 
+  purchaseInvoices PurchaseInvoice[]
+
   priceGroupMembers CustomerPriceGroupMember[]
   campaigns         Campaign[]
 
@@ -1087,6 +1094,7 @@ model Warehouse {
   transfers          WarehouseTransfer[]
   transferTo         WarehouseTransfer[] @relation("WarehouseTransferTo")
   stockCounts        StockCount[]
+  purchaseInvoices   PurchaseInvoice[]
 
   @@unique([tenantId, code])
   @@index([tenantId, isDeleted])
@@ -1136,6 +1144,8 @@ model Product {
   stockCountItems        StockCountItem[]
 
   returnItems ReturnItem[]
+
+  purchaseInvoiceItems PurchaseInvoiceItem[]
 
   priceListItems PriceListItem[]
   campaigns      Campaign[]
@@ -1852,6 +1862,127 @@ model Return {
   @@unique([tenantId, returnNumber])
   @@index([tenantId, customerId, returnDate])
   @@index([tenantId, source, sourceId])
+}
+
+// =====================================================================
+// ALIŞ FATURASI MODÜLÜ
+// =====================================================================
+// Tedarikçiden yapılan alımlar için alış faturaları.
+// Onaylanan alış faturası OTOMATİK olarak:
+//   - 1 CustomerMovement (CREDIT) — tedarikçiye borç kaydı
+//   - N StockMovement (IN) — ürünler depoya girer (warehouseId)
+// İptal edilen alış faturası: TERS kayıtlar.
+// =====================================================================
+
+enum PurchaseInvoiceStatus {
+  DRAFT
+  CONFIRMED
+  CANCELLED
+}
+
+enum PurchaseInvoiceType {
+  PURCHASE
+  RETURN
+}
+
+model PurchaseInvoice {
+  id          String                @id @default(cuid())
+  tenantId    String
+  supplierId  String // Tedarikçi (Customer)
+  invoiceNumber String // "AF-2026-000001" (tenant-scoped unique)
+  invoiceDate DateTime
+  dueDate     DateTime? // Vade
+
+  type   PurchaseInvoiceType      @default(PURCHASE)
+  status PurchaseInvoiceStatus    @default(DRAFT)
+  paymentStatus PaymentStatus     @default(UNPAID)
+
+  // Depo (stok girişi hangi depoya yapılacak)
+  warehouseId String
+
+  // Fiyat bilgileri
+  currency      String  @default("TRY")
+  exchangeRate  Decimal @default(1)
+  subTotal      Decimal @default(0) // KDV hariç toplam
+  vatTotal      Decimal @default(0) // KDV toplamı
+  discountTotal Decimal @default(0) // İskonto toplamı
+  grandTotal    Decimal @default(0) // Genel toplam (KDV dahil)
+  paidAmount    Decimal @default(0) // Ödenen tutar
+
+  // Tedarikçi bilgileri (anlık snapshot)
+  supplierName      String
+  supplierTaxNumber String?
+  supplierAddress   String?
+  supplierPhone     String?
+  supplierEmail     String?
+
+  // E-fatura bilgileri (opsiyonel)
+  einvoiceNumber String?
+  einvoiceStatus String?
+  einvoiceDate   DateTime?
+
+  notes         String?
+  internalNotes String?
+
+  // Self-relation: iptal edilen faturaya referans
+  cancelsInvoiceId String? @unique
+
+  isActive      Boolean   @default(true)
+  isDeleted     Boolean   @default(false)
+  deletedAt     DateTime?
+  createdById   String?
+  updatedById   String?
+  confirmedById String?
+  confirmedAt   DateTime?
+  cancelledById String?
+  cancelledAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  tenant      Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  supplier    Customer             @relation(fields: [supplierId], references: [id], onDelete: Restrict)
+  warehouse   Warehouse            @relation(fields: [warehouseId], references: [id], onDelete: Restrict)
+  items       PurchaseInvoiceItem[]
+  cancelsInvoice PurchaseInvoice?  @relation("PurchaseInvoiceCancel", fields: [cancelsInvoiceId], references: [id], onDelete: SetNull)
+  cancelledBy PurchaseInvoice?     @relation("PurchaseInvoiceCancel")
+
+  @@unique([tenantId, invoiceNumber])
+  @@index([tenantId, supplierId, invoiceDate])
+  @@index([tenantId, invoiceDate])
+  @@index([tenantId, status])
+  @@index([tenantId, paymentStatus])
+  @@index([cancelsInvoiceId])
+}
+
+model PurchaseInvoiceItem {
+  id          String         @id @default(cuid())
+  tenantId    String
+  invoiceId   String
+  productId   String
+  unitId      String?
+  quantity    Decimal
+  unitPrice   Decimal // Birim fiyat (KDV hariç)
+  vatRate     Decimal // KDV oranı (%)
+  discountRate Decimal       @default(0) // Satır iskonto oranı (%)
+  description String? // Serbest metin açıklama
+  sortOrder   Int            @default(0)
+  status      SaleItemStatus @default(ACTIVE)
+
+  // Hesaplanmış alanlar
+  lineSubTotal   Decimal // quantity * unitPrice
+  discountAmount Decimal @default(0)
+  lineVatAmount  Decimal @default(0)
+  lineGrandTotal Decimal
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant  Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  invoice PurchaseInvoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  product Product          @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  @@index([tenantId, invoiceId])
+  @@index([tenantId, productId])
 }
 
 model ReturnItem {

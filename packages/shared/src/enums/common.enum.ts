@@ -164,6 +164,8 @@ export type CustomerMovementType = (typeof CustomerMovementType)[keyof typeof Cu
 export const CustomerMovementRefType = {
   SALE: 'SALE',
   SALE_CANCEL: 'SALE_CANCEL',
+  PURCHASE: 'PURCHASE',
+  PURCHASE_CANCEL: 'PURCHASE_CANCEL',
   COLLECTION: 'COLLECTION',
   COLLECTION_CANCEL: 'COLLECTION_CANCEL',
   RETURN: 'RETURN',
@@ -241,3 +243,16 @@ export const CollectionType = {
   OTHER: 'OTHER',
 } as const;
 export type CollectionType = (typeof CollectionType)[keyof typeof CollectionType];
+
+export const PurchaseInvoiceStatus = {
+  DRAFT: 'DRAFT',
+  CONFIRMED: 'CONFIRMED',
+  CANCELLED: 'CANCELLED',
+} as const;
+export type PurchaseInvoiceStatus = (typeof PurchaseInvoiceStatus)[keyof typeof PurchaseInvoiceStatus];
+
+export const PurchaseInvoiceType = {
+  PURCHASE: 'PURCHASE',
+  RETURN: 'RETURN',
+} as const;
+export type PurchaseInvoiceType = (typeof PurchaseInvoiceType)[keyof typeof PurchaseInvoiceType];
